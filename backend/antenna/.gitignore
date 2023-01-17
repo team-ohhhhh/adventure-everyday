@@ -18,6 +18,10 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
+
+### application.yml 무시 ###
+application.yml
+
 .idea
 *.iws
 *.iml
