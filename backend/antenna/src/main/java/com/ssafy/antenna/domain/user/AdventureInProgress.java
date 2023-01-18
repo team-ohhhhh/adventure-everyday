@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -22,7 +21,7 @@ public class AdventureInProgress extends Base {
     private Long progressId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="userId")
+    @JoinColumn(name = "userId")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -31,9 +30,9 @@ public class AdventureInProgress extends Base {
 
     @Column(columnDefinition = "int not null")
     private int totalPoint;
-@Column(columnDefinition = "int default 0")
+    @Column(columnDefinition = "int default 0")
     private int currentPoint;
-@Column(columnDefinition = "datetime(6) default null")
+    @Column(columnDefinition = "datetime(6) default null")
     private LocalDateTime clearTime;
 
 
