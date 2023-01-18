@@ -1,5 +1,6 @@
 package com.ssafy.antenna.domain.like;
 
+import com.ssafy.antenna.domain.Base;
 import com.ssafy.antenna.domain.adventure.Adventure;
 import com.ssafy.antenna.domain.user.User;
 import jakarta.persistence.*;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AdventureLike {
+public class AdventureLike  extends Base {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

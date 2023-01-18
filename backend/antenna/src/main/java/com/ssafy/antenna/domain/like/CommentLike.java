@@ -1,5 +1,6 @@
 package com.ssafy.antenna.domain.like;
 
+import com.ssafy.antenna.domain.Base;
 import com.ssafy.antenna.domain.comment.Comment;
 import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.user.User;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CommentLike {
+public class CommentLike  extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentLikeId;

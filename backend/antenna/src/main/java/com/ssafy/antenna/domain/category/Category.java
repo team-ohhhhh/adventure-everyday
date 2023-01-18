@@ -1,5 +1,6 @@
 package com.ssafy.antenna.domain.category;
 
+import com.ssafy.antenna.domain.Base;
 import com.ssafy.antenna.domain.adventure.Adventure;
 import com.ssafy.antenna.domain.comment.Comment;
 import jakarta.persistence.*;
@@ -16,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Category {
+public class Category  extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId;

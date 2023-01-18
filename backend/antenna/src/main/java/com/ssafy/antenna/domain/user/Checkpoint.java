@@ -1,5 +1,6 @@
 package com.ssafy.antenna.domain.user;
 
+import com.ssafy.antenna.domain.Base;
 import com.ssafy.antenna.domain.adventure.AdventurePlace;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Checkpoint {
+public class Checkpoint  extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long checkpointId;

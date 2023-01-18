@@ -1,5 +1,6 @@
 package com.ssafy.antenna.domain.user;
 
+import com.ssafy.antenna.domain.Base;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Follow {
+public class Follow  extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long followId;

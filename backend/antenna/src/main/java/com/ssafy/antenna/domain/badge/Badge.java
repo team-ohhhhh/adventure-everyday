@@ -1,5 +1,6 @@
 package com.ssafy.antenna.domain.badge;
 
+import com.ssafy.antenna.domain.Base;
 import com.ssafy.antenna.domain.adventure.Adventure;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Badge {
+public class Badge extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long badgeId;

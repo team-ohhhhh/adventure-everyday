@@ -1,5 +1,6 @@
 package com.ssafy.antenna.domain.adventure;
 
+import com.ssafy.antenna.domain.Base;
 import com.ssafy.antenna.domain.category.Category;
 import com.ssafy.antenna.domain.post.CheckpointPost;
 import com.ssafy.antenna.domain.user.Checkpoint;
@@ -18,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-public class AdventurePlace {
+public class AdventurePlace  extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long adventurePlaceId;
