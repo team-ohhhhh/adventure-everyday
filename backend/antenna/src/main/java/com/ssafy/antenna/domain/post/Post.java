@@ -29,8 +29,8 @@ public class Post extends Base {
     private String content;
     @Column(columnDefinition = "Point not null")
     private Point coordinate;
-    @Column(columnDefinition = "varchar(255) default null")
-    private String photo;
+    @Column(columnDefinition = "blob default null")
+    private byte[] photo;
     @Column(columnDefinition = "boolean not null")
     private boolean isPublic;
     @ManyToOne
