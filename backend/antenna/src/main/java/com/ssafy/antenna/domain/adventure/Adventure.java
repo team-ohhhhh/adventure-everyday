@@ -5,6 +5,7 @@ import com.ssafy.antenna.domain.badge.Badge;
 import com.ssafy.antenna.domain.category.Category;
 import com.ssafy.antenna.domain.like.AdventureLike;
 import com.ssafy.antenna.domain.user.Follow;
+import com.ssafy.antenna.domain.user.AdventureInProgress;
 import com.ssafy.antenna.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -61,6 +62,8 @@ public class Adventure extends Base {
     private int validDate;
     @Column(columnDefinition = "datetime(6) default null")
     private LocalDateTime endDate;
+    @OneToMany(mappedBy = "adventure",cascade = CascadeType.ALL)
+    private List<AdventureInProgress> adventuresInProgress;
 
     @OneToMany(mappedBy = "adventure", cascade = CascadeType.ALL)
     private List<AdventurePlace> adventurePlaces = new ArrayList<>();

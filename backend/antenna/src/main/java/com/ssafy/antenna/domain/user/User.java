@@ -76,6 +76,8 @@ public class User extends Base {
 
     @OneToMany(mappedBy = "followingUser", cascade = CascadeType.ALL)
     private List<Follow> followingUsers = new ArrayList<>();
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<AdventureInProgress> adventuresInProgress = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<AdventureLike> adventureLikes = new ArrayList<>();
