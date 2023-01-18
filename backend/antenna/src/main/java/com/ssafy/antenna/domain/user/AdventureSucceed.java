@@ -17,10 +17,10 @@ public class AdventureSucceed extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long succeedId;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adventure_id")
     private Adventure adventure;
 }

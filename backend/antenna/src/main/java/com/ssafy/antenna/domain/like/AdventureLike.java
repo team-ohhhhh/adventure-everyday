@@ -19,10 +19,10 @@ public class AdventureLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long adventureLikeId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adventure_id")
     private Adventure adventure;
 }

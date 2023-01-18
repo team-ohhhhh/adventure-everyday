@@ -17,11 +17,11 @@ public class Checkpoint {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long checkpointId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adventurePlaceId")
     private AdventurePlace adventurePlace;
 

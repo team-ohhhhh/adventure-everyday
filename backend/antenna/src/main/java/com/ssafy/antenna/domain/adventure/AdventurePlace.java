@@ -23,7 +23,7 @@ public class AdventurePlace {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long adventurePlaceId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adventureId")
     private Adventure adventure;
 

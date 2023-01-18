@@ -18,13 +18,13 @@ public class CheckpointPost extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long checkpointId;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adventureId")
     private Adventure adventure;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "postId")
     private Post post;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adventurePlaceId")
     private AdventurePlace adventurePlace;
 }

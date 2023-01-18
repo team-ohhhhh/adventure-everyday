@@ -18,7 +18,7 @@ public class Antenna extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long antennaId;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
     @Column(columnDefinition = "int not null")

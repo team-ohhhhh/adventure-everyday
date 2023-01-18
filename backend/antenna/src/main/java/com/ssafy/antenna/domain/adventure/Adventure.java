@@ -27,13 +27,13 @@ public class Adventure extends Base {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long adventureId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoryId")
     private Category category;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "badgeId")
     private Badge badge;
 

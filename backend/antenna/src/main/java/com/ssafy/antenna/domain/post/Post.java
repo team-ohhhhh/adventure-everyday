@@ -33,7 +33,7 @@ public class Post extends Base {
     private byte[] photo;
     @Column(columnDefinition = "boolean not null")
     private boolean isPublic;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
 

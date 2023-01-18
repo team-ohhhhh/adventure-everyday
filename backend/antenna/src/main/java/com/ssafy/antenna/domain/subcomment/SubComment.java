@@ -23,11 +23,11 @@ public class SubComment extends Base {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long subCommentId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 

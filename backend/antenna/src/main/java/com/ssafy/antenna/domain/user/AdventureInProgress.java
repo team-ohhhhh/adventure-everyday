@@ -21,11 +21,11 @@ public class AdventureInProgress extends Base {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long progressId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="userId")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adventureId")
     private Adventure adventure;
 

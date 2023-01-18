@@ -17,10 +17,10 @@ public class AdventureReview extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewId;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adventureId")
     private Adventure adventure;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
     @Lob

@@ -19,11 +19,11 @@ public class SubCommentLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long subCommentLikeId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sub_comment_id")
     private SubComment subComment;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 }

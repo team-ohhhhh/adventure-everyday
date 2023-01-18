@@ -50,7 +50,7 @@ public class User extends Base {
     private byte[] photo;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tierId")
     private Tier tier;
 
