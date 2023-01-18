@@ -1,7 +1,7 @@
 package com.ssafy.antenna.domain.user;
 
 import com.ssafy.antenna.domain.Base;
-//import com.ssafy.antenna.domain.adventure.Adventure;
+import com.ssafy.antenna.domain.adventure.Adventure;
 import com.ssafy.antenna.domain.antenna.Antenna;
 import com.ssafy.antenna.domain.comment.Comment;
 import com.ssafy.antenna.domain.like.CommentLike;
@@ -60,8 +60,8 @@ public class User extends Base {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<SubComment> subComments = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//    private List<Adventure> adventures = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Adventure> adventures = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PostLike> postLikes = new ArrayList<>();

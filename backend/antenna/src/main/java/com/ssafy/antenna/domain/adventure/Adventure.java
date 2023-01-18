@@ -54,9 +54,9 @@ public class Adventure extends Base {
 
 
     @Column(columnDefinition = "int default 6")
-    private int vaildDate;
-    @Column(updatable = false)
-    private LocalDateTime endDate = getCreateTime().plusMonths(vaildDate);
+    private int validDate;
+    @Column(columnDefinition = "datetime(6) default null")
+    private LocalDateTime endDate;
 
 
 }
