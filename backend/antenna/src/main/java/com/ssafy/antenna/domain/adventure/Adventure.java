@@ -73,5 +73,6 @@ public class Adventure extends Base {
     private List<AdventureLike> adventureLikes = new ArrayList<>();
 
     @OneToMany(mappedBy = "adventure", cascade = CascadeType.ALL)
-    private List<AdventureSucceed> adventureSucceeds= new ArrayList<>();
+    private List<AdventureReview> adventureReviews = new ArrayList<>();
+
 }
