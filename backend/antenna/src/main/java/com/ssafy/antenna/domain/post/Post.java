@@ -1,6 +1,8 @@
 package com.ssafy.antenna.domain.post;
 
 import com.ssafy.antenna.domain.Base;
+import com.ssafy.antenna.domain.comment.Comment;
+import com.ssafy.antenna.domain.like.PostLike;
 import com.ssafy.antenna.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,6 +10,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.geo.Point;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -24,12 +29,20 @@ public class Post extends Base {
     private String content;
     @Column(columnDefinition = "Point not null")
     private Point coordinate;
-    @Column(columnDefinition = "varchar(255) default null")
-    private String photo;
+    @Column(columnDefinition = "blob default null")
+    private byte[] photo;
     @Column(columnDefinition = "boolean not null")
     private boolean isPublic;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<PostLike> postLikes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
+    private List<CheckpointPost> checkpointPosts = new ArrayList<>();
 }
