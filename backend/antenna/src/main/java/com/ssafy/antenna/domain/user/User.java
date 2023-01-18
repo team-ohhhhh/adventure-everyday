@@ -46,7 +46,6 @@ public class User extends Base {
     private byte[] photo;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
-
     @ManyToOne
     @JoinColumn(name = "tierId")
     private Tier tier;
@@ -70,5 +69,11 @@ public class User extends Base {
     private List<CommentLike> commentLikes = new ArrayList<>();
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<SubCommentLike> subCommentLikes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "followerUser", cascade = CascadeType.ALL)
+    private List<Follow> followerUsers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "followingUser", cascade = CascadeType.ALL)
+    private List<Follow> followingUsers = new ArrayList<>();
 
 }
