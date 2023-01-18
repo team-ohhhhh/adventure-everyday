@@ -3,6 +3,7 @@ package com.ssafy.antenna.domain.adventure;
 import com.ssafy.antenna.domain.Base;
 import com.ssafy.antenna.domain.badge.Badge;
 import com.ssafy.antenna.domain.category.Category;
+import com.ssafy.antenna.domain.user.Follow;
 import com.ssafy.antenna.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -57,6 +60,9 @@ public class Adventure extends Base {
     private int validDate;
     @Column(columnDefinition = "datetime(6) default null")
     private LocalDateTime endDate;
+
+    @OneToMany(mappedBy = "adventure", cascade = CascadeType.ALL)
+    private List<AdventurePlace> adventurePlaces = new ArrayList<>();
 
 
 }
