@@ -1,6 +1,7 @@
 package com.ssafy.antenna.domain.comment;
 
 import com.ssafy.antenna.domain.Base;
+import com.ssafy.antenna.domain.like.CommentLike;
 import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.subcomment.SubComment;
 import com.ssafy.antenna.domain.user.User;
@@ -35,5 +36,8 @@ public class Comment extends Base {
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
     private List<SubComment> subComments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+    private List<CommentLike> commentLikes = new ArrayList<>();
 
 }

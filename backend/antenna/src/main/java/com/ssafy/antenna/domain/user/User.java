@@ -1,9 +1,12 @@
 package com.ssafy.antenna.domain.user;
 
 import com.ssafy.antenna.domain.Base;
-import com.ssafy.antenna.domain.adventure.Adventure;
+//import com.ssafy.antenna.domain.adventure.Adventure;
 import com.ssafy.antenna.domain.antenna.Antenna;
 import com.ssafy.antenna.domain.comment.Comment;
+import com.ssafy.antenna.domain.like.CommentLike;
+import com.ssafy.antenna.domain.like.PostLike;
+import com.ssafy.antenna.domain.like.SubCommentLike;
 import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.subcomment.SubComment;
 import com.ssafy.antenna.domain.tier.Tier;
@@ -57,6 +60,15 @@ public class User extends Base {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<SubComment> subComments = new ArrayList<>();
 
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    private List<Adventure> adventures = new ArrayList<>();
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Adventure> adventures = new ArrayList<>();
+    private List<PostLike> postLikes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<CommentLike> commentLikes = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<SubCommentLike> subCommentLikes = new ArrayList<>();
+
 }
