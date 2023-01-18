@@ -15,6 +15,7 @@ import com.ssafy.antenna.domain.subcomment.SubComment;
 import com.ssafy.antenna.domain.tier.Tier;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Check;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
@@ -90,5 +91,5 @@ public class User extends Base {
     private List<AdventureReview> adventureReviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<AdventurePlace> adventurePlaces = new ArrayList<>();
+    private List<Checkpoint> checkpoints = new ArrayList<>();
 }
