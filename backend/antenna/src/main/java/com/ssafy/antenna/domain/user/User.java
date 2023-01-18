@@ -1,7 +1,10 @@
 package com.ssafy.antenna.domain.user;
 
 import com.ssafy.antenna.domain.Base;
+import com.ssafy.antenna.domain.antenna.Antenna;
+import com.ssafy.antenna.domain.comment.Comment;
 import com.ssafy.antenna.domain.post.Post;
+import com.ssafy.antenna.domain.subcomment.SubComment;
 import com.ssafy.antenna.domain.tier.Tier;
 import jakarta.persistence.*;
 import lombok.*;
@@ -43,4 +46,13 @@ public class User extends Base {
     @ManyToOne
     @JoinColumn(name = "tierId")
     private Tier tier;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Antenna> antennas = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<SubComment> subComments = new ArrayList<>();
 }
