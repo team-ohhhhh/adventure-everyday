@@ -43,4 +43,6 @@ public class Post extends Base {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostLike> postLikes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
+    private List<CheckpointPost> checkpointPosts = new ArrayList<>();
 }

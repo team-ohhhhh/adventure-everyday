@@ -1,6 +1,7 @@
 package com.ssafy.antenna.domain.adventure;
 
 import com.ssafy.antenna.domain.category.Category;
+import com.ssafy.antenna.domain.post.CheckpointPost;
 import com.ssafy.antenna.domain.user.Checkpoint;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -38,4 +39,6 @@ public class AdventurePlace {
     @OneToMany(mappedBy = "adventurePlace", cascade = CascadeType.ALL)
     private List<Checkpoint> checkpoints = new ArrayList<>();
 
+    @OneToMany(mappedBy = "adventurePlace",cascade = CascadeType.ALL)
+    private List<CheckpointPost> checkpointPosts = new ArrayList<>();
 }

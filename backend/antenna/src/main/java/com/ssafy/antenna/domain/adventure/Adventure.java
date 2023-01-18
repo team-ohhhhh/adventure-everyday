@@ -4,8 +4,7 @@ import com.ssafy.antenna.domain.Base;
 import com.ssafy.antenna.domain.badge.Badge;
 import com.ssafy.antenna.domain.category.Category;
 import com.ssafy.antenna.domain.like.AdventureLike;
-import com.ssafy.antenna.domain.user.AdventureSucceed;
-import com.ssafy.antenna.domain.user.Follow;
+import com.ssafy.antenna.domain.post.CheckpointPost;
 import com.ssafy.antenna.domain.user.AdventureInProgress;
 import com.ssafy.antenna.domain.user.User;
 import jakarta.persistence.*;
@@ -13,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -74,5 +72,8 @@ public class Adventure extends Base {
 
     @OneToMany(mappedBy = "adventure", cascade = CascadeType.ALL)
     private List<AdventureReview> adventureReviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "adventure",cascade = CascadeType.ALL)
+    private List<CheckpointPost> checkpointPosts = new ArrayList<>();
 
 }
