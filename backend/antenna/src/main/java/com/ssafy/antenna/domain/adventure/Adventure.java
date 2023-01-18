@@ -3,6 +3,7 @@ package com.ssafy.antenna.domain.adventure;
 import com.ssafy.antenna.domain.Base;
 import com.ssafy.antenna.domain.badge.Badge;
 import com.ssafy.antenna.domain.category.Category;
+import com.ssafy.antenna.domain.like.AdventureLike;
 import com.ssafy.antenna.domain.user.Follow;
 import com.ssafy.antenna.domain.user.User;
 import jakarta.persistence.*;
@@ -63,6 +64,9 @@ public class Adventure extends Base {
 
     @OneToMany(mappedBy = "adventure", cascade = CascadeType.ALL)
     private List<AdventurePlace> adventurePlaces = new ArrayList<>();
+
+    @OneToMany(mappedBy = "adventure", cascade = CascadeType.ALL)
+    private List<AdventureLike> adventureLikes = new ArrayList<>();
 
 
 }
