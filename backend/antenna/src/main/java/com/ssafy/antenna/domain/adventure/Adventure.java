@@ -1,7 +1,6 @@
 package com.ssafy.antenna.domain.adventure;
 
 import com.ssafy.antenna.domain.Base;
-import com.ssafy.antenna.domain.badge.Badge;
 import com.ssafy.antenna.domain.category.Category;
 import com.ssafy.antenna.domain.like.AdventureLike;
 import com.ssafy.antenna.domain.post.CheckpointPost;
@@ -33,9 +32,10 @@ public class Adventure extends Base {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoryId")
     private Category category;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "badgeId")
-    private Badge badge;
+
+    @Column(columnDefinition = "boolean default false")
+    private boolean selected;
+
 
     @Column(columnDefinition = "varchar(255) not null")
     private String feat;
