@@ -1,9 +1,7 @@
 package com.ssafy.antenna.domain.user;
 
 import com.ssafy.antenna.domain.Base;
-import com.ssafy.antenna.domain.adventure.Adventure;
-import com.ssafy.antenna.domain.adventure.AdventurePlace;
-import com.ssafy.antenna.domain.adventure.AdventureReview;
+import com.ssafy.antenna.domain.adventure.*;
 import com.ssafy.antenna.domain.antenna.Antenna;
 import com.ssafy.antenna.domain.comment.Comment;
 import com.ssafy.antenna.domain.like.AdventureLike;
@@ -15,12 +13,7 @@ import com.ssafy.antenna.domain.subcomment.SubComment;
 import com.ssafy.antenna.domain.tier.Tier;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Check;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
-import org.springframework.data.annotation.CreatedDate;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -4,7 +4,6 @@ import com.ssafy.antenna.domain.Base;
 import com.ssafy.antenna.domain.category.Category;
 import com.ssafy.antenna.domain.like.AdventureLike;
 import com.ssafy.antenna.domain.post.CheckpointPost;
-import com.ssafy.antenna.domain.user.AdventureInProgress;
 import com.ssafy.antenna.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
