@@ -60,7 +60,7 @@ public class Adventure extends Base {
     private int validDate;
     @Column(columnDefinition = "datetime(6) default null")
     private LocalDateTime endDate;
-    @OneToMany(mappedBy = "adventure",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "adventure", cascade = CascadeType.ALL)
     private List<AdventureInProgress> adventuresInProgress;
 
     @OneToMany(mappedBy = "adventure", cascade = CascadeType.ALL)
@@ -72,7 +72,7 @@ public class Adventure extends Base {
     @OneToMany(mappedBy = "adventure", cascade = CascadeType.ALL)
     private List<AdventureReview> adventureReviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "adventure",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "adventure", cascade = CascadeType.ALL)
     private List<CheckpointPost> checkpointPosts = new ArrayList<>();
 
 }
