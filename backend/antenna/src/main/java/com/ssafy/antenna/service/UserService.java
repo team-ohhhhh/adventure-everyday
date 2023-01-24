@@ -102,4 +102,8 @@ public class UserService {
         followRepository.deleteById(followId);
         return deletedFollow;
     }
+
+    public boolean checkEmailUser(String email) {
+        return userRepository.countByEmail(email) != 0;
+    }
 }

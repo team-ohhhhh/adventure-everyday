@@ -73,4 +73,10 @@ public class UserController {
         return new ResponseEntity<>(userService.deleteFollowingUser(userId,followId).toResponse(), HttpStatus.OK);
     }
 
+    @GetMapping("/email")
+    public ResponseEntity<Boolean> CheckEmailUser(@RequestParam String email) throws Exception {
+        //validation 필요!!!!!!!!!!!!!!
+        return new ResponseEntity<>(userService.checkEmailUser(email), HttpStatus.OK);
+    }
+
 }
