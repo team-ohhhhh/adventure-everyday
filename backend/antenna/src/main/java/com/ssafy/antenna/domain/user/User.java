@@ -14,9 +14,16 @@ import com.ssafy.antenna.domain.tier.Tier;
 import com.ssafy.antenna.domain.user.dto.PostUserReq;
 import com.ssafy.antenna.domain.user.dto.UserDetailRes;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Data
@@ -24,7 +31,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-public class User extends Base {
+public class User extends Base implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
@@ -43,6 +50,9 @@ public class User extends Base {
     @Lob
     @Column(columnDefinition = "blob default null")
     private byte[] photo;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
@@ -88,7 +98,7 @@ public class User extends Base {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Checkpoint> checkpoints = new ArrayList<>();
 
-    static public User saveUser(PostUserReq postUserReq){
+    static public User saveUser(PostUserReq postUserReq) {
         User user = new User();
         user.setEmail(postUserReq.email());
         user.setNickname(postUserReq.nickname());
@@ -98,7 +108,42 @@ public class User extends Base {
         return user;
     }
 
-    public UserDetailRes toResponse(){
-        return new UserDetailRes(this.userId, this.email, this.nickname,this.password,this.level,this.exp,this.introduce,this.photo);
+    public UserDetailRes toResponse() {
+        return new UserDetailRes(this.userId, this.email, this.nickname, this.password, this.level, this.exp, this.introduce, this.photo);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return String.valueOf(userId);
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
