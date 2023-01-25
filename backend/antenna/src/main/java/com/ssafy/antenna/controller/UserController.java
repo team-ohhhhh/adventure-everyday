@@ -6,6 +6,7 @@ import com.ssafy.antenna.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,24 +16,26 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
-    @PostMapping
-    public ResponseEntity<PostUserRes> createUser(@RequestBody PostUserReq postUserReq){
-        //validation 필요!!!!!!!!!!!!!!
-        User user = userService.createUser(postUserReq);
-        return new ResponseEntity<>(new PostUserRes(user.getUserId(),user.getNickname()), HttpStatus.OK);
-    }
+
+//    @PostMapping
+//    public ResponseEntity<PostUserRes> createUser(@RequestBody PostUserReq postUserReq){
+//        //validation 필요!!!!!!!!!!!!!!
+//        User user = userService.createUser(postUserReq);
+//        return new ResponseEntity<>(new PostUserRes(user.getUserId(),user.getNickname()), HttpStatus.OK);
+//    }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDetailRes> getUser(@PathVariable Long userId) throws Exception {
+    public ResponseEntity<UserDetailRes> getUser(@PathVariable Long userId, Authentication authentication) throws Exception {
+        System.out.println(authentication.getName());
         //validation 필요!!!!!!!!!!!!!!
         return new ResponseEntity<>(userService.getUser(userId).toResponse(), HttpStatus.OK);
     }
 
-    @PostMapping("/log-in")
-    public ResponseEntity<LogInUserRes> logInUser(@RequestBody LogInUserReq logInUserReq) throws Exception {
-        //validation 필요!!!!!!!!!!!!!!
-        return new ResponseEntity<>(userService.logInUser(logInUserReq), HttpStatus.OK);
-    }
+//    @PostMapping("/log-in")
+//    public ResponseEntity<LogInUserRes> logInUser(@RequestBody LogInUserReq logInUserReq) throws Exception {
+//        //validation 필요!!!!!!!!!!!!!!
+//        return new ResponseEntity<>(userService.logInUser(logInUserReq), HttpStatus.OK);
+//    }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<UserDetailRes> deleteUser(@PathVariable Long userId) throws Exception {
