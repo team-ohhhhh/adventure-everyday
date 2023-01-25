@@ -1,10 +1,11 @@
 import React from 'react';
 import './App.css';
+import KakaoMap from './KakaoMap';
 
 function App() {
   return (
     <div className="App">
-      뜨기만 해라
+      <KakaoMap />
     </div>
   );
 }
