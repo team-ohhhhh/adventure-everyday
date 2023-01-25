@@ -85,4 +85,15 @@ function PasswordComponent(props) {
   )
 }
 
-export { EmailComponent, PasswordComponent }
+function NicknameComponent(props) {
+  return (
+    <div>
+      <label htmlFor="nickname">비밀번호</label>
+      <input id="nickname" onChange={(event) => { props.setNickname(event.target.value) }}></input>
+      <button onClick={() => { props.setStage(props.stage - 1)}}>이전</button>
+      { props.nickname.length >= 2 && <button onClick={() => { props.setStage(props.stage + 1)}}>다음</button>}
+    </div>
+  )
+}
+
+export { EmailComponent, PasswordComponent, NicknameComponent }

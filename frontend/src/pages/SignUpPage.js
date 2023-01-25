@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux"
-import { EmailComponent, PasswordComponent } from "../components/SignUp/ComponentsForSignUp";
+import { EmailComponent, PasswordComponent, NicknameComponent } from "../components/SignUp/ComponentsForSignUp";
 
 function SignUpPage() {
   let URL = useSelector((state) => state.URL)
@@ -46,6 +46,10 @@ function SignUpPage() {
       case 2:
         return (
           <PasswordComponent setPassword={setPassword} setPassword2={setPassword2} setStage={setStage} password={password} password2={password2}/>
+        )
+      case 3:
+        return (
+          <NicknameComponent setNickname={setNickname} setStage={setStage} nickname={nickname}/>
         )
     }
   return(
