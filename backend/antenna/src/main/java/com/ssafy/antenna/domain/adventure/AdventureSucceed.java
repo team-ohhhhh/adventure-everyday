@@ -1,29 +1,27 @@
-package com.ssafy.antenna.domain.user;
+package com.ssafy.antenna.domain.adventure;
 
 import com.ssafy.antenna.domain.Base;
-import com.ssafy.antenna.domain.adventure.AdventurePlace;
+import com.ssafy.antenna.domain.adventure.Adventure;
+import com.ssafy.antenna.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Checkpoint  extends Base {
+@Entity
+public class AdventureSucceed extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long checkpointId;
-
+    private Long succeedId;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     private User user;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "adventurePlaceId")
-    private AdventurePlace adventurePlace;
-
+    @JoinColumn(name = "adventure_id")
+    private Adventure adventure;
 }

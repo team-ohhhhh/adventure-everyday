@@ -1,9 +1,7 @@
 package com.ssafy.antenna.domain.adventure;
 
 import com.ssafy.antenna.domain.Base;
-import com.ssafy.antenna.domain.category.Category;
 import com.ssafy.antenna.domain.post.CheckpointPost;
-import com.ssafy.antenna.domain.user.Checkpoint;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

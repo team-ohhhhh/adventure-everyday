@@ -1,9 +1,7 @@
 package com.ssafy.antenna.domain.user;
 
 import com.ssafy.antenna.domain.Base;
-import com.ssafy.antenna.domain.adventure.Adventure;
-import com.ssafy.antenna.domain.adventure.AdventurePlace;
-import com.ssafy.antenna.domain.adventure.AdventureReview;
+import com.ssafy.antenna.domain.adventure.*;
 import com.ssafy.antenna.domain.antenna.Antenna;
 import com.ssafy.antenna.domain.comment.Comment;
 import com.ssafy.antenna.domain.like.AdventureLike;
@@ -13,15 +11,19 @@ import com.ssafy.antenna.domain.like.SubCommentLike;
 import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.subcomment.SubComment;
 import com.ssafy.antenna.domain.tier.Tier;
+import com.ssafy.antenna.domain.user.dto.PostUserReq;
+import com.ssafy.antenna.domain.user.dto.UserDetailRes;
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.Check;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
-import org.springframework.data.annotation.CreatedDate;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Data
@@ -29,7 +31,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-public class User extends Base {
+public class User extends Base implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
@@ -48,6 +50,9 @@ public class User extends Base {
     @Lob
     @Column(columnDefinition = "blob default null")
     private byte[] photo;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
@@ -92,4 +97,53 @@ public class User extends Base {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Checkpoint> checkpoints = new ArrayList<>();
+
+    static public User saveUser(PostUserReq postUserReq) {
+        User user = new User();
+        user.setEmail(postUserReq.email());
+        user.setNickname(postUserReq.nickname());
+        user.setPassword(postUserReq.password());
+        user.setIntroduce(postUserReq.introduce());
+        user.setPhoto(postUserReq.photo());
+        return user;
+    }
+
+    public UserDetailRes toResponse() {
+        return new UserDetailRes(this.userId, this.email, this.nickname, this.password, this.level, this.exp, this.introduce, this.photo);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return String.valueOf(userId);
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

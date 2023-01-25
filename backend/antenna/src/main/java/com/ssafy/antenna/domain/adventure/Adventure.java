@@ -1,11 +1,9 @@
 package com.ssafy.antenna.domain.adventure;
 
 import com.ssafy.antenna.domain.Base;
-import com.ssafy.antenna.domain.badge.Badge;
 import com.ssafy.antenna.domain.category.Category;
 import com.ssafy.antenna.domain.like.AdventureLike;
 import com.ssafy.antenna.domain.post.CheckpointPost;
-import com.ssafy.antenna.domain.user.AdventureInProgress;
 import com.ssafy.antenna.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,9 +31,10 @@ public class Adventure extends Base {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoryId")
     private Category category;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "badgeId")
-    private Badge badge;
+
+    @Column(columnDefinition = "boolean default false")
+    private boolean selected;
+
 
     @Column(columnDefinition = "varchar(255) not null")
     private String feat;
@@ -61,7 +60,7 @@ public class Adventure extends Base {
     private int validDate;
     @Column(columnDefinition = "datetime(6) default null")
     private LocalDateTime endDate;
-    @OneToMany(mappedBy = "adventure",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "adventure", cascade = CascadeType.ALL)
     private List<AdventureInProgress> adventuresInProgress;
 
     @OneToMany(mappedBy = "adventure", cascade = CascadeType.ALL)
@@ -73,7 +72,7 @@ public class Adventure extends Base {
     @OneToMany(mappedBy = "adventure", cascade = CascadeType.ALL)
     private List<AdventureReview> adventureReviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "adventure",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "adventure", cascade = CascadeType.ALL)
     private List<CheckpointPost> checkpointPosts = new ArrayList<>();
 
 }
