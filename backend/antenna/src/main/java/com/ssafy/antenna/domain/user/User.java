@@ -11,7 +11,6 @@ import com.ssafy.antenna.domain.like.SubCommentLike;
 import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.subcomment.SubComment;
 import com.ssafy.antenna.domain.tier.Tier;
-import com.ssafy.antenna.domain.user.dto.PostUserReq;
 import com.ssafy.antenna.domain.user.dto.UserDetailRes;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -98,18 +97,18 @@ public class User extends Base implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Checkpoint> checkpoints = new ArrayList<>();
 
-    static public User saveUser(PostUserReq postUserReq) {
-        User user = new User();
-        user.setEmail(postUserReq.email());
-        user.setNickname(postUserReq.nickname());
-        user.setPassword(postUserReq.password());
-        user.setIntroduce(postUserReq.introduce());
-        user.setPhoto(postUserReq.photo());
-        return user;
-    }
+//    static public User saveUser(PostUserReq postUserReq) {
+//        User user = new User();
+//        user.setEmail(postUserReq.email());
+//        user.setNickname(postUserReq.nickname());
+//        user.setPassword(postUserReq.password());
+//        user.setIntroduce(postUserReq.introduce());
+//        user.setPhoto(postUserReq.photo());
+//        return user;
+//    }
 
     public UserDetailRes toResponse() {
-        return new UserDetailRes(this.userId, this.email, this.nickname, this.password, this.level, this.exp, this.introduce, this.photo);
+        return new UserDetailRes(this.userId, this.email, this.nickname, this.level, this.exp, this.introduce, this.photo);
     }
 
     @Override

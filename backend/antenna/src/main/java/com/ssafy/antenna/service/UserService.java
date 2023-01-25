@@ -6,6 +6,7 @@ import com.ssafy.antenna.domain.user.dto.*;
 import com.ssafy.antenna.repository.FollowRepository;
 import com.ssafy.antenna.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,28 +18,12 @@ public class UserService {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
 
-    public User createUser(PostUserReq postUserReq) {
-        //validation 필요!!!!!!!!!!!!!!
-        User savedUser = userRepository.save(User.saveUser(postUserReq));
-        return savedUser;
-    }
+    private final PasswordEncoder passwordEncoder;
 
     public User getUser(Long userId) throws Exception {
         return userRepository.findById(userId).orElseThrow(() -> new Exception("입력된 인덱스를 갖는 유저가 없습니다."));
     }
 
-    public LogInUserRes logInUser(LogInUserReq logInUserReq) throws Exception {
-        //userName 있는지 확인 - 에러 처리 필요
-        User user = (User) userRepository.findByEmail(logInUserReq.email())
-                .orElseThrow(() -> new Exception("이메일을 다시 확인해주세요."));
-
-        //password가 일치하는지 확인 - 에러 처리 필요
-        if (!user.getPassword().equals(logInUserReq.password())) {
-            throw new Exception("비밀번호를 다시 확인해주세요.");
-        }
-        return new LogInUserRes(user.getUserId(), user.getNickname());
-
-    }
 
     public User deleteUser(Long userId) throws Exception {
         //유저 정보가 존재 하는지 먼저 검색
@@ -52,10 +37,16 @@ public class UserService {
     public User modifyPwdUser(Long userId, ModifyPwdUserReq modifyPwdUserReq) throws Exception {
         //유저 정보가 존재 하는지 먼저 검색
         User user = userRepository.findById(userId).orElseThrow(() -> new Exception("입력된 인덱스를 갖는 유저가 없습니다."));
-        //존재한다면, 비밀번호 수정 작업을 수행한다.
-        user.setPassword(modifyPwdUserReq.newPassword());
-        User savedUser = userRepository.save(user);
-        return savedUser;
+        //존재한다면, 기존 비밀번호가 일치하는지 확인한다.
+        if(passwordEncoder.matches(modifyPwdUserReq.oldPassword(), user.getPassword())){
+            user.setPassword(passwordEncoder.encode(modifyPwdUserReq.newPassword()));
+            User savedUser = userRepository.save(user);
+            return savedUser;
+        }else{
+            throw new Exception("기존 비밀번호가 일치하지 않습니다.");
+        }
+
+
     }
 
     public FollowDetailRes createFollowUser(Long userId, CreateFollowUserReq createFollowUserReq) throws Exception {
