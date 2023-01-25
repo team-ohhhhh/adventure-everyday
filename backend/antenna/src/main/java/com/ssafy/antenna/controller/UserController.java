@@ -1,6 +1,7 @@
 package com.ssafy.antenna.controller;
 
 import com.ssafy.antenna.domain.email.dto.AuthEmailRes;
+import com.ssafy.antenna.domain.email.dto.CheckEmailRes;
 import com.ssafy.antenna.domain.user.dto.*;
 import com.ssafy.antenna.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,12 @@ public class UserController {
         //validation 필요!!!!!!!!!!!!!!
         return new ResponseEntity<>(userService.modifyPwdUser(Long.valueOf(authentication.getName()),modifyPwdUserReq).toResponse(), HttpStatus.OK);
     }
+
+    @PutMapping("/password/reset")
+    public ResponseEntity<AuthEmailRes> resetPwdUser(@RequestBody ResetPwdUserReq resetPwdUserReq) throws Exception {
+        //validation 필요!!!!!!!!!!!!!!
+        return new ResponseEntity<>(userService.resetPwdUser(resetPwdUserReq), HttpStatus.OK);
+    }
     /*팔로잉의 뜻
     follow + ing 의 형태로 팔로우를 하고 있는 상태를 말합니다.
     팔로우 중이라는 뜻으로 내가 이미 이 계정을 팔로우하고 있다, 글 받아보기를 하고 있는 것입니다.
@@ -65,9 +72,21 @@ public class UserController {
     }
 
     @GetMapping("/check-email")
-    public ResponseEntity<AuthEmailRes> CheckEmailUser(@RequestParam String email) throws Exception {
+    public ResponseEntity<CheckEmailRes> checkEmailUser(@RequestParam String email) throws Exception {
         //validation 필요!!!!!!!!!!!!!!
-        return new ResponseEntity<>(new AuthEmailRes(userService.checkEmailUser(email)), HttpStatus.OK);
+        return new ResponseEntity<>(userService.checkEmailUser(email), HttpStatus.OK);
+    }
+
+    @GetMapping("/check-nickname")
+    public ResponseEntity<CheckNicknameRes> checkNicknameUser(@RequestParam String nickname) throws Exception {
+        //validation 필요!!!!!!!!!!!!!!
+        return new ResponseEntity<>(userService.checkNicknameUser(nickname), HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<UserDetailRes>> likeNicknameUser(@RequestParam String nickname) throws Exception {
+        //validation 필요!!!!!!!!!!!!!!
+        return new ResponseEntity<>(userService.likeNicknameUser(nickname), HttpStatus.OK);
     }
 
 }

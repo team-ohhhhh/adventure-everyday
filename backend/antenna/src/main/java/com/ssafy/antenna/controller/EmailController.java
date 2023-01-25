@@ -8,8 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/email")
@@ -17,12 +15,12 @@ public class EmailController {
     private final EmailService emailService;
 
     @GetMapping("/send")
-    public ResponseEntity<AuthEmailRes> SendMail(@RequestParam String email) {
+    public ResponseEntity<AuthEmailRes> sendMail(@RequestParam String email) {
         return new ResponseEntity<>(new AuthEmailRes(emailService.sendMail(email)), HttpStatus.OK);
     }
 
     @PostMapping("/auth")
-    public ResponseEntity<AuthEmailRes> CheckEmailAuth(@RequestBody AuthEmailReq authEmailReq) throws Exception {
+    public ResponseEntity<AuthEmailRes> checkEmailAuth(@RequestBody AuthEmailReq authEmailReq) throws Exception {
         return new ResponseEntity<>(new AuthEmailRes(emailService.checkEmailAuth(authEmailReq)), HttpStatus.OK);
     }
 }

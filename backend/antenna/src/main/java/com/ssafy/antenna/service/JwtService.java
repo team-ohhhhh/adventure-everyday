@@ -1,4 +1,4 @@
-package com.ssafy.antenna.config;
+package com.ssafy.antenna.service;
 
 
 import io.jsonwebtoken.Claims;

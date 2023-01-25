@@ -1,23 +1,29 @@
 package com.ssafy.antenna.service;
 
+import com.ssafy.antenna.domain.email.dto.AuthEmailRes;
+import com.ssafy.antenna.domain.email.dto.CheckEmailRes;
 import com.ssafy.antenna.domain.user.Follow;
 import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.domain.user.dto.*;
 import com.ssafy.antenna.repository.FollowRepository;
 import com.ssafy.antenna.repository.UserRepository;
+import com.ssafy.antenna.util.EmailHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
-
+    private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
 
     public User getUser(Long userId) throws Exception {
@@ -38,11 +44,11 @@ public class UserService {
         //유저 정보가 존재 하는지 먼저 검색
         User user = userRepository.findById(userId).orElseThrow(() -> new Exception("입력된 인덱스를 갖는 유저가 없습니다."));
         //존재한다면, 기존 비밀번호가 일치하는지 확인한다.
-        if(passwordEncoder.matches(modifyPwdUserReq.oldPassword(), user.getPassword())){
+        if (passwordEncoder.matches(modifyPwdUserReq.oldPassword(), user.getPassword())) {
             user.setPassword(passwordEncoder.encode(modifyPwdUserReq.newPassword()));
             User savedUser = userRepository.save(user);
             return savedUser;
-        }else{
+        } else {
             throw new Exception("기존 비밀번호가 일치하지 않습니다.");
         }
 
@@ -94,7 +100,63 @@ public class UserService {
         return deletedFollow;
     }
 
-    public boolean checkEmailUser(String email) {
-        return userRepository.countByEmail(email) != 0;
+    public CheckEmailRes checkEmailUser(String email) throws Exception {
+        int count = userRepository.countByEmail(email);
+        CheckEmailRes checkEmailRes = new CheckEmailRes(false, null);
+        if (count == 1) {
+            User user = userRepository.findByEmail(email).orElseThrow(() -> new Exception("유저 조회중 문제 발생"));
+            checkEmailRes = new CheckEmailRes(true, user.toResponse());
+        }
+        return checkEmailRes;
+    }
+
+    @Transactional
+    public AuthEmailRes resetPwdUser(ResetPwdUserReq resetPwdUserReq) throws Exception {
+        EmailHandler emailHandler = new EmailHandler(javaMailSender);
+        User user = userRepository.findById(resetPwdUserReq.userId()).orElseThrow(() -> new Exception("유저가 존재하지 않습니다."));
+        emailHandler.setTo(user.getEmail());
+        emailHandler.setSubject("antenna 임시 비밀번호 발급 안내입니다.");
+        Random rand = new Random();
+        StringBuffer key = new StringBuffer();
+        for (int i = 0; i < 12; i++) {
+            int index = rand.nextInt(3);
+            switch (index) {
+                case 0:
+                    key.append(Character.toChars(((rand.nextInt(26)) + 97)));
+                    break;
+                case 1:
+                    key.append(Character.toChars(((rand.nextInt(26)) + 65)));
+                    break;
+                case 2:
+                    key.append(Character.toChars((rand.nextInt(10)) + 48));
+                    break;
+            }
+        }
+        String htmlContent = "<p> 임시 비밀번호는 [" + key.toString() + "] 입니다.<p>";
+        emailHandler.setText(htmlContent, true);
+        emailHandler.send();
+        User newUser = new User(user.getCreateTime(), user.getUpdateTime(), user.getUserId(), user.getEmail(), user.getNickname(), passwordEncoder.encode(key.toString()), user.getLevel(), user.getExp(), user.getIntroduce(), user.getPhoto());
+        userRepository.save(newUser);
+
+        return new AuthEmailRes(true);
+    }
+
+    public CheckNicknameRes checkNicknameUser(String nickname) throws Exception {
+        int count = userRepository.countByNickname(nickname);
+        CheckNicknameRes checkNicknameRes = new CheckNicknameRes(false, null);
+        if (count == 1) {
+            User user = userRepository.findByNickname(nickname).orElseThrow(() -> new Exception("유저 조회중 문제 발생"));
+            checkNicknameRes = new CheckNicknameRes(true, user.toResponse());
+        }
+        return checkNicknameRes;
+    }
+
+    public List<UserDetailRes> likeNicknameUser(String nickname) {
+        List<User> userList = userRepository.findAllByNicknameStartingWith(nickname);
+        List<UserDetailRes> userDetailResList = new ArrayList<>();
+        for (int i = 0; i < userList.size(); i++) {
+            userDetailResList.add(userList.get(i).toResponse());
+        }
+        return userDetailResList;
     }
 }
