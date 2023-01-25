@@ -1,6 +1,7 @@
 package com.ssafy.antenna.controller;
 
 import com.ssafy.antenna.domain.email.dto.AuthEmailReq;
+import com.ssafy.antenna.domain.email.dto.AuthEmailRes;
 import com.ssafy.antenna.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,13 +16,13 @@ import java.util.Map;
 public class EmailController {
     private final EmailService emailService;
 
-    @GetMapping
-    public ResponseEntity<Boolean> SendMail(@RequestParam String email) {
-        return new ResponseEntity<>(emailService.sendMail(email), HttpStatus.OK);
+    @GetMapping("/send")
+    public ResponseEntity<AuthEmailRes> SendMail(@RequestParam String email) {
+        return new ResponseEntity<>(new AuthEmailRes(emailService.sendMail(email)), HttpStatus.OK);
     }
 
     @PostMapping("/auth")
-    public ResponseEntity<Boolean> CheckEmailAuth(@RequestBody AuthEmailReq authEmailReq) throws Exception {
-        return new ResponseEntity<>(emailService.checkEmailAuth(authEmailReq), HttpStatus.OK);
+    public ResponseEntity<AuthEmailRes> CheckEmailAuth(@RequestBody AuthEmailReq authEmailReq) throws Exception {
+        return new ResponseEntity<>(new AuthEmailRes(emailService.checkEmailAuth(authEmailReq)), HttpStatus.OK);
     }
 }

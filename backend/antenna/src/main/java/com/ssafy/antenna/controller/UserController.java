@@ -1,5 +1,6 @@
 package com.ssafy.antenna.controller;
 
+import com.ssafy.antenna.domain.email.dto.AuthEmailRes;
 import com.ssafy.antenna.domain.user.dto.*;
 import com.ssafy.antenna.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -63,10 +64,10 @@ public class UserController {
         return new ResponseEntity<>(userService.deleteFollowingUser(Long.valueOf(authentication.getName()),followId).toResponse(), HttpStatus.OK);
     }
 
-    @GetMapping("/email")
-    public ResponseEntity<Boolean> CheckEmailUser(@RequestParam String email) throws Exception {
+    @GetMapping("/check-email")
+    public ResponseEntity<AuthEmailRes> CheckEmailUser(@RequestParam String email) throws Exception {
         //validation 필요!!!!!!!!!!!!!!
-        return new ResponseEntity<>(userService.checkEmailUser(email), HttpStatus.OK);
+        return new ResponseEntity<>(new AuthEmailRes(userService.checkEmailUser(email)), HttpStatus.OK);
     }
 
 }
