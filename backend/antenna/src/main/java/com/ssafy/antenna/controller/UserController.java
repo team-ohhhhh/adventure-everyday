@@ -36,7 +36,7 @@ public class UserController {
     public ResponseEntity<UserDetailRes> modifyPwdUser(@RequestBody ModifyPwdUserReq modifyPwdUserReq, Authentication authentication) throws Exception {
         System.out.println(Long.valueOf(authentication.getName()));
         //validation 필요!!!!!!!!!!!!!!
-        return new ResponseEntity<>(userService.modifyPwdUser(Long.valueOf(authentication.getName()),modifyPwdUserReq).toResponse(), HttpStatus.OK);
+        return new ResponseEntity<>(userService.modifyPwdUser(Long.valueOf(authentication.getName()), modifyPwdUserReq).toResponse(), HttpStatus.OK);
     }
 
     @PutMapping("/password/reset")
@@ -44,6 +44,7 @@ public class UserController {
         //validation 필요!!!!!!!!!!!!!!
         return new ResponseEntity<>(userService.resetPwdUser(resetPwdUserReq), HttpStatus.OK);
     }
+
     /*팔로잉의 뜻
     follow + ing 의 형태로 팔로우를 하고 있는 상태를 말합니다.
     팔로우 중이라는 뜻으로 내가 이미 이 계정을 팔로우하고 있다, 글 받아보기를 하고 있는 것입니다.
@@ -69,7 +70,7 @@ public class UserController {
     @DeleteMapping("/followers/{followId}")
     public ResponseEntity<FollowDetailRes> deleteFollowingUser(Authentication authentication, @PathVariable Long followId) throws Exception {
         //validation 필요!!!!!!!!!!!!!!
-        return new ResponseEntity<>(userService.deleteFollowingUser(Long.valueOf(authentication.getName()),followId).toResponse(), HttpStatus.OK);
+        return new ResponseEntity<>(userService.deleteFollowingUser(Long.valueOf(authentication.getName()), followId).toResponse(), HttpStatus.OK);
     }
 
     @GetMapping("/check-email")
@@ -88,6 +89,12 @@ public class UserController {
     public ResponseEntity<List<UserDetailRes>> likeNicknameUser(@RequestParam String nickname) throws Exception {
         //validation 필요!!!!!!!!!!!!!!
         return new ResponseEntity<>(userService.likeNicknameUser(nickname), HttpStatus.OK);
+    }
+
+    @PutMapping("/profile")
+    public ResponseEntity<UserDetailRes> modifyProfileUser(@RequestBody ModifyProfileUserReq modifyProfileUserReq, Authentication authentication) throws Exception {
+        //validation 필요!!!!!!!!!!!!!!
+        return new ResponseEntity<>(userService.modifyProfileUser(modifyProfileUserReq.introduce(), Long.valueOf(authentication.getName())), HttpStatus.OK);
     }
 
 }

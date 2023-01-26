@@ -175,4 +175,13 @@ public class UserService {
         byte[] photo = imageUtil.decompressImage(user.getPhoto());
         return photo;
     }
+
+    public UserDetailRes modifyProfileUser(String introduce, Long userId) throws Exception {
+        //유저가 존재하는지 먼저 확인
+        User user = userRepository.findById(userId).orElseThrow(() -> new Exception("입력된 인덱스를 갖는 유저가 없습니다."));
+        //소개글 수정 후 저장
+        User newUser = new User(user.getCreateTime(), user.getUpdateTime(), user.getUserId(), user.getEmail(), user.getNickname(), user.getPassword(), user.getLevel(), user.getExp(), introduce, user.getPhoto());
+        userRepository.save(newUser);
+        return newUser.toResponse();
+    }
 }
