@@ -51,6 +51,9 @@ public class User extends Base implements UserDetails {
     @Column(columnDefinition = "blob default null")
     private byte[] photo;
 
+    @Column(columnDefinition = "varchar(255) default null")
+    private String photoType;
+
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
