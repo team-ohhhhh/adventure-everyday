@@ -1,5 +1,6 @@
 package com.ssafy.antenna.controller;
 
+import com.ssafy.antenna.domain.ResultResponse;
 import com.ssafy.antenna.domain.user.dto.LogInUserReq;
 import com.ssafy.antenna.domain.user.dto.LogInUserRes;
 import com.ssafy.antenna.domain.user.dto.PostUserReq;
@@ -22,12 +23,12 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping(value="/register", consumes = {"application/json","multipart/form-data"})
-    public ResponseEntity<LogInUserRes> register(@RequestPart(value = "req") PostUserReq postUserReq, @RequestPart(value = "photo", required = false) MultipartFile photo) throws IOException {
-        return new ResponseEntity<>(authenticationService.register(postUserReq, photo), HttpStatus.OK);
+    public ResultResponse<LogInUserRes> register(@RequestPart(value = "req") PostUserReq postUserReq, @RequestPart(value = "photo", required = false) MultipartFile photo) throws IOException {
+        return ResultResponse.success(authenticationService.register(postUserReq, photo));
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<LogInUserRes> authenticate(@RequestBody LogInUserReq logInUserReq) {
-        return new ResponseEntity<>(authenticationService.authenticate(logInUserReq), HttpStatus.OK);
+    public ResultResponse<LogInUserRes> authenticate(@RequestBody LogInUserReq logInUserReq) {
+        return ResultResponse.success(authenticationService.authenticate(logInUserReq));
     }
 }
