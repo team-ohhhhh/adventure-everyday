@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import com.ssafy.antenna.exception.not_found.UserNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class UserService {
     private final ImageUtil imageUtil;
 
     public User getUser(Long userId) throws Exception {
-        return userRepository.findById(userId).orElseThrow(() -> new Exception("입력된 인덱스를 갖는 유저가 없습니다."));
+        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
     }
 
 

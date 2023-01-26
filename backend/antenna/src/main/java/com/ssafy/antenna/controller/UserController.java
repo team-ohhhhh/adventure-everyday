@@ -1,5 +1,6 @@
 package com.ssafy.antenna.controller;
 
+import com.ssafy.antenna.domain.ResultResponse;
 import com.ssafy.antenna.domain.email.dto.AuthEmailRes;
 import com.ssafy.antenna.domain.email.dto.CheckEmailRes;
 import com.ssafy.antenna.domain.user.dto.*;
@@ -20,9 +21,9 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDetailRes> getUser(@PathVariable Long userId, Authentication authentication) throws Exception {
+    public ResultResponse<UserDetailRes> getUser(@PathVariable Long userId, Authentication authentication) throws Exception {
         //validation 필요!!!!!!!!!!!!!!
-        return new ResponseEntity<>(userService.getUser(userId).toResponse(), HttpStatus.OK);
+        return ResultResponse.success(userService.getUser(userId).toResponse());
     }
 
 
