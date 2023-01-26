@@ -6,10 +6,9 @@ import com.ssafy.antenna.domain.email.dto.CheckEmailRes;
 import com.ssafy.antenna.domain.user.dto.*;
 import com.ssafy.antenna.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,29 +20,29 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/{userId}")
-    public ResultResponse<UserDetailRes> getUser(@PathVariable Long userId, Authentication authentication) throws Exception {
+    public ResultResponse<UserDetailRes> getUser(@PathVariable Long userId) throws Exception {
         //validation 필요!!!!!!!!!!!!!!
         return ResultResponse.success(userService.getUser(userId).toResponse());
     }
 
 
     @DeleteMapping
-    public ResponseEntity<UserDetailRes> deleteUser(Authentication authentication) throws Exception {
+    public ResultResponse<UserDetailRes> deleteUser(Authentication authentication) throws Exception {
         //validation 필요!!!!!!!!!!!!!!
-        return new ResponseEntity<>(userService.deleteUser(Long.valueOf(authentication.getName())).toResponse(), HttpStatus.OK);
+        return ResultResponse.success(userService.deleteUser(Long.valueOf(authentication.getName())).toResponse());
     }
 
     @PutMapping("/password")
-    public ResponseEntity<UserDetailRes> modifyPwdUser(@RequestBody ModifyPwdUserReq modifyPwdUserReq, Authentication authentication) throws Exception {
+    public ResultResponse<UserDetailRes> modifyPwdUser(@RequestBody ModifyPwdUserReq modifyPwdUserReq, Authentication authentication) throws Exception {
         System.out.println(Long.valueOf(authentication.getName()));
         //validation 필요!!!!!!!!!!!!!!
-        return new ResponseEntity<>(userService.modifyPwdUser(Long.valueOf(authentication.getName()), modifyPwdUserReq).toResponse(), HttpStatus.OK);
+        return ResultResponse.success(userService.modifyPwdUser(Long.valueOf(authentication.getName()), modifyPwdUserReq).toResponse());
     }
 
     @PutMapping("/password/reset")
-    public ResponseEntity<AuthEmailRes> resetPwdUser(@RequestBody ResetPwdUserReq resetPwdUserReq) throws Exception {
+    public ResultResponse<AuthEmailRes> resetPwdUser(@RequestBody ResetPwdUserReq resetPwdUserReq) throws Exception {
         //validation 필요!!!!!!!!!!!!!!
-        return new ResponseEntity<>(userService.resetPwdUser(resetPwdUserReq), HttpStatus.OK);
+        return ResultResponse.success(userService.resetPwdUser(resetPwdUserReq));
     }
 
     /*팔로잉의 뜻
@@ -51,51 +50,56 @@ public class UserController {
     팔로우 중이라는 뜻으로 내가 이미 이 계정을 팔로우하고 있다, 글 받아보기를 하고 있는 것입니다.
     이때 내가 팔로우 한 사람/계정이 A 라고 하면, 나는 A를 팔로잉 하고 있고, 나는 A의 팔로워가 됩니다. */
     @PostMapping("/followings")
-    public ResponseEntity<FollowDetailRes> createFollowUser(@RequestBody CreateFollowUserReq createFollowUserReq, Authentication authentication) throws Exception {
+    public ResultResponse<FollowDetailRes> createFollowUser(@RequestBody CreateFollowUserReq createFollowUserReq, Authentication authentication) throws Exception {
         //validation 필요!!!!!!!!!!!!!!
-        return new ResponseEntity<>(userService.createFollowUser(Long.valueOf(authentication.getName()), createFollowUserReq), HttpStatus.OK);
+        return ResultResponse.success(userService.createFollowUser(Long.valueOf(authentication.getName()), createFollowUserReq));
     }
 
     @GetMapping("/followings")
-    public ResponseEntity<List<UserDetailRes>> getFollowingUser(Authentication authentication) throws Exception {
+    public ResultResponse<List<UserDetailRes>> getFollowingUser(Authentication authentication) throws Exception {
         //validation 필요!!!!!!!!!!!!!!
-        return new ResponseEntity<>(userService.getFollowingUser(Long.valueOf(authentication.getName())), HttpStatus.OK);
+        return ResultResponse.success(userService.getFollowingUser(Long.valueOf(authentication.getName())));
     }
 
     @GetMapping("/followers")
-    public ResponseEntity<List<UserDetailRes>> getFollowerUser(Authentication authentication) throws Exception {
+    public ResultResponse<List<UserDetailRes>> getFollowerUser(Authentication authentication) throws Exception {
         //validation 필요!!!!!!!!!!!!!!
-        return new ResponseEntity<>(userService.getFollowerUser(Long.valueOf(authentication.getName())), HttpStatus.OK);
+        return ResultResponse.success(userService.getFollowerUser(Long.valueOf(authentication.getName())));
     }
 
     @DeleteMapping("/followers/{followId}")
-    public ResponseEntity<FollowDetailRes> deleteFollowingUser(Authentication authentication, @PathVariable Long followId) throws Exception {
+    public ResultResponse<FollowDetailRes> deleteFollowingUser(Authentication authentication, @PathVariable Long followId) throws Exception {
         //validation 필요!!!!!!!!!!!!!!
-        return new ResponseEntity<>(userService.deleteFollowingUser(Long.valueOf(authentication.getName()), followId).toResponse(), HttpStatus.OK);
+        return ResultResponse.success(userService.deleteFollowingUser(Long.valueOf(authentication.getName()), followId).toResponse());
     }
 
     @GetMapping("/check-email")
-    public ResponseEntity<CheckEmailRes> checkEmailUser(@RequestParam String email) throws Exception {
+    public ResultResponse<CheckEmailRes> checkEmailUser(@RequestParam String email) throws Exception {
         //validation 필요!!!!!!!!!!!!!!
-        return new ResponseEntity<>(userService.checkEmailUser(email), HttpStatus.OK);
+        return ResultResponse.success(userService.checkEmailUser(email));
     }
 
     @GetMapping("/check-nickname")
-    public ResponseEntity<CheckNicknameRes> checkNicknameUser(@RequestParam String nickname) throws Exception {
+    public ResultResponse<CheckNicknameRes> checkNicknameUser(@RequestParam String nickname) throws Exception {
         //validation 필요!!!!!!!!!!!!!!
-        return new ResponseEntity<>(userService.checkNicknameUser(nickname), HttpStatus.OK);
+        return ResultResponse.success(userService.checkNicknameUser(nickname));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<UserDetailRes>> likeNicknameUser(@RequestParam String nickname) throws Exception {
+    public ResultResponse<List<UserDetailRes>> likeNicknameUser(@RequestParam String nickname) throws Exception {
         //validation 필요!!!!!!!!!!!!!!
-        return new ResponseEntity<>(userService.likeNicknameUser(nickname), HttpStatus.OK);
+        return ResultResponse.success(userService.likeNicknameUser(nickname));
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<UserDetailRes> modifyProfileUser(@RequestBody ModifyProfileUserReq modifyProfileUserReq, Authentication authentication) throws Exception {
+    public ResultResponse<UserDetailRes> modifyProfileUser(@RequestBody ModifyProfileUserReq modifyProfileUserReq, Authentication authentication) throws Exception {
         //validation 필요!!!!!!!!!!!!!!
-        return new ResponseEntity<>(userService.modifyProfileUser(modifyProfileUserReq.introduce(), Long.valueOf(authentication.getName())), HttpStatus.OK);
+        return ResultResponse.success(userService.modifyProfileUser(modifyProfileUserReq.introduce(), Long.valueOf(authentication.getName())));
+    }
+
+    @PutMapping("/photo")
+    public ResultResponse<String> modifyProfilePhoto(@RequestParam MultipartFile multipartFile, Authentication authentication) {
+        return ResultResponse.success(userService.uploadImage(multipartFile, Long.valueOf(authentication.getName())));
     }
 
 }
