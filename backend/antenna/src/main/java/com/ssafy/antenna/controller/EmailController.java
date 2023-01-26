@@ -1,5 +1,6 @@
 package com.ssafy.antenna.controller;
 
+import com.ssafy.antenna.domain.ResultResponse;
 import com.ssafy.antenna.domain.email.dto.AuthEmailReq;
 import com.ssafy.antenna.domain.email.dto.AuthEmailRes;
 import com.ssafy.antenna.service.EmailService;
@@ -16,12 +17,12 @@ public class EmailController {
     private final EmailService emailService;
 
     @GetMapping("/send")
-    public ResponseEntity<AuthEmailRes> sendMail(@RequestParam String email) {
-        return new ResponseEntity<>(new AuthEmailRes(emailService.sendMail(email)), HttpStatus.OK);
+    public ResultResponse<AuthEmailRes> sendMail(@RequestParam String email) {
+        return ResultResponse.success(new AuthEmailRes(emailService.sendMail(email)));
     }
 
     @PostMapping("/auth")
-    public ResponseEntity<AuthEmailRes> checkEmailAuth(@RequestBody AuthEmailReq authEmailReq) throws Exception {
-        return new ResponseEntity<>(new AuthEmailRes(emailService.checkEmailAuth(authEmailReq)), HttpStatus.OK);
+    public ResultResponse<AuthEmailRes> checkEmailAuth(@RequestBody AuthEmailReq authEmailReq) throws Exception {
+        return ResultResponse.success(new AuthEmailRes(emailService.checkEmailAuth(authEmailReq)));
     }
 }

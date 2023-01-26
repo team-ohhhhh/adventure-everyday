@@ -2,6 +2,7 @@ package com.ssafy.antenna.service;
 
 import com.ssafy.antenna.domain.email.Email;
 import com.ssafy.antenna.domain.email.dto.AuthEmailReq;
+import com.ssafy.antenna.exception.not_found.CertificationSendNotFoundException;
 import com.ssafy.antenna.repository.EmailRepository;
 import com.ssafy.antenna.util.EmailUtil;
 import lombok.RequiredArgsConstructor;
@@ -54,8 +55,8 @@ public class EmailService {
         }
     }
 
-    public boolean checkEmailAuth(AuthEmailReq authEmailReq) throws Exception {
-        Email email = emailRepository.findByEmail(authEmailReq.email()).orElseThrow(() -> new Exception("입력된 이메일은 인증번호를 전송한 내역이 없습니다."));
+    public boolean checkEmailAuth(AuthEmailReq authEmailReq) {
+        Email email = emailRepository.findByEmail(authEmailReq.email()).orElseThrow(CertificationSendNotFoundException::new);
         if (email.getAuthNumber().equals(authEmailReq.auth()))
             return true;
         else
