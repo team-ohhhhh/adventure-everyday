@@ -4,9 +4,7 @@ import KakaoMap from "./KakaoMap";
 import LogInPage from "./pages/LogInPage";
 import SignUpPage from "./pages/SignUpPage";
 import { Routes, Route, Link } from "react-router-dom";
-import ArticleCreatePage from "./pages/ArticleCreatePage";
-import ArticlePhoto from "./pages/ArticlePhoto";
-import ArticleText from "./pages/ArticleText";
+import ArticleCreatePage from "./pages/article/ArticleCreatePage";
 
 function App() {
   return (
@@ -22,8 +20,6 @@ function App() {
         <Route path="/login" element={<LogInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/create/" element={<ArticleCreatePage />} />
-        <Route path="/create/photo" element={<ArticlePhoto />} />
-        <Route path="/create/text" element={<ArticleText />} />
       </Routes>
     </div>
   );
