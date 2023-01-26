@@ -7,12 +7,14 @@ import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.domain.user.dto.*;
 import com.ssafy.antenna.repository.FollowRepository;
 import com.ssafy.antenna.repository.UserRepository;
-import com.ssafy.antenna.util.EmailHandler;
+import com.ssafy.antenna.util.EmailUtil;
+import com.ssafy.antenna.util.ImageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,7 @@ public class UserService {
     private final FollowRepository followRepository;
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
+    private final ImageUtil imageUtil;
 
     public User getUser(Long userId) throws Exception {
         return userRepository.findById(userId).orElseThrow(() -> new Exception("입력된 인덱스를 갖는 유저가 없습니다."));
@@ -112,10 +115,10 @@ public class UserService {
 
     @Transactional
     public AuthEmailRes resetPwdUser(ResetPwdUserReq resetPwdUserReq) throws Exception {
-        EmailHandler emailHandler = new EmailHandler(javaMailSender);
+        EmailUtil emailUtil = new EmailUtil(javaMailSender);
         User user = userRepository.findById(resetPwdUserReq.userId()).orElseThrow(() -> new Exception("유저가 존재하지 않습니다."));
-        emailHandler.setTo(user.getEmail());
-        emailHandler.setSubject("antenna 임시 비밀번호 발급 안내입니다.");
+        emailUtil.setTo(user.getEmail());
+        emailUtil.setSubject("antenna 임시 비밀번호 발급 안내입니다.");
         Random rand = new Random();
         StringBuffer key = new StringBuffer();
         for (int i = 0; i < 12; i++) {
@@ -133,8 +136,8 @@ public class UserService {
             }
         }
         String htmlContent = "<p> 임시 비밀번호는 [" + key.toString() + "] 입니다.<p>";
-        emailHandler.setText(htmlContent, true);
-        emailHandler.send();
+        emailUtil.setText(htmlContent, true);
+        emailUtil.send();
         User newUser = new User(user.getCreateTime(), user.getUpdateTime(), user.getUserId(), user.getEmail(), user.getNickname(), passwordEncoder.encode(key.toString()), user.getLevel(), user.getExp(), user.getIntroduce(), user.getPhoto());
         userRepository.save(newUser);
 
@@ -158,5 +161,18 @@ public class UserService {
             userDetailResList.add(userList.get(i).toResponse());
         }
         return userDetailResList;
+    }
+
+    public String uploadImage(MultipartFile multipartFile, Long userId) throws Exception {
+        User user = getUser(userId);
+        user.setPhoto(imageUtil.compressImage(multipartFile.getBytes()));
+        userRepository.save(user);
+        return "succeed";
+    }
+
+    public byte[] downloadImage(Long userId) throws Exception {
+        User user = getUser(userId);
+        byte[] photo = imageUtil.decompressImage(user.getPhoto());
+        return photo;
     }
 }
