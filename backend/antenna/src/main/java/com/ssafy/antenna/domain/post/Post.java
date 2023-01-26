@@ -27,7 +27,7 @@ public class Post extends Base {
     private String title;
     @Column(columnDefinition = "varchar(255) not null")
     private String content;
-    @Column(columnDefinition = "Point not null")
+    @Column(columnDefinition = "Point default null")
     private Point coordinate;
     @Column(columnDefinition = "blob default null")
     private byte[] photo;
