@@ -24,7 +24,7 @@ function SignUpPage() {
   // 회원가입 axios
   const signUp = function () {
     axios({
-      url : URL + '/users',
+      url : URL + '/auth/register',
       method: 'post',
       data: {
         email,
@@ -35,17 +35,16 @@ function SignUpPage() {
       }
     })
     .then(function (response) {
-      console.log(response.data, '--------------------------------')
     })
     .then(setStage(stage + 1))
-    .catch((error) => console.log(error, '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'))
+    .catch((error) => console.log(error))
   }
   // 스테이지 별 컴포넌트 변경
   switch (stage) {
     case 0:
       return (
         <div>
-          <button onClick={ () => {setStage(stage+1)} }>시작</button>
+          <button className="signUpButton" onClick={ () => {setStage(stage+1)}}>이메일로 회원가입</button>
         </div>
       )
       case 1:

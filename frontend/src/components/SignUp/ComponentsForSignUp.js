@@ -16,7 +16,7 @@ function EmailComponent(props) {
   // 이메일 보내기 위한 axios -> 전송 성공시 isSent를 True로 
   const sendEmail = function() {
     axios({
-      url : URL + '/email',
+      url : URL + '/email/send',
       method: 'get',
       params: {
         email: props.email
@@ -59,18 +59,18 @@ function EmailComponent(props) {
   return(
     <div>
       <label htmlFor="email">이메일</label>
-      <input id="email" onChange={(event) => { props.setEmail(event.target.value) }}></input>
-      <button onClick={ () => {sendEmail()} }>이메일로 코드 전송</button>
+      <input id="email" className="greyRoundInput" onChange={(event) => { props.setEmail(event.target.value) }} placeholder="이메일"></input>
+      <button className="signUpButton"  onClick={ () => {sendEmail()} }>인증 요청</button>
       { isSent ? 
       <div>
         <label htmlFor="code">코드를 입력하세요</label>
-        <input id="code" onChange={(event) => { setCode(event.target.value) }}></input>
-        <button onClick={ () => {validate()}  }>확인</button>
+        <input id="code" onChange={(event) => { setCode(event.target.value) }} placeholder="인증 코드"></input>
+        <button className="signUpButton" onClick={ () => {validate()}  }>확인</button>
       </div> : null
       }
       
 
-      <button onClick={() => { props.setStage(props.stage - 1)}}>이전</button>
+      <button className="signUpButton" onClick={() => { props.setStage(props.stage - 1)}} >이전</button>
     </div>
   )
 }
@@ -83,10 +83,10 @@ function PasswordComponent(props) {
   return (
     <div>
       <label htmlFor="password">비밀번호</label>
-      <input type={ "password" } id="password" onChange={(event) => { props.setPassword(event.target.value) }}></input>
+      <input className="greyRoundInput" type={ "password" } id="password" onChange={(event) => { props.setPassword(event.target.value) }} placeholder="비밀번호"></input>
       <label htmlFor="password2">비밀번호 확인</label>
-      <input type={ "password" } id="password2" onChange={(event) => { props.setPassword2(event.target.value) }}></input>
-      { props.password == props.password2 && <button onClick={() => { props.setStage(props.stage + 1)}}>다음</button>}
+      <input type={ "password" } id="password2" onChange={(event) => { props.setPassword2(event.target.value) }} placeholder="비밀번호 확인"></input>
+      { props.password == props.password2 && <button className="signUpButton" onClick={() => { props.setStage(props.stage + 1)}}>다음</button>}
     </div>
 
   )
@@ -96,8 +96,8 @@ function NicknameComponent(props) {
   return (
     <div>
       <label htmlFor="nickname">닉네임</label>
-      <input id="nickname" onChange={(event) => { props.setNickname(event.target.value) }}></input>
-      <button onClick={() => { props.setStage(props.stage - 1)}}>이전</button>
+      <input id="nickname" onChange={(event) => { props.setNickname(event.target.value) }} placeholder="닉네임"></input>
+      <button className="signUpButton" onClick={() => { props.setStage(props.stage - 1)}}>이전</button>
       { props.nickname.length >= 2 && <button onClick={() => { props.setStage(props.stage + 1)}}>다음</button>}
     </div>
   )
@@ -107,9 +107,9 @@ function IntroduceComponent(props) {
   return (
     <div>
       <label htmlFor="introduce">자기소개</label>
-      <textarea id="introduce" onChange={(event) => { props.setIntroduce(event.target.value) }}></textarea>
-      <button onClick={() => { props.setStage(props.stage - 1)}}>이전</button>
-      <button onClick={() => { props.setStage(props.stage + 1)}}>다음</button>
+      <textarea id="introduce" onChange={(event) => { props.setIntroduce(event.target.value) }} placeholder="소개글"></textarea>
+      <button className="signUpButton" onClick={() => { props.setStage(props.stage - 1)}}>이전</button>
+      <button className="signUpButton" onClick={() => { props.setStage(props.stage + 1)}}>다음</button>
     </div>
   )
 }
@@ -140,8 +140,8 @@ function PhotoComponent(props) {
       onChange={savePhoto}
       ref={props.imgRef}
       ></input>
-      <button onClick={() => { props.setStage(props.stage - 1)}}>이전</button>
-      <button onClick={() => { props.signUp() }}>가입</button>
+      <button className="signUpButton" onClick={() => { props.setStage(props.stage - 1)}}>이전</button>
+      <button className="signUpButton" onClick={() => { props.signUp() }}>가입</button>
     </div>
   )
 }
