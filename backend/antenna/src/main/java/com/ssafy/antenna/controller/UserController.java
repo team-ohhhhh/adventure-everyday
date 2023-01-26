@@ -8,6 +8,7 @@ import com.ssafy.antenna.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -94,6 +95,11 @@ public class UserController {
     public ResultResponse<UserDetailRes> modifyProfileUser(@RequestBody ModifyProfileUserReq modifyProfileUserReq, Authentication authentication) throws Exception {
         //validation 필요!!!!!!!!!!!!!!
         return ResultResponse.success(userService.modifyProfileUser(modifyProfileUserReq.introduce(), Long.valueOf(authentication.getName())));
+    }
+
+    @PutMapping("/photo")
+    public ResultResponse<String> modifyProfilePhoto(@RequestParam MultipartFile multipartFile, Authentication authentication) {
+        return ResultResponse.success(userService.uploadImage(multipartFile, Long.valueOf(authentication.getName())));
     }
 
 }

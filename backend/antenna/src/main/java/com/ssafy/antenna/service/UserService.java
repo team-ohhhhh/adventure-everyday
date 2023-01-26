@@ -15,12 +15,14 @@ import com.ssafy.antenna.repository.UserRepository;
 import com.ssafy.antenna.util.EmailUtil;
 import com.ssafy.antenna.util.ImageUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -165,16 +167,20 @@ public class UserService {
         return userDetailResList;
     }
 
-    public String uploadImage(MultipartFile multipartFile, Long userId) throws Exception {
+    public String uploadImage(MultipartFile multipartFile, Long userId){
         User user = getUser(userId);
-        user.setPhoto(imageUtil.compressImage(multipartFile.getBytes()));
+        try {
+            user.setPhoto(ImageUtil.compressImage(multipartFile.getBytes()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         userRepository.save(user);
         return "succeed";
     }
 
     public byte[] downloadImage(Long userId) {
         User user = getUser(userId);
-        byte[] photo = imageUtil.decompressImage(user.getPhoto());
+        byte[] photo = ImageUtil.decompressImage(user.getPhoto());
         return photo;
     }
 

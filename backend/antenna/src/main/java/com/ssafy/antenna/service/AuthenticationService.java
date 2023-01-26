@@ -26,14 +26,12 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final ImageUtil imageUtil;
-    public LogInUserRes register(PostUserReq postUserReq, MultipartFile photo) throws IOException {
+    public LogInUserRes register(PostUserReq postUserReq) {
         User user = User.builder()
                 .email(postUserReq.email())
                 .nickname(postUserReq.nickname())
                 .password(passwordEncoder.encode(postUserReq.password()))
                 .introduce(postUserReq.introduce())
-                .photo(imageUtil.compressImage(photo.getBytes()))
-                .photoType(String.valueOf(photo.getOriginalFilename()))
                 .role(Role.USER)
                 .build();
         userRepository.save(user);

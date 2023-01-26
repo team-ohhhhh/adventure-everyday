@@ -22,9 +22,9 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
-    @PostMapping(value="/register", consumes = {"application/json","multipart/form-data"})
-    public ResultResponse<LogInUserRes> register(@RequestPart(value = "req") PostUserReq postUserReq, @RequestPart(value = "photo", required = false) MultipartFile photo) throws IOException {
-        return ResultResponse.success(authenticationService.register(postUserReq, photo));
+    @PostMapping(value="/register")
+    public ResultResponse<LogInUserRes> register(@RequestBody PostUserReq postUserReq) {
+        return ResultResponse.success(authenticationService.register(postUserReq));
     }
 
     @PostMapping("/authenticate")

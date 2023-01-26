@@ -7,7 +7,6 @@ public record PostUserReq(
         String nickname,
         String password,
         String introduce
-//        MultipartFile photo
 ) {
 }
 
