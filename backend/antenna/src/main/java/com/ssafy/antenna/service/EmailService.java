@@ -28,20 +28,9 @@ public class EmailService {
             Random rand = new Random();
             StringBuffer key = new StringBuffer();
             for (int i = 0; i < 6; i++) {
-                int index = rand.nextInt(3);
-                switch (index) {
-                    case 0:
-                        key.append(((int) (rand.nextInt(26)) + 97));
-                        break;
-                    case 1:
-                        key.append(((int) (rand.nextInt(26)) + 65));
-                        break;
-                    case 2:
-                        key.append((rand.nextInt(10)));
-                        break;
-                }
+                key.append(rand.nextInt(10));
             }
-            String htmlContent = "<p> 인증번호는 [" + key.toString() + "] 입니다.<p>";
+            String htmlContent = "<p> 인증번호는 [" + key + "] 입니다.<p>";
             emailUtil.setText(htmlContent, true);
             emailUtil.send();
             //기존에 이 메일로 인증번호 저장 내역이 있다면 다 삭제하자.
