@@ -12,6 +12,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/email")
+@CrossOrigin("*")
 public class EmailController {
     private final EmailService emailService;
 

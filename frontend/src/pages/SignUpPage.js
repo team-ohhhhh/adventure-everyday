@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux"
-import { EmailComponent, PasswordComponent, NicknameComponent } from "../components/SignUp/ComponentsForSignUp";
+import { EmailComponent, PasswordComponent, NicknameComponent, IntroduceComponent, PhotoComponent, SignUpCompletedComponent } from "../components/SignUp/ComponentsForSignUp";
+
 
 function SignUpPage() {
   let URL = useSelector((state) => state.URL)
@@ -18,6 +19,8 @@ function SignUpPage() {
   const [introduce, setIntroduce] = useState("")
   const [photo, setPhoto] = useState("")
 
+  const imgRef = useRef()
+
   // 회원가입 axios
   const signUp = function () {
     axios({
@@ -31,7 +34,13 @@ function SignUpPage() {
         photo,
       }
     })
+    .then(function (response) {
+      console.log(response.data, '--------------------------------')
+    })
+    .then(setStage(stage + 1))
+    .catch((error) => console.log(error, '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'))
   }
+  // 스테이지 별 컴포넌트 변경
   switch (stage) {
     case 0:
       return (
@@ -41,37 +50,49 @@ function SignUpPage() {
       )
       case 1:
         return (
-          <EmailComponent setEmail={setEmail} email={email} setStage={setStage}/>
+          <EmailComponent setEmail={setEmail} email={email} setStage={setStage} stage={stage}/>
         )
       case 2:
         return (
-          <PasswordComponent setPassword={setPassword} setPassword2={setPassword2} setStage={setStage} password={password} password2={password2}/>
+          <PasswordComponent setPassword={setPassword} setPassword2={setPassword2} stage={stage} setStage={setStage} password={password} password2={password2}/>
         )
       case 3:
         return (
-          <NicknameComponent setNickname={setNickname} setStage={setStage} nickname={nickname}/>
+          <NicknameComponent setNickname={setNickname} setStage={setStage} stage={stage} nickname={nickname}/>
+        )
+      case 4:
+        return (
+          <IntroduceComponent setStage={setStage} stage={stage} setIntroduce={setIntroduce}/>
+        )
+      case 5:
+        return (
+          <PhotoComponent signUp={signUp} imgRef={imgRef} setStage={setStage} stage={stage} setPhoto={setPhoto} photo={photo}/>
+        )
+      case 6:
+        return (
+          <SignUpCompletedComponent/>
         )
     }
-  return(
-    <div>
+  // return(
+  //   <div>
       
       
-      <label htmlFor="nickName">닉네임</label>
-      <input id="nickName" onChange={(event) => { setNickname(event.target.value) }}></input>
+  //     <label htmlFor="nickName">닉네임</label>
+  //     <input id="nickName" onChange={(event) => { setNickname(event.target.value) }}></input>
 
       
 
-      <label htmlFor="introduce">자기소개</label>
-      <textarea id="introduce" onChange={(event) => { setIntroduce(event.target.value) }}></textarea>
+  //     <label htmlFor="introduce">자기소개</label>
+  //     <textarea id="introduce" onChange={(event) => { setIntroduce(event.target.value) }}></textarea>
       
-      <label htmlFor="photo">프로필 사진</label>
-      <input type={ "file" } accept={ "image/*" } id="photo" onChange={(event) => { setPhoto(event.target.value) }}></input>
+  //     <label htmlFor="photo">프로필 사진</label>
+  //     <input type={ "file" } accept={ "image/*" } id="photo" onChange={(event) => { setPhoto(event.target.value) }}></input>
 
       
-      <button onClick={ () => { signUp() } }>회원가입</button>
+  //     <button onClick={ () => { signUp() } }>회원가입</button>
 
-    </div>
-  )
+  //   </div>
+  // )
 
 
 }
