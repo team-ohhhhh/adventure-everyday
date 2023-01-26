@@ -1,11 +1,19 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 
+// 로그인 페이지
 function LoginPage() {
   let URL = useSelector((state) => state.URL)
+
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+
+
+  const navigate = useNavigate()
+
+  // 로그인 버튼에 달린 로그인 axios -> 성공시 메인페이지로 이동
   const LogIn = function () {
     axios({
       url : URL + '/users/log-in',
@@ -14,6 +22,10 @@ function LoginPage() {
         email,
         password
       }
+    })
+    .then((response) => {
+      //TODO: 여기서 토큰 저장하시오
+      navigate('/')
     })
   }
 
