@@ -36,3 +36,28 @@
     transform: rotate(360deg);
   }
 }
+
+.greyRoundInput {
+
+padding: 15px 16px;
+gap: 8px;
+
+background: #D9D9D9;
+border-radius: 999px;
+}
+
+.signUpButton {
+padding: 15px 16px;
+gap: 8px;
+color: white;
+
+background: #1C0B69;
+border-radius: 999px;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}

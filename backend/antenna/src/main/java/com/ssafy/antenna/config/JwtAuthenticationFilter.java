@@ -1,5 +1,6 @@
 package com.ssafy.antenna.config;
 
+import com.ssafy.antenna.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
