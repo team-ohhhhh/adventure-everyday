@@ -44,9 +44,10 @@ public class AuthenticationService {
                 .email(postUserReq.email())
                 .nickname(postUserReq.nickname())
                 .password(passwordEncoder.encode(postUserReq.password()))
-                .introduce(postUserReq.introduce())
+                .introduce((postUserReq.introduce() != null) ? postUserReq.introduce() : null)
                 .role(Role.USER)
-                .photo(ImageUtil.compressImage(file.getBytes()))
+                .photo((file != null) ? ImageUtil.compressImage(file.getBytes()) : null)
+                .photoType((file != null) ? file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1) : null)
                 .build();
         userRepository.save(user);
         String jwtToken = jwtService.generateToken(user);
