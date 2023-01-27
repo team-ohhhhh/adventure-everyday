@@ -32,8 +32,8 @@ public class AuthenticationController {
             @RequestPart String email,
             @RequestPart String nickname,
             @RequestPart String password,
-            @RequestPart String introduce,
-            @RequestPart MultipartFile file
+            @RequestPart(required = false) String introduce,
+            @RequestPart(required = false) MultipartFile file
     ) throws IOException {
         return ResultResponse.success(
                 authenticationService.registerTest(
