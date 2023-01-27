@@ -1,5 +1,6 @@
 package com.ssafy.antenna.service;
 
+import com.ssafy.antenna.domain.ResultResponse;
 import com.ssafy.antenna.domain.antenna.Antenna;
 import com.ssafy.antenna.domain.antenna.dto.DetailAntennaRes;
 import com.ssafy.antenna.domain.antenna.dto.PostAntennaReq;
@@ -200,4 +201,20 @@ public class UserService {
         return newUser.toResponse();
     }
 
+    public ResultResponse<UserDetailRes> deleteImage(Long userId) {
+        User user = userRepository.findById(userId).orElseGet(User::new);
+        user.setPhoto(null);
+        userRepository.save(user);
+        return ResultResponse.success(
+                new UserDetailRes(
+                        user.getUserId(),
+                        user.getEmail(),
+                        user.getNickname(),
+                        user.getLevel(),
+                        user.getExp(),
+                        user.getIntroduce(),
+                        user.getPhoto()
+                )
+        );
+    }
 }

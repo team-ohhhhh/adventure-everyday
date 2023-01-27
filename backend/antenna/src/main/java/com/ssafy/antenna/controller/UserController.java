@@ -104,9 +104,14 @@ public class UserController {
         return ResultResponse.success(userService.uploadImage(multipartFile, Long.valueOf(authentication.getName())));
     }
 
-    @PostMapping("/antenna")
-    public ResultResponse<DetailAntennaRes> createAntenna(@RequestBody PostAntennaReq postAntennaReq, Authentication authentication) {
-        return ResultResponse.success(userService.createAntenna(postAntennaReq,Long.valueOf(authentication.getName())));
+    @DeleteMapping("/photo")
+    public ResultResponse<UserDetailRes> deleteProfilePhoto(Authentication authentication) {
+        return userService.deleteImage(Long.valueOf(authentication.getName()));
     }
+
+//    @PostMapping("/antenna")
+//    public ResultResponse<DetailAntennaRes> createAntenna(@RequestBody PostAntennaReq postAntennaReq, Authentication authentication) {
+//        return ResultResponse.success(userService.createAntenna(postAntennaReq,Long.valueOf(authentication.getName())));
+//    }
 
 }
