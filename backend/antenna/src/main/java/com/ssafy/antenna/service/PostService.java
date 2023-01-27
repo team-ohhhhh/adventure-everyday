@@ -2,12 +2,11 @@ package com.ssafy.antenna.service;
 
 import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.post.dto.PostPostReq;
+import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.repository.PostRepository;
 import com.ssafy.antenna.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -27,4 +26,12 @@ public class PostService {
         return "success";
     }
 
+    public String deletePost(Long userId, Long postId) {
+        Post post = postRepository.findById(postId).orElseGet(Post::new);
+        if(post.getUser().getUserId() != userId) {
+            throw new RuntimeException();
+        } else {
+            return "success";
+        }
+    }
 }
