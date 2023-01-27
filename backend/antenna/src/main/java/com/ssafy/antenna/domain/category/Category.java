@@ -4,17 +4,14 @@ import com.ssafy.antenna.domain.Base;
 import com.ssafy.antenna.domain.adventure.Adventure;
 import com.ssafy.antenna.domain.comment.Comment;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @Entity
 public class Category  extends Base {
@@ -22,7 +19,8 @@ public class Category  extends Base {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId;
 
-    @Column(columnDefinition = "varchar(255) not null")
+//    @Column(columnDefinition = "varchar(255) not null")
+    @Column(nullable = false)
     private String category;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
