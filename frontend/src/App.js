@@ -5,7 +5,7 @@ import LogInPage from "./pages/LogInPage";
 import SignUpPage from "./pages/SignUpPage";
 import MapMain from "./pages/MapMain";
 import { Routes, Route, Link } from "react-router-dom";
-import ArticleCreatePage from "./pages/article/ArticleCreatePage";
+import ArticleCreatePage from "./pages/ArticleCreatePage";
 
 function App() {
   return (
