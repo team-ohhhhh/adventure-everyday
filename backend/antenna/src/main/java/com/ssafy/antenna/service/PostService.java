@@ -5,6 +5,7 @@ import com.ssafy.antenna.domain.post.dto.PostPostReq;
 import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.repository.PostRepository;
 import com.ssafy.antenna.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class PostService {
                 .title(postPostReq.title())
                 .content(postPostReq.content())
                 .isPublic(postPostReq.isPublic())
-                .user(userRepository.findById(userId).get())
+                .user(userRepository.findById(userId).orElseGet(User::new))
                 .build()
         );
         int result = postRepository.setPoint(post.getPostId(), String.format("POINT(%f %f)", postPostReq.lng(), postPostReq.lat()));
@@ -27,11 +28,7 @@ public class PostService {
     }
 
     public String deletePost(Long userId, Long postId) {
-        Post post = postRepository.findById(postId).orElseGet(Post::new);
-        if(post.getUser().getUserId() != userId) {
-            throw new RuntimeException();
-        } else {
-            return "success";
-        }
+        postRepository.deletePost(postId);
+        return "succeed";
     }
 }

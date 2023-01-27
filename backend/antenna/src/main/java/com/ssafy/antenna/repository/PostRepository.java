@@ -11,9 +11,15 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    String insertPointQuery = "UPDATE post SET coordinate = ST_GEOMFROMTEXT(:point, 4326) WHERE post_id = :postId";
+    String insertPointQuery = "UPDATE post SET coordinate = ST_GEOMFROMTEXT(:point) WHERE post_id = :postId";
     @Transactional
     @Modifying
     @Query(nativeQuery = true, value = insertPointQuery)
     int setPoint(Long postId, String point);
+
+    String deletePostQuery = "delete from post where post_id=:postId";
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = deletePostQuery)
+    void deletePost(Long postId);
 }
