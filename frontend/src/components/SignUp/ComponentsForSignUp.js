@@ -123,6 +123,10 @@ function PhotoComponent(props) {
     reader.onloadend = () => {
       props.setPhoto(reader.result)
     }
+    if (file) {
+      props.setFile(file)
+    }
+
   }
 
 
