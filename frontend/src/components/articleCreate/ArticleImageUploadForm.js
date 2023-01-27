@@ -61,18 +61,21 @@ const ArticleImageUploadForm = (props) => {
         onChange={uploadPhoto}
       />
       {!imagePreview ? (
-        <div className={styles.beforeUpload} onClick={handleClickFileInput}>
-          사진 업로드
-        </div>
-      ) : (
-        <img
-          className={styles.afterUpload}
-          src={imagePreview.url}
-          alt={imagePreview.name}
+        <div
+          className={styles.beforeUpload}
           onClick={handleClickFileInput}
-        />
+        ></div>
+      ) : (
+        <div>
+          <img
+            className={styles.afterUpload}
+            src={imagePreview.url}
+            alt={imagePreview.name}
+            onClick={handleClickFileInput}
+          />
+          <button onClick={removePhoto}>X</button>
+        </div>
       )}
-      <button onClick={removePhoto}>사진 삭제</button>
     </div>
   );
 };
