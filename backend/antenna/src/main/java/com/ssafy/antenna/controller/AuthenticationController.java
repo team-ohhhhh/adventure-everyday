@@ -22,9 +22,23 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
+//    @PostMapping(value="/register")
+//    public ResultResponse<LogInUserRes> register(@RequestBody PostUserReq postUserReq) {
+//        return ResultResponse.success(authenticationService.register(postUserReq));
+//    }
+
     @PostMapping(value="/register")
-    public ResultResponse<LogInUserRes> register(@RequestBody PostUserReq postUserReq) {
-        return ResultResponse.success(authenticationService.register(postUserReq));
+    public ResultResponse<LogInUserRes> registerTest(
+            @RequestPart String email,
+            @RequestPart String nickname,
+            @RequestPart String password,
+            @RequestPart String introduce,
+            @RequestPart MultipartFile file
+    ) throws IOException {
+        return ResultResponse.success(
+                authenticationService.registerTest(
+                    new PostUserReq(email, nickname, password, introduce), file
+                ));
     }
 
     @PostMapping("/authenticate")

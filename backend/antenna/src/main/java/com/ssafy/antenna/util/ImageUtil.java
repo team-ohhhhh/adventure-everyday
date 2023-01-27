@@ -23,6 +23,7 @@ public class ImageUtil {
         try {
             outputStream.close();
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return outputStream.toByteArray();
     }
@@ -39,6 +40,7 @@ public class ImageUtil {
             }
             outputStream.close();
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return outputStream.toByteArray();
     }

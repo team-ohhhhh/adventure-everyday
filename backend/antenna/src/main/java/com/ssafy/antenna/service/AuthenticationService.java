@@ -39,6 +39,20 @@ public class AuthenticationService {
         return new LogInUserRes(jwtToken);
     }
 
+    public LogInUserRes registerTest(PostUserReq postUserReq, MultipartFile file) throws IOException {
+        User user = User.builder()
+                .email(postUserReq.email())
+                .nickname(postUserReq.nickname())
+                .password(passwordEncoder.encode(postUserReq.password()))
+                .introduce(postUserReq.introduce())
+                .role(Role.USER)
+                .photo(ImageUtil.compressImage(file.getBytes()))
+                .build();
+        userRepository.save(user);
+        String jwtToken = jwtService.generateToken(user);
+        return new LogInUserRes(jwtToken);
+    }
+
     public LogInUserRes authenticate(LogInUserReq logInUserReq) {
         User user = userRepository.findByEmail(logInUserReq.email())
                 .orElseThrow();
