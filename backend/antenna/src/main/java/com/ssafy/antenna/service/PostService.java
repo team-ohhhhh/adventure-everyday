@@ -2,6 +2,7 @@ package com.ssafy.antenna.service;
 
 import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.post.dto.PostPostReq;
+import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.repository.PostRepository;
 import com.ssafy.antenna.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +24,14 @@ public class PostService {
         );
         int result = postRepository.setPoint(post.getPostId(), String.format("POINT(%f %f)", postPostReq.lng(), postPostReq.lat()));
         return "success";
+    }
+
+    public String deletePost(Long userId, Long postId) {
+        Post post = postRepository.findById(postId).orElseGet(Post::new);
+        if(post.getUser().getUserId() != userId) {
+            throw new RuntimeException();
+        } else {
+            return "success";
+        }
     }
 }

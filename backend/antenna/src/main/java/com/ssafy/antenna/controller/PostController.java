@@ -15,11 +15,23 @@ public class PostController {
 
     @PostMapping
     public ResultResponse<String> createPost(@RequestBody PostPostReq postPostReq, Authentication authentication) {
-        return ResultResponse.success(postService.createPost(Long.valueOf(authentication.getName()), postPostReq));
+        return ResultResponse.success(
+                postService.createPost(
+                        Long.valueOf(authentication.getName()),
+                        postPostReq
+                )
+        );
     }
 
     @DeleteMapping("/{postId}")
     public ResultResponse<String> deletePost(@PathVariable Long postId, Authentication authentication) {
-        return null;
+        return ResultResponse.success(
+                postService.deletePost(
+                        Long.valueOf(authentication.getName()),
+                        postId
+                )
+        );
     }
+
+//    public ResultResponse<>
 }
