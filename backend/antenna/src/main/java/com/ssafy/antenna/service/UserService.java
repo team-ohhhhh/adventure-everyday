@@ -1,5 +1,8 @@
 package com.ssafy.antenna.service;
 
+import com.ssafy.antenna.domain.antenna.Antenna;
+import com.ssafy.antenna.domain.antenna.dto.DetailAntennaRes;
+import com.ssafy.antenna.domain.antenna.dto.PostAntennaReq;
 import com.ssafy.antenna.domain.email.dto.AuthEmailRes;
 import com.ssafy.antenna.domain.email.dto.CheckEmailRes;
 import com.ssafy.antenna.domain.user.Follow;
@@ -10,12 +13,16 @@ import com.ssafy.antenna.exception.not_found.FollowerNotFoundException;
 import com.ssafy.antenna.exception.not_found.FollowingNotFoundException;
 import com.ssafy.antenna.exception.not_found.UserNotFoundException;
 import com.ssafy.antenna.exception.unauthorized.InvalidPasswordException;
+import com.ssafy.antenna.repository.AntennaRepository;
 import com.ssafy.antenna.repository.FollowRepository;
 import com.ssafy.antenna.repository.UserRepository;
 import com.ssafy.antenna.util.EmailUtil;
 import com.ssafy.antenna.util.ImageUtil;
+import com.ssafy.antenna.util.W3WUtil;
+import com.what3words.javawrapper.response.ConvertTo3WA;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.data.geo.Point;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,6 +42,7 @@ public class UserService {
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
     private final ImageUtil imageUtil;
+    private final AntennaRepository antennaRepository;
 
     public User getUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
@@ -191,4 +199,5 @@ public class UserService {
         userRepository.save(newUser);
         return newUser.toResponse();
     }
+
 }

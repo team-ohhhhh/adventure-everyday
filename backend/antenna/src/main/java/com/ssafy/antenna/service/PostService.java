@@ -2,12 +2,12 @@ package com.ssafy.antenna.service;
 
 import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.post.dto.PostPostReq;
+import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.repository.PostRepository;
 import com.ssafy.antenna.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -20,11 +20,15 @@ public class PostService {
                 .title(postPostReq.title())
                 .content(postPostReq.content())
                 .isPublic(postPostReq.isPublic())
-                .user(userRepository.findById(userId).get())
+                .user(userRepository.findById(userId).orElseGet(User::new))
                 .build()
         );
         int result = postRepository.setPoint(post.getPostId(), String.format("POINT(%f %f)", postPostReq.lng(), postPostReq.lat()));
         return "success";
     }
 
+    public String deletePost(Long userId, Long postId) {
+        postRepository.deletePost(postId);
+        return "succeed";
+    }
 }

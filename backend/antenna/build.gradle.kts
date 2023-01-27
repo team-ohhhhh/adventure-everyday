@@ -25,6 +25,7 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
+	compileOnly("com.what3words:w3w-java-wrapper:3.1.8")
 }
 
 tasks.withType<Test> {
