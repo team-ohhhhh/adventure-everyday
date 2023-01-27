@@ -109,6 +109,11 @@ public class UserController {
         return userService.deleteImage(Long.valueOf(authentication.getName()));
     }
 
+    @GetMapping("/{userId}/feats")
+    public ResultResponse<UserFeatsRes> getUserFeats(@PathVariable Long userId) {
+        return userService.getUserFeats(userId);
+    }
+
 //    @PostMapping("/antenna")
 //    public ResultResponse<DetailAntennaRes> createAntenna(@RequestBody PostAntennaReq postAntennaReq, Authentication authentication) {
 //        return ResultResponse.success(userService.createAntenna(postAntennaReq,Long.valueOf(authentication.getName())));

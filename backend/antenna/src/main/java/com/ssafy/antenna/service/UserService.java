@@ -1,6 +1,8 @@
 package com.ssafy.antenna.service;
 
 import com.ssafy.antenna.domain.ResultResponse;
+import com.ssafy.antenna.domain.adventure.Adventure;
+import com.ssafy.antenna.domain.adventure.AdventureSucceed;
 import com.ssafy.antenna.domain.antenna.Antenna;
 import com.ssafy.antenna.domain.antenna.dto.DetailAntennaRes;
 import com.ssafy.antenna.domain.antenna.dto.PostAntennaReq;
@@ -14,6 +16,7 @@ import com.ssafy.antenna.exception.not_found.FollowerNotFoundException;
 import com.ssafy.antenna.exception.not_found.FollowingNotFoundException;
 import com.ssafy.antenna.exception.not_found.UserNotFoundException;
 import com.ssafy.antenna.exception.unauthorized.InvalidPasswordException;
+import com.ssafy.antenna.repository.AdventureSucceedRepository;
 import com.ssafy.antenna.repository.AntennaRepository;
 import com.ssafy.antenna.repository.FollowRepository;
 import com.ssafy.antenna.repository.UserRepository;
@@ -44,6 +47,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final ImageUtil imageUtil;
     private final AntennaRepository antennaRepository;
+    private final AdventureSucceedRepository adventureSucceedRepository;
 
     public User getUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
@@ -216,5 +220,13 @@ public class UserService {
                         user.getPhoto()
                 )
         );
+    }
+
+    public ResultResponse<UserFeatsRes> getUserFeats(Long userId) {
+        List<AdventureSucceed> adventureSucceeds = adventureSucceedRepository.findAllByUser(
+                userRepository.findById(userId).orElseThrow(UserNotFoundException::new));
+        List<String> result = adventureSucceeds.stream()
+                .map(b -> b.getAdventure().getFeat()).toList();
+        return ResultResponse.success(new UserFeatsRes(result));
     }
 }
