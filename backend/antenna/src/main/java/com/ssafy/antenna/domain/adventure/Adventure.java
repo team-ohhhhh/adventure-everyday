@@ -8,6 +8,7 @@ import com.ssafy.antenna.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,21 +33,26 @@ public class Adventure extends Base {
     @Column(columnDefinition = "varchar(255) default null")
     private String content;
     @Column(columnDefinition = "int not null")
-    private int difficulty;
+    private Integer difficulty;
     @Lob
     @Column(columnDefinition = "blob default null")
     private byte[] photo;
-    @Column(columnDefinition = "int default 6")
-    private int validDate;
+//    @Column(columnDefinition = "int default 6")
+//    private int validDate;
+    @Column(nullable = false)
+    private LocalDateTime startDate;
+    @Column(nullable = false)
+    private LocalDateTime endDate;
 
     // 따로 넣어줄 것들.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
+
+    // 나중에 업데이트.
     @Column(columnDefinition = "double default 0")
-    private String avgReviewRate;
-    @Column(columnDefinition = "datetime(6) default null")
-    private LocalDateTime endDate;
+    private Double avgReviewRate;
+
 
     // 양방향.
     @OneToMany(mappedBy = "adventure", cascade = CascadeType.ALL)
