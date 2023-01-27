@@ -1,6 +1,8 @@
 package com.ssafy.antenna.controller;
 
 import com.ssafy.antenna.domain.ResultResponse;
+import com.ssafy.antenna.domain.antenna.dto.DetailAntennaRes;
+import com.ssafy.antenna.domain.antenna.dto.PostAntennaReq;
 import com.ssafy.antenna.domain.email.dto.AuthEmailRes;
 import com.ssafy.antenna.domain.email.dto.CheckEmailRes;
 import com.ssafy.antenna.domain.user.dto.*;
@@ -100,6 +102,11 @@ public class UserController {
     @PutMapping("/photo")
     public ResultResponse<String> modifyProfilePhoto(@RequestParam MultipartFile multipartFile, Authentication authentication) {
         return ResultResponse.success(userService.uploadImage(multipartFile, Long.valueOf(authentication.getName())));
+    }
+
+    @PostMapping("/antenna")
+    public ResultResponse<DetailAntennaRes> createAntenna(@RequestBody PostAntennaReq postAntennaReq, Authentication authentication) {
+        return ResultResponse.success(userService.createAntenna(postAntennaReq,Long.valueOf(authentication.getName())));
     }
 
 }

@@ -1,5 +1,8 @@
 package com.ssafy.antenna.service;
 
+import com.ssafy.antenna.domain.antenna.Antenna;
+import com.ssafy.antenna.domain.antenna.dto.DetailAntennaRes;
+import com.ssafy.antenna.domain.antenna.dto.PostAntennaReq;
 import com.ssafy.antenna.domain.email.dto.AuthEmailRes;
 import com.ssafy.antenna.domain.email.dto.CheckEmailRes;
 import com.ssafy.antenna.domain.user.Follow;
@@ -14,8 +17,11 @@ import com.ssafy.antenna.repository.FollowRepository;
 import com.ssafy.antenna.repository.UserRepository;
 import com.ssafy.antenna.util.EmailUtil;
 import com.ssafy.antenna.util.ImageUtil;
+import com.ssafy.antenna.util.W3WUtil;
+import com.what3words.javawrapper.response.ConvertTo3WA;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.data.geo.Point;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -190,5 +196,19 @@ public class UserService {
         User newUser = new User(user.getCreateTime(), user.getUpdateTime(), user.getUserId(), user.getEmail(), user.getNickname(), user.getPassword(), user.getLevel(), user.getExp(), introduce, user.getPhoto());
         userRepository.save(newUser);
         return newUser.toResponse();
+    }
+
+    public DetailAntennaRes createAntenna(PostAntennaReq postAntennaReq, Long userId) {
+        //유저가 존재하는지 먼저 확인
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        ConvertTo3WA w3wWords = W3WUtil.getW3W(postAntennaReq.lng(), postAntennaReq.lat());
+
+        return Antenna.builder()
+                .user(user)
+                .area(postAntennaReq.area())
+                .coordinate(new Point(w3wWords.getCoordinates().getLng(),w3wWords.getCoordinates().getLat()))
+                .w3w(w3wWords.getWords())
+                .nearestPlace(w3wWords.getNearestPlace())
+                .build().toResponse();
     }
 }
