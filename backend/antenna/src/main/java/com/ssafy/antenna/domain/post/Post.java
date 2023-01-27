@@ -31,6 +31,8 @@ public class Post extends Base {
     private Point coordinate;
     @Column(columnDefinition = "blob default null")
     private byte[] photo;
+    @Column(columnDefinition = "varchar(255) default null")
+    private String photoType;
     @Column(columnDefinition = "boolean not null")
     private boolean isPublic;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -43,6 +45,6 @@ public class Post extends Base {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostLike> postLikes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<CheckpointPost> checkpointPosts = new ArrayList<>();
 }

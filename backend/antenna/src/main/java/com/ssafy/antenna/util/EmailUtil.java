@@ -9,12 +9,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-public class EmailHandler {
+public class EmailUtil {
     private JavaMailSender sender;
     private MimeMessage message;
     private MimeMessageHelper msgHelper;
 
-    public EmailHandler(JavaMailSender sender) throws MessagingException {
+    public EmailUtil(JavaMailSender sender) throws MessagingException {
         this.sender = sender;
         message = sender.createMimeMessage();
         msgHelper = new MimeMessageHelper(message, true, "UTF-8");
