@@ -44,7 +44,6 @@ public class UserService {
     public User deleteUser(Long userId) {
         //유저 정보가 존재 하는지 먼저 검색
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        ;
         //존재한다면, delete 작업 수행한다.
         userRepository.deleteById(userId);
         return user;
@@ -139,7 +138,7 @@ public class UserService {
                     break;
             }
         }
-        String htmlContent = "<p> 임시 비밀번호는 [" + key.toString() + "] 입니다.<p>";
+        String htmlContent = "<p> 임시 비밀번호는 [" + key + "] 입니다.<p>";
         emailUtil.setText(htmlContent, true);
         emailUtil.send();
         User newUser = new User(user.getCreateTime(), user.getUpdateTime(), user.getUserId(), user.getEmail(), user.getNickname(), passwordEncoder.encode(key.toString()), user.getLevel(), user.getExp(), user.getIntroduce(), user.getPhoto());

@@ -46,9 +46,6 @@ public class EmailService {
 
     public boolean checkEmailAuth(AuthEmailReq authEmailReq) {
         Email email = emailRepository.findByEmail(authEmailReq.email()).orElseThrow(CertificationSendNotFoundException::new);
-        if (email.getAuthNumber().equals(authEmailReq.auth()))
-            return true;
-        else
-            return false;
+        return email.getAuthNumber().equals(authEmailReq.auth());
     }
 }
