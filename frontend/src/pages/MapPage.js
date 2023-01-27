@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { MapMarker, Map, Circle } from "react-kakao-maps-sdk";
+import Antenna from "../components/mapPage/antenna/Antenna";
 
 function MapMain() {
   const [state, setState] = useState({
@@ -33,7 +34,7 @@ function MapMain() {
           style={{
             // 지도의 크기
             width: "100%",
-            height: "100%",
+            height: "80%",
           }}
           level={state.level} // 지도의 확대 레벨
           onCenterChanged={(map) =>
@@ -95,17 +96,8 @@ function MapMain() {
             </>
           )}
 
-          <span
-            style={{
-              /*버튼 위치*/ position: "absolute",
-              top: "15%",
-              left: "80%",
-
-              zIndex: "1",
-            }}
-          >
-            <img src={"images/antennaBtn.png"}></img>
-          </span>
+          {/* 지도 위 안테나 버튼 + 리스트 */}
+          <Antenna></Antenna>
 
           {/* isCur가 켜져있지 않을 때만 버튼이 보임 */}
           {!state.isCur && (
