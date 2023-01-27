@@ -5,9 +5,7 @@ import com.ssafy.antenna.domain.post.dto.PostPostReq;
 import com.ssafy.antenna.repository.PostRepository;
 import com.ssafy.antenna.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -26,5 +24,4 @@ public class PostService {
         int result = postRepository.setPoint(post.getPostId(), String.format("POINT(%f %f)", postPostReq.lng(), postPostReq.lat()));
         return "success";
     }
-
 }
