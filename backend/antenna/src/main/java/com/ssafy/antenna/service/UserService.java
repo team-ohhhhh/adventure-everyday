@@ -13,6 +13,7 @@ import com.ssafy.antenna.exception.not_found.FollowerNotFoundException;
 import com.ssafy.antenna.exception.not_found.FollowingNotFoundException;
 import com.ssafy.antenna.exception.not_found.UserNotFoundException;
 import com.ssafy.antenna.exception.unauthorized.InvalidPasswordException;
+import com.ssafy.antenna.repository.AntennaRepository;
 import com.ssafy.antenna.repository.FollowRepository;
 import com.ssafy.antenna.repository.UserRepository;
 import com.ssafy.antenna.util.EmailUtil;
@@ -41,6 +42,7 @@ public class UserService {
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
     private final ImageUtil imageUtil;
+    private final AntennaRepository antennaRepository;
 
     public User getUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
@@ -198,17 +200,4 @@ public class UserService {
         return newUser.toResponse();
     }
 
-    public DetailAntennaRes createAntenna(PostAntennaReq postAntennaReq, Long userId) {
-        //유저가 존재하는지 먼저 확인
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        ConvertTo3WA w3wWords = W3WUtil.getW3W(postAntennaReq.lng(), postAntennaReq.lat());
-
-        return Antenna.builder()
-                .user(user)
-                .area(postAntennaReq.area())
-                .coordinate(new Point(w3wWords.getCoordinates().getLng(),w3wWords.getCoordinates().getLat()))
-                .w3w(w3wWords.getWords())
-                .nearestPlace(w3wWords.getNearestPlace())
-                .build().toResponse();
-    }
 }
