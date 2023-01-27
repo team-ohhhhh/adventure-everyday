@@ -11,7 +11,6 @@ import com.ssafy.antenna.domain.like.SubCommentLike;
 import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.subcomment.SubComment;
 import com.ssafy.antenna.domain.tier.Tier;
-import com.ssafy.antenna.domain.user.dto.PostUserReq;
 import com.ssafy.antenna.domain.user.dto.UserDetailRes;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,6 +21,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -50,6 +50,9 @@ public class User extends Base implements UserDetails {
     @Lob
     @Column(columnDefinition = "blob default null")
     private byte[] photo;
+
+    @Column(columnDefinition = "varchar(255) default null")
+    private String photoType;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -98,18 +101,21 @@ public class User extends Base implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Checkpoint> checkpoints = new ArrayList<>();
 
-    static public User saveUser(PostUserReq postUserReq) {
-        User user = new User();
-        user.setEmail(postUserReq.email());
-        user.setNickname(postUserReq.nickname());
-        user.setPassword(postUserReq.password());
-        user.setIntroduce(postUserReq.introduce());
-        user.setPhoto(postUserReq.photo());
-        return user;
+    public User(LocalDateTime createTime, LocalDateTime updateTime, Long userId, String email, String nickname, String password, int level, int exp, String introduce, byte[] photo) {
+        super(createTime, updateTime);
+        this.userId = userId;
+        this.email = email;
+        this.nickname = nickname;
+        this.password = password;
+        this.level = level;
+        this.exp = exp;
+        this.introduce = introduce;
+        this.photo = photo;
+        this.role = Role.USER;
     }
 
     public UserDetailRes toResponse() {
-        return new UserDetailRes(this.userId, this.email, this.nickname, this.password, this.level, this.exp, this.introduce, this.photo);
+        return new UserDetailRes(this.userId, this.email, this.nickname, this.level, this.exp, this.introduce, this.photo);
     }
 
     @Override
@@ -146,4 +152,6 @@ public class User extends Base implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }

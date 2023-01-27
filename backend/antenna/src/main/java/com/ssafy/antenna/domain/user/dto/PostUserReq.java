@@ -1,3 +1,12 @@
 package com.ssafy.antenna.domain.user.dto;
 
-public record PostUserReq(String email, String nickname, String password, String introduce, byte[] photo) {}
+import org.springframework.web.multipart.MultipartFile;
+
+public record PostUserReq(
+        String email,
+        String nickname,
+        String password,
+        String introduce
+) {
+}
+
