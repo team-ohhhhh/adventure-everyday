@@ -1,5 +1,6 @@
 import React, { useState,useEffect } from "react";
 import ArticleListItem from "./ArticleListItem"
+import AdventureBanner from "./Adventure/AdventureBanner"
 import { ScrollMenu } from 'react-horizontal-scrolling-menu';
 import "./HorizontalScroll.css"
 
@@ -14,6 +15,9 @@ function HorizontalScroll() {
     {post_id: 5, title : 'TITLE', nickName: 'NICKNAME', date: 'DATE.MM.DD'},
     {post_id: 6, title : 'TITLE', nickName: 'NICKNAME', date: 'DATE.MM.DD'},
   ]
+
+  
+
   
   return (
 
@@ -21,7 +25,7 @@ function HorizontalScroll() {
       <ScrollMenu >
         {dummy.map((articleListItem) => {
           return(
-          <ArticleListItem articleListItem={articleListItem}/>
+          <AdventureBanner articleListItem={articleListItem}/>
         )
         })
       }
