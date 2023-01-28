@@ -38,4 +38,11 @@ public class AdventureController {
     public ResponseEntity<List< ReadAdventureRes >> readAdventure(@RequestParam String order, @RequestParam(required = false) Double lat, @RequestParam(required = false) Double lng){
         return new ResponseEntity<List<ReadAdventureRes>>(adventureService.readAdventure(order,lat,lng),HttpStatus.OK);
     }
+
+    // 특정 탐험 달성자 추가
+    @PostMapping("/adventure-succeed/{adventureId}")
+    public ResponseEntity<String> creaateAdventureSucceed(@PathVariable Long adventureId,Authentication authentication){
+        adventureService.createAdventureSucceed(adventureId,Long.valueOf(authentication.getName()));
+        return new ResponseEntity<String>("특정 탐험 달성자 추가 성공",HttpStatus.OK);
+    }
 }

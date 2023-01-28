@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DialectOverride;
 
 @Data
 @AllArgsConstructor
@@ -24,4 +25,6 @@ public class AdventureSucceed extends Base {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adventure_id")
     private Adventure adventure;
+    @Column(columnDefinition = "boolean default false")
+    private boolean selected;
 }
