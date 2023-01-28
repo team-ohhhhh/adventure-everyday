@@ -13,6 +13,7 @@ import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.domain.user.dto.*;
 import com.ssafy.antenna.exception.not_found.*;
 import com.ssafy.antenna.exception.unauthorized.InvalidPasswordException;
+import com.ssafy.antenna.repository.AdventureSucceedRepository;
 import com.ssafy.antenna.repository.AntennaRepository;
 import com.ssafy.antenna.repository.FollowRepository;
 import com.ssafy.antenna.repository.UserRepository;
