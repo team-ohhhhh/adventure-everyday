@@ -1,11 +1,13 @@
 package com.ssafy.antenna.service;
 
 import com.ssafy.antenna.domain.adventure.Adventure;
+import com.ssafy.antenna.domain.adventure.AdventureSucceed;
 import com.ssafy.antenna.domain.adventure.dto.CreateAdventureReq;
 import com.ssafy.antenna.domain.adventure.dto.ReadAdventureRes;
 import com.ssafy.antenna.domain.category.Category;
 import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.repository.AdventureRepository;
+import com.ssafy.antenna.repository.AdventureSucceedRepository;
 import com.ssafy.antenna.repository.CategoryRepository;
 import com.ssafy.antenna.repository.UserRepository;
 import jakarta.persistence.EntityManager;
@@ -24,6 +26,7 @@ public class AdventureService {
     private final AdventureRepository adventureRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final AdventureSucceedRepository adventureSucceedRepository;
 
     public void createAdventure(CreateAdventureReq createAdventureReq, Authentication authentication){
         // user, end_date 나중에 바꾸기.
@@ -99,5 +102,17 @@ public class AdventureService {
         }
 
         return result;
+    }
+
+    public void createAdventureSucceed(Long adventureId, Long userId) {
+        User curUser = userRepository.findById(userId).orElseThrow();
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+
+        AdventureSucceed newAdventureSucceed = AdventureSucceed.builder()
+                .user(curUser)
+                .adventure(curAdventure)
+                .build();
+
+        adventureSucceedRepository.save(newAdventureSucceed);
     }
 }
