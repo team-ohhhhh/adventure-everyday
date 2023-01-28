@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final ImageUtil imageUtil;
     private final AntennaRepository antennaRepository;
+
+    private final W3WUtil w3WUtil;
 
     public User getUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
@@ -205,9 +208,7 @@ public class UserService {
     public DetailAntennaRes createAntenna(PostAntennaReq postAntennaReq, Long userId) {
         //유저가 존재하는지 먼저 확인
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        ConvertTo3WA w3wWords = W3WUtil.getW3W(postAntennaReq.lng(), postAntennaReq.lat());
-        System.out.println("------------------------------------------------------------------------------");
-        System.out.println(w3wWords.toString());
+        ConvertTo3WA w3wWords = w3WUtil.getW3W(postAntennaReq.lng(), postAntennaReq.lat());
         Antenna antenna = Antenna.builder()
                 .user(user)
                 .area(postAntennaReq.area())
@@ -215,8 +216,6 @@ public class UserService {
                 .w3w(w3wWords.getWords())
                 .nearestPlace(w3wWords.getNearestPlace())
                 .build();
-        System.out.println(antenna.toResponse());
-        System.out.println("------------------------------------------------------------------------------");
         antennaRepository.save(antenna);
         return antenna.toResponse();
     }
