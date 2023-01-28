@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.geo.Point;
+import org.locationtech.jts.geom.Point;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +27,12 @@ public class Post extends Base {
     private String title;
     @Column(columnDefinition = "varchar(255) not null")
     private String content;
-    @Column(columnDefinition = "Point default null")
+    @Column(columnDefinition = "Point not null")
     private Point coordinate;
+    @Column(columnDefinition = "varchar(50) not null")
+    private String nearestPlace;
+    @Column(columnDefinition = "varchar(50) not null")
+    private String w3w;
     @Column(columnDefinition = "blob default null")
     private byte[] photo;
     @Column(columnDefinition = "varchar(255) default null")
