@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.geo.Point;
+import org.locationtech.jts.geom.Point;
 
 @Entity
 @Data
@@ -33,6 +33,6 @@ public class Antenna extends Base {
     private String nearestPlace;
 
     public DetailAntennaRes toResponse() {
-        return new DetailAntennaRes(this.antennaId, this.area, this.coordinate.getX(), this.coordinate.getY(), this.w3w, this.nearestPlace);
+        return new DetailAntennaRes(this.antennaId, this.area, this.coordinate.getY(), this.coordinate.getX(), this.w3w, this.nearestPlace);
     }
 }

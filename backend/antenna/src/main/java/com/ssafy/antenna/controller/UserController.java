@@ -104,19 +104,28 @@ public class UserController {
         return ResultResponse.success(userService.uploadImage(multipartFile, Long.valueOf(authentication.getName())));
     }
 
-    @DeleteMapping("/photo")
-    public ResultResponse<UserDetailRes> deleteProfilePhoto(Authentication authentication) {
-        return userService.deleteImage(Long.valueOf(authentication.getName()));
+    @GetMapping("/photo")
+    public ResultResponse<byte[]> getProfilePhoto(@RequestParam Long userId) {
+        return ResultResponse.success(userService.getImage(userId));
     }
 
-    @GetMapping("/{userId}/feats")
-    public ResultResponse<UserFeatsRes> getUserFeats(@PathVariable Long userId) {
-        return userService.getUserFeats(userId);
+    @PostMapping("/antennae")
+    public ResultResponse<DetailAntennaRes> createAntenna(@RequestBody PostAntennaReq postAntennaReq, Authentication authentication) {
+        return ResultResponse.success(userService.createAntenna(postAntennaReq,Long.valueOf(authentication.getName())));
     }
 
-//    @PostMapping("/antenna")
-//    public ResultResponse<DetailAntennaRes> createAntenna(@RequestBody PostAntennaReq postAntennaReq, Authentication authentication) {
-//        return ResultResponse.success(userService.createAntenna(postAntennaReq,Long.valueOf(authentication.getName())));
-//    }
+    @DeleteMapping("/antennae/{antennaId}")
+    public ResultResponse<DetailAntennaRes> deleteAntenna(Authentication authentication, @PathVariable Long antennaId) {
+        return ResultResponse.success(userService.deleteAntenna(antennaId,Long.valueOf(authentication.getName())));
+    }
 
+    @GetMapping("/antennae")
+    public ResultResponse<List<DetailAntennaRes>> getAllAntennae(Authentication authentication) {
+        return ResultResponse.success(userService.getAllAntennae(Long.valueOf(authentication.getName())));
+    }
+
+    @GetMapping("/antennae/{antennaId}")
+    public ResultResponse<DetailAntennaRes> getAntenna(Authentication authentication, @PathVariable Long antennaId) {
+        return ResultResponse.success(userService.getAntenna(antennaId,Long.valueOf(authentication.getName())));
+    }
 }

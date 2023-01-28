@@ -11,12 +11,8 @@ import com.ssafy.antenna.domain.email.dto.CheckEmailRes;
 import com.ssafy.antenna.domain.user.Follow;
 import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.domain.user.dto.*;
-import com.ssafy.antenna.exception.not_found.FollowNotFoundException;
-import com.ssafy.antenna.exception.not_found.FollowerNotFoundException;
-import com.ssafy.antenna.exception.not_found.FollowingNotFoundException;
-import com.ssafy.antenna.exception.not_found.UserNotFoundException;
+import com.ssafy.antenna.exception.not_found.*;
 import com.ssafy.antenna.exception.unauthorized.InvalidPasswordException;
-import com.ssafy.antenna.repository.AdventureSucceedRepository;
 import com.ssafy.antenna.repository.AntennaRepository;
 import com.ssafy.antenna.repository.FollowRepository;
 import com.ssafy.antenna.repository.UserRepository;
@@ -25,8 +21,8 @@ import com.ssafy.antenna.util.ImageUtil;
 import com.ssafy.antenna.util.W3WUtil;
 import com.what3words.javawrapper.response.ConvertTo3WA;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import org.springframework.data.geo.Point;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -48,6 +44,7 @@ public class UserService {
     private final ImageUtil imageUtil;
     private final AntennaRepository antennaRepository;
     private final AdventureSucceedRepository adventureSucceedRepository;
+    private final W3WUtil w3WUtil;
 
     public User getUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
@@ -179,7 +176,7 @@ public class UserService {
         return userDetailResList;
     }
 
-    public String uploadImage(MultipartFile multipartFile, Long userId){
+    public String uploadImage(MultipartFile multipartFile, Long userId) {
         User user = getUser(userId);
         try {
             user.setPhoto(ImageUtil.compressImage(multipartFile.getBytes()));
@@ -190,8 +187,15 @@ public class UserService {
         return "succeed";
     }
 
-    public byte[] downloadImage(Long userId) {
-        User user = getUser(userId);
+//    public byte[] downloadImage(Long userId) {
+//        User user = getUser(userId);
+//        byte[] photo = ImageUtil.decompressImage(user.getPhoto());
+//        return photo;
+//    }
+
+    public byte[] getImage(Long userId) {
+        //유저가 있는지 확인
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         byte[] photo = ImageUtil.decompressImage(user.getPhoto());
         return photo;
     }
@@ -228,5 +232,49 @@ public class UserService {
         List<String> result = adventureSucceeds.stream()
                 .map(b -> b.getAdventure().getFeat()).toList();
         return ResultResponse.success(new UserFeatsRes(result));
+    }
+    public DetailAntennaRes createAntenna(PostAntennaReq postAntennaReq, Long userId) {
+        //유저가 존재하는지 먼저 확인
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        ConvertTo3WA w3wWords = w3WUtil.getW3W(postAntennaReq.lng(), postAntennaReq.lat());
+        Antenna antenna = Antenna.builder()
+                .user(user)
+                .area(postAntennaReq.area())
+                .coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLat(), w3wWords.getCoordinates().getLng())))
+                .w3w(w3wWords.getWords())
+                .nearestPlace(w3wWords.getNearestPlace())
+                .build();
+        antennaRepository.save(antenna);
+        return antenna.toResponse();
+    }
+
+
+    public DetailAntennaRes deleteAntenna(Long antennaId, Long userId) {
+        //유저가 존재하는지 확인
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        //유저가 존재하면, 유저가 그 안테나 아이디를 가지고 있는지 확인
+        Antenna antenna = antennaRepository.findByAntennaIdAndUser(antennaId, user).orElseThrow(AntennaNotFoundException::new);
+        antennaRepository.deleteById(antennaId);
+        return antenna.toResponse();
+    }
+
+    public List<DetailAntennaRes> getAllAntennae(Long userId) {
+        //유저가 존재하는지 확인
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        //유저가 존재하면, 안테나 리스트 가져오기
+        List<Antenna> antennaList = antennaRepository.findAllByUser(user);
+        List<DetailAntennaRes> detailAntennaResList = new ArrayList<>();
+        for (int i = 0; i < antennaList.size(); i++) {
+            detailAntennaResList.add(antennaList.get(i).toResponse());
+        }
+        return detailAntennaResList;
+    }
+
+    public DetailAntennaRes getAntenna(Long antennaId, Long userId) {
+        //유저가 존재하는지 확인
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        //유저가 존재하면, 유저와 안테나를 함께 조회
+        Antenna antenna = antennaRepository.findByAntennaIdAndUser(antennaId, user).orElseThrow(AntennaNotFoundException::new);
+        return antenna.toResponse();
     }
 }
