@@ -1,10 +1,10 @@
 import React, { useState,useEffect } from "react";
-import ArticleListItem from "./ArticleListItem";
+import ArticleListItem from "./ArticleListItem"
 import { ScrollMenu } from 'react-horizontal-scrolling-menu';
-import "./ArticleList.css"
+import "./HorizontalScroll.css"
 
 
-function ArticleList() {
+function HorizontalScroll() {
   
   const dummy = [
     {post_id: 1, title : 'TITLEaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', nickName: 'NICKNAME', date: 'DATE.MM.DD'},
@@ -14,18 +14,17 @@ function ArticleList() {
     {post_id: 5, title : 'TITLE', nickName: 'NICKNAME', date: 'DATE.MM.DD'},
     {post_id: 6, title : 'TITLE', nickName: 'NICKNAME', date: 'DATE.MM.DD'},
   ]
-  console.log(dummy)
+  
   return (
 
     <div className="articleList">
       <ScrollMenu >
-        {
-        dummy.map((articleListItem) => {
+        {dummy.map((articleListItem) => {
           return(
-            <ArticleListItem articleListItem={articleListItem}/>
-          )
+          <ArticleListItem articleListItem={articleListItem}/>
+        )
         })
-        }
+      }
       </ScrollMenu>
     </div>
       
@@ -40,4 +39,4 @@ function ArticleList() {
 
 
 
-export default ArticleList
+export default HorizontalScroll
