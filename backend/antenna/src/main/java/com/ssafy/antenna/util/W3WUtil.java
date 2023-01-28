@@ -16,7 +16,6 @@ public class W3WUtil {
         ConvertTo3WA words = api.convertTo3wa(new Coordinates(lng, lat))
                 .language("ko")
                 .execute();
-        System.out.println(words);
         return words;
     }
 }

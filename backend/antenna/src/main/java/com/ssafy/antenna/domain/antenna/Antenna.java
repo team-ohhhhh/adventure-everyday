@@ -33,6 +33,6 @@ public class Antenna extends Base {
     private String nearestPlace;
 
     public DetailAntennaRes toResponse() {
-        return new DetailAntennaRes(this.antennaId, this.area, this.coordinate.getX(), this.coordinate.getY(), this.w3w, this.nearestPlace);
+        return new DetailAntennaRes(this.antennaId, this.area, this.coordinate.getY(), this.coordinate.getX(), this.w3w, this.nearestPlace);
     }
 }
