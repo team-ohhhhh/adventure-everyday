@@ -57,6 +57,13 @@ public class AdventureController {
         return new ResponseEntity<>("특정 탐험 장소(체크포인트) 추가 성공",HttpStatus.OK);
     }
 
+    // 특정 탐험의 장소들(체크포인트들) 조회
+    @GetMapping("/{adventureId}/places")
+    public ResponseEntity<List<ReadAdventurePlaceRes>> readAdventurePlace(@PathVariable Long adventureId){
+        List<ReadAdventurePlaceRes> result = adventureService.readAdventurePlace(adventureId);
+        return new ResponseEntity<List<ReadAdventurePlaceRes>>(result,HttpStatus.OK);
+    }
+
     // 특정 유저가 참가중인 탐험 추가(탐험 참가하기)
     @PostMapping("/adventure-in-progress")
     public ResponseEntity<String> createAdventureInProgress(@RequestBody CreateAdventureInProgressReq createAdventureInProgressReq,Authentication authentication){
@@ -68,13 +75,13 @@ public class AdventureController {
     // 특정 유저가 참가중인 탐험 삭제(탐험 포기)
 
 
-//    // 특정 탐험 달성자 추가
-//    @PostMapping("/adventure-succeed/{adventureId}")
-//    public ResponseEntity<String> creaateAdventureSucceed(@PathVariable Long adventureId,Authentication authentication){
-//        adventureService.createAdventureSucceed(adventureId,Long.valueOf(authentication.getName()));
-//        return new ResponseEntity<String>("특정 탐험 달성자 추가 성공",HttpStatus.OK);
-//    }
-//
+    // 특정 탐험 달성자 추가
+    @PostMapping("/adventure-succeed/{adventureId}")
+    public ResponseEntity<String> creaateAdventureSucceed(@PathVariable Long adventureId,Authentication authentication){
+        adventureService.createAdventureSucceed(adventureId,Long.valueOf(authentication.getName()));
+        return new ResponseEntity<String>("특정 탐험 달성자 추가 성공",HttpStatus.OK);
+    }
+
 //    // 특정 탐험 달성자 조회
 //    @GetMapping("/adventure-succeed/{adventureId}")
 //    public ResponseEntity<List<ReadAdventureSucceedRes>> readAdventureSucceed(@PathVariable Long adventureId,Authentication authentication){
@@ -82,14 +89,14 @@ public class AdventureController {
 //        return new ResponseEntity<List<ReadAdventureSucceedRes>>(,HttpStatus.OK);
 //    }
 
-    // 특정 탐험 달성자의 후기 추가
+    // 특정 탐험의 후기 추가
     @PostMapping("/{adventureId}/reviews")
     public ResponseEntity<String> createAdventureReview(@PathVariable Long adventureId, @RequestBody CreateAdventureReviewReq createAdventureReviewReq, Authentication authentication){
         adventureService.createAdventureReview(adventureId,createAdventureReviewReq,Long.valueOf(authentication.getName()));
         return new ResponseEntity<>("탐험 후기 추가 성공",HttpStatus.OK);
     }
 
-    // 특정 탐험 후기 조회
+    // 특정 탐험의 후기들 조회
     @GetMapping("/{adventureId}/reviews")
     public ResponseEntity<List<ReadAdventureReviewRes>> readAdventureReview(@PathVariable Long adventureId){
         List<ReadAdventureReviewRes> result = adventureService.readAdventureReview(adventureId);
