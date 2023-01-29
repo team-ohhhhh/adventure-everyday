@@ -7,8 +7,12 @@ import com.ssafy.antenna.domain.email.dto.AuthEmailRes;
 import com.ssafy.antenna.domain.email.dto.CheckEmailRes;
 import com.ssafy.antenna.domain.user.dto.*;
 import com.ssafy.antenna.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -127,5 +131,14 @@ public class UserController {
     @GetMapping("/antennae/{antennaId}")
     public ResultResponse<DetailAntennaRes> getAntenna(Authentication authentication, @PathVariable Long antennaId) {
         return ResultResponse.success(userService.getAntenna(antennaId,Long.valueOf(authentication.getName())));
+    }
+
+    @GetMapping("/logout")
+    public ResultResponse<String> logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws Exception {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        return ResultResponse.success("true");
     }
 }

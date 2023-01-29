@@ -4,9 +4,9 @@ import com.what3words.javawrapper.What3WordsV3;
 import com.what3words.javawrapper.request.Coordinates;
 import com.what3words.javawrapper.response.ConvertTo3WA;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class W3WUtil {
     @Value("${w3w.token.secret}")
     private String SECRET_KEY;

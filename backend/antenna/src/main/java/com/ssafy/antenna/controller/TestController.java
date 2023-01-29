@@ -1,14 +1,20 @@
 package com.ssafy.antenna.controller;
 
+import com.ssafy.antenna.domain.ResultResponse;
 import com.ssafy.antenna.domain.category.Category;
 import com.ssafy.antenna.repository.CategoryRepository;
 import com.what3words.javawrapper.What3WordsV3;
 import com.what3words.javawrapper.request.Coordinates;
 import com.what3words.javawrapper.response.ConvertTo3WA;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,16 +32,10 @@ public class TestController {
         categoryRepository.save(testCategory);
         return new ResponseEntity<>("카테고리생성성공~~", HttpStatus.OK);
     }
-    @PostMapping
-    public ConvertTo3WA getW3W(@RequestParam double lat, @RequestParam double lng){
-
-        What3WordsV3 api = new What3WordsV3("9JQT4MJK");
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        ConvertTo3WA words = api.convertTo3wa(new Coordinates(lat, lng))
-                .language("ko")
-                .execute();
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        System.out.println(words.toString());
-        return words;
+    @GetMapping("/main")
+    public ResultResponse<String> test(){
+        return ResultResponse.success("로그아웃 완료");
     }
+
+
 }
