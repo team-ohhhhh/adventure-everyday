@@ -8,6 +8,7 @@ import com.ssafy.antenna.domain.email.dto.CheckEmailRes;
 import com.ssafy.antenna.domain.user.dto.*;
 import com.ssafy.antenna.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -104,9 +105,14 @@ public class UserController {
         return ResultResponse.success(userService.uploadImage(multipartFile, Long.valueOf(authentication.getName())));
     }
 
-    @GetMapping("/photo")
-    public ResultResponse<byte[]> getProfilePhoto(@RequestParam Long userId) {
-        return ResultResponse.success(userService.getImage(userId));
+    @GetMapping("{userId}/photo")
+    public ResponseEntity<?> getProfilePhoto(@PathVariable Long userId) {
+        return userService.getImage(userId);
+    }
+
+    @GetMapping("/{userId}/feats")
+    public ResultResponse<UserFeatsRes> getUserFeats(@PathVariable Long userId) {
+        return userService.getUserFeats(userId);
     }
 
     @PostMapping("/antennae")
