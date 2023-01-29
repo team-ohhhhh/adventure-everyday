@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.geo.Point;
+import org.locationtech.jts.geom.Point;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,18 +22,18 @@ public class AdventurePlace  extends Base {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long adventurePlaceId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "adventureId")
-    private Adventure adventure;
-
-    @Column(columnDefinition = "Point not null")
-    private Point coordinate;
-
     @Column(columnDefinition = "varchar(255) not null")
     private String title;
 
     @Column(columnDefinition = "varchar(255) default null")
     private String content;
+    @Column(columnDefinition = "Point not null")
+    private Point coordinate;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "adventureId")
+    private Adventure adventure;
 
     @OneToMany(mappedBy = "adventurePlace", cascade = CascadeType.ALL)
     private List<Checkpoint> checkpoints = new ArrayList<>();

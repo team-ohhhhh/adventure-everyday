@@ -1,22 +1,25 @@
 package com.ssafy.antenna.service;
 
 import com.ssafy.antenna.domain.adventure.Adventure;
+import com.ssafy.antenna.domain.adventure.AdventurePlace;
 import com.ssafy.antenna.domain.adventure.AdventureSucceed;
+import com.ssafy.antenna.domain.adventure.dto.CreateAdventureInProgressReq;
 import com.ssafy.antenna.domain.adventure.dto.CreateAdventureReq;
 import com.ssafy.antenna.domain.adventure.dto.ReadAdventureRes;
 import com.ssafy.antenna.domain.category.Category;
 import com.ssafy.antenna.domain.user.User;
-import com.ssafy.antenna.repository.AdventureRepository;
-import com.ssafy.antenna.repository.AdventureSucceedRepository;
-import com.ssafy.antenna.repository.CategoryRepository;
-import com.ssafy.antenna.repository.UserRepository;
+import com.ssafy.antenna.repository.*;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,22 +30,13 @@ public class AdventureService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final AdventureSucceedRepository adventureSucceedRepository;
+    private final AdventurePlaceRepository adventurePlaceRepository;
 
-    public void createAdventure(CreateAdventureReq createAdventureReq, Authentication authentication){
-        // user, end_date 나중에 바꾸기.
-        Optional<User> curUser = userRepository.findById(Long.valueOf(authentication.getName()));
+    // 탐험 추가
+    public void createAdventure(CreateAdventureReq createAdventureReq, Long userId){
+        Optional<User> curUser = userRepository.findById(userId);
 
-        // 나중에는 Category 실행시에 넣어주기 일단 지금은 테스트로 만들어줌
-        // test
-        // Category를 만들고
-//        Category testCategory = Category.builder()
-//                .category("맛집")
-//                .build();
-//        // 저장해줌
-//        categoryRepository.save(testCategory);
-        // test
-
-        // 나중에 Exeption 바꿔주기.
+        // 탐험을 생성한 후,
         Adventure newAdventure = Adventure.builder()
                 .category(categoryRepository.findCategoryIdByCategory(createAdventureReq.category()).orElseThrow())
                 .feat(createAdventureReq.feat())
@@ -54,14 +48,37 @@ public class AdventureService {
                 .endDate(createAdventureReq.endDate())
                 .user(curUser.orElseThrow())
                 .build();
-
         adventureRepository.save(newAdventure);
+
+        // 생성한 탐험의 id를 가지고 탐험 장소를 생성한다.
+        // 입력 확인.
+        /*
+        System.out.println(createAdventureReq.locationTitle());
+        System.out.println(createAdventureReq.locationContent());
+        for(Double[] d : createAdventureReq.coordinate()){
+            Arrays.toString(d);
+        }
+         */
+
+        // 좌표의 개수만큼 반복
+        for(Double[] point:createAdventureReq.coordinate()) {
+            AdventurePlace newAdventurePlace = AdventurePlace.builder()
+                    .title(createAdventureReq.locationTitle())
+                    .content(createAdventureReq.locationContent())
+                    .coordinate(new GeometryFactory().createPoint(new Coordinate(point[0],point[1])))
+                    .adventure(newAdventure)
+                    .build();
+
+            adventurePlaceRepository.save(newAdventurePlace);
+        }
     }
 
+    // 탐험 삭제
     public void deleteAdventure(Long adventureId){
         adventureRepository.deleteById(adventureId);
     }
 
+    // 탐험 조회(생성순, 달성순, 거리순)
     public List<ReadAdventureRes> readAdventure(String order,Double lat,Double lng){
         // 거리순 조회
         List<ReadAdventureRes> result=new ArrayList<>();
@@ -82,6 +99,25 @@ public class AdventureService {
         return result;
     }
 
+    // 특정 유저가 참가중인 탐험 추가(탐험 참가하기)
+    public void createAdventureInProgress(CreateAdventureInProgressReq createAdventureInProgressReq, Long valueOf) {
+
+    }
+
+    // 특정 탐험 달성자 추가
+    public void createAdventureSucceed(Long adventureId, Long userId) {
+        User curUser = userRepository.findById(userId).orElseThrow();
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+
+        AdventureSucceed newAdventureSucceed = AdventureSucceed.builder()
+                .user(curUser)
+                .adventure(curAdventure)
+                .build();
+
+        adventureSucceedRepository.save(newAdventureSucceed);
+    }
+
+    // Entity class를 Response로 변환.
     public List<ReadAdventureRes> toResponse(List<Adventure> temp){
         List<ReadAdventureRes> result=new ArrayList<>();
 
@@ -104,15 +140,5 @@ public class AdventureService {
         return result;
     }
 
-    public void createAdventureSucceed(Long adventureId, Long userId) {
-        User curUser = userRepository.findById(userId).orElseThrow();
-        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
 
-        AdventureSucceed newAdventureSucceed = AdventureSucceed.builder()
-                .user(curUser)
-                .adventure(curAdventure)
-                .build();
-
-        adventureSucceedRepository.save(newAdventureSucceed);
-    }
 }
