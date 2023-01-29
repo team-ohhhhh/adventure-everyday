@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -33,7 +34,7 @@ public class AdventureController {
         return new ResponseEntity<ReadAdventureRes>(result,HttpStatus.OK);
     }
 
-    // 탐험 삭제
+    // 특정 탐험 삭제
     @DeleteMapping("/{adventureId}")
     public ResponseEntity<String> deleteAdventure(@PathVariable Long adventureId){
         // 탐험 삭제
@@ -41,10 +42,19 @@ public class AdventureController {
         return new ResponseEntity<String>("탐험 삭제 성공",HttpStatus.OK);
     }
 
-    // 탐험 조회(생성순, 달성순, 거리순)
+    // 모든 탐험 조회(생성순, 달성순, 거리순)
     @GetMapping()
     public ResponseEntity<List< ReadAdventureRes >> readAdventures(@RequestParam String order, @RequestParam(required = false) Double lat, @RequestParam(required = false) Double lng){
         return new ResponseEntity<List<ReadAdventureRes>>(adventureService.readAdventures(order,lat,lng),HttpStatus.OK);
+    }
+
+    // 특정 탐험 장소(체크포인트) 추가
+    @PostMapping("/{adventureId}/places")
+    public ResponseEntity<String> createAdventurePlace(@PathVariable Long adventureId,@RequestBody CreateAdventurePlaceReq[] places){
+        System.out.println("=========================");
+//        System.out.println(Arrays.toString(places));
+        adventureService.createAdventurePlace(adventureId,places);
+        return new ResponseEntity<>("특정 탐험 장소(체크포인트) 추가 성공",HttpStatus.OK);
     }
 
     // 특정 유저가 참가중인 탐험 추가(탐험 참가하기)

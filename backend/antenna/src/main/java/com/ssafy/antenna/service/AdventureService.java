@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,31 +43,8 @@ public class AdventureService {
                 .endDate(createAdventureReq.endDate())
                 .user(curUser.orElseThrow())
                 .build();
+
         adventureRepository.save(newAdventure);
-
-        // 생성한 탐험의 id를 가지고 탐험 장소를 생성한다.
-
-        // 입력 확인.
-        /*
-        System.out.println(createAdventureReq.locationTitle());
-        System.out.println(createAdventureReq.locationContent());
-        for(Double[] d : createAdventureReq.coordinate()){
-            Arrays.toString(d);
-        }
-         */
-
-        // 좌표의 개수만큼 반복
-        for(Double[] point:createAdventureReq.coordinate()) {
-            AdventurePlace newAdventurePlace = AdventurePlace.builder()
-                    .title(createAdventureReq.locationTitle())
-                    .content(createAdventureReq.locationContent())
-                    .coordinate(new GeometryFactory().createPoint(new Coordinate(point[0],point[1])))
-                    .adventure(newAdventure)
-                    .photo(createAdventureReq.locationPhoto())
-                    .build();
-
-            adventurePlaceRepository.save(newAdventurePlace);
-        }
     }
 
     // 특정 탐험 조회
@@ -89,12 +67,12 @@ public class AdventureService {
         return newReadAdventureRes;
     }
 
-    // 탐험 삭제
+    // 특정 탐험 삭제
     public void deleteAdventure(Long adventureId){
         adventureRepository.deleteById(adventureId);
     }
 
-    // 탐험 조회(생성순, 달성순, 거리순)
+    // 모든 탐험 조회(생성순, 달성순, 거리순)
     public List<ReadAdventureRes> readAdventures(String order, Double lat, Double lng){
         // 거리순 조회
         List<ReadAdventureRes> result=new ArrayList<>();
@@ -113,6 +91,24 @@ public class AdventureService {
         }
 
         return result;
+    }
+
+    // 특정 탐험 장소(체크포인트) 추가
+    public void createAdventurePlace(Long adventureId,CreateAdventurePlaceReq[] places){
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+
+        // 좌표의 개수만큼 반복
+        for(CreateAdventurePlaceReq place:places) {
+            AdventurePlace newAdventurePlace = AdventurePlace.builder()
+                    .title(place.title())
+                    .content(place.content())
+                    .coordinate(new GeometryFactory().createPoint(new Coordinate(place.coordinate()[0],place.coordinate()[1])))
+                    .photo(place.photo())
+                    .adventure(curAdventure)
+                    .build();
+
+            adventurePlaceRepository.save(newAdventurePlace);
+        }
     }
 
     // Entity class를 Response로 변환.
