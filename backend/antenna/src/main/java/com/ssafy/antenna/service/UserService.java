@@ -241,7 +241,7 @@ public class UserService {
         Antenna antenna = Antenna.builder()
                 .user(user)
                 .area(postAntennaReq.area())
-                .coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLat(), w3wWords.getCoordinates().getLng())))
+                .coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLng(), w3wWords.getCoordinates().getLat())))
                 .w3w(w3wWords.getWords())
                 .nearestPlace(w3wWords.getNearestPlace())
                 .build();
