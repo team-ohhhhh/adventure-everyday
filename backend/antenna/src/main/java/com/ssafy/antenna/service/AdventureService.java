@@ -62,10 +62,31 @@ public class AdventureService {
                     .content(createAdventureReq.locationContent())
                     .coordinate(new GeometryFactory().createPoint(new Coordinate(point[0],point[1])))
                     .adventure(newAdventure)
+                    .photo(createAdventureReq.locationPhoto())
                     .build();
 
             adventurePlaceRepository.save(newAdventurePlace);
         }
+    }
+
+    // 특정 탐험 조회
+    public ReadAdventureRes readAdventure(Long adventureId){
+        Adventure newAdventure = adventureRepository.findById(adventureId).orElseThrow();
+
+        ReadAdventureRes newReadAdventureRes = new ReadAdventureRes(
+                newAdventure.getAdventureId(),
+                newAdventure.getCategory().getCategory(),
+                newAdventure.getFeat(),
+                newAdventure.getTitle(),
+                newAdventure.getContent(),
+                newAdventure.getDifficulty(),
+                newAdventure.getPhoto(),
+                newAdventure.getStartDate(),
+                newAdventure.getEndDate(),
+                newAdventure.getAvgReviewRate()
+        );
+
+        return newReadAdventureRes;
     }
 
     // 탐험 삭제
@@ -74,7 +95,7 @@ public class AdventureService {
     }
 
     // 탐험 조회(생성순, 달성순, 거리순)
-    public List<ReadAdventureRes> readAdventure(String order,Double lat,Double lng){
+    public List<ReadAdventureRes> readAdventures(String order, Double lat, Double lng){
         // 거리순 조회
         List<ReadAdventureRes> result=new ArrayList<>();
         if(lat!=null && lng!=null){

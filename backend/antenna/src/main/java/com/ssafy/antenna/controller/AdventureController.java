@@ -2,7 +2,6 @@ package com.ssafy.antenna.controller;
 
 import com.ssafy.antenna.domain.adventure.dto.*;
 import com.ssafy.antenna.service.AdventureService;
-import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +26,13 @@ public class AdventureController {
         return new ResponseEntity<String>("탐험 추가 성공",HttpStatus.OK);
     }
 
+    // 특정 탐험 조회
+    @GetMapping("/{adventureId}")
+    public ResponseEntity<ReadAdventureRes> readAdventure(@PathVariable Long adventureId){
+        ReadAdventureRes result = adventureService.readAdventure(adventureId);
+        return new ResponseEntity<ReadAdventureRes>(result,HttpStatus.OK);
+    }
+
     // 탐험 삭제
     @DeleteMapping("/{adventureId}")
     public ResponseEntity<String> deleteAdventure(@PathVariable Long adventureId){
@@ -37,8 +43,8 @@ public class AdventureController {
 
     // 탐험 조회(생성순, 달성순, 거리순)
     @GetMapping()
-    public ResponseEntity<List< ReadAdventureRes >> readAdventure(@RequestParam String order, @RequestParam(required = false) Double lat, @RequestParam(required = false) Double lng){
-        return new ResponseEntity<List<ReadAdventureRes>>(adventureService.readAdventure(order,lat,lng),HttpStatus.OK);
+    public ResponseEntity<List< ReadAdventureRes >> readAdventures(@RequestParam String order, @RequestParam(required = false) Double lat, @RequestParam(required = false) Double lng){
+        return new ResponseEntity<List<ReadAdventureRes>>(adventureService.readAdventures(order,lat,lng),HttpStatus.OK);
     }
 
     // 특정 유저가 참가중인 탐험 추가(탐험 참가하기)

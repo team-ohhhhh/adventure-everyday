@@ -29,7 +29,9 @@ public class AdventurePlace  extends Base {
     private String content;
     @Column(columnDefinition = "Point not null")
     private Point coordinate;
-
+    @Lob
+    @Column(columnDefinition = "blob default null")
+    private byte[] photo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adventureId")

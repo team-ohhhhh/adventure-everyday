@@ -19,7 +19,8 @@ public record CreateAdventureReq(
         // 모험 장소
         String locationTitle,
         String locationContent,
-        List<Double[]> coordinate
+        List<Double[]> coordinate,
+        byte[] locationPhoto
 
 ) {
 }
