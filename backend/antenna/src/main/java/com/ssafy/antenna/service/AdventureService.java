@@ -162,6 +162,7 @@ public class AdventureService {
 
         for(AdventureReview ar:temp){
             ReadAdventureReviewRes newReadAdventureReviewRes = new ReadAdventureReviewRes(
+                    ar.getAdventureReviewId(),
                     ar.getUser().getUserId(),
                     ar.getUser().getNickname(),
                     ar.getRate(),
@@ -174,6 +175,8 @@ public class AdventureService {
         return result;
     }
 
-
-
+    // 탐험 후기 삭제
+    public void deleteAdventureReview(Long adventureReviewId) {
+        adventureReviewRepository.deleteById(adventureReviewId);
+    }
 }

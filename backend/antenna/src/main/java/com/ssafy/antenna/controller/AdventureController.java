@@ -67,16 +67,23 @@ public class AdventureController {
 //    }
 
     // 특정 탐험 달성자의 후기 추가
-    @PostMapping("/{adventureId}/review")
+    @PostMapping("/{adventureId}/reviews")
     public ResponseEntity<String> createAdventureReview(@PathVariable Long adventureId, @RequestBody CreateAdventureReviewReq createAdventureReviewReq, Authentication authentication){
         adventureService.createAdventureReview(adventureId,createAdventureReviewReq,Long.valueOf(authentication.getName()));
         return new ResponseEntity<>("탐험 후기 추가 성공",HttpStatus.OK);
     }
 
     // 특정 탐험 후기 조회
-    @GetMapping("/{adventureId}/review")
+    @GetMapping("/{adventureId}/reviews")
     public ResponseEntity<List<ReadAdventureReviewRes>> readAdventureReview(@PathVariable Long adventureId){
         List<ReadAdventureReviewRes> result = adventureService.readAdventureReview(adventureId);
         return new ResponseEntity<List<ReadAdventureReviewRes>>(result,HttpStatus.OK);
+    }
+
+    // 탐험 후기 삭제
+    @DeleteMapping("/reviews/{adventureReviewId}")
+    public ResponseEntity<String> deleteAdventureReview(@PathVariable Long adventureReviewId){
+        adventureService.deleteAdventureReview(adventureReviewId);
+        return new ResponseEntity<>("탐험 후기 삭제 성공",HttpStatus.OK);
     }
 }

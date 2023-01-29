@@ -17,7 +17,7 @@ import org.hibernate.annotations.ColumnDefault;
 public class AdventureReview extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reviewId;
+    private Long adventureReviewId;
     @Column(columnDefinition = "varchar(255) default null")
     private String content;
     @Column(columnDefinition = "int not null")
