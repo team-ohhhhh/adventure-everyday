@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./BottomSheet.css"
+import style from "./BottomSheet.module.css"
 import ArticleListItem from "./ArticleListItem"
 
 function BottomSheet() {
@@ -18,23 +18,23 @@ function BottomSheet() {
   return(
     <div>
       <button onClick={() => {
-        setBottomSheetContainerState("active");
+        setBottomSheetContainerState("style.active");
         setTimeout(() => {
-          setBottomSheetState("semiActive");
+          setBottomSheetState("style.semiActive");
         }, 200)
       }}>여기를 눌러!</button>
       <button onClick={() => {console.log('ㅇㅋ')}}>여기를 누르면 콘솔</button>
       <div id="bottomSheetContainer" className={bottomSheetContainerState}>
         <div id="bottomSheet" className={bottomSheetState}>
-        {bottomSheetState === "semiActive" &&
+        {bottomSheetState === "style.semiActive" &&
           <button onClick={() => {
-              setBottomSheetState("active")
+              setBottomSheetState("style.active")
             }}
           >더보기</button>    
     }
-    {bottomSheetState === "active" &&
+    {bottomSheetState === "style.active" &&
           <button onClick={() => {
-              setBottomSheetState("semiActive")
+              setBottomSheetState("style.semiActive")
             }}
           >덜보기</button>    
     }

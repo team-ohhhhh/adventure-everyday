@@ -1,5 +1,5 @@
 import HorizontalScroll from "../components/HorizontalScroll";
-import "./AdventurePage.css"
+import style from "./AdventurePage.module.css"
 import { BiSearchAlt2 } from "react-icons/bi"
 
 
@@ -7,23 +7,23 @@ function AdventurePage() {
 
   return (
     <div>
-      <div className="recommendPageHeader">
+      <div className={style.recommendPageHeader}>
         <h1>탐험</h1>
-        <div className="searchAndCreate">
+        <div className={style.searchAndCreate}>
           {/* 검색 컴포넌트 자리 onClick달아서 모달열기 */}
-          <BiSearchAlt2 className="searchIcon" />
+          <BiSearchAlt2 className={style.searchIcon} />
           {/* 생성 컴포넌트 자리 */}
           <h3>생성</h3>
         </div>
       </div>
       {/* 첫번째 추천 기준 */}
       <div>
-        <div className="recommendListInfo">
-          <div className="adventureTitle">
-            <div className="recommendTitle">첫번째 기준 제목</div>
-            <div className="recommendInfo">첫번째 기준에 대한 설명 자리</div>
+        <div className={style.recommendListInfo}>
+          <div className={style.adventureTitle}>
+            <div className={style.recommendTitle}>첫번째 기준 제목</div>
+            <div className={style.recommendInfo}>첫번째 기준에 대한 설명 자리</div>
           </div>
-          <div className="more">
+          <div className={style.more}>
             <span>
               더보기
             </span>
@@ -35,12 +35,12 @@ function AdventurePage() {
       </div>
       {/* 두번째 추천 기준 */}
       <div>
-        <div className="recommendListInfo">
-          <div className="adventureTitle">
-            <div className="recommendTitle">두번째 기준 제목</div>
-            <div className="recommendInfo">두번째 기준에 대한 설명 자리</div>
+        <div className={style.recommendListInfo}>
+          <div className={style.adventureTitle}>
+            <div className={style.recommendTitle}>두번째 기준 제목</div>
+            <div className={style.recommendInfo}>두번째 기준에 대한 설명 자리</div>
           </div>
-          <div className="more">
+          <div className={style.more}>
             <span>
               더보기
             </span>
@@ -52,12 +52,12 @@ function AdventurePage() {
       </div>
       {/* 세번째 추천 기준 */}
       <div>
-        <div className="recommendListInfo">
-          <div className="adventureTitle">
-            <div className="recommendTitle">세번째 기준 제목</div>
-            <div className="recommendInfo">세번째 기준에 대한 설명 자리</div>
+        <div className={style.recommendListInfo}>
+          <div className={style.adventureTitle}>
+            <div className={style.recommendTitle}>세번째 기준 제목</div>
+            <div className={style.recommendInfo}>세번째 기준에 대한 설명 자리</div>
           </div>
-          <div className="more">
+          <div className={style.more}>
             <span>
               더보기
             </span>

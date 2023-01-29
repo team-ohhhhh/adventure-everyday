@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import './ArticleListItem.css'
+import style from './ArticleListItem.module.css'
 
 function ArticleListItem(props) {
   const postId = props.articleListItem.post_id
@@ -12,14 +12,14 @@ function ArticleListItem(props) {
   const tierImage =  `./../../public/${tier}`
 
   return (
-    <div key={ postId } className="articleListItem" onClick={() => {console.log("클릭")}}>
-      <img src="images.jpg" className="photo" />
-      <div className="divForInfo">
+    <div key={ postId } className={style.articleListItem} onClick={() => {console.log("클릭")}}>
+      <img src="images.jpg" className={style.photo} />
+      <div className={style.divForInfo}>
         <div>
-          <div className="title"> { title } </div>
-          <div className="nickNameAndTier"> <span className="nickName"> { nickName } </span> <img src="logo192.png"/></div>
+          <div className={style.title}> { title } </div>
+          <div className={style.nickNameAndTier}> <span className={style.nickName}> { nickName } </span> <img src="logo192.png"/></div>
         </div>
-        <div className="date"> { date } </div>
+        <div className={style.date}> { date } </div>
       </div>
     </div>
   )

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom";
-import "./ComponentsForSignUp.css"
+import style from "./ComponentsForSignUp.module.css"
 
 
 
@@ -66,17 +66,17 @@ function EmailComponent(props) {
         <h1>사용할 이메일을</h1>
         <h1>입력해주세요</h1>
       </div>
-      <div className="inputAndButton">
-        <input className="signUpInput" onChange={(event) => { props.setEmail(event.target.value) }} placeholder="이메일"></input>
+      <div className={style.inputAndButton}>
+        <input className={style.signUpInput} onChange={(event) => { props.setEmail(event.target.value) }} placeholder="이메일"></input>
         {/* TODO: 여기에 이메일 형식 validation!!! */}
-        <button   onClick={ () => {sendEmail()} } className="signUpButton">인증 요청</button>
+        <button   onClick={ () => {sendEmail()} } className={style.signUpButton}>인증 요청</button>
       </div>             
       { isSent ? 
       <div>
-        <div className="inputAndButton">
+        <div className={style.inputAndButton}>
           {/* TODO: 여기에 인증코드 validation!!! */}
-          <input className="signUpInput" onChange={(event) => { setCode(event.target.value) }} placeholder="인증 코드"></input>
-          <button onClick={ () => {validate()}} className="signUpButton">확인</button>
+          <input className={style.signUpInput} onChange={(event) => { setCode(event.target.value) }} placeholder="인증 코드"></input>
+          <button onClick={ () => {validate()}} className={style.signUpButton}>확인</button>
         </div>
       </div> : null
       }
@@ -90,17 +90,17 @@ function PasswordComponent(props) {
 
   return (
     <div>
-      <div className="titleHolder">
+      <div className={style.titleHolder}>
         <h1>비밀번호를</h1>
         <h1>입력해주세요</h1>
       </div>
-      <div className="inputAndButton">
-        <input className="signUpInput" type={ "password" } id="password" onChange={(event) => { props.setPassword(event.target.value) }} placeholder="비밀번호"></input>
-        <input className="signUpInput" type={ "password" } id="password2" onChange={(event) => { props.setPassword2(event.target.value) }} placeholder="비밀번호 확인"></input>
-        <div className="buttonBox">
-          <button onClick={() => { props.setStage(props.stage - 1)}} className="signUpButton">이전</button>
+      <div className={style.inputAndButton}>
+        <input className={style.signUpInput} type={ "password" } id="password" onChange={(event) => { props.setPassword(event.target.value) }} placeholder="비밀번호"></input>
+        <input className={style.signUpInput} type={ "password" } id="password2" onChange={(event) => { props.setPassword2(event.target.value) }} placeholder="비밀번호 확인"></input>
+        <div className={style.buttonBox}>
+          <button onClick={() => { props.setStage(props.stage - 1)}} className={style.signUpButton}>이전</button>
           {/* TODO: 여기에 비밀번호 형식 validation!!! */}
-          <button className="signUpButton" onClick={() => { props.setStage(props.stage + 1)}}>다음</button>
+          <button className={style.signUpButton} onClick={() => { props.setStage(props.stage + 1)}}>다음</button>
         </div>
       </div>
     </div>
@@ -111,16 +111,16 @@ function PasswordComponent(props) {
 function NicknameComponent(props) {
   return (
     <div>
-      <div className="titleHolder">
+      <div className={style.titleHolder}>
         <h1>닉네임을</h1>
         <h1>입력해주세요</h1>
       </div>
-      <div className="inputAndButton">
-        <input className="signUpInput" onChange={(event) => { props.setNickname(event.target.value) }} placeholder="닉네임"></input>
-        <div className="buttonBox">
-          <button className="signUpButton" onClick={() => { props.setStage(props.stage - 1)}}>이전</button>
+      <div className={style.inputAndButton}>
+        <input className={style.signUpInput} onChange={(event) => { props.setNickname(event.target.value) }} placeholder="닉네임"></input>
+        <div className={style.buttonBox}>
+          <button className={style.signUpButton} onClick={() => { props.setStage(props.stage - 1)}}>이전</button>
           {/* TODO: 여기에 닉네임 형식 validation!!! */}
-          <button onClick={() => { props.setStage(props.stage + 1)}} className="signUpButton">다음</button>
+          <button onClick={() => { props.setStage(props.stage + 1)}} className={style.signUpButton}>다음</button>
         </div>
       </div>
     </div>
@@ -130,15 +130,15 @@ function NicknameComponent(props) {
 function IntroduceComponent(props) {
   return (
     <div>
-      <div className="titleHolder">
+      <div className={style.titleHolder}>
         <h1>소개글을</h1>
         <h1>입력해주세요<h1 style={{display:"inline", color:"#1C0B69"}}>(선택)</h1></h1>
       </div>
-      <div className="inputAndButton">
-        <input className="signUpInput" style={{height:"100px", borderRadius:"29px"}} onChange={(event) => { props.setIntroduce(event.target.value) }} placeholder="소개글"></input>
-        <div className="buttonBox">
-          <button className="signUpButton" onClick={() => { props.setStage(props.stage - 1)}}>이전</button>
-          <button className="signUpButton" onClick={() => { props.setStage(props.stage + 1)}}>다음</button>
+      <div className={style.inputAndButton}>
+        <input className={style.signUpInput} style={{height:"100px", borderRadius:"29px"}} onChange={(event) => { props.setIntroduce(event.target.value) }} placeholder="소개글"></input>
+        <div className={style.buttonBox}>
+          <button className={style.signUpButton} onClick={() => { props.setStage(props.stage - 1)}}>이전</button>
+          <button className={style.signUpButton} onClick={() => { props.setStage(props.stage + 1)}}>다음</button>
         </div>
       </div>
     </div>
@@ -161,15 +161,15 @@ function PhotoComponent(props) {
   }
   return (
     <div>
-      <div className="titleHolder">
+      <div className={style.titleHolder}>
         <h1>프로필 사진을</h1>
         <h1>등록해주세요<h1 style={{display:"inline", color:"#1C0B69"}}>(선택)</h1></h1>
       </div>
-        <label htmlFor="photo" className="signUpPhotoLabel">
-          <div className="signUpPhotoContiner">
+        <label htmlFor="photo" className={style.signUpPhotoLabel}>
+          <div className={style.signUpPhotoContiner}>
             <img
             src={props.photo ? props.photo : `defaultProfile.jpg`}
-            className="signUpPhoto"
+            className={style.signUpPhoto}
             ></img>
           </div>
         </label>
@@ -181,10 +181,10 @@ function PhotoComponent(props) {
         ref={props.imgRef}
         style={{display:"none"}}
         ></input>
-      <div className="inputAndButton">
-        <div className="buttonBox">
-          <button className="signUpButton" onClick={() => { props.setStage(props.stage - 1)}}>이전</button>
-          <button className="signUpButton" onClick={() => { props.signUp() }}>가입</button>
+      <div className={style.inputAndButton}>
+        <div className={style.buttonBox}>
+          <button className={style.signUpButton} onClick={() => { props.setStage(props.stage - 1)}}>이전</button>
+          <button className={style.signUpButton} onClick={() => { props.signUp() }}>가입</button>
         </div>
       </div>
     </div>
@@ -201,7 +201,7 @@ function PhotoComponent(props) {
         // 여기 자꾸 워닝 뜸.. React Hook useEffect has a missing dependency: 'navigate'. Either include it or remove the dependency array
     return (
       <div>
-        <div className="titleHolder" style={{color:"#1C0B69"}}>
+        <div className={style.titleHolder} style={{color:"#1C0B69"}}>
           <h1>가입이</h1>
           <h1>완료되었습니다</h1>
         </div>

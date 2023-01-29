@@ -2,9 +2,9 @@ import React, { useState,useEffect } from "react";
 import ArticleListItem from "./ArticleListItem"
 import AdventureBanner from "./Adventure/AdventureBanner"
 import { ScrollMenu } from 'react-horizontal-scrolling-menu';
-import "./HorizontalScroll.css"
+import style from "./HorizontalScroll.module.css"
 
-
+// props로 contentType 지정해서 넘겨줄 것. adventure/article
 function HorizontalScroll(props) {
   
   const dummy = [
@@ -22,7 +22,7 @@ function HorizontalScroll(props) {
   switch(listItem) {
     case "adventure":
       return (
-        <div className="articleList">
+        <div className={style.articleList}>
           <ScrollMenu >
             {dummy.map((articleListItem) => {
               return(
@@ -35,7 +35,7 @@ function HorizontalScroll(props) {
       )
       case "article":
         return (
-          <div className="articleList">
+          <div className={style.articleList}>
             <ScrollMenu >
               {dummy.map((articleListItem) => {
                 return(
