@@ -10,7 +10,7 @@ function AdventurePage() {
       <div className="recommendPageHeader">
         <h1>탐험</h1>
         <div className="searchAndCreate">
-          {/* 검색 컴포넌트 자리 */}
+          {/* 검색 컴포넌트 자리 onClick달아서 모달열기 */}
           <BiSearchAlt2 className="searchIcon" />
           {/* 생성 컴포넌트 자리 */}
           <h3>생성</h3>

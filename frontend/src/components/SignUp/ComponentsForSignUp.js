@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom";
+import "./ComponentsForSignUp.css"
+
+
 
 // 1. 이메일 인증 화면
 function EmailComponent(props) {
@@ -47,6 +50,7 @@ function EmailComponent(props) {
         props.setStage(props.stage + 1)
       }
       else {
+        // TODO: validation 통과못하면 스테이트 바꿔서 메세지를 html로 띄우자
         alert('인증코드가 틀렸습니다')
       }
     })
@@ -58,19 +62,24 @@ function EmailComponent(props) {
 
   return(
     <div>
-      <label htmlFor="email">이메일</label>
-      <input id="email" className="greyRoundInput" onChange={(event) => { props.setEmail(event.target.value) }} placeholder="이메일"></input>
-      <button className="signUpButton"  onClick={ () => {sendEmail()} }>인증 요청</button>
+      <div className="titleHolder">
+        <h1>사용할 이메일을</h1>
+        <h1>입력해주세요</h1>
+      </div>
+      <div className="inputAndButton">
+        <input className="signUpInput" onChange={(event) => { props.setEmail(event.target.value) }} placeholder="이메일"></input>
+        {/* TODO: 여기에 이메일 형식 validation!!! */}
+        <button   onClick={ () => {sendEmail()} } className="signUpButton">인증 요청</button>
+      </div>             
       { isSent ? 
       <div>
-        <label htmlFor="code">코드를 입력하세요</label>
-        <input id="code" onChange={(event) => { setCode(event.target.value) }} placeholder="인증 코드"></input>
-        <button className="signUpButton" onClick={ () => {validate()}  }>확인</button>
+        <div className="inputAndButton">
+          {/* TODO: 여기에 인증코드 validation!!! */}
+          <input className="signUpInput" onChange={(event) => { setCode(event.target.value) }} placeholder="인증 코드"></input>
+          <button onClick={ () => {validate()}} className="signUpButton">확인</button>
+        </div>
       </div> : null
       }
-      
-
-      <button className="signUpButton" onClick={() => { props.setStage(props.stage - 1)}} >이전</button>
     </div>
   )
 }
@@ -82,11 +91,19 @@ function PasswordComponent(props) {
 
   return (
     <div>
-      <label htmlFor="password">비밀번호</label>
-      <input className="greyRoundInput" type={ "password" } id="password" onChange={(event) => { props.setPassword(event.target.value) }} placeholder="비밀번호"></input>
-      <label htmlFor="password2">비밀번호 확인</label>
-      <input type={ "password" } id="password2" onChange={(event) => { props.setPassword2(event.target.value) }} placeholder="비밀번호 확인"></input>
-      { props.password == props.password2 && <button className="signUpButton" onClick={() => { props.setStage(props.stage + 1)}}>다음</button>}
+      <div className="titleHolder">
+        <h1>비밀번호를</h1>
+        <h1>입력해주세요</h1>
+      </div>
+      <div className="inputAndButton">
+        <input className="signUpInput" type={ "password" } id="password" onChange={(event) => { props.setPassword(event.target.value) }} placeholder="비밀번호"></input>
+        <input className="signUpInput" type={ "password" } id="password2" onChange={(event) => { props.setPassword2(event.target.value) }} placeholder="비밀번호 확인"></input>
+        <div className="buttonBox">
+          <button onClick={() => { props.setStage(props.stage - 1)}} className="signUpButton">이전</button>
+          {/* TODO: 여기에 비밀번호 형식 validation!!! */}
+          <button className="signUpButton" onClick={() => { props.setStage(props.stage + 1)}}>다음</button>
+        </div>
+      </div>
     </div>
 
   )
@@ -95,10 +112,18 @@ function PasswordComponent(props) {
 function NicknameComponent(props) {
   return (
     <div>
-      <label htmlFor="nickname">닉네임</label>
-      <input id="nickname" onChange={(event) => { props.setNickname(event.target.value) }} placeholder="닉네임"></input>
-      <button className="signUpButton" onClick={() => { props.setStage(props.stage - 1)}}>이전</button>
-      { props.nickname.length >= 2 && <button onClick={() => { props.setStage(props.stage + 1)}}>다음</button>}
+      <div className="titleHolder">
+        <h1>닉네임을</h1>
+        <h1>입력해주세요</h1>
+      </div>
+      <div className="inputAndButton">
+        <input className="signUpInput" onChange={(event) => { props.setNickname(event.target.value) }} placeholder="닉네임"></input>
+        <div className="buttonBox">
+          <button className="signUpButton" onClick={() => { props.setStage(props.stage - 1)}}>이전</button>
+          {/* TODO: 여기에 닉네임 형식 validation!!! */}
+          <button onClick={() => { props.setStage(props.stage + 1)}} className="signUpButton">다음</button>
+        </div>
+      </div>
     </div>
   )
 }
@@ -106,10 +131,17 @@ function NicknameComponent(props) {
 function IntroduceComponent(props) {
   return (
     <div>
-      <label htmlFor="introduce">자기소개</label>
-      <textarea id="introduce" onChange={(event) => { props.setIntroduce(event.target.value) }} placeholder="소개글"></textarea>
-      <button className="signUpButton" onClick={() => { props.setStage(props.stage - 1)}}>이전</button>
-      <button className="signUpButton" onClick={() => { props.setStage(props.stage + 1)}}>다음</button>
+      <div className="titleHolder">
+        <h1>소개글을</h1>
+        <h1>입력해주세요<h1 style={{display:"inline", color:"#1C0B69"}}>(선택)</h1></h1>
+      </div>
+      <div className="inputAndButton">
+        <input className="signUpInput" style={{height:"100px", borderRadius:"29px"}} onChange={(event) => { props.setIntroduce(event.target.value) }} placeholder="소개글"></input>
+        <div className="buttonBox">
+          <button className="signUpButton" onClick={() => { props.setStage(props.stage - 1)}}>이전</button>
+          <button className="signUpButton" onClick={() => { props.setStage(props.stage + 1)}}>다음</button>
+        </div>
+      </div>
     </div>
   )
 }
@@ -128,24 +160,34 @@ function PhotoComponent(props) {
     }
 
   }
-
-
-
   return (
     <div>
-      <img
-      src={props.photo ? props.photo : `./../public/logo192.png`}
-      ></img>
-      <label htmlFor="photo">프로필 사진</label>
-      <input 
-      id="photo" 
-      type="file"
-      accept={ "image/*" } 
-      onChange={savePhoto}
-      ref={props.imgRef}
-      ></input>
-      <button className="signUpButton" onClick={() => { props.setStage(props.stage - 1)}}>이전</button>
-      <button className="signUpButton" onClick={() => { props.signUp() }}>가입</button>
+      <div className="titleHolder">
+        <h1>프로필 사진을</h1>
+        <h1>등록해주세요<h1 style={{display:"inline", color:"#1C0B69"}}>(선택)</h1></h1>
+      </div>
+        <label htmlFor="photo" className="signUpPhotoLabel">
+          <div className="signUpPhotoContiner">
+            <img
+            src={props.photo ? props.photo : `defaultProfile.webp`}
+            className="signUpPhoto"
+            ></img>
+          </div>
+        </label>
+        <input 
+        id="photo" 
+        type="file"
+        accept={ "image/*" } 
+        onChange={savePhoto}
+        ref={props.imgRef}
+        style={{display:"none"}}
+        ></input>
+      <div className="inputAndButton">
+        <div className="buttonBox">
+          <button className="signUpButton" onClick={() => { props.setStage(props.stage - 1)}}>이전</button>
+          <button className="signUpButton" onClick={() => { props.signUp() }}>가입</button>
+        </div>
+      </div>
     </div>
   )
 }
@@ -159,8 +201,11 @@ function PhotoComponent(props) {
         }, [])
     return (
       <div>
-        <h1>가입이 완료되었습니다</h1>
-        <p>잠시 후 로그인 페이지로 이동합니다</p>
+        <div className="titleHolder" style={{color:"#1C0B69"}}>
+          <h1>가입이</h1>
+          <h1>완료되었습니다</h1>
+        </div>
+        {/* gif 자리 */}
       </div>
     )
   }
