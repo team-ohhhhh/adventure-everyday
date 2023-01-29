@@ -87,7 +87,6 @@ function EmailComponent(props) {
 // 2. 비밀번호 입력
 
 function PasswordComponent(props) {
-  let URL = useSelector((state) => state.URL)
 
   return (
     <div>
@@ -169,7 +168,7 @@ function PhotoComponent(props) {
         <label htmlFor="photo" className="signUpPhotoLabel">
           <div className="signUpPhotoContiner">
             <img
-            src={props.photo ? props.photo : `defaultProfile.webp`}
+            src={props.photo ? props.photo : `defaultProfile.jpg`}
             className="signUpPhoto"
             ></img>
           </div>
@@ -195,10 +194,11 @@ function PhotoComponent(props) {
   function SignUpCompletedComponent() {
     const navigate = useNavigate()
         useEffect(() => {
-          const timer = setTimeout(() => {
-            navigate('/login')
+          setTimeout(() => {
+          navigate('/login')
           }, 3000)
         }, [])
+        // 여기 자꾸 워닝 뜸.. React Hook useEffect has a missing dependency: 'navigate'. Either include it or remove the dependency array
     return (
       <div>
         <div className="titleHolder" style={{color:"#1C0B69"}}>

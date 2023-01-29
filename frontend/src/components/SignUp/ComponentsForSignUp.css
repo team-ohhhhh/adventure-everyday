@@ -5,6 +5,14 @@
   background-color: #D9D9D9;
   border: 0px;
   margin-top: 18px;
+
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 100%;
+  text-align: center;
+  
  }
 
  .signUpInput::placeholder {

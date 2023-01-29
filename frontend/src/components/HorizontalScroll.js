@@ -5,7 +5,7 @@ import { ScrollMenu } from 'react-horizontal-scrolling-menu';
 import "./HorizontalScroll.css"
 
 
-function HorizontalScroll() {
+function HorizontalScroll(props) {
   
   const dummy = [
     {post_id: 1, title : 'TITLEaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', nickName: 'NICKNAME', date: 'DATE.MM.DD'},
@@ -16,24 +16,37 @@ function HorizontalScroll() {
     {post_id: 6, title : 'TITLE', nickName: 'NICKNAME', date: 'DATE.MM.DD'},
   ]
 
-  
+  const listItem = props.contentType
+ 
 
-  
-  return (
-
-    <div className="articleList">
-      <ScrollMenu >
-        {dummy.map((articleListItem) => {
-          return(
-          <AdventureBanner articleListItem={articleListItem}/>
+  switch(listItem) {
+    case "adventure":
+      return (
+        <div className="articleList">
+          <ScrollMenu >
+            {dummy.map((articleListItem) => {
+              return(
+              <AdventureBanner articleListItem={articleListItem}/>
+            )
+            })
+          }
+          </ScrollMenu>
+        </div>
+      )
+      case "article":
+        return (
+          <div className="articleList">
+            <ScrollMenu >
+              {dummy.map((articleListItem) => {
+                return(
+                <ArticleListItem articleListItem={articleListItem}/>
+              )
+              })
+            }
+            </ScrollMenu>
+          </div>
         )
-        })
-      }
-      </ScrollMenu>
-    </div>
-      
-
-  )
+  }
   // props.articleList.map(function(articleListItem){
   //   return (
   //     <ArticleListItem articleListItem={articleListItem}/>

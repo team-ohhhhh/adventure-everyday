@@ -30,7 +30,7 @@ function AdventurePage() {
           </div>
         </div>
         <div>
-          <HorizontalScroll />
+          <HorizontalScroll contentType={'adventure'}/>
         </div>
       </div>
       {/* 두번째 추천 기준 */}
@@ -47,7 +47,7 @@ function AdventurePage() {
           </div>
         </div>
         <div>
-          <HorizontalScroll />
+          <HorizontalScroll contentType={'adventure'}/>
         </div>
       </div>
       {/* 세번째 추천 기준 */}
@@ -64,7 +64,7 @@ function AdventurePage() {
           </div>
         </div>
         <div>
-          <HorizontalScroll />
+          <HorizontalScroll contentType={'adventure'}/>
         </div>
       </div>
     </div>
