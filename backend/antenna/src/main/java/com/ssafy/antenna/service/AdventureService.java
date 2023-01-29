@@ -2,9 +2,11 @@ package com.ssafy.antenna.service;
 
 import com.ssafy.antenna.domain.adventure.Adventure;
 import com.ssafy.antenna.domain.adventure.AdventurePlace;
+import com.ssafy.antenna.domain.adventure.AdventureReview;
 import com.ssafy.antenna.domain.adventure.AdventureSucceed;
 import com.ssafy.antenna.domain.adventure.dto.CreateAdventureInProgressReq;
 import com.ssafy.antenna.domain.adventure.dto.CreateAdventureReq;
+import com.ssafy.antenna.domain.adventure.dto.CreateAdventureReviewReq;
 import com.ssafy.antenna.domain.adventure.dto.ReadAdventureRes;
 import com.ssafy.antenna.domain.category.Category;
 import com.ssafy.antenna.domain.user.User;
@@ -31,6 +33,7 @@ public class AdventureService {
     private final CategoryRepository categoryRepository;
     private final AdventureSucceedRepository adventureSucceedRepository;
     private final AdventurePlaceRepository adventurePlaceRepository;
+    private final AdventureReviewRepository adventureReviewRepository;
 
     // 탐험 추가
     public void createAdventure(CreateAdventureReq createAdventureReq, Long userId){
@@ -51,6 +54,7 @@ public class AdventureService {
         adventureRepository.save(newAdventure);
 
         // 생성한 탐험의 id를 가지고 탐험 장소를 생성한다.
+
         // 입력 확인.
         /*
         System.out.println(createAdventureReq.locationTitle());
@@ -140,5 +144,18 @@ public class AdventureService {
         return result;
     }
 
+    // 특정 탐험 달성자의 후기 추가
+    public void createAdventureReview(Long adventureId, CreateAdventureReviewReq createAdventureReviewReq, Long userId) {
+        User curUser = userRepository.findById(userId).orElseThrow();
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
 
+        AdventureReview newAdventureReview = AdventureReview.builder()
+                .content(createAdventureReviewReq.content())
+                .rate(createAdventureReviewReq.rate())
+                .user(curUser)
+                .adventure(curAdventure)
+                .build();
+
+        adventureReviewRepository.save(newAdventureReview);
+    }
 }

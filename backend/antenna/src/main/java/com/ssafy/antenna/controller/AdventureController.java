@@ -1,9 +1,6 @@
 package com.ssafy.antenna.controller;
 
-import com.ssafy.antenna.domain.adventure.dto.CreateAdventureInProgressReq;
-import com.ssafy.antenna.domain.adventure.dto.CreateAdventureReq;
-import com.ssafy.antenna.domain.adventure.dto.ReadAdventureRes;
-import com.ssafy.antenna.domain.adventure.dto.ReadAdventureSucceedRes;
+import com.ssafy.antenna.domain.adventure.dto.*;
 import com.ssafy.antenna.service.AdventureService;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
@@ -68,4 +65,11 @@ public class AdventureController {
 //        adventureService.readAdventureSucceed(adventureId,Long.valueOf(authentication.getName()));
 //        return new ResponseEntity<List<ReadAdventureSucceedRes>>(,HttpStatus.OK);
 //    }
+
+    // 특정 탐험 달성자의 후기 추가
+    @PostMapping("/{adventureId}/review")
+    public ResponseEntity<String> createAdventureReview(@PathVariable Long adventureId, @RequestBody CreateAdventureReviewReq createAdventureReviewReq, Authentication authentication){
+        adventureService.createAdventureReview(adventureId,createAdventureReviewReq,Long.valueOf(authentication.getName()));
+        return new ResponseEntity<>("탐험 후기 추가 성공",HttpStatus.OK);
+    }
 }
