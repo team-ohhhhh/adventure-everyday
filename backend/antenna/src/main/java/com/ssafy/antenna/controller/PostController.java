@@ -1,6 +1,7 @@
 package com.ssafy.antenna.controller;
 
 import com.ssafy.antenna.domain.ResultResponse;
+import com.ssafy.antenna.domain.comment.PostCommentReq;
 import com.ssafy.antenna.domain.post.dto.PostUpdateReq;
 import com.ssafy.antenna.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -65,5 +66,18 @@ public class PostController {
             Authentication authentication
     ) throws IllegalAccessException {
         return postService.updatePost(postId, postUpdateReq, authentication);
+    }
+
+    @PostMapping("{postId}/comments")
+    public ResultResponse<?> postComment(
+            @PathVariable Long postId,
+            @RequestBody PostCommentReq postCommentReq,
+            Authentication authentication
+    ) {
+        return postService.postComment(
+                postId,
+                postCommentReq,
+                Long.valueOf(authentication.getName())
+        );
     }
 }

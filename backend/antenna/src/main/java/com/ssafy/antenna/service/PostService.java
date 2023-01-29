@@ -1,9 +1,13 @@
 package com.ssafy.antenna.service;
 
 import com.ssafy.antenna.domain.ResultResponse;
+import com.ssafy.antenna.domain.comment.Comment;
+import com.ssafy.antenna.domain.comment.PostCommentReq;
 import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.post.dto.PostUpdateReq;
+import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.exception.not_found.UserNotFoundException;
+import com.ssafy.antenna.repository.CommentRepository;
 import com.ssafy.antenna.repository.PostRepository;
 import com.ssafy.antenna.repository.UserRepository;
 import com.ssafy.antenna.util.ImageUtil;
@@ -29,6 +33,7 @@ public class PostService {
     private final UserRepository userRepository;
     private final W3WUtil w3WUtil;
     private final ImageUtil imageUtil;
+    private final CommentRepository commentRepository;
 
     public String deletePost(Long userId, Long postId) throws IllegalAccessException {
         if (Objects.equals(userId, postRepository.findById(postId).orElseThrow(NoSuchElementException::new).getUser().getUserId())) {
@@ -59,7 +64,7 @@ public class PostService {
                 .isPublic(Boolean.valueOf(isPublic))
                 .build();
         if (file != null) {
-            post.setPhoto(ImageUtil.compressImage(file.getBytes()));
+            post.setPhoto(imageUtil.compressImage(file.getBytes()));
             post.setPhotoType(file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1));
         }
         postRepository.save(post);
@@ -104,5 +109,23 @@ public class PostService {
                     .build();
             return ResultResponse.success(postRepository.save(newPost).getPostId());
         }
+    }
+
+    public ResultResponse<?> postComment(
+            Long postId,
+            PostCommentReq postCommentReq,
+            Long userId
+    ) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(NoSuchElementException::new);
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+        Comment comment = commentRepository.save(Comment.builder()
+                .post(post)
+                .user(user)
+                .content(postCommentReq.content())
+                .build()
+        );
+        return ResultResponse.success(postId);
     }
 }
