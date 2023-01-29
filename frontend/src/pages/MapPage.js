@@ -34,7 +34,7 @@ function MapMain() {
           style={{
             // 지도의 크기
             width: "100%",
-            height: "80%",
+            height: "60%",
           }}
           level={state.level} // 지도의 확대 레벨
           onCenterChanged={(map) =>
@@ -128,6 +128,7 @@ function MapMain() {
             </button>
           )}
 
+          <p>{state.errMsg}</p>
           <p>{"지도 레벨은 " + state.level + " 이고"}</p>
           <p>
             {"중심 좌표는 위도 " +
@@ -165,7 +166,7 @@ function MapMain() {
         {
           maximumAge: 60000,
           timeout: 5000,
-          enableHighAccuracy: true,
+          enableHighAccuracy: false,
         }
       );
     } else {

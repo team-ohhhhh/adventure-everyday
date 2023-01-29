@@ -5,7 +5,7 @@ function AntennaBtn(props) {
       <button
         className="AntennaBtn"
         onClick={() => {
-          props.setIsOn();
+          props.setIsOn(true);
         }}
       >
         <img src={"images/antennaBtn.png"}></img>
