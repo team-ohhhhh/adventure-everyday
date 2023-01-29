@@ -1,8 +1,10 @@
 package com.ssafy.antenna.controller;
 
 import com.ssafy.antenna.domain.ResultResponse;
+import com.ssafy.antenna.domain.post.dto.PostUpdateReq;
 import com.ssafy.antenna.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,5 +53,17 @@ public class PostController {
         );
     }
 
-//    public ResultResponse<>
+    @GetMapping("/{postId}/photo")
+    public ResponseEntity<?> getPostPhoto(@PathVariable Long postId) {
+        return postService.getPostPhoto(postId);
+    }
+
+    @PutMapping("/{postId}")
+    public  ResultResponse<?> updatePost(
+            @PathVariable Long postId,
+            @RequestBody PostUpdateReq postUpdateReq,
+            Authentication authentication
+    ) throws IllegalAccessException {
+        return postService.updatePost(postId, postUpdateReq, authentication);
+    }
 }
