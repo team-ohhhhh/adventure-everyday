@@ -4,24 +4,15 @@ import com.ssafy.antenna.domain.adventure.Adventure;
 import com.ssafy.antenna.domain.adventure.AdventurePlace;
 import com.ssafy.antenna.domain.adventure.AdventureReview;
 import com.ssafy.antenna.domain.adventure.AdventureSucceed;
-import com.ssafy.antenna.domain.adventure.dto.CreateAdventureInProgressReq;
-import com.ssafy.antenna.domain.adventure.dto.CreateAdventureReq;
-import com.ssafy.antenna.domain.adventure.dto.CreateAdventureReviewReq;
-import com.ssafy.antenna.domain.adventure.dto.ReadAdventureRes;
-import com.ssafy.antenna.domain.category.Category;
+import com.ssafy.antenna.domain.adventure.dto.*;
 import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.repository.*;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.Point;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -92,12 +83,35 @@ public class AdventureService {
             // 생성시간 조회
             if(order.equals("update")){
                 List<Adventure>temp = adventureRepository.findAllByOrderByCreateTimeAsc().orElseThrow();
-                result = toResponse(temp);
+                result = adventureToReadAdventureRes(temp);
             }
             // 달성자순 조회
             else if(order.equals("user")){
 
             }
+        }
+
+        return result;
+    }
+
+    // Entity class를 Response로 변환.
+    public List<ReadAdventureRes> adventureToReadAdventureRes(List<Adventure> temp){
+        List<ReadAdventureRes> result=new ArrayList<>();
+
+        for(Adventure adventrue : temp){
+            ReadAdventureRes newReadAdventureRes = new ReadAdventureRes(
+                    adventrue.getAdventureId(),
+                    adventrue.getCategory().getCategory(),
+                    adventrue.getFeat(),
+                    adventrue.getTitle(),
+                    adventrue.getContent(),
+                    adventrue.getDifficulty(),
+                    adventrue.getPhoto(),
+                    adventrue.getStartDate(),
+                    adventrue.getEndDate(),
+                    adventrue.getAvgReviewRate()
+            );
+            result.add(newReadAdventureRes);
         }
 
         return result;
@@ -121,28 +135,7 @@ public class AdventureService {
         adventureSucceedRepository.save(newAdventureSucceed);
     }
 
-    // Entity class를 Response로 변환.
-    public List<ReadAdventureRes> toResponse(List<Adventure> temp){
-        List<ReadAdventureRes> result=new ArrayList<>();
 
-        for(Adventure adventrue : temp){
-            ReadAdventureRes newReadAdventureRes = new ReadAdventureRes(
-                    adventrue.getAdventureId(),
-                    adventrue.getCategory().getCategory(),
-                    adventrue.getFeat(),
-                    adventrue.getTitle(),
-                    adventrue.getContent(),
-                    adventrue.getDifficulty(),
-                    adventrue.getPhoto(),
-                    adventrue.getStartDate(),
-                    adventrue.getEndDate(),
-                    adventrue.getAvgReviewRate()
-            );
-            result.add(newReadAdventureRes);
-        }
-
-        return result;
-    }
 
     // 특정 탐험 달성자의 후기 추가
     public void createAdventureReview(Long adventureId, CreateAdventureReviewReq createAdventureReviewReq, Long userId) {
@@ -158,4 +151,29 @@ public class AdventureService {
 
         adventureReviewRepository.save(newAdventureReview);
     }
+
+    // 특정 탐험 달성자들의 후기 조회
+    public List<ReadAdventureReviewRes> readAdventureReview(Long adventureId) {
+        List<ReadAdventureReviewRes> result = new ArrayList<>();
+
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+
+        List<AdventureReview> temp = adventureReviewRepository.findAllByAdventure(curAdventure).orElseThrow();
+
+        for(AdventureReview ar:temp){
+            ReadAdventureReviewRes newReadAdventureReviewRes = new ReadAdventureReviewRes(
+                    ar.getUser().getUserId(),
+                    ar.getUser().getNickname(),
+                    ar.getRate(),
+                    ar.getContent()
+            );
+
+            result.add(newReadAdventureReviewRes);
+        }
+
+        return result;
+    }
+
+
+
 }
