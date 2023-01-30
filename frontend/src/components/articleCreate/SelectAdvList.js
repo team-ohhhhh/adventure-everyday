@@ -1,23 +1,36 @@
 import React from "react";
 import SelectAdvItem from "./SelectAdvItem";
 
-const SelectAdvList = (props) => {
-  const advList = props.advList;
-
-  const onSelect = (id) => {
+const SelectAdvList = ({ advList, setAdvList, setArticle }) => {
+  // 선택된 옵션 다시 누른 경우
+  // 누른 옵션 -> 셀렉티드 폴스, 모험 등록 취소
+  // 나머지 옵션 -> 그대로
+  // 선택 안 된 옵션 누른 경우
+  // 누른 옵션 -> 셀렉티드 트루, 모험 등록
+  // 나머지 옵션 -> 셀렉티드 폴스
+  const onSelect = (isSelected, id) => {
     const newAdvList = advList.map((advItem) => {
-      if (advItem.id !== id) {
-        return { ...advItem, selected: false };
-      } else {
-        props.setArticle((article) => ({
+      if (isSelected && id === advItem.id) {
+        setArticle((article) => ({
+          ...article,
+          isAdv: false,
+          advId: null,
+        }));
+        return { ...advItem, isSelected: false };
+      } else if (isSelected && id !== advItem.id) {
+        return { ...advItem };
+      } else if (!isSelected && id === advItem.id) {
+        setArticle((article) => ({
           ...article,
           isAdv: true,
           advId: id,
         }));
-        return { ...advItem, selected: true };
+        return { ...advItem, isSelected: true };
+      } else {
+        return { ...advItem, isSelected: false };
       }
     });
-    props.setAdvList(newAdvList);
+    setAdvList(newAdvList);
   };
 
   return (
@@ -26,8 +39,8 @@ const SelectAdvList = (props) => {
       <div>
         {advList.map((advItem) => (
           <SelectAdvItem
-            advItem={advItem}
             key={advItem.id}
+            advItem={advItem}
             onSelect={onSelect}
           />
         ))}

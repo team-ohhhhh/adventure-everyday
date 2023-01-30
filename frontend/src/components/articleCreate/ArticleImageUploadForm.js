@@ -20,7 +20,7 @@ const GPSConvert = (metadata) => {
   return [degreeLa, degreeLo];
 };
 
-const ArticleImageUploadForm = (props) => {
+const ArticleImageUploadForm = ({ setArticle }) => {
   const fileInputRef = useRef();
   const [imagePreview, setImagePreview] = useState();
 
@@ -39,7 +39,7 @@ const ArticleImageUploadForm = (props) => {
           const url = URL.createObjectURL(file);
           const [lat, lng] = GPSConvert(metadata);
           setImagePreview({ url, name: file.name });
-          props.setArticle({ type: "image", image: file, lat, lng });
+          setArticle({ type: "image", image: file, lat, lng });
         } else {
           alert("위치정보가 없는 사진입니다. 다른 사진을 선택해주세요.");
         }
@@ -49,7 +49,7 @@ const ArticleImageUploadForm = (props) => {
 
   const removePhoto = () => {
     setImagePreview();
-    props.setArticle({ type: "text" });
+    setArticle({ type: "text" });
   };
   return (
     <div>

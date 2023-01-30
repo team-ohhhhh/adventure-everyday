@@ -1,19 +1,23 @@
 import React from "react";
 import styles from "./SelectAdvList.module.css";
 
-const SelectAdvItem = (props) => {
-  const advItem = props.advItem;
+const SelectAdvItem = ({ advItem, onSelect }) => {
+  const handleSelect = () => {
+    onSelect(advItem.isSelected, advItem.id);
+  };
 
   return (
-    <div
-      className={
-        styles.advItem + ` ${advItem.selected ? styles.selectedAdvItem : ""}`
-      }
-      onClick={() => {
-        props.onSelect(advItem.id);
-      }}
-    >
-      {advItem.adv} - {advItem.checkpoint}
+    <div>
+      <div
+        className={`${styles.advItem} ${
+          advItem.isSelected ? styles.selected : ""
+        }`}
+        onClick={handleSelect}
+      >
+        {advItem.adv} - {advItem.checkpoint}
+      </div>
+      {/* {advItem.isSelected ? "O" : "X"} ( */}
+      {/* {`${styles.advItem} ${advItem.isSelected ? styles.selected : ""}`}) */}
     </div>
   );
 };

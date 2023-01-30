@@ -62,13 +62,13 @@ const ArticleCreatePage = () => {
         id: 1,
         adv: "추억이 가득 쌓이는 탐험",
         checkpoint: "깃기 생가",
-        selected: false,
+        isSelected: false,
       },
       {
         id: 2,
         adv: "방방곡곡 맛집 탐방",
         checkpoint: "대우부대찌개",
-        selected: false,
+        isSelected: false,
       },
     ]);
   }, [article.lat, article.lng]);
@@ -84,15 +84,17 @@ const ArticleCreatePage = () => {
         <ArticleMap lat={article.lat} lng={article.lng} />
         <p>{address}</p>
       </div>
-      {advList ? (
-        <SelectAdvList
-          advList={advList}
-          setAdvList={setAdvList}
-          setArticle={setArticle}
-        />
-      ) : (
-        <div></div>
-      )}
+      <div>
+        {advList ? (
+          <SelectAdvList
+            advList={advList}
+            setAdvList={setAdvList}
+            setArticle={setArticle}
+          />
+        ) : (
+          <div></div>
+        )}
+      </div>
     </>
   );
 };
