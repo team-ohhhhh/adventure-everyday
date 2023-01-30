@@ -10,10 +10,12 @@
   font-weight: bold;
 }
 
-.advItem:hover {
-  cursor: pointer;
-  color: white;
-  background-color: #1c0b69;
+@media (hover: hover) and (pointer: fine) {
+  .advItem:hover {
+    cursor: pointer;
+    color: white;
+    background-color: #1c0b69;
+  }
 }
 
 .selected {
