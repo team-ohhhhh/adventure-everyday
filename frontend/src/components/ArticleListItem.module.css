@@ -1,0 +1,92 @@
+.articleListItem {
+  width : 333px;
+  height : 109px;
+  display: flex;
+  flex-direction: row;
+  background-color: #ffffff;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
+  
+  border-radius: 5px;
+  box-shadow: 5px 5px 5px;
+
+}
+
+/* 사진인데 사이즈가 문제임... */
+.photo {
+  width : 21%;
+  height : 70%;
+
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 10px;
+
+}
+
+
+
+
+.divForInfo {
+  display: flex;
+  width : 75%;
+  height : 70%;
+  margin-top: auto;
+  margin-bottom: auto;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-right: 10px;
+
+}
+
+.title {
+  text-align: left;
+
+  /* 여기가 글자 넘칠때 잘라주는 코드 */
+  overflow: hidden;  		
+  text-overflow: ellipsis;  	 
+  white-space: nowrap;
+
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 17px;
+}
+
+.nickNameAndTier {
+  text-align: left;
+  float:left;
+  display: flex;
+  flex-direction: row;
+
+}
+
+/* 티어 이미지 인데 크기 어케 바꾸지.. */
+img {
+  height:13px;
+  width: 13px;
+  object-fit: cover;
+}
+
+.date {
+  text-align: right;
+  float: right;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+
+
+}
+
+.nickName {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 100%;
+}
+
