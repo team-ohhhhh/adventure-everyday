@@ -64,13 +64,14 @@ public class AdventureController {
         return new ResponseEntity<List<ReadAdventurePlaceRes>>(result,HttpStatus.OK);
     }
 
-    // 특정 유저가 참가중인 탐험 추가(탐험 참가하기)
-    @PostMapping("/adventure-in-progress")
-    public ResponseEntity<String> createAdventureInProgress(@RequestBody CreateAdventureInProgressReq createAdventureInProgressReq,Authentication authentication){
-        adventureService.createAdventureInProgress(createAdventureInProgressReq,Long.valueOf(authentication.getName()));
-        return new ResponseEntity<>("특정 유저가 참가중인 탐험 추가(탐험 참가하기)",HttpStatus.OK);
+    // 특정 유저가 참가중인 탐험 추가(탐험 참가)
+    @PostMapping("/{adventureId}/adventure-in-progress")
+    public ResponseEntity<String> createAdventureInProgress(@PathVariable Long adventureId,Authentication authentication){
+        adventureService.createAdventureInProgress(adventureId,Long.valueOf(authentication.getName()));
+        return new ResponseEntity<>("탐험 참가 성공~~",HttpStatus.OK);
     }
     // 특정 유저가 참가중인 탐험 조회
+
 
     // 특정 유저가 참가중인 탐험 삭제(탐험 포기)
 

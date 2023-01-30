@@ -1,9 +1,6 @@
 package com.ssafy.antenna.service;
 
-import com.ssafy.antenna.domain.adventure.Adventure;
-import com.ssafy.antenna.domain.adventure.AdventurePlace;
-import com.ssafy.antenna.domain.adventure.AdventureReview;
-import com.ssafy.antenna.domain.adventure.AdventureSucceed;
+import com.ssafy.antenna.domain.adventure.*;
 import com.ssafy.antenna.domain.adventure.dto.*;
 import com.ssafy.antenna.domain.like.AdventureLike;
 import com.ssafy.antenna.domain.user.User;
@@ -27,6 +24,7 @@ public class AdventureService {
     private final AdventurePlaceRepository adventurePlaceRepository;
     private final AdventureReviewRepository adventureReviewRepository;
     private final AdventureLikeRepository adventureLikeRepository;
+    private final AdventureInProgressRepository adventureInProgressRepository;
 
     // 탐험 추가
     public void createAdventure(CreateAdventureReq createAdventureReq, Long userId){
@@ -162,8 +160,18 @@ public class AdventureService {
 
 
     // 특정 유저가 참가중인 탐험 추가(탐험 참가하기)
-    public void createAdventureInProgress(CreateAdventureInProgressReq createAdventureInProgressReq, Long valueOf) {
+    public void createAdventureInProgress(Long adventureId, Long userId) {
+        User curUser = userRepository.findById(userId).orElseThrow();
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+        Long totalPoint = adventurePlaceRepository.countByAdventure(curAdventure);
 
+        AdventureInProgress newAdventureInProgress = AdventureInProgress.builder()
+                .totalPoint(totalPoint.intValue())
+                .user(curUser)
+                .adventure(curAdventure)
+                .build();
+
+        adventureInProgressRepository.save(newAdventureInProgress);
     }
 
     // 특정 유저가 참가중인 모험의 피드 켜기(좋아요 추가)
