@@ -31,7 +31,6 @@ function SignUpPage() {
     formData.append("password", password)
     formData.append("introduce", introduce)
     formData.append("file", file)
-    console.log(typeof(formData))
     axios.post(URL + "/auth/register", formData, {
       headers: {
       "Content-type": "multipart/form-date",
@@ -76,27 +75,6 @@ function SignUpPage() {
           <SignUpCompletedComponent/>
         )
     }
-  // return(
-  //   <div>
-      
-      
-  //     <label htmlFor="nickName">닉네임</label>
-  //     <input id="nickName" onChange={(event) => { setNickname(event.target.value) }}></input>
-
-      
-
-  //     <label htmlFor="introduce">자기소개</label>
-  //     <textarea id="introduce" onChange={(event) => { setIntroduce(event.target.value) }}></textarea>
-      
-  //     <label htmlFor="photo">프로필 사진</label>
-  //     <input type={ "file" } accept={ "image/*" } id="photo" onChange={(event) => { setPhoto(event.target.value) }}></input>
-
-      
-  //     <button onClick={ () => { signUp() } }>회원가입</button>
-
-  //   </div>
-  // )
-
 
 }
 
