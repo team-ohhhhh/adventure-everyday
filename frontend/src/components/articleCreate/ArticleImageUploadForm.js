@@ -39,7 +39,7 @@ const ArticleImageUploadForm = (props) => {
           const url = URL.createObjectURL(file);
           const [lat, lng] = GPSConvert(metadata);
           setImagePreview({ url, name: file.name });
-          props.setImageFile({ file, url, lat, lng });
+          props.setArticle({ type: "image", image: file, lat, lng });
         } else {
           alert("위치정보가 없는 사진입니다. 다른 사진을 선택해주세요.");
         }
@@ -49,9 +49,8 @@ const ArticleImageUploadForm = (props) => {
 
   const removePhoto = () => {
     setImagePreview();
-    props.setImageFile();
+    props.setArticle({ type: "text" });
   };
-
   return (
     <div>
       <input

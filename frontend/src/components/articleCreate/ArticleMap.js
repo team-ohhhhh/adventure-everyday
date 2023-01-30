@@ -28,9 +28,9 @@ const ArticleMap = (props) => {
   );
 };
 
-ArticleMap.defaultProps = {
-  lat: 37.50128745884959,
-  lng: 127.03956225524968,
-};
+// ArticleMap.defaultProps = {
+//   lat: 37.50128745884959,
+//   lng: 127.03956225524968,
+// };
 
 export default ArticleMap;
