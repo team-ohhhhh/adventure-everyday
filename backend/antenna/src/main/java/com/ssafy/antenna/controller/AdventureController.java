@@ -147,6 +147,13 @@ public class AdventureController {
         return new ResponseEntity<>("탐험 후기 삭제 성공",HttpStatus.OK);
     }
 
+    // 모험 검색(모든 모험 키워드 조회)
+    @GetMapping("/search")
+    public ResponseEntity<List<ReadAdventureRes>> readAdventureSearch(@RequestParam String keyword){
+        List<ReadAdventureRes> result = adventureService.readAdventureSearch(keyword);
+        return new ResponseEntity<>(result,HttpStatus.OK);
+    }
+
     // 특정 위치에서 일정 거리 안에 특정 유저가 참가중인 탐험과 탐험 장소 조회하기
 //    @GetMapping("/adventure-in-progress/check")
 //    public ResponseEntity<List<ReadAdventureInProgressWithinDistanceRes>> readAdventureInProgressWithinDistance(@RequestParam Double lat,@RequestParam Double lng, Authentication authentication){

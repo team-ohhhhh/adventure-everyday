@@ -7,8 +7,6 @@ import com.ssafy.antenna.domain.post.CheckpointPost;
 import com.ssafy.antenna.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,7 +25,9 @@ public class Adventure extends Base {
     @JoinColumn(name = "categoryId")
     private Category category;
     @Column(columnDefinition = "varchar(255) not null")
-    private String feat;
+    private String featTitle;
+    @Column(columnDefinition = "varchar(255) not null")
+    private String featContent;
     @Column(columnDefinition = "varchar(255) not null")
     private String title;
     @Column(columnDefinition = "varchar(255) default null")

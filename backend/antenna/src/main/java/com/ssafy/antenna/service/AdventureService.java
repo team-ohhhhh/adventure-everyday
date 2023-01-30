@@ -3,15 +3,9 @@ package com.ssafy.antenna.service;
 import com.ssafy.antenna.domain.adventure.*;
 import com.ssafy.antenna.domain.adventure.dto.*;
 import com.ssafy.antenna.domain.like.AdventureLike;
-import com.ssafy.antenna.domain.location.Location;
-import com.ssafy.antenna.domain.post.Post;
-import com.ssafy.antenna.domain.post.dto.PostDetailRes;
 import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.repository.*;
-import com.ssafy.antenna.util.CardinalDirection;
-import com.ssafy.antenna.util.GeometryUtil;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -41,7 +35,8 @@ public class AdventureService {
         // 탐험을 생성한 후,
         Adventure newAdventure = Adventure.builder()
                 .category(categoryRepository.findCategoryIdByCategory(createAdventureReq.category()).orElseThrow())
-                .feat(createAdventureReq.feat())
+                .featTitle(createAdventureReq.featTitle())
+                .featContent(createAdventureReq.featContent())
                 .title(createAdventureReq.title())
                 .content(createAdventureReq.content())
                 .difficulty(createAdventureReq.difficulty())
@@ -61,7 +56,8 @@ public class AdventureService {
         ReadAdventureRes newReadAdventureRes = new ReadAdventureRes(
                 newAdventure.getAdventureId(),
                 newAdventure.getCategory().getCategory(),
-                newAdventure.getFeat(),
+                newAdventure.getFeatTitle(),
+                newAdventure.getFeatContent(),
                 newAdventure.getTitle(),
                 newAdventure.getContent(),
                 newAdventure.getDifficulty(),
@@ -104,18 +100,19 @@ public class AdventureService {
     public List<ReadAdventureRes> adventureToReadAdventureRes(List<Adventure> temp){
         List<ReadAdventureRes> result=new ArrayList<>();
 
-        for(Adventure adventrue : temp){
+        for(Adventure adventure : temp){
             ReadAdventureRes newReadAdventureRes = new ReadAdventureRes(
-                    adventrue.getAdventureId(),
-                    adventrue.getCategory().getCategory(),
-                    adventrue.getFeat(),
-                    adventrue.getTitle(),
-                    adventrue.getContent(),
-                    adventrue.getDifficulty(),
-                    adventrue.getPhoto(),
-                    adventrue.getStartDate(),
-                    adventrue.getEndDate(),
-                    adventrue.getAvgReviewRate()
+                    adventure.getAdventureId(),
+                    adventure.getCategory().getCategory(),
+                    adventure.getFeatTitle(),
+                    adventure.getFeatContent(),
+                    adventure.getTitle(),
+                    adventure.getContent(),
+                    adventure.getDifficulty(),
+                    adventure.getPhoto(),
+                    adventure.getStartDate(),
+                    adventure.getEndDate(),
+                    adventure.getAvgReviewRate()
             );
             result.add(newReadAdventureRes);
         }
@@ -327,7 +324,33 @@ public class AdventureService {
         adventureReviewRepository.deleteById(adventureReviewId);
     }
 
+    // 모험 검색(모든 모험 키워드 조회)
+    public List<ReadAdventureRes> readAdventureSearch(String keyword) {
+        System.out.println(keyword);
+        List<Adventure> adventureList = adventureRepository.findByTitleContaining(keyword).orElseThrow();
+        System.out.println("==================================================================");
 
+        List<ReadAdventureRes> readAdventureResList = new ArrayList<>();
+        for(Adventure adventure:adventureList){
+            ReadAdventureRes newReadAdventureRes = new ReadAdventureRes(
+                    adventure.getAdventureId(),
+                    adventure.getCategory().getCategory(),
+                    adventure.getFeatTitle(),
+                    adventure.getFeatContent(),
+                    adventure.getTitle(),
+                    adventure.getContent(),
+                    adventure.getDifficulty(),
+                    adventure.getPhoto(),
+                    adventure.getStartDate(),
+                    adventure.getEndDate(),
+                    adventure.getAvgReviewRate()
+            );
+
+            readAdventureResList.add(newReadAdventureRes);
+        }
+
+        return readAdventureResList;
+    }
 
     // 특정 위치에서 일정 거리 안에 내가 참가중인 탐험과 탐험 장소 조회하기
 //    public List<ReadAdventureInProgressWithinDistanceRes> readAdventureInProgressWithinDistance(Double lng,Double lat,Long userId) {
