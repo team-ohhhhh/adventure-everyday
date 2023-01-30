@@ -9,7 +9,7 @@ const KakaoMap = () => {
     return (
         <div>
             이게 왜 안되지
-            {/* <HorizontalScroll contentType={'article'}/> */}
+            <HorizontalScroll contentType={'article'}/>
             <BottomSheet contentType={'article'}/>
         </div>
     );

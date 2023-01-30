@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./BottomSheet.css"
 import ArticleListItem from "./ArticleListItem"
 
+// 바텀 시트는 module.css  작용이 어렵다...
 function BottomSheet() {
   const [bottomSheetContainerState, setBottomSheetContainerState] = useState(null)
   const [bottomSheetState, setBottomSheetState] = useState(null)
