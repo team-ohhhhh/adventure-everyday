@@ -174,6 +174,28 @@ public class AdventureService {
         adventureInProgressRepository.save(newAdventureInProgress);
     }
 
+    // 특정 유저가 참가중인 탐험 조회
+    public List<ReadAdventureInProgressRes> readAdventureInProgress(Long userId){
+        User curUser = userRepository.findById(userId).orElseThrow();
+
+        List<ReadAdventureInProgressRes> result = new ArrayList<>();
+
+        List<AdventureInProgress> temp = adventureInProgressRepository.findAllByUser(curUser).orElseThrow();
+
+        for(AdventureInProgress aip : temp){
+            ReadAdventureInProgressRes newReadAdventureInProgressRes = new ReadAdventureInProgressRes(
+                    aip.getAdventure().getAdventureId(),
+                    aip.getTotalPoint(),
+                    aip.getCurrentPoint()
+            );
+
+            result.add(newReadAdventureInProgressRes);
+        }
+
+        return result;
+    }
+
+
     // 특정 유저가 참가중인 모험의 피드 켜기(좋아요 추가)
     public void createAdventureLike(Long adventureId,Long userId){
         User curUser = userRepository.findById(userId).orElseThrow();

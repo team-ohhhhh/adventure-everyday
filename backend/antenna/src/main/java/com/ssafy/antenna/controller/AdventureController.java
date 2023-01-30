@@ -71,7 +71,11 @@ public class AdventureController {
         return new ResponseEntity<>("탐험 참가 성공~~",HttpStatus.OK);
     }
     // 특정 유저가 참가중인 탐험 조회
-
+    @GetMapping("/adventure-in-progress")
+    public ResponseEntity<List<ReadAdventureInProgressRes>> readAdventureInProgress(Authentication authentication){
+        List<ReadAdventureInProgressRes> result = adventureService.readAdventureInProgress(Long.valueOf(authentication.getName()));
+        return new ResponseEntity<List<ReadAdventureInProgressRes>>(result,HttpStatus.OK);
+    }
 
     // 특정 유저가 참가중인 탐험 삭제(탐험 포기)
 
