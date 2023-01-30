@@ -3,6 +3,7 @@ package com.ssafy.antenna.domain.post;
 import com.ssafy.antenna.domain.Base;
 import com.ssafy.antenna.domain.comment.Comment;
 import com.ssafy.antenna.domain.like.PostLike;
+import com.ssafy.antenna.domain.post.dto.PostDetailRes;
 import com.ssafy.antenna.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -51,4 +52,8 @@ public class Post extends Base {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<CheckpointPost> checkpointPosts = new ArrayList<>();
+
+    public PostDetailRes toResponse() {
+        return new PostDetailRes(this.postId, this.title, this.content, this.coordinate.getX(), this.coordinate.getY(), this.nearestPlace, this.w3w, this.isPublic, this.user.toResponse());
+    }
 }
