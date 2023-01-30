@@ -1,12 +1,12 @@
 package com.ssafy.antenna.domain.post;
 
 import com.ssafy.antenna.domain.post.dto.PostDto;
-import org.springframework.cglib.core.internal.Function;
 import org.springframework.stereotype.Service;
+
+import java.util.function.Function;
 
 @Service
 public class PostDtoMapper implements Function<Post, PostDto> {
-
     @Override
     public PostDto apply(Post post) {
         return new PostDto(
@@ -20,5 +20,6 @@ public class PostDtoMapper implements Function<Post, PostDto> {
                 post.getCreateTime(),
                 post.getUpdateTime()
         );
+
     }
 }

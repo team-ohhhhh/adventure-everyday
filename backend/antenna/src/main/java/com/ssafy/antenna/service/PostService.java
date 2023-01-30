@@ -39,6 +39,7 @@ public class PostService {
     private final W3WUtil w3WUtil;
     private final ImageUtil imageUtil;
     private final CommentRepository commentRepository;
+    private final PostDtoMapper postDtoMapper;
     public String deletePost(Long userId, Long postId) throws IllegalAccessException {
         if (Objects.equals(userId, postRepository.findById(postId).orElseThrow(NoSuchElementException::new).getUser().getUserId())) {
             postRepository.deletePost(postId);
@@ -133,23 +134,13 @@ public class PostService {
         return ResultResponse.success(postId);
     }
 
-    public ResultResponse<?> getPostByUserId(Long userId) {
+    public ResultResponse<?> getPostByUserId(Long userId, PostDtoMapper postDtoMapper) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
         List<PostDto> postDtoList = postRepository.findAllByUser(user)
                 .stream()
                 .filter(Post::isPublic)
-                .map(post -> new PostDto(
-                        post.getPostId(),
-                        post.getUser().getUserId(),
-                        post.getTitle(),
-                        post.getContent(),
-//                        post.getCoordinate(),
-                        post.getNearestPlace(),
-                        post.getW3w(),
-                        post.getCreateTime(),
-                        post.getUpdateTime()
-                ))
+                .map(postDtoMapper)
                 .collect(Collectors.toList());
         return ResultResponse.success(postDtoList);
     }
