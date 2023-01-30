@@ -67,6 +67,7 @@ function MainMap() {
             setState((prev) => ({
               ...prev,
               isCur: false,
+              isAroundClicked: false,
             }));
 
             console.log("dragStart");
@@ -194,7 +195,7 @@ function MainMap() {
           {/*UFO 이미지가 눌리면 파란색 원 등장*/}
           {state.isAround && state.isAroundClicked && (
             <Circle
-              center={state.center}
+              center={state.click}
               radius={100}
               strokeWeight={5} // 선의 두께입니다
               strokeColor={"#00529E"} // 선의 색깔입니다
