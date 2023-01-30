@@ -195,6 +195,14 @@ public class AdventureService {
         return result;
     }
 
+    // 탐험 포기(특정 유저가 참가중인 탐험 삭제)
+    public void deleteAdventureInProgress(Long adventureId){
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+
+        adventureInProgressRepository.deleteByAdventure(curAdventure);
+    }
+
+
 
     // 특정 유저가 참가중인 모험의 피드 켜기(좋아요 추가)
     public void createAdventureLike(Long adventureId,Long userId){

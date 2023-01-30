@@ -77,7 +77,12 @@ public class AdventureController {
         return new ResponseEntity<List<ReadAdventureInProgressRes>>(result,HttpStatus.OK);
     }
 
-    // 특정 유저가 참가중인 탐험 삭제(탐험 포기)
+    // 탐험 포기(특정 유저가 참가중인 탐험 삭제)
+    @DeleteMapping("/{adventureId}/adventure-in-progress")
+    public ResponseEntity<String> deleteAdventureInProgress(@PathVariable Long adventureId){
+        adventureService.deleteAdventureInProgress(adventureId);
+        return new ResponseEntity<>("탐험 포기 성공~~",HttpStatus.OK);
+    }
 
     // 탐험 알림 켜기
     @PostMapping("/{adventureId}/adventure-like")
