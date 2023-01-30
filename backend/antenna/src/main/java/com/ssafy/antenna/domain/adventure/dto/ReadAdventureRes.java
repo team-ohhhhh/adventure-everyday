@@ -5,7 +5,7 @@ import com.ssafy.antenna.domain.user.User;
 import java.time.LocalDateTime;
 
 public record ReadAdventureRes(
-        Long adventrueId,
+        Long adventureId,
         String category,
         String feat,
         String title,
