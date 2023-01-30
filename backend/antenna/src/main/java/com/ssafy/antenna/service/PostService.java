@@ -4,6 +4,8 @@ import com.ssafy.antenna.domain.ResultResponse;
 import com.ssafy.antenna.domain.comment.Comment;
 import com.ssafy.antenna.domain.comment.PostCommentReq;
 import com.ssafy.antenna.domain.post.Post;
+import com.ssafy.antenna.domain.post.PostDtoMapper;
+import com.ssafy.antenna.domain.post.dto.PostDto;
 import com.ssafy.antenna.domain.post.dto.PostUpdateReq;
 import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.exception.not_found.UserNotFoundException;
@@ -23,8 +25,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +38,7 @@ public class PostService {
     private final W3WUtil w3WUtil;
     private final ImageUtil imageUtil;
     private final CommentRepository commentRepository;
+    private final PostDtoMapper postDtoMapper;
 
     public String deletePost(Long userId, Long postId) throws IllegalAccessException {
         if (Objects.equals(userId, postRepository.findById(postId).orElseThrow(NoSuchElementException::new).getUser().getUserId())) {
@@ -127,5 +132,26 @@ public class PostService {
                 .build()
         );
         return ResultResponse.success(postId);
+    }
+
+    public ResultResponse<?> getPostByUserId(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+        List<PostDto> postDtoList = postRepository.findAllByUser(user)
+                .stream()
+                .filter(Post::isPublic)
+                .map(post -> new PostDto(
+                        post.getPostId(),
+                        post.getUser().getUserId(),
+                        post.getTitle(),
+                        post.getContent(),
+//                        post.getCoordinate(),
+                        post.getNearestPlace(),
+                        post.getW3w(),
+                        post.getCreateTime(),
+                        post.getUpdateTime()
+                ))
+                .collect(Collectors.toList());
+        return ResultResponse.success(postDtoList);
     }
 }

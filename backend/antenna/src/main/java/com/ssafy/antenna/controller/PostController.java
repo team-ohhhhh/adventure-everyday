@@ -80,4 +80,9 @@ public class PostController {
                 Long.valueOf(authentication.getName())
         );
     }
+
+    @GetMapping("/{userId}")
+    public ResultResponse<?> getPostByUserId(@PathVariable Long userId) {
+        return postService.getPostByUserId(userId);
+    }
 }
