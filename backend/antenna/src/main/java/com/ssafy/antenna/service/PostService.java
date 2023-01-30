@@ -3,6 +3,7 @@ package com.ssafy.antenna.service;
 import com.ssafy.antenna.domain.ResultResponse;
 import com.ssafy.antenna.domain.comment.Comment;
 import com.ssafy.antenna.domain.comment.PostCommentReq;
+import com.ssafy.antenna.domain.comment.dto.commentDto;
 import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.post.PostDtoMapper;
 import com.ssafy.antenna.domain.post.dto.PostDto;
@@ -38,8 +39,6 @@ public class PostService {
     private final W3WUtil w3WUtil;
     private final ImageUtil imageUtil;
     private final CommentRepository commentRepository;
-    private final PostDtoMapper postDtoMapper;
-
     public String deletePost(Long userId, Long postId) throws IllegalAccessException {
         if (Objects.equals(userId, postRepository.findById(postId).orElseThrow(NoSuchElementException::new).getUser().getUserId())) {
             postRepository.deletePost(postId);
@@ -153,5 +152,31 @@ public class PostService {
                 ))
                 .collect(Collectors.toList());
         return ResultResponse.success(postDtoList);
+    }
+
+    public ResultResponse<?> getCommentsByPostId(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(NoSuchElementException::new);
+        List<commentDto> commentList = post.getComments().stream()
+                .map(comment -> new commentDto(
+                        comment.getUser().getNickname(),
+                        comment.getContent()
+                ))
+                .collect(Collectors.toList());
+        return ResultResponse.success(commentList);
+    }
+
+    public ResultResponse<?> deleteComment(
+            Long commentId,
+            Long userId
+    ) throws IllegalAccessException {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(NoSuchElementException::new);
+        if(!comment.getUser().getUserId().equals(userId)) {
+            throw new IllegalAccessException("잘못된 접근입니다");
+        } else {
+            commentRepository.delete(comment);
+        }
+        return ResultResponse.success("삭제 성공");
     }
 }

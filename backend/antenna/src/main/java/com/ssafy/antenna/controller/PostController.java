@@ -85,4 +85,17 @@ public class PostController {
     public ResultResponse<?> getPostByUserId(@PathVariable Long userId) {
         return postService.getPostByUserId(userId);
     }
+
+    @GetMapping("/{postId}/comments")
+    public ResultResponse<?> getCommentsByPostId(@PathVariable Long postId) {
+        return postService.getCommentsByPostId(postId);
+    }
+
+    @DeleteMapping("/comments/{commentId}")
+    public ResultResponse<?> deleteComment(
+            @PathVariable Long commentId,
+            Authentication authentication
+    ) throws IllegalAccessException {
+        return postService.deleteComment(commentId, Long.valueOf(authentication.getName()));
+    }
 }
