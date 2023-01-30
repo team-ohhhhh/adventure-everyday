@@ -1,14 +1,9 @@
-import "./AntennaBtn.css";
+import styles from "./AntennaBtn.module.css";
 function AntennaBtn(props) {
   return (
     <>
-      <button
-        className="AntennaBtn"
-        onClick={() => {
-          props.setIsOn(true);
-        }}
-      >
-        <img src={"images/antennaBtn.png"}></img>
+      <button className={styles.AntennaBtn} onClick={props.onClick}>
+        <img src="images/antennaBtn.png"></img>
       </button>
     </>
   );

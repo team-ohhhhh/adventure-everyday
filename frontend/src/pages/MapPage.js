@@ -1,21 +1,34 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { MapMarker, Map, Circle } from "react-kakao-maps-sdk";
 import Antenna from "../components/mapPage/antenna/Antenna";
 
-function MapMain() {
+function MainMap() {
   const [state, setState] = useState({
     center: {
-      lat: 33.4507044,
-      lng: 126.570667,
+      lat: 37.5016117,
+      lng: 127.0397674,
     },
+
+    click: {
+      lat: 37.5016117,
+      lng: 127.0397674,
+    },
+
     errMsg: null,
     level: 3,
-    isCur: false,
+    isPanto: false, // 부드럽게 움직이는
+    isCur: false, // 현재 위치인지
+    isAround: false, // 주변 검색 상황인지
+    isAroundClicked: false, // UFO가 눌렸는지
   });
 
-  // 초기 렌더링 때 현재 위치로 이동
+  // 초기 렌더링 때 현재 위치로 지도 이동
   useEffect(() => {
     moveCurPos();
+    setState((prev) => ({
+      ...prev,
+      isCur: false,
+    }));
   }, []);
 
   return (
@@ -31,36 +44,56 @@ function MapMain() {
       >
         <Map // 지도를 표시할 Container
           center={state.center}
+          isPanto={state.isPanto}
           style={{
             // 지도의 크기
             width: "100%",
-            height: "60%",
+            height: "100%",
           }}
           level={state.level} // 지도의 확대 레벨
           onCenterChanged={(map) =>
-            setState({
+            setState((prev) => ({
+              ...prev,
               center: {
                 lat: map.getCenter().getLat(),
                 lng: map.getCenter().getLng(),
               },
-            })
+            }))
           }
           onCreate={() => {
             console.log("create");
           }}
           onDragStart={() => {
-            setState({
-              ...state,
+            setState((prev) => ({
+              ...prev,
               isCur: false,
-            });
+            }));
+
             console.log("dragStart");
           }}
-          onClick={() => {
-            setState({
-              ...state,
-              isCur: false,
-            });
-            console.log("click");
+          onClick={(_t, mouseEvent) => {
+            if (!state.isAroundClicked) {
+              // UFO 이미지가 떠 있지 않다면
+              // 지도 클릭시 그 곳에 ufo 이미지 뜸
+              setState((prev) => ({
+                ...prev,
+                isCur: false,
+                click: {
+                  // 마우스 클릭하면 center에 저장
+                  lat: mouseEvent.latLng.getLat(),
+                  lng: mouseEvent.latLng.getLng(),
+                },
+                isAround: true,
+              }));
+            } else {
+              // UFO 이미지가 떠 있다면
+              // 지도 클릭 시 ufo 이미지 제거
+              setState((prev) => ({
+                ...prev,
+                isAround: false,
+                isAroundClicked: false,
+              }));
+            }
           }}
         >
           {/* isCur(현재 위치 버튼을 눌러서 isCur가 true일 때 원과 현재마커 보여주기) */}
@@ -96,7 +129,6 @@ function MapMain() {
             </>
           )}
 
-          {/* 지도 위 안테나 버튼 + 리스트 */}
           <Antenna></Antenna>
 
           {/* isCur가 켜져있지 않을 때만 버튼이 보임 */}
@@ -128,15 +160,52 @@ function MapMain() {
             </button>
           )}
 
+          {/*isAround가 켜지면 UFO 이미지 생성*/}
+          {state.isAround && (
+            <>
+              <MapMarker
+                onClick={() => {
+                  setState((prev) => ({
+                    ...prev,
+                    isAroundClicked: true,
+                    center: state.click,
+                    isPanto: true,
+                  }));
+                }}
+                image={{
+                  src: "/images/alien.jpg",
+
+                  size: {
+                    width: 30,
+                    height: 30,
+                  },
+                  options: {
+                    offset: {
+                      x: 12,
+                      y: 20,
+                    },
+                  },
+                }}
+                position={state.click}
+              ></MapMarker>
+            </>
+          )}
+
+          {/*UFO 이미지가 눌리면 파란색 원 등장*/}
+          {state.isAround && state.isAroundClicked && (
+            <Circle
+              center={state.center}
+              radius={100}
+              strokeWeight={5} // 선의 두께입니다
+              strokeColor={"#00529E"} // 선의 색깔입니다
+              strokeOpacity={0} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+              strokeStyle={"dash"} // 선의 스타일 입니다
+              fillColor={"#00529E"} // 채우기 색깔입니다
+              fillOpacity={0.7} // 채우기 불투명도 입니다
+            />
+          )}
+
           <p>{state.errMsg}</p>
-          <p>{"지도 레벨은 " + state.level + " 이고"}</p>
-          <p>
-            {"중심 좌표는 위도 " +
-              state.center.lat +
-              ", 경도 " +
-              state.center.lng +
-              " 입니다"}
-          </p>
         </Map>
       </div>
     </>
@@ -177,14 +246,15 @@ function MapMain() {
       }));
     }
 
-    // 원과 중심좌표 표시
-    setState({
-      ...state,
+    // 원과 중심좌표 표시, 주변검색 UFO 이미지가 켜져있다면 없애기
+    setState((prev) => ({
+      ...prev,
       isCur: true,
-    });
+      isAround: false,
+    }));
 
     console.log(state.center);
   }
 }
 
-export default MapMain;
+export default MainMap;
