@@ -10,4 +10,5 @@ import java.util.Optional;
 
 public interface AdventurePlaceRepository extends JpaRepository<AdventurePlace,Long> {
     Optional<List<AdventurePlace>> findAllByAdventure(Adventure adventure);
+    Long countByAdventure(Adventure adventure);
 }
