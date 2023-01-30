@@ -1,7 +1,8 @@
 import { MapMarker, Map } from "react-kakao-maps-sdk";
 import React, { useState } from "react";
 import HorizontalScroll from "./components/HorizontalScroll";
-import BottomSheet from "./components/BottomSheet";
+import Oba from "./components/BottomSheet/BottomSheetPrac"
+
 
 
 const KakaoMap = () => {
@@ -9,8 +10,11 @@ const KakaoMap = () => {
     return (
         <div>
             이게 왜 안되지
-            <HorizontalScroll contentType={'article'}/>
-            <BottomSheet contentType={'article'}/>
+            {/* <HorizontalScroll contentType={'article'}/>
+             */}
+            <Oba />
+     
+        
         </div>
     );
 };

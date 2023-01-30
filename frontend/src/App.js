@@ -5,6 +5,7 @@ import LogInPage from './pages/LogInPage'
 import SignUpPage from './pages/SignUpPage'
 import { Routes, Route, Link } from 'react-router-dom'
 import AdventurePage from './pages/AdventurePage';
+import NavBar from './components/NavBar';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/signup" element={ <SignUpPage/>} />
         <Route path="/adventure" element={ <AdventurePage/>} />
       </Routes>
+      <NavBar />
     </div>
   );
 }
