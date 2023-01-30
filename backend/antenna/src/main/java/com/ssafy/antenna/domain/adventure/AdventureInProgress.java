@@ -21,20 +21,20 @@ public class AdventureInProgress extends Base {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long progressId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId")
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "adventureId")
-    private Adventure adventure;
-
     @Column(columnDefinition = "int not null")
     private int totalPoint;
     @Column(columnDefinition = "int default 0")
     private int currentPoint;
     @Column(columnDefinition = "datetime(6) default null")
     private LocalDateTime clearTime;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "adventureId")
+    private Adventure adventure;
+
 
 
 }
