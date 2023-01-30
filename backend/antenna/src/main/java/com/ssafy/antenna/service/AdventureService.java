@@ -196,6 +196,11 @@ public class AdventureService {
         return result;
     }
 
+    // 탐험 알림 끄기
+    public void deleteAdventureLike(Long adventureLikeId){
+        adventureLikeRepository.deleteById(adventureLikeId);
+    }
+
     // 특정 탐험 달성자 추가
     public void createAdventureSucceed(Long adventureId, Long userId) {
         User curUser = userRepository.findById(userId).orElseThrow();

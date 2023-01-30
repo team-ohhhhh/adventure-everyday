@@ -74,18 +74,25 @@ public class AdventureController {
 
     // 특정 유저가 참가중인 탐험 삭제(탐험 포기)
 
-    // 특정 유저가 참가중인 모험의 알림 켜기(좋아요 추가)
+    // 탐험 알림 켜기
     @PostMapping("/{adventureId}/adventure-like")
     public ResponseEntity<String> createAdventureLike(@PathVariable Long adventureId, Authentication authentication){
         adventureService.createAdventureLike(adventureId,Long.valueOf(authentication.getName()));
         return new ResponseEntity<String>("피드 켜기 성공~~",HttpStatus.OK);
     }
 
-    // 특정 유저가 참가중인 모험의 알림 조회
+    // 탐험 알림 조회
     @GetMapping("/{adventureId}/adventure-like")
     public ResponseEntity<ReadAdventureLikeRes> readAdventureLike(@PathVariable Long adventureId, Authentication authentication){
         ReadAdventureLikeRes result = adventureService.readAdventureLike(adventureId,Long.valueOf(authentication.getName()));
         return new ResponseEntity<ReadAdventureLikeRes>(result,HttpStatus.OK);
+    }
+
+    // 탐험 알림 끄기
+    @DeleteMapping("/adventure-like/{adventureLikeId}")
+    public ResponseEntity<String> deleteAdventureLike(@PathVariable Long adventureLikeId){
+        adventureService.deleteAdventureLike(adventureLikeId);
+        return new ResponseEntity<>("탐험 알림 끄기 성공~~",HttpStatus.OK);
     }
 
     // 특정 탐험 달성자 추가
