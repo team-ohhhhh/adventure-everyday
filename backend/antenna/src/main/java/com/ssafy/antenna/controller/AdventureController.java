@@ -64,16 +64,46 @@ public class AdventureController {
         return new ResponseEntity<List<ReadAdventurePlaceRes>>(result,HttpStatus.OK);
     }
 
-    // 특정 유저가 참가중인 탐험 추가(탐험 참가하기)
-    @PostMapping("/adventure-in-progress")
-    public ResponseEntity<String> createAdventureInProgress(@RequestBody CreateAdventureInProgressReq createAdventureInProgressReq,Authentication authentication){
-        adventureService.createAdventureInProgress(createAdventureInProgressReq,Long.valueOf(authentication.getName()));
-        return new ResponseEntity<>("특정 유저가 참가중인 탐험 추가(탐험 참가하기)",HttpStatus.OK);
+    // 특정 유저가 참가중인 탐험 추가(탐험 참가)
+    @PostMapping("/{adventureId}/adventure-in-progress")
+    public ResponseEntity<String> createAdventureInProgress(@PathVariable Long adventureId,Authentication authentication){
+        adventureService.createAdventureInProgress(adventureId,Long.valueOf(authentication.getName()));
+        return new ResponseEntity<>("탐험 참가 성공~~",HttpStatus.OK);
     }
     // 특정 유저가 참가중인 탐험 조회
+    @GetMapping("/adventure-in-progress")
+    public ResponseEntity<List<ReadAdventureInProgressRes>> readAdventureInProgress(Authentication authentication){
+        List<ReadAdventureInProgressRes> result = adventureService.readAdventureInProgress(Long.valueOf(authentication.getName()));
+        return new ResponseEntity<List<ReadAdventureInProgressRes>>(result,HttpStatus.OK);
+    }
 
-    // 특정 유저가 참가중인 탐험 삭제(탐험 포기)
+    // 탐험 포기(특정 유저가 참가중인 탐험 삭제)
+    @DeleteMapping("/{adventureId}/adventure-in-progress")
+    public ResponseEntity<String> deleteAdventureInProgress(@PathVariable Long adventureId){
+        adventureService.deleteAdventureInProgress(adventureId);
+        return new ResponseEntity<>("탐험 포기 성공~~",HttpStatus.OK);
+    }
 
+    // 탐험 알림 켜기
+    @PostMapping("/{adventureId}/adventure-like")
+    public ResponseEntity<String> createAdventureLike(@PathVariable Long adventureId, Authentication authentication){
+        adventureService.createAdventureLike(adventureId,Long.valueOf(authentication.getName()));
+        return new ResponseEntity<String>("피드 켜기 성공~~",HttpStatus.OK);
+    }
+
+    // 탐험 알림 조회
+    @GetMapping("/{adventureId}/adventure-like")
+    public ResponseEntity<ReadAdventureLikeRes> readAdventureLike(@PathVariable Long adventureId, Authentication authentication){
+        ReadAdventureLikeRes result = adventureService.readAdventureLike(adventureId,Long.valueOf(authentication.getName()));
+        return new ResponseEntity<ReadAdventureLikeRes>(result,HttpStatus.OK);
+    }
+
+    // 탐험 알림 끄기
+    @DeleteMapping("/adventure-like/{adventureLikeId}")
+    public ResponseEntity<String> deleteAdventureLike(@PathVariable Long adventureLikeId){
+        adventureService.deleteAdventureLike(adventureLikeId);
+        return new ResponseEntity<>("탐험 알림 끄기 성공~~",HttpStatus.OK);
+    }
 
     // 특정 탐험 달성자 추가
     @PostMapping("/adventure-succeed/{adventureId}")
@@ -82,11 +112,11 @@ public class AdventureController {
         return new ResponseEntity<String>("특정 탐험 달성자 추가 성공",HttpStatus.OK);
     }
 
-//    // 특정 탐험 달성자 조회
-//    @GetMapping("/adventure-succeed/{adventureId}")
-//    public ResponseEntity<List<ReadAdventureSucceedRes>> readAdventureSucceed(@PathVariable Long adventureId,Authentication authentication){
-//        adventureService.readAdventureSucceed(adventureId,Long.valueOf(authentication.getName()));
-//        return new ResponseEntity<List<ReadAdventureSucceedRes>>(,HttpStatus.OK);
+    // 특정 유저의 달성한 탐험들 조회
+//    @GetMapping("/adventure-succeed")
+//    public ResponseEntity<List<ReadAdventureSucceedRes>> readAdventureSucceed(Authentication authentication){
+//        List<ReadAdventureSucceedRes> result = adventureService.readAdventureSucceed(Long.valueOf(authentication.getName()));
+//        return new ResponseEntity<List<ReadAdventureSucceedRes>>(result,HttpStatus.OK);
 //    }
 
     // 특정 탐험의 후기 추가
@@ -103,10 +133,19 @@ public class AdventureController {
         return new ResponseEntity<List<ReadAdventureReviewRes>>(result,HttpStatus.OK);
     }
 
+    // 탐험 후기 수정
+    @PutMapping("/reviews/{adventurereviewId}")
+    public ResponseEntity<String> updateAdventureReview(@PathVariable Long adventurereviewId, @RequestBody UpdateAdventureReviewReq updateAdventureReviewReq, Authentication authentication){
+        adventureService.updateAdventureReview(adventurereviewId,updateAdventureReviewReq,Long.valueOf(authentication.getName()));
+        return new ResponseEntity<>("탐험 후기 수정 성공",HttpStatus.OK);
+    }
+
     // 탐험 후기 삭제
     @DeleteMapping("/reviews/{adventureReviewId}")
     public ResponseEntity<String> deleteAdventureReview(@PathVariable Long adventureReviewId){
         adventureService.deleteAdventureReview(adventureReviewId);
         return new ResponseEntity<>("탐험 후기 삭제 성공",HttpStatus.OK);
     }
+
+
 }

@@ -1,10 +1,8 @@
 package com.ssafy.antenna.service;
 
-import com.ssafy.antenna.domain.adventure.Adventure;
-import com.ssafy.antenna.domain.adventure.AdventurePlace;
-import com.ssafy.antenna.domain.adventure.AdventureReview;
-import com.ssafy.antenna.domain.adventure.AdventureSucceed;
+import com.ssafy.antenna.domain.adventure.*;
 import com.ssafy.antenna.domain.adventure.dto.*;
+import com.ssafy.antenna.domain.like.AdventureLike;
 import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +23,8 @@ public class AdventureService {
     private final AdventureSucceedRepository adventureSucceedRepository;
     private final AdventurePlaceRepository adventurePlaceRepository;
     private final AdventureReviewRepository adventureReviewRepository;
+    private final AdventureLikeRepository adventureLikeRepository;
+    private final AdventureInProgressRepository adventureInProgressRepository;
 
     // 탐험 추가
     public void createAdventure(CreateAdventureReq createAdventureReq, Long userId){
@@ -160,8 +160,83 @@ public class AdventureService {
 
 
     // 특정 유저가 참가중인 탐험 추가(탐험 참가하기)
-    public void createAdventureInProgress(CreateAdventureInProgressReq createAdventureInProgressReq, Long valueOf) {
+    public void createAdventureInProgress(Long adventureId, Long userId) {
+        User curUser = userRepository.findById(userId).orElseThrow();
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+        Long totalPoint = adventurePlaceRepository.countByAdventure(curAdventure);
 
+        AdventureInProgress newAdventureInProgress = AdventureInProgress.builder()
+                .totalPoint(totalPoint.intValue())
+                .user(curUser)
+                .adventure(curAdventure)
+                .build();
+
+        adventureInProgressRepository.save(newAdventureInProgress);
+    }
+
+    // 특정 유저가 참가중인 탐험 조회
+    public List<ReadAdventureInProgressRes> readAdventureInProgress(Long userId){
+        User curUser = userRepository.findById(userId).orElseThrow();
+
+        List<ReadAdventureInProgressRes> result = new ArrayList<>();
+
+        List<AdventureInProgress> temp = adventureInProgressRepository.findAllByUser(curUser).orElseThrow();
+
+        for(AdventureInProgress aip : temp){
+            ReadAdventureInProgressRes newReadAdventureInProgressRes = new ReadAdventureInProgressRes(
+                    aip.getAdventure().getAdventureId(),
+                    aip.getTotalPoint(),
+                    aip.getCurrentPoint()
+            );
+
+            result.add(newReadAdventureInProgressRes);
+        }
+
+        return result;
+    }
+
+    // 탐험 포기(특정 유저가 참가중인 탐험 삭제)
+    public void deleteAdventureInProgress(Long adventureId){
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+
+        adventureInProgressRepository.deleteByAdventure(curAdventure);
+    }
+
+
+
+    // 특정 유저가 참가중인 모험의 피드 켜기(좋아요 추가)
+    public void createAdventureLike(Long adventureId,Long userId){
+        User curUser = userRepository.findById(userId).orElseThrow();
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+
+        AdventureLike newAdventureLike = AdventureLike.builder()
+                .user(curUser)
+                .adventure(curAdventure)
+                .build();
+
+        adventureLikeRepository.save(newAdventureLike);
+    }
+
+    // 특정 유저가 참가중인 모험의 알림 조회
+    public ReadAdventureLikeRes readAdventureLike(Long adventureId,Long userId){
+        User curUser = userRepository.findById(userId).orElseThrow();
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+
+        Optional<AdventureLike> findByAdventureandUser = adventureLikeRepository.findByAdventureAndUser(curAdventure,curUser);
+
+        ReadAdventureLikeRes result=null;
+
+        if(findByAdventureandUser.isPresent()){
+            result = new ReadAdventureLikeRes(findByAdventureandUser.orElseThrow().getAdventureLikeId(), Boolean.TRUE);
+        }else{
+            result=new ReadAdventureLikeRes(null,Boolean.FALSE);
+        }
+        return result;
+    }
+
+    // 탐험 알림 끄기
+    public void deleteAdventureLike(Long adventureLikeId){
+        adventureLikeRepository.deleteById(adventureLikeId);
     }
 
     // 특정 탐험 달성자 추가
@@ -215,6 +290,28 @@ public class AdventureService {
         }
 
         return result;
+    }
+
+    // 탐험 후기 수정
+    public void updateAdventureReview(Long adventurereviewId, UpdateAdventureReviewReq updateAdventureReviewReq, Long userId) {
+        User curUser = userRepository.findById(userId).orElseThrow();
+
+        // 꺼내와서,
+        AdventureReview curAdvventureReview = adventureReviewRepository.findById(adventurereviewId).orElseThrow();
+
+        // 내용 갈아끼운 후,
+        AdventureReview updateAdventureReview = AdventureReview.builder()
+                .adventureReviewId(curAdvventureReview.getAdventureReviewId())
+                .content(updateAdventureReviewReq.content())
+                .rate(updateAdventureReviewReq.rate())
+                .user(curUser)
+                .adventure(curAdvventureReview.getAdventure())
+                .build();
+
+        curAdvventureReview = updateAdventureReview;
+
+        // 저장.
+        adventureReviewRepository.save(curAdvventureReview);
     }
 
     // 탐험 후기 삭제
