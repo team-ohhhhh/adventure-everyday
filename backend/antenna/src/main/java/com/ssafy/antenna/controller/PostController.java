@@ -2,7 +2,9 @@ package com.ssafy.antenna.controller;
 
 import com.ssafy.antenna.domain.ResultResponse;
 import com.ssafy.antenna.domain.comment.PostCommentReq;
+import com.ssafy.antenna.domain.post.dto.PostDetailRes;
 import com.ssafy.antenna.domain.post.dto.PostUpdateReq;
+import com.ssafy.antenna.repository.PostRepository;
 import com.ssafy.antenna.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -79,5 +82,10 @@ public class PostController {
                 postCommentReq,
                 Long.valueOf(authentication.getName())
         );
+    }
+
+    @GetMapping
+    public ResultResponse<List<PostDetailRes>> getPostWithArea(@RequestParam double lng, @RequestParam double lat, @RequestParam double area){
+        return ResultResponse.success(postService.getPostWithArea(lng,lat,area));
     }
 }
