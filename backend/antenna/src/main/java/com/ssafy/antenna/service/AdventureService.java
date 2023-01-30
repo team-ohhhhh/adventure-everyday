@@ -292,6 +292,28 @@ public class AdventureService {
         return result;
     }
 
+    // 탐험 후기 수정
+    public void updateAdventureReview(Long adventurereviewId, UpdateAdventureReviewReq updateAdventureReviewReq, Long userId) {
+        User curUser = userRepository.findById(userId).orElseThrow();
+
+        // 꺼내와서,
+        AdventureReview curAdvventureReview = adventureReviewRepository.findById(adventurereviewId).orElseThrow();
+
+        // 내용 갈아끼운 후,
+        AdventureReview updateAdventureReview = AdventureReview.builder()
+                .adventureReviewId(curAdvventureReview.getAdventureReviewId())
+                .content(updateAdventureReviewReq.content())
+                .rate(updateAdventureReviewReq.rate())
+                .user(curUser)
+                .adventure(curAdvventureReview.getAdventure())
+                .build();
+
+        curAdvventureReview = updateAdventureReview;
+
+        // 저장.
+        adventureReviewRepository.save(curAdvventureReview);
+    }
+
     // 탐험 후기 삭제
     public void deleteAdventureReview(Long adventureReviewId) {
         adventureReviewRepository.deleteById(adventureReviewId);

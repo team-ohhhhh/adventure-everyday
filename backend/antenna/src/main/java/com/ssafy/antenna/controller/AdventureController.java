@@ -112,11 +112,11 @@ public class AdventureController {
         return new ResponseEntity<String>("특정 탐험 달성자 추가 성공",HttpStatus.OK);
     }
 
-//    // 특정 탐험 달성자 조회
-//    @GetMapping("/adventure-succeed/{adventureId}")
-//    public ResponseEntity<List<ReadAdventureSucceedRes>> readAdventureSucceed(@PathVariable Long adventureId,Authentication authentication){
-//        adventureService.readAdventureSucceed(adventureId,Long.valueOf(authentication.getName()));
-//        return new ResponseEntity<List<ReadAdventureSucceedRes>>(,HttpStatus.OK);
+    // 특정 유저의 달성한 탐험들 조회
+//    @GetMapping("/adventure-succeed")
+//    public ResponseEntity<List<ReadAdventureSucceedRes>> readAdventureSucceed(Authentication authentication){
+//        List<ReadAdventureSucceedRes> result = adventureService.readAdventureSucceed(Long.valueOf(authentication.getName()));
+//        return new ResponseEntity<List<ReadAdventureSucceedRes>>(result,HttpStatus.OK);
 //    }
 
     // 특정 탐험의 후기 추가
@@ -131,6 +131,13 @@ public class AdventureController {
     public ResponseEntity<List<ReadAdventureReviewRes>> readAdventureReview(@PathVariable Long adventureId){
         List<ReadAdventureReviewRes> result = adventureService.readAdventureReview(adventureId);
         return new ResponseEntity<List<ReadAdventureReviewRes>>(result,HttpStatus.OK);
+    }
+
+    // 탐험 후기 수정
+    @PutMapping("/reviews/{adventurereviewId}")
+    public ResponseEntity<String> updateAdventureReview(@PathVariable Long adventurereviewId, @RequestBody UpdateAdventureReviewReq updateAdventureReviewReq, Authentication authentication){
+        adventureService.updateAdventureReview(adventurereviewId,updateAdventureReviewReq,Long.valueOf(authentication.getName()));
+        return new ResponseEntity<>("탐험 후기 수정 성공",HttpStatus.OK);
     }
 
     // 탐험 후기 삭제
