@@ -179,6 +179,23 @@ public class AdventureService {
         adventureLikeRepository.save(newAdventureLike);
     }
 
+    // 특정 유저가 참가중인 모험의 알림 조회
+    public ReadAdventureLikeRes readAdventureLike(Long adventureId,Long userId){
+        User curUser = userRepository.findById(userId).orElseThrow();
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+
+        Optional<AdventureLike> findByAdventureandUser = adventureLikeRepository.findByAdventureAndUser(curAdventure,curUser);
+
+        ReadAdventureLikeRes result=null;
+
+        if(findByAdventureandUser.isPresent()){
+            result = new ReadAdventureLikeRes(findByAdventureandUser.orElseThrow().getAdventureLikeId(), Boolean.TRUE);
+        }else{
+            result=new ReadAdventureLikeRes(null,Boolean.FALSE);
+        }
+        return result;
+    }
+
     // 특정 탐험 달성자 추가
     public void createAdventureSucceed(Long adventureId, Long userId) {
         User curUser = userRepository.findById(userId).orElseThrow();
