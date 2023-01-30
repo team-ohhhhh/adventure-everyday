@@ -3,6 +3,7 @@ import axios from "axios";
 import useGeolocation from "react-hook-geolocation";
 import ArticleImageUploadForm from "../components/articleCreate/ArticleImageUploadForm";
 import ArticleMap from "../components/articleCreate/ArticleMap";
+import SelectAdvList from "../components/articleCreate/SelectAdvList";
 
 const API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY;
 
@@ -12,11 +13,17 @@ const ArticleCreatePage = () => {
     image: null,
     lat: 37.50128745884959,
     lng: 127.03956225524968,
+    isAdv: false,
+    advId: null,
   });
+
   const [address, setAddress] = useState();
+
+  const [advList, setAdvList] = useState();
 
   const geolocation = useGeolocation();
 
+  // 현재 위치 또는 게시글 타입이 변화 시 article에 현재 위치 데이터 반영
   useEffect(() => {
     if (article.type === "text" && geolocation.latitude) {
       setArticle((article) => ({
@@ -27,6 +34,9 @@ const ArticleCreatePage = () => {
     }
   }, [geolocation.latitude, geolocation.longitude, article.type]);
 
+  // 위경도 변화 시
+  // 1. 좌표->주소 변환 api 호출
+  // 2. 탐험 리스트 조회 api 호출
   useEffect(() => {
     axios
       .get("https://dapi.kakao.com/v2/local/geo/coord2address.json", {
@@ -45,6 +55,22 @@ const ArticleCreatePage = () => {
           setAddress(data[0].address.address_name);
         }
       });
+
+    // 탐험 요청 (백엔드 완성 시 업데이트 예정)
+    setAdvList([
+      {
+        id: 1,
+        adv: "추억이 가득 쌓이는 탐험",
+        checkpoint: "깃기 생가",
+        selected: false,
+      },
+      {
+        id: 2,
+        adv: "방방곡곡 맛집 탐방",
+        checkpoint: "대우부대찌개",
+        selected: false,
+      },
+    ]);
   }, [article.lat, article.lng]);
 
   return (
@@ -58,6 +84,15 @@ const ArticleCreatePage = () => {
         <ArticleMap lat={article.lat} lng={article.lng} />
         <p>{address}</p>
       </div>
+      {advList ? (
+        <SelectAdvList
+          advList={advList}
+          setAdvList={setAdvList}
+          setArticle={setArticle}
+        />
+      ) : (
+        <div></div>
+      )}
     </>
   );
 };
