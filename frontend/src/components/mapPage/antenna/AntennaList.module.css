@@ -1,0 +1,35 @@
+.container
+{
+position: relative;
+width: 250px;
+height: 100%;
+padding: 0px;
+margin-top: 10px;
+margin-right: 10px;
+background: #1C0B69;
+-webkit-border-radius: 6px;
+-moz-border-radius: 6px;
+border-radius: 6px;
+
+z-index: 2;
+}
+
+.container:after
+{
+content: '';
+position: absolute;
+border-style: solid;
+border-width: 0 10px 15px;
+border-color: #1C0B69 transparent;
+display: block;
+width: 0;
+z-index: 1;
+top: -15px;
+left: 212px;
+}
+
+.countInfo{
+    color: #ffffff;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
