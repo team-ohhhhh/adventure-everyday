@@ -5,6 +5,7 @@ import com.ssafy.antenna.domain.adventure.AdventurePlace;
 import com.ssafy.antenna.domain.adventure.AdventureReview;
 import com.ssafy.antenna.domain.adventure.AdventureSucceed;
 import com.ssafy.antenna.domain.adventure.dto.*;
+import com.ssafy.antenna.domain.like.AdventureLike;
 import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class AdventureService {
     private final AdventureSucceedRepository adventureSucceedRepository;
     private final AdventurePlaceRepository adventurePlaceRepository;
     private final AdventureReviewRepository adventureReviewRepository;
+    private final AdventureLikeRepository adventureLikeRepository;
 
     // 탐험 추가
     public void createAdventure(CreateAdventureReq createAdventureReq, Long userId){
@@ -162,6 +164,19 @@ public class AdventureService {
     // 특정 유저가 참가중인 탐험 추가(탐험 참가하기)
     public void createAdventureInProgress(CreateAdventureInProgressReq createAdventureInProgressReq, Long valueOf) {
 
+    }
+
+    // 특정 유저가 참가중인 모험의 피드 켜기(좋아요 추가)
+    public void createAdventureLike(Long adventureId,Long userId){
+        User curUser = userRepository.findById(userId).orElseThrow();
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+
+        AdventureLike newAdventureLike = AdventureLike.builder()
+                .user(curUser)
+                .adventure(curAdventure)
+                .build();
+
+        adventureLikeRepository.save(newAdventureLike);
     }
 
     // 특정 탐험 달성자 추가
