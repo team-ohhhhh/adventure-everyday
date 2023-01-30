@@ -1,10 +1,8 @@
 package com.ssafy.antenna.domain.post.dto;
 
-public record PostPostReq(
+public record PostUpdateReq(
         String title,
         String content,
-        double lng,
-        double lat,
-        boolean isPublic
+        String isPublic
 ) {
 }

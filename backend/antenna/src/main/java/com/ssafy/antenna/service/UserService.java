@@ -24,6 +24,8 @@ import com.what3words.javawrapper.response.ConvertTo3WA;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -194,11 +197,13 @@ public class UserService {
 //        return photo;
 //    }
 
-    public byte[] getImage(Long userId) {
+    public ResponseEntity<byte[]> getImage(Long userId) {
         //유저가 있는지 확인
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         byte[] photo = ImageUtil.decompressImage(user.getPhoto());
-        return photo;
+        return ResponseEntity.ok()
+                .contentType(MediaType.valueOf("image/"+user.getPhotoType()))
+                .body(photo);
     }
 
     public UserDetailRes modifyProfileUser(String introduce, Long userId) {
@@ -231,7 +236,8 @@ public class UserService {
         List<AdventureSucceed> adventureSucceeds = adventureSucceedRepository.findAllByUser(
                 userRepository.findById(userId).orElseThrow(UserNotFoundException::new));
         List<String> result = adventureSucceeds.stream()
-                .map(b -> b.getAdventure().getFeat()).toList();
+                .map(b -> b.getAdventure().getFeat())
+                .collect(Collectors.toList());
         return ResultResponse.success(new UserFeatsRes(result));
     }
     public DetailAntennaRes createAntenna(PostAntennaReq postAntennaReq, Long userId) {
