@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import useGeolocation from "react-hook-geolocation";
 import ArticleImageUploadForm from "../components/articleCreate/ArticleImageUploadForm";
@@ -8,6 +9,10 @@ import SelectAdvList from "../components/articleCreate/SelectAdvList";
 const API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY;
 
 const ArticleCreatePage = () => {
+  // 게시글 작성 단계
+  // 1 : 장소 선택, 2 : 내용 입력
+  const [step, setStep] = useState(1);
+
   const [article, setArticle] = useState({
     type: "text",
     image: null,
@@ -16,12 +21,12 @@ const ArticleCreatePage = () => {
     isAdv: false,
     advId: null,
   });
-
   const [address, setAddress] = useState();
-
   const [advList, setAdvList] = useState();
 
   const geolocation = useGeolocation();
+
+  const navigate = useNavigate();
 
   // 현재 위치 또는 게시글 타입이 변화 시 article에 현재 위치 데이터 반영
   useEffect(() => {
@@ -86,15 +91,20 @@ const ArticleCreatePage = () => {
       </div>
       <div>
         {advList ? (
-          <SelectAdvList
-            advList={advList}
-            setAdvList={setAdvList}
-            setArticle={setArticle}
-          />
+          <div>
+            <h2>집중집중!!! 탐험이 있어요~</h2>
+            <SelectAdvList
+              advList={advList}
+              setAdvList={setAdvList}
+              setArticle={setArticle}
+            />
+          </div>
         ) : (
           <div></div>
         )}
       </div>
+      <button onClick={() => navigate(-1)}>취소</button>
+      <button>다음</button>
     </>
   );
 };
