@@ -155,11 +155,11 @@ public class AdventureController {
     }
 
     // 특정 위치에서 일정 거리 안에 특정 유저가 참가중인 탐험과 탐험 장소 조회하기
-//    @GetMapping("/adventure-in-progress/check")
-//    public ResponseEntity<List<ReadAdventureInProgressWithinDistanceRes>> readAdventureInProgressWithinDistance(@RequestParam Double lat,@RequestParam Double lng, Authentication authentication){
-//        List<ReadAdventureInProgressWithinDistanceRes> result = adventureService.readAdventureInProgressWithinDistance(lng,lat,Long.valueOf(authentication.getName()));
-//        return new ResponseEntity<List<ReadAdventureInProgressWithinDistanceRes>>(result,HttpStatus.OK);
-//    }
+    @GetMapping("/adventure-in-progress/check")
+    public ResponseEntity<List<ReadAdventureInProgressWithinDistanceRes>> readAdventureInProgressWithinDistance(@RequestParam Double lat,@RequestParam Double lng, Authentication authentication){
+        List<ReadAdventureInProgressWithinDistanceRes> result = adventureService.readAdventureInProgressWithinDistance(lng,lat,Long.valueOf(authentication.getName()));
+        return new ResponseEntity<List<ReadAdventureInProgressWithinDistanceRes>>(result,HttpStatus.OK);
+    }
 
 
 }
