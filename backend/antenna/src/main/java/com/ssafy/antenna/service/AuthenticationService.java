@@ -1,20 +1,20 @@
 package com.ssafy.antenna.service;
+
+import com.ssafy.antenna.domain.user.Role;
+import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.domain.user.dto.LogInUserReq;
 import com.ssafy.antenna.domain.user.dto.LogInUserRes;
 import com.ssafy.antenna.domain.user.dto.PostUserReq;
-import com.ssafy.antenna.domain.user.Role;
 import com.ssafy.antenna.repository.UserRepository;
-import com.ssafy.antenna.util.ImageUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.ssafy.antenna.domain.user.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 
 @Service
@@ -24,22 +24,12 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final AwsS3Service awsS3Service;
     private final AuthenticationManager authenticationManager;
-    private final ImageUtil imageUtil;
-    public LogInUserRes register(PostUserReq postUserReq) {
-        User user = User.builder()
-                .email(postUserReq.email())
-                .nickname(postUserReq.nickname())
-                .password(passwordEncoder.encode(postUserReq.password()))
-                .introduce(postUserReq.introduce())
-                .role(Role.USER)
-                .build();
-        userRepository.save(user);
-        String jwtToken = jwtService.generateToken(user);
-        return new LogInUserRes(jwtToken);
-    }
+    @Value("${aws-cloud.aws.s3.bucket.url}")
+    private String bucketUrl;
 
-    public LogInUserRes registerTest(PostUserReq postUserReq, MultipartFile file) throws IOException {
+    public LogInUserRes registerUser(PostUserReq postUserReq, MultipartFile photo) throws IOException {
         User user = User.builder()
                 .email(postUserReq.email())
                 .nickname(postUserReq.nickname())
@@ -47,10 +37,21 @@ public class AuthenticationService {
                 .introduce((postUserReq.introduce() != null) ? postUserReq.introduce() : null)
                 .role(Role.USER)
                 .build();
-        if(file != null) {
-            user.setPhoto(imageUtil.compressImage(file.getBytes()));
-            user.setPhotoType(file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1));
+        if (photo != null) {
+            String photoName = awsS3Service.uploadImage(photo);
+            String photoUrl = bucketUrl + photoName;
+            user = User.builder()
+                    .email(postUserReq.email())
+                    .nickname(postUserReq.nickname())
+                    .password(passwordEncoder.encode(postUserReq.password()))
+                    .photoUrl(photoUrl)
+                    .photoName(photoName)
+                    .introduce((postUserReq.introduce() != null) ? postUserReq.introduce() : null)
+                    .role(Role.USER)
+                    .build();
         }
+
+
         userRepository.save(user);
         String jwtToken = jwtService.generateToken(user);
         return new LogInUserRes(jwtToken);
