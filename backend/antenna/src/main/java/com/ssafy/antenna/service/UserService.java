@@ -88,19 +88,18 @@ public class UserService {
         User follower = userRepository.findById(userId).orElseThrow(FollowerNotFoundException::new);
         User following = userRepository.findById(createFollowUserReq.followingId()).orElseThrow(FollowingNotFoundException::new);
         //두 유저가 모두 존재한다면, 데이터 넣어주기.
-        Follow newFollow = new Follow();
-        newFollow.setFollowerId(userId);
-        newFollow.setFollowingId(createFollowUserReq.followingId());
-        newFollow.setFollowerUser(follower);
-        newFollow.setFollowingUser(following);
+        Follow newFollow = Follow.builder()
+                .followerUser(follower)
+                .followingUser(following)
+                .build();
         followRepository.save(newFollow);
         return newFollow.toResponse();
     }
 
     public List<UserDetailRes> getFollowingUser(Long userId) {
         //유저가 존재하는지 먼저 확인
-        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        List<Follow> followList = followRepository.findByFollowingId(userId);
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        List<Follow> followList = followRepository.findAllByFollowingUser(user);
         List<UserDetailRes> userDetailResList = new ArrayList<>();
         for (int i = 0; i < followList.size(); i++) {
             userDetailResList.add(followList.get(i).getFollowerUser().toResponse());
@@ -110,8 +109,8 @@ public class UserService {
 
     public List<UserDetailRes> getFollowerUser(Long userId) {
         //유저가 존재하는지 먼저 확인
-        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        List<Follow> followList = followRepository.findByFollowerId(userId);
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        List<Follow> followList = followRepository.findAllByFollowerUser(user);
         List<UserDetailRes> userDetailResList = new ArrayList<>();
         for (int i = 0; i < followList.size(); i++) {
             userDetailResList.add(followList.get(i).getFollowingUser().toResponse());
