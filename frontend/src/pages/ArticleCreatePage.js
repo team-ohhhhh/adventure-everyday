@@ -48,7 +48,6 @@ const ArticleCreatePage = () => {
   // 1. 좌표->주소 변환 api 호출
   // 2. 탐험 리스트 조회 api 호출
   useEffect(() => {
-    console.log("axios");
     axios
       .get("https://dapi.kakao.com/v2/local/geo/coord2address.json", {
         params: {
