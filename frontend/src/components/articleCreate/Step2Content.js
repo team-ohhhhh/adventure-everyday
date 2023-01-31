@@ -1,4 +1,6 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import axios from "axios";
 import styles from "./Step2Content.module.css";
 
 const Step2Content = ({ article, setStep, address, advList, setArticle }) => {
@@ -18,6 +20,30 @@ const Step2Content = ({ article, setStep, address, advList, setArticle }) => {
       ...article,
       isPrivate: !article.isPrivate,
     }));
+  };
+
+  const URL = useSelector((state) => state.URL);
+  const handleCreate = (e) => {
+    // 제대로 처리하기
+    axios({
+      url: URL + "/posts",
+      method: "post",
+      data: {
+        title: article.title,
+        content: article.content,
+        lat: article.lat,
+        lng: article.lng,
+        isPublic: !article.isPrivate,
+        file: article.image.data,
+      },
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .then(setStep((step) => step + 1))
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -71,7 +97,7 @@ const Step2Content = ({ article, setStep, address, advList, setArticle }) => {
       />
       <div>
         <button onClick={() => setStep((step) => step - 1)}>이전</button>
-        <button onClick={() => setStep((step) => step + 1)}>완료</button>
+        <button onClick={handleCreate}>완료</button>
       </div>
     </>
   );
