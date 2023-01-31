@@ -115,7 +115,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/feats")
-    public ResultResponse<UserFeatsRes> getUserFeats(@PathVariable Long userId) {
+    public ResultResponse<List<UserFeatsDto>> getUserFeats(@PathVariable Long userId) {
         return userService.getUserFeats(userId);
     }
 
