@@ -304,7 +304,7 @@ public class PostService {
     }
 
     public List<PostDetailRes> getPostWithArea(double lng, double lat, double area) {
-        System.out.println(lng + " " + lat + " " + area);
+//        System.out.println(lng + " " + lat + " " + area);
         Location northEast = GeometryUtil.calculateByDirection(lng, lat, area, CardinalDirection.NORTHEAST
                 .getBearing());
         Location southWest = GeometryUtil.calculateByDirection(lng, lat, area, CardinalDirection.SOUTHWEST
@@ -313,12 +313,12 @@ public class PostService {
         double y1 = northEast.lng();
         double x2 = southWest.lat();
         double y2 = southWest.lng();
-        System.out.println(northEast.toString());
-        System.out.println(southWest.toString());
+        System.out.println(northEast);
+        System.out.println(southWest);
         String pointFormat = String.format("'LINESTRING(%f %f, %f %f)')", x1, y1, x2, y2);
         Query query = entityManager.createNativeQuery("" +
                                 "SELECT * FROM post as p " +
-                                "WHERE MBRContains(ST_LINESTRINGFROMTEXT(" + pointFormat + ", p.coordinate)"
+                                "WHERE MBRContains(ST_LINESTRINGFROMTEXT(" + pointFormat + ", p.coordinate) and p.is_public=true"
                         , Post.class)
                 .setMaxResults(100);
         List<Post> postList = query.getResultList();

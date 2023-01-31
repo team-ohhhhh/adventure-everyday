@@ -7,5 +7,5 @@ public record UserDetailRes(
         int level,
         int exp,
         String introduce,
-        byte[] photo
+        String photoUrl
 ) {}

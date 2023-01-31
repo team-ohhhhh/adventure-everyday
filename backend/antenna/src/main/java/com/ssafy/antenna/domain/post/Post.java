@@ -54,6 +54,6 @@ public class Post extends Base {
     private List<CheckpointPost> checkpointPosts = new ArrayList<>();
 
     public PostDetailRes toResponse() {
-        return new PostDetailRes(this.postId, this.title, this.content, this.coordinate.getX(), this.coordinate.getY(), this.nearestPlace, this.w3w, this.isPublic, this.user.toResponse());
+        return new PostDetailRes(this.postId, this.title, this.content, this.coordinate.getX(), this.coordinate.getY(), this.nearestPlace, this.w3w, this.isPublic,this.getCreateTime() , this.user.toResponse());
     }
 }

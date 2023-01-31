@@ -1,7 +1,9 @@
 import { useEffect, useState, useCallback } from "react";
 import { MapMarker, Map, Circle } from "react-kakao-maps-sdk";
 import Antenna from "../components/mapPage/antenna/Antenna";
-
+import axios from "axios";
+import { useSelector } from "react-redux";
+import BottomSheetContainer from './../components/BottomSheet/BottomSheet'
 function MainMap() {
   const [state, setState] = useState({
     center: {
@@ -20,6 +22,7 @@ function MainMap() {
     isCur: false, // 현재 위치인지
     isAround: false, // 주변 검색 상황인지
     isAroundClicked: false, // UFO가 눌렸는지
+    isCircle: false, // 원이 생겼는지(자기 주위, 해당 좌표, 안테나)
   });
 
   // 초기 렌더링 때 현재 위치로 지도 이동
@@ -30,6 +33,34 @@ function MainMap() {
       isCur: false,
     }));
   }, []);
+
+
+  // lat이나 lng 값이 변화했을 때 작동할 함수 -> axios 후에 setArticleList
+  let URL = useSelector((state) => state.URL)
+  let TOKEN = useSelector((state) => state.TOKEN)
+  const [articleList, setArticleList] = useState([])
+  useEffect(() => {
+    axios({
+      url: URL + '/posts',
+      method: 'get',
+      headers: {
+        Authorization: `Bearer ${TOKEN}`
+      },
+      params: {
+        lng: state.center.lng,
+        lat: state.center.lat,
+        area: 1 //TODO: 여기는 안테나의 경우에는 동적할당 생각하기
+      }
+    })
+    .then((res) => {
+      setArticleList(res.data)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }, [state.center]) //TODO: 만약 안되면 오브젝트 풀어서 넣기 
+
+
 
   return (
     <>
@@ -68,6 +99,7 @@ function MainMap() {
               ...prev,
               isCur: false,
               isAroundClicked: false,
+              isCircle: false,
             }));
 
             console.log("dragStart");
@@ -85,6 +117,7 @@ function MainMap() {
                   lng: mouseEvent.latLng.getLng(),
                 },
                 isAround: true,
+                isCircle: false,
               }));
             } else {
               // UFO 이미지가 떠 있다면
@@ -93,6 +126,7 @@ function MainMap() {
                 ...prev,
                 isAround: false,
                 isAroundClicked: false,
+                isCircle: false,
               }));
             }
           }}
@@ -135,7 +169,13 @@ function MainMap() {
           {/* isCur가 켜져있지 않을 때만 버튼이 보임 */}
           {!state.isCur && (
             <button
-              onClick={moveCurPos}
+              onClick={() => {
+                moveCurPos()
+                setState((prev) => ({
+                  ...prev,
+                  isCircle: true,
+                }))
+              }}
               style={{
                 /*버튼 위치*/
                 position: "absolute",
@@ -169,6 +209,7 @@ function MainMap() {
                   setState((prev) => ({
                     ...prev,
                     isAroundClicked: true,
+                    isCircle: true,
                     center: state.click,
                     isPanto: true,
                   }));
@@ -207,6 +248,8 @@ function MainMap() {
           )}
 
           <p>{state.errMsg}</p>
+          {/* 주변 검색 상황일때 바텀시트 등장 */}
+          { state.isCircle && <BottomSheetContainer articleList={articleList} />}
         </Map>
       </div>
     </>
