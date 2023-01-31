@@ -105,6 +105,13 @@ public class AdventureController {
         return new ResponseEntity<>("탐험 알림 끄기 성공~~",HttpStatus.OK);
     }
 
+    // 특정 탐험 진행자, 달성률 조회
+    @GetMapping("/adventure-in-progress/{adventureId}")
+    public ResponseEntity<List<ReadAdventureInProgressUsersRes>> readAdventureInProgressUsers(@PathVariable Long adventureId){
+        List<ReadAdventureInProgressUsersRes> result = adventureService.readAdventureInProgressUsers(adventureId);
+        return new ResponseEntity<>(result,HttpStatus.OK);
+    }
+
     // 특정 탐험 달성자 추가
     @PostMapping("/adventure-succeed/{adventureId}")
     public ResponseEntity<String> creaateAdventureSucceed(@PathVariable Long adventureId,Authentication authentication){
@@ -174,9 +181,5 @@ public class AdventureController {
         List<ReadAdventureInProgressWithinDistanceRes> result = adventureService.readAdventureInProgressWithinDistance(lng,lat,Long.valueOf(authentication.getName()));
         return new ResponseEntity<List<ReadAdventureInProgressWithinDistanceRes>>(result,HttpStatus.OK);
     }
-
-    // 특정 모험의 모든 장소의 게시글 조회
-
-
 
 }

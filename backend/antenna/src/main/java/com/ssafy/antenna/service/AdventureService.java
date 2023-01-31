@@ -16,6 +16,7 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.stereotype.Service;
 
+import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -60,6 +61,7 @@ public class AdventureService {
         Adventure newAdventure = adventureRepository.findById(adventureId).orElseThrow();
 
         ReadAdventureRes newReadAdventureRes = new ReadAdventureRes(
+                newAdventure.getAdventureId(),
                 newAdventure.getAdventureId(),
                 newAdventure.getCategory().getCategory(),
                 newAdventure.getFeatTitle(),
@@ -109,6 +111,7 @@ public class AdventureService {
         for(Adventure adventure : temp){
             ReadAdventureRes newReadAdventureRes = new ReadAdventureRes(
                     adventure.getAdventureId(),
+                    adventure.getUser().getUserId(),
                     adventure.getCategory().getCategory(),
                     adventure.getFeatTitle(),
                     adventure.getFeatContent(),
@@ -194,10 +197,10 @@ public class AdventureService {
         List<AdventureInProgress> temp = adventureInProgressRepository.findAllByUser(curUser).orElseThrow();
 
         for(AdventureInProgress aip : temp){
+            Integer clearRate = (int)(((double)aip.getCurrentPoint()/(double)aip.getTotalPoint())*100.0);
             ReadAdventureInProgressRes newReadAdventureInProgressRes = new ReadAdventureInProgressRes(
                     aip.getAdventure().getAdventureId(),
-                    aip.getTotalPoint(),
-                    aip.getCurrentPoint()
+                    clearRate
             );
 
             result.add(newReadAdventureInProgressRes);
@@ -248,6 +251,27 @@ public class AdventureService {
     // 탐험 알림 끄기
     public void deleteAdventureLike(Long adventureLikeId){
         adventureLikeRepository.deleteById(adventureLikeId);
+    }
+
+    // 특정 탐험 진행자, 달성률 조회
+    public List<ReadAdventureInProgressUsersRes> readAdventureInProgressUsers(Long adventureId) {
+        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow();
+
+        List<AdventureInProgress> adventureInProgressList = adventureInProgressRepository.findAllByAdventure(adventure).orElseThrow();
+
+        List<ReadAdventureInProgressUsersRes> result = new ArrayList<>();
+
+        for(AdventureInProgress adventureInProgress:adventureInProgressList){
+            Integer clearRate = (int)(((double)adventureInProgress.getCurrentPoint()/(double)adventureInProgress.getTotalPoint())*100.0);
+            ReadAdventureInProgressUsersRes readAdventureInProgressUsersRes = new ReadAdventureInProgressUsersRes(
+                    adventureInProgress.getUser().getUserId(),
+                    clearRate
+            );
+
+            result.add(readAdventureInProgressUsersRes);
+        }
+
+        return result;
     }
 
     // 특정 탐험 달성자 추가
@@ -379,6 +403,7 @@ public class AdventureService {
         return result;
     }
 
+
     // 모험 검색(모든 모험 키워드 조회)
     public List<ReadAdventureRes> readAdventureSearch(String keyword) {
         System.out.println(keyword);
@@ -389,6 +414,7 @@ public class AdventureService {
         for(Adventure adventure:adventureList){
             ReadAdventureRes newReadAdventureRes = new ReadAdventureRes(
                     adventure.getAdventureId(),
+                    adventure.getUser().getUserId(),
                     adventure.getCategory().getCategory(),
                     adventure.getFeatTitle(),
                     adventure.getFeatContent(),
