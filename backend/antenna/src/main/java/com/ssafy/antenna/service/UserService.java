@@ -1,7 +1,6 @@
 package com.ssafy.antenna.service;
 
 import com.ssafy.antenna.domain.ResultResponse;
-import com.ssafy.antenna.domain.adventure.Adventure;
 import com.ssafy.antenna.domain.adventure.AdventureSucceed;
 import com.ssafy.antenna.domain.antenna.Antenna;
 import com.ssafy.antenna.domain.antenna.dto.DetailAntennaRes;
@@ -11,6 +10,7 @@ import com.ssafy.antenna.domain.email.dto.CheckEmailRes;
 import com.ssafy.antenna.domain.user.Follow;
 import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.domain.user.dto.*;
+import com.ssafy.antenna.domain.user.mapper.UserFeatsDtoMapper;
 import com.ssafy.antenna.exception.not_found.*;
 import com.ssafy.antenna.exception.unauthorized.InvalidPasswordException;
 import com.ssafy.antenna.repository.AdventureSucceedRepository;
@@ -49,6 +49,7 @@ public class UserService {
     private final AntennaRepository antennaRepository;
     private final AdventureSucceedRepository adventureSucceedRepository;
     private final W3WUtil w3WUtil;
+    private final UserFeatsDtoMapper userFeatsDtoMapper;
 
     public User getUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
@@ -232,13 +233,14 @@ public class UserService {
         );
     }
 
-    public ResultResponse<UserFeatsRes> getUserFeats(Long userId) {
+    public ResultResponse<List<UserFeatsDto>> getUserFeats(Long userId) {
         List<AdventureSucceed> adventureSucceeds = adventureSucceedRepository.findAllByUser(
                 userRepository.findById(userId).orElseThrow(UserNotFoundException::new));
-        List<String> result = adventureSucceeds.stream()
-                .map(b -> b.getAdventure().getFeatTitle())
+        List<UserFeatsDto> result = adventureSucceeds.stream()
+                .map(AdventureSucceed::getAdventure)
+                .map(userFeatsDtoMapper)
                 .collect(Collectors.toList());
-        return ResultResponse.success(new UserFeatsRes(result));
+        return ResultResponse.success(result);
     }
     public DetailAntennaRes createAntenna(PostAntennaReq postAntennaReq, Long userId) {
         //유저가 존재하는지 먼저 확인

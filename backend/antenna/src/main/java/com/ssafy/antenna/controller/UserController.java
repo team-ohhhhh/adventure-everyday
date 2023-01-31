@@ -114,10 +114,10 @@ public class UserController {
         return userService.getImage(userId);
     }
 
-    @GetMapping("/{userId}/feats")
-    public ResultResponse<UserFeatsRes> getUserFeats(@PathVariable Long userId) {
-        return userService.getUserFeats(userId);
-    }
+//    @GetMapping("/{userId}/feats")
+//    public ResultResponse<List<UserFeatsDto>> getUserFeats(@PathVariable Long userId) {
+//        return userService.getUserFeats(userId);
+//    }
 
     @PostMapping("/antennae")
     public ResultResponse<DetailAntennaRes> createAntenna(@RequestBody PostAntennaReq postAntennaReq, Authentication authentication) {

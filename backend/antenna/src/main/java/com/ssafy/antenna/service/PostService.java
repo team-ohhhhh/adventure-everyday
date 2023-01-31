@@ -17,7 +17,7 @@ import com.ssafy.antenna.domain.like.dto.PostLikeDto;
 import com.ssafy.antenna.domain.like.dto.SubCommentLikeDto;
 import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.post.dto.PostDetailRes;
-import com.ssafy.antenna.domain.post.PostDtoMapper;
+import com.ssafy.antenna.domain.post.mapper.PostDtoMapper;
 import com.ssafy.antenna.domain.post.dto.PostDto;
 import com.ssafy.antenna.domain.post.dto.PostUpdateReq;
 import com.ssafy.antenna.domain.user.User;
@@ -45,9 +45,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service

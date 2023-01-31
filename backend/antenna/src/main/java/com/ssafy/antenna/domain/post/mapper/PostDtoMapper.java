@@ -1,5 +1,6 @@
-package com.ssafy.antenna.domain.post;
+package com.ssafy.antenna.domain.post.mapper;
 
+import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.post.dto.PostDto;
 import org.springframework.stereotype.Service;
 
