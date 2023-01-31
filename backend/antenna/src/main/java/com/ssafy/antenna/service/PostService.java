@@ -67,10 +67,12 @@ public class PostService {
     private final SubCommentLikeRepository subCommentLikeRepository;
 
     public String deletePost(Long userId, Long postId) throws IllegalAccessException {
-        if (Objects.equals(userId, postRepository.findById(postId).orElseThrow(NoSuchElementException::new).getUser().getUserId())) {
-            postRepository.deletePost(postId);
+        Post post = postRepository.findById(postId)
+                .orElseThrow(NoSuchElementException::new);
+        if(post.getUser().getUserId().equals(userId)) {
+            postRepository.delete(post);
             return "게시글 삭제 성공";
-        } else {
+        } {
             throw new IllegalAccessException("잘못된 접근입니다");
         }
     }
