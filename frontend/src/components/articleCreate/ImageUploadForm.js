@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import EXIF from "exif-js";
-import styles from "./ArticleImageUploadForm.module.css";
+import styles from "./ImageUploadForm.module.css";
 
 const GPSConvert = (metadata) => {
   const dmsLaRef = metadata.GPSLatitudeRef;
@@ -20,9 +20,8 @@ const GPSConvert = (metadata) => {
   return [degreeLa, degreeLo];
 };
 
-const ArticleImageUploadForm = ({ setArticle }) => {
+const ImageUploadForm = ({ article, setArticle }) => {
   const fileInputRef = useRef();
-  const [imagePreview, setImagePreview] = useState();
 
   const handleClickFileInput = () => {
     fileInputRef.current?.click();
@@ -38,8 +37,13 @@ const ArticleImageUploadForm = ({ setArticle }) => {
           const metadata = EXIF.getAllTags(this);
           const url = URL.createObjectURL(file);
           const [lat, lng] = GPSConvert(metadata);
-          setImagePreview({ url, name: file.name });
-          setArticle({ type: "image", image: file, lat, lng });
+          setArticle((article) => ({
+            ...article,
+            lat,
+            lng,
+            type: "image",
+            image: { data: file, preview: url, name: file.name },
+          }));
         } else {
           alert("위치정보가 없는 사진입니다. 다른 사진을 선택해주세요.");
         }
@@ -48,18 +52,22 @@ const ArticleImageUploadForm = ({ setArticle }) => {
   };
 
   const removePhoto = () => {
-    setImagePreview();
-    setArticle({ type: "text" });
+    setArticle({
+      type: "text",
+      image: { data: null, preview: null, name: null },
+    });
   };
+
   return (
     <div>
       <input
+        className={styles.fileInput}
         type="file"
         accept="image/*"
         ref={fileInputRef}
         onChange={uploadPhoto}
       />
-      {!imagePreview ? (
+      {!article.image.preview ? (
         <div
           className={styles.beforeUpload}
           onClick={handleClickFileInput}
@@ -68,8 +76,8 @@ const ArticleImageUploadForm = ({ setArticle }) => {
         <div>
           <img
             className={styles.afterUpload}
-            src={imagePreview.url}
-            alt={imagePreview.name}
+            src={article.image.preview}
+            alt={article.image.name}
             onClick={handleClickFileInput}
           />
           <button onClick={removePhoto}>X</button>
@@ -79,4 +87,4 @@ const ArticleImageUploadForm = ({ setArticle }) => {
   );
 };
 
-export default ArticleImageUploadForm;
+export default ImageUploadForm;
