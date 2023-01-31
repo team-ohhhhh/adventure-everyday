@@ -347,6 +347,23 @@ public class AdventureService {
         return result;
     }
 
+    // 특정 모험의 모든 장소의 게시글 조회
+    public List<ReadAdventurePlacePostRes> readAdventurePosts(Long adventureId) {
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+
+        List<CheckpointPost> checkpointPosts = checkpointPostRepository.findAllByAdventureOrderByCreateTimeDesc(curAdventure).orElseThrow();
+
+        List<ReadAdventurePlacePostRes> result = new ArrayList<>();
+
+        for(CheckpointPost checkpointPost:checkpointPosts){
+            ReadAdventurePlacePostRes readAdventurePlacePostRes = new ReadAdventurePlacePostRes(checkpointPost.getPost().getPostId());
+
+            result.add(readAdventurePlacePostRes);
+        }
+
+        return result;
+    }
+
     // 모험 검색(모든 모험 키워드 조회)
     public List<ReadAdventureRes> readAdventureSearch(String keyword) {
         System.out.println(keyword);
@@ -413,6 +430,7 @@ public class AdventureService {
 
         return readAdventureInProgressWithinDistanceRes;
     }
+
 
 
 }

@@ -147,10 +147,17 @@ public class AdventureController {
         return new ResponseEntity<>("탐험 후기 삭제 성공",HttpStatus.OK);
     }
 
-    // 특정 모험의 특정 좌표의 게시글 조회
-    @GetMapping("/adventure-place/{adventurePlaceId}")
+    // 특정 모험의 특정 장소의 게시글 조회
+    @GetMapping("/adventure-places/{adventurePlaceId}/posts")
     public ResponseEntity<List<ReadAdventurePlacePostRes>> readAdventurePlacePost(@PathVariable Long adventurePlaceId){
         List<ReadAdventurePlacePostRes> result = adventureService.readAdventurePlacePost(adventurePlaceId);
+        return new ResponseEntity<List<ReadAdventurePlacePostRes>>(result,HttpStatus.OK);
+    }
+
+    // 특정 모험의 모든 장소의 게시글 조회
+    @GetMapping("/{adventureId}/adventure-places/posts")
+    public ResponseEntity<List<ReadAdventurePlacePostRes>> readAdventurePosts(@PathVariable Long adventureId){
+        List<ReadAdventurePlacePostRes> result = adventureService.readAdventurePosts(adventureId);
         return new ResponseEntity<List<ReadAdventurePlacePostRes>>(result,HttpStatus.OK);
     }
 
@@ -167,6 +174,9 @@ public class AdventureController {
         List<ReadAdventureInProgressWithinDistanceRes> result = adventureService.readAdventureInProgressWithinDistance(lng,lat,Long.valueOf(authentication.getName()));
         return new ResponseEntity<List<ReadAdventureInProgressWithinDistanceRes>>(result,HttpStatus.OK);
     }
+
+    // 특정 모험의 모든 장소의 게시글 조회
+
 
 
 }
