@@ -64,7 +64,6 @@ public class PostService {
     private final SubCommentRepository subCommentRepository;
     private final SubCommentDtoMapper subCommentDtoMapper;
     private final SubCommentLikeRepository subCommentLikeRepository;
-    private final ErrorCode errorCode;
 
     public ResultResponse<?> getPostById(Long postId) {
         return ResultResponse.success(
