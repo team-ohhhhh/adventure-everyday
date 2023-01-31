@@ -1,0 +1,21 @@
+.container{
+    width: 100%;
+    height: 850px;
+    background-color: aqua;  
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.white{
+    width: 100%;
+    height: 30%;
+    background-color: white;
+}
+
+.purple{
+    width: 100%;
+    height: 70%;
+    background-color:#1C0B69;
+}
