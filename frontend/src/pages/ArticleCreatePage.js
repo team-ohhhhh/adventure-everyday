@@ -106,7 +106,7 @@ const ArticleCreatePage = () => {
         />
       );
     case 3:
-      return <Step3Done setStep={setStep} />;
+      return <Step3Done />;
     default:
       return <></>;
   }

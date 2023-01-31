@@ -23,7 +23,7 @@ const Step2Content = ({ article, setStep, address, advList, setArticle }) => {
   };
 
   const URL = useSelector((state) => state.URL);
-  const handleCreate = (e) => {
+  const handleSubmit = (e) => {
     // 제대로 처리하기
     axios({
       url: URL + "/posts",
@@ -97,7 +97,7 @@ const Step2Content = ({ article, setStep, address, advList, setArticle }) => {
       />
       <div>
         <button onClick={() => setStep((step) => step - 1)}>이전</button>
-        <button onClick={handleCreate}>완료</button>
+        <button onClick={handleSubmit}>완료</button>
       </div>
     </>
   );

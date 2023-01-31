@@ -15,7 +15,6 @@ function App() {
         <Link to="/">home</Link>
         <Link to="/login">login</Link>
         <Link to="/signup">signup</Link>
-        <Link to="/create">create</Link>
         <Routes>
           <Route path="/" element={<MapPage />} />
           <Route path="/login" element={<LogInPage />} />

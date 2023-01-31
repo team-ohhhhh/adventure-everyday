@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Step3Done = ({ setStep }) => {
+const Step3Done = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
