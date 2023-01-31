@@ -237,7 +237,6 @@ public class UserService {
         List<AdventureSucceed> adventureSucceeds = adventureSucceedRepository.findAllByUser(
                 userRepository.findById(userId).orElseThrow(UserNotFoundException::new));
         List<UserFeatsDto> result = adventureSucceeds.stream()
-                .map(AdventureSucceed::getAdventure)
                 .map(userFeatsDtoMapper)
                 .collect(Collectors.toList());
         return ResultResponse.success(result);
