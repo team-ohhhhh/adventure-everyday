@@ -46,6 +46,11 @@ public class PostController {
         );
     }
 
+    @GetMapping("/{postId}")
+    public ResultResponse<?> getPostById(@PathVariable Long postId) {
+        return postService.getPostById(postId);
+    }
+
     @DeleteMapping("/{postId}")
     public ResultResponse<String> deletePost(
             @PathVariable Long postId,
@@ -91,7 +96,7 @@ public class PostController {
         return ResultResponse.success(postService.getPostWithArea(lng,lat,area));
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/users/{userId}")
     public ResultResponse<?> getPostByUserId(@PathVariable Long userId) {
         return postService.getPostByUserId(userId);
     }

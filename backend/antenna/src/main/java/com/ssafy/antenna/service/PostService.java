@@ -21,6 +21,7 @@ import com.ssafy.antenna.domain.post.mapper.PostDtoMapper;
 import com.ssafy.antenna.domain.post.dto.PostDto;
 import com.ssafy.antenna.domain.post.dto.PostUpdateReq;
 import com.ssafy.antenna.domain.user.User;
+import com.ssafy.antenna.exception.ErrorCode;
 import com.ssafy.antenna.exception.not_found.UserNotFoundException;
 import com.ssafy.antenna.repository.CommentRepository;
 import com.ssafy.antenna.repository.PostRepository;
@@ -63,7 +64,15 @@ public class PostService {
     private final SubCommentRepository subCommentRepository;
     private final SubCommentDtoMapper subCommentDtoMapper;
     private final SubCommentLikeRepository subCommentLikeRepository;
+    private final ErrorCode errorCode;
 
+    public ResultResponse<?> getPostById(Long postId) {
+        return ResultResponse.success(
+                postRepository.findById(postId)
+                        .map(postDtoMapper)
+                        .orElseThrow(NoSuchElementException::new)
+        );
+    }
     public String deletePost(Long userId, Long postId) throws IllegalAccessException {
         Post post = postRepository.findById(postId)
                 .orElseThrow(NoSuchElementException::new);
@@ -321,4 +330,5 @@ public class PostService {
         }
         return postDetailResList;
     }
+
 }
