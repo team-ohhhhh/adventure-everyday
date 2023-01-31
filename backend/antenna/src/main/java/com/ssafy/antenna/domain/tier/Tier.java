@@ -19,6 +19,9 @@ public class Tier extends Base {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tierId;
 
+    @Column(columnDefinition = "varchar(255) not null")
+    private String tierName;
+
     @OneToMany(mappedBy = "tier")
     private List<User> users = new ArrayList<>();
 }

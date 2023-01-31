@@ -9,32 +9,35 @@ function SignUpPage() {
 
   // 로그인 단계 저장용 변수
   // 0 : 메인, 1: 이메일 선택 창, 2: 비밀번호 입력 창, 3: 닉네임 입력창, 4: 소개글 입력 창, 5: 프로필 사진 업로드 창, 6: 완료 창
-  const [stage, setStage] = useState(0)
+  const [stage, setStage] = useState(2)
 
   // 로그인에 필요한 정보들
-  const [email, setEmail] = useState("")
+  const [email, setEmail] = useState("jh8671@naver.com")
   const [nickname, setNickname] = useState("")
   const [password, setPassword] = useState("")
   const [password2, setPassword2] = useState("")
   const [introduce, setIntroduce] = useState("")
   const [photo, setPhoto] = useState("")
+  const [file, setFile] = useState("")
 
   const imgRef = useRef()
+  
 
   // 회원가입 axios
   const signUp = function () {
-    axios({
-      url : URL + '/auth/register',
-      method: 'post',
-      data: {
-        email,
-        nickname,
-        password,
-        introduce,
-        photo,
-      }
+    const formData = new FormData()
+    formData.append("email", email)
+    formData.append("nickname", nickname)
+    formData.append("password", password)
+    formData.append("introduce", introduce)
+    formData.append("file", file)
+    axios.post(URL + "/auth/register", formData, {
+      headers: {
+      "Content-type": "multipart/form-date",
+    },
     })
     .then(function (response) {
+      console.log(response)
     })
     .then(setStage(stage + 1))
     .catch((error) => console.log(error))
@@ -65,34 +68,13 @@ function SignUpPage() {
         )
       case 5:
         return (
-          <PhotoComponent signUp={signUp} imgRef={imgRef} setStage={setStage} stage={stage} setPhoto={setPhoto} photo={photo}/>
+          <PhotoComponent setFile={setFile} signUp={signUp} imgRef={imgRef} setStage={setStage} stage={stage} setPhoto={setPhoto} photo={photo}/>
         )
       case 6:
         return (
           <SignUpCompletedComponent/>
         )
     }
-  // return(
-  //   <div>
-      
-      
-  //     <label htmlFor="nickName">닉네임</label>
-  //     <input id="nickName" onChange={(event) => { setNickname(event.target.value) }}></input>
-
-      
-
-  //     <label htmlFor="introduce">자기소개</label>
-  //     <textarea id="introduce" onChange={(event) => { setIntroduce(event.target.value) }}></textarea>
-      
-  //     <label htmlFor="photo">프로필 사진</label>
-  //     <input type={ "file" } accept={ "image/*" } id="photo" onChange={(event) => { setPhoto(event.target.value) }}></input>
-
-      
-  //     <button onClick={ () => { signUp() } }>회원가입</button>
-
-  //   </div>
-  // )
-
 
 }
 

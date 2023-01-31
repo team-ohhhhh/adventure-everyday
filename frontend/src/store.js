@@ -5,9 +5,15 @@ let URL = createSlice({
   initialState : 'http://localhost:8080'
 })
 
+let TOKEN = createSlice({
+  name : 'TOKEN',
+  initialState : null
+})
+
 
 export default configureStore({
   reducer: {
-    URL : URL.reducer
+    URL : URL.reducer,
+    TOKEN : TOKEN.reducer
    }
 })

@@ -1,0 +1,90 @@
+.articleListItem {
+  width : 333px;
+  height : 109px;
+  display: flex;
+  flex-direction: row;
+  background-color: #ffffff;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  
+  border-radius: 5px;
+  box-shadow: 5px 5px 5px;
+
+}
+
+/* 사진인데 사이즈가 문제임... */
+.photo {
+  height : 100%;
+  aspect-ratio : 1 / 1;
+}
+
+
+
+
+.divForInfo {
+  display: flex;
+  /* 얘 밀리면 날짜 위치 벗어나게 조정됨 */
+  width : 60%;
+  height : 70%;
+  margin-left : 10px;
+  margin-top: auto;
+  margin-bottom: auto;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-right: 10px;
+
+}
+
+.title {
+  /* 타이틀 너비 체크 */
+  width: 80%;
+  text-align: left;
+
+  /* 여기가 글자 넘칠때 잘라주는 코드 */
+  overflow: hidden;  		
+  text-overflow: ellipsis;  	 
+  white-space: nowrap;
+
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 17px;
+}
+
+.nickNameAndTier {
+  text-align: left;
+  float:left;
+  display: flex;
+  flex-direction: row;
+
+}
+
+/* 티어 이미지 인데 크기 어케 바꾸지.. */
+.tier {
+  height:13px;
+  width: 13px;
+  object-fit: cover;
+}
+
+
+.date {
+  text-align: right;
+  float: right;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+
+
+}
+
+.nickName {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 100%;
+}
+

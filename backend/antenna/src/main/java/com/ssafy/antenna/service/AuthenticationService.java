@@ -26,16 +26,31 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final ImageUtil imageUtil;
-    public LogInUserRes register(PostUserReq postUserReq, MultipartFile photo) throws IOException {
+    public LogInUserRes register(PostUserReq postUserReq) {
         User user = User.builder()
                 .email(postUserReq.email())
                 .nickname(postUserReq.nickname())
                 .password(passwordEncoder.encode(postUserReq.password()))
                 .introduce(postUserReq.introduce())
-                .photo(imageUtil.compressImage(photo.getBytes()))
-                .photoType(String.valueOf(photo.getOriginalFilename()))
                 .role(Role.USER)
                 .build();
+        userRepository.save(user);
+        String jwtToken = jwtService.generateToken(user);
+        return new LogInUserRes(jwtToken);
+    }
+
+    public LogInUserRes registerTest(PostUserReq postUserReq, MultipartFile file) throws IOException {
+        User user = User.builder()
+                .email(postUserReq.email())
+                .nickname(postUserReq.nickname())
+                .password(passwordEncoder.encode(postUserReq.password()))
+                .introduce((postUserReq.introduce() != null) ? postUserReq.introduce() : null)
+                .role(Role.USER)
+                .build();
+        if(file != null) {
+            user.setPhoto(imageUtil.compressImage(file.getBytes()));
+            user.setPhotoType(file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1));
+        }
         userRepository.save(user);
         String jwtToken = jwtService.generateToken(user);
         return new LogInUserRes(jwtToken);
