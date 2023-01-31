@@ -17,9 +17,7 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.stereotype.Service;
 
 import java.awt.geom.Path2D;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -85,10 +83,46 @@ public class AdventureService {
 
     // 모든 탐험 조회(생성순, 달성순, 거리순)
     public List<ReadAdventureRes> readAdventures(String order, Double lat, Double lng){
-        // 거리순 조회
+        // 5km이내(변경가능) 모든 탐험 거리순으로(가까운순) 10개(변경가능) 조회
         List<ReadAdventureRes> result=new ArrayList<>();
         if(lat!=null && lng!=null){
+            Query query = entityManager.createNativeQuery(
+                                    "SELECT *, " +
+                                            "ST_Distance_Sphere(POINT("+lng.toString()+", "+lat.toString()+"), ap.coordinate) AS distance "+
+                                            "FROM adventure_place ap "+
+                                            "order by distance asc "
+                            , AdventurePlace.class)
+                    .setMaxResults(10);
+            List<AdventurePlace> adventurePlaceList = query.getResultList();
 
+            // 중복제거
+            Set<Long> adventureIds=new HashSet<>();
+            for(AdventurePlace adventurePlace:adventurePlaceList){
+                adventureIds.add(adventurePlace.getAdventure().getAdventureId());
+            }
+
+            System.out.println(adventureIds);
+
+            for (Long i : adventureIds) {
+                Adventure curAdventure = adventureRepository.findById(i).orElseThrow();
+
+                ReadAdventureRes newReadAdventureRes = new ReadAdventureRes(
+                        curAdventure.getAdventureId(),
+                        curAdventure.getUser().getUserId(),
+                        curAdventure.getCategory().getCategory(),
+                        curAdventure.getFeatTitle(),
+                        curAdventure.getFeatContent(),
+                        curAdventure.getTitle(),
+                        curAdventure.getContent(),
+                        curAdventure.getDifficulty(),
+                        curAdventure.getPhoto(),
+                        curAdventure.getStartDate(),
+                        curAdventure.getEndDate(),
+                        curAdventure.getAvgReviewRate()
+                );
+
+                result.add(newReadAdventureRes);
+            }
         }else{
             // 생성시간 조회
             if(order.equals("update")){
@@ -138,7 +172,7 @@ public class AdventureService {
             AdventurePlace newAdventurePlace = AdventurePlace.builder()
                     .title(place.title())
                     .content(place.content())
-                    .coordinate(new GeometryFactory().createPoint(new Coordinate(place.coordinate()[0],place.coordinate()[1])))
+                    .coordinate(new GeometryFactory().createPoint(new Coordinate(place.coordinate()[1],place.coordinate()[0])))
                     .photo(place.photo())
                     .adventure(curAdventure)
                     .build();
