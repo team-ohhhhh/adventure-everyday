@@ -4,6 +4,7 @@ import com.ssafy.antenna.domain.adventure.*;
 import com.ssafy.antenna.domain.adventure.dto.*;
 import com.ssafy.antenna.domain.like.AdventureLike;
 import com.ssafy.antenna.domain.location.Location;
+import com.ssafy.antenna.domain.post.CheckpointPost;
 import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.repository.*;
 import com.ssafy.antenna.util.CardinalDirection;
@@ -31,6 +32,7 @@ public class AdventureService {
     private final AdventureReviewRepository adventureReviewRepository;
     private final AdventureLikeRepository adventureLikeRepository;
     private final AdventureInProgressRepository adventureInProgressRepository;
+    private final CheckpointPostRepository checkpointPostRepository;
 
     // 탐험 추가
     public void createAdventure(CreateAdventureReq createAdventureReq, Long userId){
@@ -328,6 +330,23 @@ public class AdventureService {
         adventureReviewRepository.deleteById(adventureReviewId);
     }
 
+    // 특정 모험의 특정 좌표의 게시글 조회
+    public List<ReadAdventurePlacePostRes> readAdventurePlacePost(Long adventurePlaceId) {
+        AdventurePlace curAdventurePlace = adventurePlaceRepository.findById(adventurePlaceId).orElseThrow();
+
+        List<CheckpointPost> checkpointPosts = checkpointPostRepository.findAllByAdventurePlace(curAdventurePlace).orElseThrow();
+
+        List<ReadAdventurePlacePostRes> result = new ArrayList<>();
+
+        for(CheckpointPost checkpointPost:checkpointPosts){
+            ReadAdventurePlacePostRes readAdventurePlacePostRes = new ReadAdventurePlacePostRes(checkpointPost.getPost().getPostId());
+
+            result.add(readAdventurePlacePostRes);
+        }
+
+        return result;
+    }
+
     // 모험 검색(모든 모험 키워드 조회)
     public List<ReadAdventureRes> readAdventureSearch(String keyword) {
         System.out.println(keyword);
@@ -362,8 +381,6 @@ public class AdventureService {
 
         Double area = 0.05;
 
-        System.out.println(lng + " " + lat + " " + area);
-
         Location northEast = GeometryUtil.calculateByDirection(lng, lat, area, CardinalDirection.NORTHEAST
                 .getBearing());
         Location southWest = GeometryUtil.calculateByDirection(lng, lat, area, CardinalDirection.SOUTHWEST
@@ -382,9 +399,6 @@ public class AdventureService {
                 .setMaxResults(100);
         List<AdventurePlace> adventurePlaceList = query.getResultList();
 
-        System.out.println(adventurePlaceList);
-        System.out.println(adventurePlaceList.size());
-
         List<ReadAdventureInProgressWithinDistanceRes> readAdventureInProgressWithinDistanceRes = new ArrayList<>();
         for (AdventurePlace ap :
                 adventurePlaceList) {
@@ -399,4 +413,6 @@ public class AdventureService {
 
         return readAdventureInProgressWithinDistanceRes;
     }
+
+
 }

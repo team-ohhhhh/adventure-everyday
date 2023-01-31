@@ -147,6 +147,13 @@ public class AdventureController {
         return new ResponseEntity<>("탐험 후기 삭제 성공",HttpStatus.OK);
     }
 
+    // 특정 모험의 특정 좌표의 게시글 조회
+    @GetMapping("/adventure-place/{adventurePlaceId}")
+    public ResponseEntity<List<ReadAdventurePlacePostRes>> readAdventurePlacePost(@PathVariable Long adventurePlaceId){
+        List<ReadAdventurePlacePostRes> result = adventureService.readAdventurePlacePost(adventurePlaceId);
+        return new ResponseEntity<List<ReadAdventurePlacePostRes>>(result,HttpStatus.OK);
+    }
+
     // 모험 검색(모든 모험 키워드 조회)
     @GetMapping("/search")
     public ResponseEntity<List<ReadAdventureRes>> readAdventureSearch(@RequestParam String keyword){
