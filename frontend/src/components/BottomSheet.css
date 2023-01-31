@@ -1,0 +1,42 @@
+#bottomSheetContainer {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  display: none;
+  z-index: -1;
+}
+
+#bottomSheetContainer.active {
+  display: flex;
+}
+
+#bottomSheet {
+  background-color: rgb(110, 109, 109);
+  width:100%;
+  height: 80%;
+  border-radius: 10px 10px 0px 0px;
+  transform: translateY(100%);
+  transition: transform 0.4s ease-in-out;
+  z-index: 200;
+}
+
+#bottomSheet.semiActive{
+  transform: translateY(70%);
+  overflow: hidden;
+}
+#bottomSheet.active{
+  transform: translateY(0);
+  overflow: auto;
+}
+
+#bottomSheet ArticleListItem{
+  display: block;
+  display: flex;
+  align-items: center;
+}
+
