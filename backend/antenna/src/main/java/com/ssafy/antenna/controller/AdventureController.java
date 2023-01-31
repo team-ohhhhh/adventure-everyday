@@ -112,12 +112,12 @@ public class AdventureController {
         return new ResponseEntity<String>("특정 탐험 달성자 추가 성공",HttpStatus.OK);
     }
 
-    // 특정 유저의 달성한 탐험들 조회
-//    @GetMapping("/adventure-succeed")
-//    public ResponseEntity<List<ReadAdventureSucceedRes>> readAdventureSucceed(Authentication authentication){
-//        List<ReadAdventureSucceedRes> result = adventureService.readAdventureSucceed(Long.valueOf(authentication.getName()));
-//        return new ResponseEntity<List<ReadAdventureSucceedRes>>(result,HttpStatus.OK);
-//    }
+    // 특정 유저의 달성한 탐험id들 조회
+    @GetMapping("/adventure-succeed/users/{userId}")
+    public ResponseEntity<List<ReadAdventureSucceedRes>> readAdventureSucceedOfUser(@PathVariable Long userId){
+        List<ReadAdventureSucceedRes> result = adventureService.readAdventureSucceedOfUser(userId);
+        return new ResponseEntity<List<ReadAdventureSucceedRes>>(result,HttpStatus.OK);
+    }
 
     // 특정 탐험의 후기 추가
     @PostMapping("/{adventureId}/reviews")

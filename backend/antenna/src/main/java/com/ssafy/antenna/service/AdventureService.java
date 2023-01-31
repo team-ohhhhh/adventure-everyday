@@ -263,7 +263,22 @@ public class AdventureService {
         adventureSucceedRepository.save(newAdventureSucceed);
     }
 
+    // 특정 유저의 달성한 탐험id들 조회
+    public List<ReadAdventureSucceedRes> readAdventureSucceedOfUser(Long userId) {
+        User curUser = userRepository.findById(userId).orElseThrow();
 
+        List<AdventureSucceed> adventureSucceeds = adventureSucceedRepository.findAllByUser(curUser);
+
+        List<ReadAdventureSucceedRes> result = new ArrayList<>();
+
+        for(AdventureSucceed adventureSucceed:adventureSucceeds){
+            ReadAdventureSucceedRes readAdventureSucceedRes = new ReadAdventureSucceedRes(adventureSucceed.getAdventure().getAdventureId());
+
+            result.add(readAdventureSucceedRes);
+        }
+
+        return result;
+    }
 
     // 특정 탐험 달성자의 후기 추가
     public void createAdventureReview(Long adventureId, CreateAdventureReviewReq createAdventureReviewReq, Long userId) {
