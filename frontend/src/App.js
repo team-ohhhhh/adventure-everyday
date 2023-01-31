@@ -11,19 +11,19 @@ import ArticleCreatePage from "./pages/ArticleCreatePage";
 function App() {
   return (
     <div className="App">
-      <div>
+      <div className="App-body">
         <Link to="/">home</Link>
         <Link to="/login">login</Link>
         <Link to="/signup">signup</Link>
         <Link to="/create">create</Link>
+        <Routes>
+          <Route path="/" element={<MapPage />} />
+          <Route path="/login" element={<LogInPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/adventure" element={<AdventurePage />} />
+          <Route path="/write" element={<ArticleCreatePage />} />
+        </Routes>
       </div>
-      <Routes>
-        <Route path="/" element={<MapPage />} />
-        <Route path="/login" element={<LogInPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/adventure" element={<AdventurePage />} />
-        <Route path="/write" element={<ArticleCreatePage />} />
-      </Routes>
       <NavBar />
     </div>
   );
