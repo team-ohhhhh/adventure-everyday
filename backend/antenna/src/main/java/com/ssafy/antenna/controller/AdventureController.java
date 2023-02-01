@@ -105,6 +105,13 @@ public class AdventureController {
         return new ResponseEntity<>("탐험 알림 끄기 성공~~",HttpStatus.OK);
     }
 
+    // 특정 탐험 진행자, 달성률 조회
+    @GetMapping("/adventure-in-progress/{adventureId}")
+    public ResponseEntity<List<ReadAdventureInProgressUsersRes>> readAdventureInProgressUsers(@PathVariable Long adventureId){
+        List<ReadAdventureInProgressUsersRes> result = adventureService.readAdventureInProgressUsers(adventureId);
+        return new ResponseEntity<>(result,HttpStatus.OK);
+    }
+
     // 특정 탐험 달성자 추가
     @PostMapping("/adventure-succeed/{adventureId}")
     public ResponseEntity<String> creaateAdventureSucceed(@PathVariable Long adventureId,Authentication authentication){
@@ -112,12 +119,12 @@ public class AdventureController {
         return new ResponseEntity<String>("특정 탐험 달성자 추가 성공",HttpStatus.OK);
     }
 
-    // 특정 유저의 달성한 탐험들 조회
-//    @GetMapping("/adventure-succeed")
-//    public ResponseEntity<List<ReadAdventureSucceedRes>> readAdventureSucceed(Authentication authentication){
-//        List<ReadAdventureSucceedRes> result = adventureService.readAdventureSucceed(Long.valueOf(authentication.getName()));
-//        return new ResponseEntity<List<ReadAdventureSucceedRes>>(result,HttpStatus.OK);
-//    }
+    // 특정 유저의 달성한 탐험id들 조회
+    @GetMapping("/adventure-succeed/users/{userId}")
+    public ResponseEntity<List<ReadAdventureSucceedRes>> readAdventureSucceedOfUser(@PathVariable Long userId){
+        List<ReadAdventureSucceedRes> result = adventureService.readAdventureSucceedOfUser(userId);
+        return new ResponseEntity<List<ReadAdventureSucceedRes>>(result,HttpStatus.OK);
+    }
 
     // 특정 탐험의 후기 추가
     @PostMapping("/{adventureId}/reviews")
@@ -147,6 +154,20 @@ public class AdventureController {
         return new ResponseEntity<>("탐험 후기 삭제 성공",HttpStatus.OK);
     }
 
+    // 특정 모험의 특정 장소의 게시글 조회
+    @GetMapping("/adventure-places/{adventurePlaceId}/posts")
+    public ResponseEntity<List<ReadAdventurePlacePostRes>> readAdventurePlacePost(@PathVariable Long adventurePlaceId){
+        List<ReadAdventurePlacePostRes> result = adventureService.readAdventurePlacePost(adventurePlaceId);
+        return new ResponseEntity<List<ReadAdventurePlacePostRes>>(result,HttpStatus.OK);
+    }
+
+    // 특정 모험의 모든 장소의 게시글 조회
+    @GetMapping("/{adventureId}/adventure-places/posts")
+    public ResponseEntity<List<ReadAdventurePlacePostRes>> readAdventurePosts(@PathVariable Long adventureId){
+        List<ReadAdventurePlacePostRes> result = adventureService.readAdventurePosts(adventureId);
+        return new ResponseEntity<List<ReadAdventurePlacePostRes>>(result,HttpStatus.OK);
+    }
+
     // 모험 검색(모든 모험 키워드 조회)
     @GetMapping("/search")
     public ResponseEntity<List<ReadAdventureRes>> readAdventureSearch(@RequestParam String keyword){
@@ -160,6 +181,5 @@ public class AdventureController {
         List<ReadAdventureInProgressWithinDistanceRes> result = adventureService.readAdventureInProgressWithinDistance(lng,lat,Long.valueOf(authentication.getName()));
         return new ResponseEntity<List<ReadAdventureInProgressWithinDistanceRes>>(result,HttpStatus.OK);
     }
-
 
 }
