@@ -1,6 +1,6 @@
 .container{
     width: 90%;
-    height: 20rem;
+    height: fit-content;
     background-color: white;
     border-radius: 1rem;
     position: absolute;
@@ -10,89 +10,180 @@
     /* box-shadow: 1px 1px 25px 1px rgb(156, 156, 156); */
     display: flex;
     flex-direction: column;
+    padding-bottom: 2rem;
 }
 
-.title{
+.titleContainer{
     height: fit-content;
     
     font-weight: 700;
     font-size: 1.6rem;
-    display: flex;
-    padding-left: 1rem;
     color: #1C0B69;
+    
+    display: flex;
+    align-items: center;
+   
 
+    margin-left: 1rem;
+    margin-right: 1rem;
+
+}
+
+.title{
+  margin-right: 0.5rem;
+}
+
+.diff{
+  width: fit-content;
+  height: fit-content;
 }
 
 .period{
     height: fit-content;
-    
     display: flex;
-    padding-left: 1rem;
+   
     padding-top: 0.6rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    font-size: 0.8rem;
 
 }
 
 .content{
     height: fit-content;
-    margin: 0.5rem;
+    
     border-radius: 0.3rem;
     border: 1px gray solid;
     display: flex;
     padding: 1rem;
+    margin-top: 0.6rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
 
 
 }
 
 .people{
     height: fit-content;
-    background-color: rgb(168, 73, 35);
+    
+    
     display: flex;
-    border-bottom: 1px gray;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    padding-bottom: 1rem;
+    border-bottom: 1px rgb(218, 218, 218) solid;
+
+    margin-top: 1rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    
 
 }
+
+  .maker {
+    display: flex;
+    flex-direction: row;
+   
+  }
+
+    .makerProfileContainer {
+      display: flex;
+      flex-direction: row;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 70%;
+      overflow: hidden;
+    }
+      .makerProfile {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+    .makerNameAndTierContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: baseline;
+      margin-left : 10px;
+      
+    }
+
+      .makerName{
+        color:#1C0B69;
+        font-weight: 600;
+      }
+
+      .makerNameAndTier{
+      
+        display: flex;
+        flex-direction: row;
+
+      }
+        .makerName{
+
+        }
+
+        .makerTier{
+          width: 1rem;
+          height: 1rem;
+          margin-left: 0.2rem;
+
+        }
+
+  .participants {
+    display: flex;
+    height: fit-content;
+    font-weight: 600;
+  }
+    .partImg{
+        width: 2rem;
+        height: 2rem;
+        object-fit: cover;
+        background-color: aquamarine;
+
+    }
 
 .etc{
     height: fit-content;
-    background-color: rgb(202, 82, 226);
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: 1rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
 
 }
 
-
-.maker {
+  .typeAndStars{
     display: flex;
     flex-direction: row;
-    margin: 20px;
-  }
-  
-  .makerNameAndTierContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: baseline;
-    margin-left : 10px;
-  }
-  
-  .makerProfileContainer {
-    width: 40px;
-    height: 40px;
-    border-radius: 70%;
-    overflow: hidden;
-  }
-  
-  .makerProfile {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    justify-content: space-between;
+
+    
+    width: 55%;
   }
 
-  .makerName{
-    color:#1C0B69;
-    font-weight: 600;
-  }
-  
-  .participants {
+  .desc{
     display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    margin-right: 15px;
-    margin-bottom: 20px;
+    flex-direction: row;
+    align-items: center;
+
+
   }
+
+  .highlight{
+    font-weight: 800;
+    font-size: 1.3rem;
+    color:#1C0B69;
+  }
+
+  .stars{
+
+  }
+
+
