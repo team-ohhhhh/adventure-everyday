@@ -34,6 +34,8 @@ public class SecurityConfiguration {
         http
                 .csrf()
                 .disable()
+                .cors()
+                .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/users/antenna","/test/**", "/auth/**", "/email/**", "/users/check-email", "/users/password/reset", "/users/check-nickname")
                 .permitAll()
