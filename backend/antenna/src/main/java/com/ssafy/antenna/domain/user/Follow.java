@@ -18,20 +18,15 @@ public class Follow extends Base {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long followId;
 
-    @Column(columnDefinition = "Long not null")
-    private Long followerId;
-
-    @Column(columnDefinition = "Long not null")
-    private Long followingId;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "followerId", referencedColumnName = "userId" ,insertable = false, updatable = false)
+    @JoinColumn(name = "followerId", referencedColumnName = "userId")
     private User followerUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "followingId", referencedColumnName = "userId",insertable = false, updatable = false)
+    @JoinColumn(name = "followingId", referencedColumnName = "userId")
     private User followingUser;
 
     public FollowDetailRes toResponse() {
-        return new FollowDetailRes(this.getFollowId(), this.followerId, this.followingId);
+        return new FollowDetailRes(this.getFollowId(), this.followerUser.getUserId(), this.followingUser.getUserId());
     }
 }

@@ -8,7 +8,8 @@ import java.util.List;
 
 public record CreateAdventureReq(
         String category,
-        String feat,
+        String featTitle,
+        String featContent,
         String title,
         String content,
         int difficulty,

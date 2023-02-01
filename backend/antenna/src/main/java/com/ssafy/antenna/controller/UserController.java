@@ -10,7 +10,6 @@ import com.ssafy.antenna.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -105,17 +104,17 @@ public class UserController {
     }
 
     @PutMapping("/photo")
-    public ResultResponse<String> modifyProfilePhoto(@RequestParam MultipartFile multipartFile, Authentication authentication) {
-        return ResultResponse.success(userService.uploadImage(multipartFile, Long.valueOf(authentication.getName())));
+    public ResultResponse<UserDetailRes> modifyProfilePhoto(@RequestParam MultipartFile photo, Authentication authentication) {
+        return ResultResponse.success(userService.modifyProfilePhoto(photo, Long.valueOf(authentication.getName())).toResponse());
     }
 
-    @GetMapping("{userId}/photo")
-    public ResponseEntity<?> getProfilePhoto(@PathVariable Long userId) {
-        return userService.getImage(userId);
+    @DeleteMapping("/photo")
+    public ResultResponse<UserDetailRes> deleteProfilePhoto(Authentication authentication) {
+        return ResultResponse.success(userService.deleteProfilePhoto(Long.valueOf(authentication.getName())).toResponse());
     }
 
     @GetMapping("/{userId}/feats")
-    public ResultResponse<UserFeatsRes> getUserFeats(@PathVariable Long userId) {
+    public ResultResponse<List<UserFeatsDto>> getUserFeats(@PathVariable Long userId) {
         return userService.getUserFeats(userId);
     }
 

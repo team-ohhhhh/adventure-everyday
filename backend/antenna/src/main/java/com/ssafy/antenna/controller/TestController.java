@@ -1,7 +1,9 @@
 package com.ssafy.antenna.controller;
 
+import com.ssafy.antenna.domain.ErrorResponse;
 import com.ssafy.antenna.domain.ResultResponse;
 import com.ssafy.antenna.domain.category.Category;
+import com.ssafy.antenna.exception.ErrorCode;
 import com.ssafy.antenna.repository.CategoryRepository;
 import com.what3words.javawrapper.What3WordsV3;
 import com.what3words.javawrapper.request.Coordinates;
@@ -33,8 +35,8 @@ public class TestController {
         return new ResponseEntity<>("카테고리생성성공~~", HttpStatus.OK);
     }
     @GetMapping("/main")
-    public ResultResponse<String> test(){
-        return ResultResponse.success("로그아웃 완료");
+    public ResultResponse<ErrorResponse> test(){
+        return ResultResponse.error(new ErrorResponse(ErrorCode.ANTENNA_NOT_FOUND));
     }
 
 

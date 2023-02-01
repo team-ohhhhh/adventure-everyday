@@ -7,7 +7,6 @@
   margin-top: 10px;
   margin-left: auto;
   margin-right: auto;
-  padding: 10px;
   
   border-radius: 5px;
   box-shadow: 5px 5px 5px;
@@ -16,13 +15,8 @@
 
 /* 사진인데 사이즈가 문제임... */
 .photo {
-  width : 21%;
-  height : 70%;
-
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-right: 10px;
-
+  height : 100%;
+  aspect-ratio : 1 / 1;
 }
 
 
@@ -30,8 +24,10 @@
 
 .divForInfo {
   display: flex;
-  width : 75%;
+  /* 얘 밀리면 날짜 위치 벗어나게 조정됨 */
+  width : 60%;
   height : 70%;
+  margin-left : 10px;
   margin-top: auto;
   margin-bottom: auto;
   flex-direction: column;
@@ -41,6 +37,8 @@
 }
 
 .title {
+  /* 타이틀 너비 체크 */
+  width: 80%;
   text-align: left;
 
   /* 여기가 글자 넘칠때 잘라주는 코드 */
@@ -48,7 +46,6 @@
   text-overflow: ellipsis;  	 
   white-space: nowrap;
 
-  font-family: 'Inter';
   font-style: normal;
   font-weight: 600;
   font-size: 15px;
@@ -64,11 +61,12 @@
 }
 
 /* 티어 이미지 인데 크기 어케 바꾸지.. */
-img {
+.tier {
   height:13px;
   width: 13px;
   object-fit: cover;
 }
+
 
 .date {
   text-align: right;

@@ -1,7 +1,6 @@
 package com.ssafy.antenna.service;
 
 import com.ssafy.antenna.domain.ResultResponse;
-import com.ssafy.antenna.domain.adventure.Adventure;
 import com.ssafy.antenna.domain.adventure.AdventureSucceed;
 import com.ssafy.antenna.domain.antenna.Antenna;
 import com.ssafy.antenna.domain.antenna.dto.DetailAntennaRes;
@@ -9,8 +8,10 @@ import com.ssafy.antenna.domain.antenna.dto.PostAntennaReq;
 import com.ssafy.antenna.domain.email.dto.AuthEmailRes;
 import com.ssafy.antenna.domain.email.dto.CheckEmailRes;
 import com.ssafy.antenna.domain.user.Follow;
+import com.ssafy.antenna.domain.user.Role;
 import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.domain.user.dto.*;
+import com.ssafy.antenna.domain.user.mapper.UserFeatsDtoMapper;
 import com.ssafy.antenna.exception.not_found.*;
 import com.ssafy.antenna.exception.unauthorized.InvalidPasswordException;
 import com.ssafy.antenna.repository.AdventureSucceedRepository;
@@ -18,21 +19,18 @@ import com.ssafy.antenna.repository.AntennaRepository;
 import com.ssafy.antenna.repository.FollowRepository;
 import com.ssafy.antenna.repository.UserRepository;
 import com.ssafy.antenna.util.EmailUtil;
-import com.ssafy.antenna.util.ImageUtil;
 import com.ssafy.antenna.util.W3WUtil;
 import com.what3words.javawrapper.response.ConvertTo3WA;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -45,10 +43,14 @@ public class UserService {
     private final FollowRepository followRepository;
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
-    private final ImageUtil imageUtil;
+    private final AwsS3Service awsS3Service;
     private final AntennaRepository antennaRepository;
     private final AdventureSucceedRepository adventureSucceedRepository;
     private final W3WUtil w3WUtil;
+    private final UserFeatsDtoMapper userFeatsDtoMapper;
+
+    @Value("${aws-cloud.aws.s3.bucket.url}")
+    private String bucketUrl;
 
     public User getUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
@@ -58,7 +60,13 @@ public class UserService {
     public User deleteUser(Long userId) {
         //유저 정보가 존재 하는지 먼저 검색
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        //존재한다면, delete 작업 수행한다.
+        //존재한다면, user의 프로필 정보가 있다면 삭제해준다.
+        if (user.getPhotoName() != null) {
+            awsS3Service.deleteImage(user.getPhotoName());
+        }
+        //post, adventure, adventure_review 불러와서 photo 서버에 올린거 있으면 다 지워주기 - 곧 할것
+
+        //이후, delete 작업 수행한다.
         userRepository.deleteById(userId);
         return user;
     }
@@ -68,7 +76,7 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         //존재한다면, 기존 비밀번호가 일치하는지 확인한다.
         if (passwordEncoder.matches(modifyPwdUserReq.oldPassword(), user.getPassword())) {
-            User newUser = new User(user.getCreateTime(), user.getUpdateTime(), user.getUserId(), user.getEmail(), user.getNickname(), passwordEncoder.encode(modifyPwdUserReq.newPassword()), user.getLevel(), user.getExp(), user.getIntroduce(), user.getPhoto());
+            User newUser = new User(user.getCreateTime(), user.getUpdateTime(), user.getUserId(), user.getEmail(), user.getNickname(), passwordEncoder.encode(modifyPwdUserReq.newPassword()), user.getLevel(), user.getExp(), user.getIntroduce(), user.getPhotoUrl(), user.getPhotoName());
             return userRepository.save(newUser);
         } else {
             throw new InvalidPasswordException();
@@ -80,19 +88,18 @@ public class UserService {
         User follower = userRepository.findById(userId).orElseThrow(FollowerNotFoundException::new);
         User following = userRepository.findById(createFollowUserReq.followingId()).orElseThrow(FollowingNotFoundException::new);
         //두 유저가 모두 존재한다면, 데이터 넣어주기.
-        Follow newFollow = new Follow();
-        newFollow.setFollowerId(userId);
-        newFollow.setFollowingId(createFollowUserReq.followingId());
-        newFollow.setFollowerUser(follower);
-        newFollow.setFollowingUser(following);
+        Follow newFollow = Follow.builder()
+                .followerUser(follower)
+                .followingUser(following)
+                .build();
         followRepository.save(newFollow);
         return newFollow.toResponse();
     }
 
     public List<UserDetailRes> getFollowingUser(Long userId) {
         //유저가 존재하는지 먼저 확인
-        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        List<Follow> followList = followRepository.findByFollowingId(userId);
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        List<Follow> followList = followRepository.findAllByFollowingUser(user);
         List<UserDetailRes> userDetailResList = new ArrayList<>();
         for (int i = 0; i < followList.size(); i++) {
             userDetailResList.add(followList.get(i).getFollowerUser().toResponse());
@@ -102,8 +109,8 @@ public class UserService {
 
     public List<UserDetailRes> getFollowerUser(Long userId) {
         //유저가 존재하는지 먼저 확인
-        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        List<Follow> followList = followRepository.findByFollowerId(userId);
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        List<Follow> followList = followRepository.findAllByFollowerUser(user);
         List<UserDetailRes> userDetailResList = new ArrayList<>();
         for (int i = 0; i < followList.size(); i++) {
             userDetailResList.add(followList.get(i).getFollowingUser().toResponse());
@@ -155,7 +162,7 @@ public class UserService {
         String htmlContent = "<p> 임시 비밀번호는 [" + key + "] 입니다.<p>";
         emailUtil.setText(htmlContent, true);
         emailUtil.send();
-        User newUser = new User(user.getCreateTime(), user.getUpdateTime(), user.getUserId(), user.getEmail(), user.getNickname(), passwordEncoder.encode(key.toString()), user.getLevel(), user.getExp(), user.getIntroduce(), user.getPhoto());
+        User newUser = new User(user.getCreateTime(), user.getUpdateTime(), user.getUserId(), user.getEmail(), user.getNickname(), passwordEncoder.encode(key.toString()), user.getLevel(), user.getExp(), user.getIntroduce(), user.getPhotoUrl(), user.getPhotoName());
         userRepository.save(newUser);
 
         return new AuthEmailRes(true);
@@ -180,66 +187,71 @@ public class UserService {
         return userDetailResList;
     }
 
-    public String uploadImage(MultipartFile multipartFile, Long userId) {
-        User user = getUser(userId);
-        try {
-            user.setPhoto(ImageUtil.compressImage(multipartFile.getBytes()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        userRepository.save(user);
-        return "succeed";
-    }
-
-//    public byte[] downloadImage(Long userId) {
-//        User user = getUser(userId);
-//        byte[] photo = ImageUtil.decompressImage(user.getPhoto());
-//        return photo;
-//    }
-
-    public ResponseEntity<byte[]> getImage(Long userId) {
-        //유저가 있는지 확인
+    public User modifyProfilePhoto(MultipartFile photo, Long userId) {
+        //유저가 존재하는지 확인
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        byte[] photo = ImageUtil.decompressImage(user.getPhoto());
-        return ResponseEntity.ok()
-                .contentType(MediaType.valueOf("image/"+user.getPhotoType()))
-                .body(photo);
+        //유저가 기존에 등록한 프로필 사진이 있다면, 서버에서 삭제
+        if (user.getPhotoName() != null) {
+            awsS3Service.deleteImage(user.getPhotoName());
+        }
+        //사진 업로드 후, 유저 객체를 만들어 저장
+        String photoName = awsS3Service.uploadImage(photo);
+        String photoUrl = bucketUrl + photoName;
+        User newUser = User.builder()
+                .userId(user.getUserId())
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .password(user.getPassword())
+                .level(user.getLevel())
+                .exp(user.getExp())
+                .introduce(user.getIntroduce())
+                .role(Role.USER)
+                .photoUrl(photoUrl).photoName(photoName).build();
+        userRepository.save(newUser);
+
+        return newUser;
+    }
+    @Transactional
+    public User deleteProfilePhoto(Long userId) {
+        //유저가 존재하는지 확인
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        //유저가 기존에 등록한 프로필 사진이 있다면, 서버에서 삭제
+        if (user.getPhotoName() != null) {
+            awsS3Service.deleteImage(user.getPhotoName());
+        }
+        User newUser = User.builder()
+                .userId(user.getUserId())
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .password(user.getPassword())
+                .level(user.getLevel())
+                .exp(user.getExp())
+                .introduce(user.getIntroduce())
+                .role(Role.USER)
+                .photoUrl(null).photoName(null).build();
+        userRepository.save(newUser);
+        return newUser;
     }
 
     public UserDetailRes modifyProfileUser(String introduce, Long userId) {
         //유저가 존재하는지 먼저 확인
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         //소개글 수정 후 저장
-        User newUser = new User(user.getCreateTime(), user.getUpdateTime(), user.getUserId(), user.getEmail(), user.getNickname(), user.getPassword(), user.getLevel(), user.getExp(), introduce, user.getPhoto());
+        User newUser = new User(user.getCreateTime(), user.getUpdateTime(), user.getUserId(), user.getEmail(), user.getNickname(), user.getPassword(), user.getLevel(), user.getExp(), introduce, user.getPhotoUrl(), user.getPhotoName());
         userRepository.save(newUser);
         return newUser.toResponse();
     }
 
-    public ResultResponse<UserDetailRes> deleteImage(Long userId) {
-        User user = userRepository.findById(userId).orElseGet(User::new);
-        user.setPhoto(null);
-        userRepository.save(user);
-        return ResultResponse.success(
-                new UserDetailRes(
-                        user.getUserId(),
-                        user.getEmail(),
-                        user.getNickname(),
-                        user.getLevel(),
-                        user.getExp(),
-                        user.getIntroduce(),
-                        user.getPhoto()
-                )
-        );
-    }
 
-    public ResultResponse<UserFeatsRes> getUserFeats(Long userId) {
+    public ResultResponse<List<UserFeatsDto>> getUserFeats(Long userId) {
         List<AdventureSucceed> adventureSucceeds = adventureSucceedRepository.findAllByUser(
                 userRepository.findById(userId).orElseThrow(UserNotFoundException::new));
-        List<String> result = adventureSucceeds.stream()
-                .map(b -> b.getAdventure().getFeat())
+        List<UserFeatsDto> result = adventureSucceeds.stream()
+                .map(userFeatsDtoMapper)
                 .collect(Collectors.toList());
-        return ResultResponse.success(new UserFeatsRes(result));
+        return ResultResponse.success(result);
     }
+
     public DetailAntennaRes createAntenna(PostAntennaReq postAntennaReq, Long userId) {
         //유저가 존재하는지 먼저 확인
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
@@ -284,4 +296,5 @@ public class UserService {
         Antenna antenna = antennaRepository.findByAntennaIdAndUser(antennaId, user).orElseThrow(AntennaNotFoundException::new);
         return antenna.toResponse();
     }
+
 }

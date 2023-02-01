@@ -1,8 +1,8 @@
 package com.ssafy.antenna.domain.like;
 
 import com.ssafy.antenna.domain.Base;
+import com.ssafy.antenna.domain.comment.SubComment;
 import com.ssafy.antenna.domain.post.Post;
-import com.ssafy.antenna.domain.subcomment.SubComment;
 import com.ssafy.antenna.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.ssafy.antenna.domain.subcomment;
+package com.ssafy.antenna.domain.comment;
 
 import com.ssafy.antenna.domain.Base;
 import com.ssafy.antenna.domain.comment.Comment;
