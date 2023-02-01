@@ -33,7 +33,7 @@ function SignUpPage() {
     formData.append("file", file)
     axios.post(URL + "/auth/register", formData, {
       headers: {
-      "Content-type": "multipart/form-date",
+      "Content-type": "multipart/form-data",// date로 되어있는데 왜 됐지...
     },
     })
     .then(function (response) {
