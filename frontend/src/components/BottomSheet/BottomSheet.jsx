@@ -13,7 +13,7 @@ const BottomSheetContainer = (props) => {
   const [open, setOpen] = useState(true);
   const focusRef = useRef();
   const contentType = "article"
-  const antennaList = props.antennae
+  
  
   
 
@@ -22,7 +22,6 @@ const BottomSheetContainer = (props) => {
   let URL = useSelector((state) => state.URL)
   let TOKEN = useSelector((state) => state.TOKEN)
   const [articleList, setArticleList] = useState([])
-  const [isAntenna, setIsAntenna] = useState([])
   useMemo(() => {
     axios({
       url: URL + '/posts',
@@ -42,8 +41,52 @@ const BottomSheetContainer = (props) => {
     .catch((err) => {
       console.log(err)
     })
-  }, [props.center]) //TODO: 만약 안되면 오브젝트 풀어서 넣기 
-  console.log(isAntenna)
+  }, [props.center])
+
+  const getAntennaList = function() {
+    axios({
+      url: URL + '/users/antennae',
+      method: 'get',
+      headers: {
+        Authorization: `Bearer ${TOKEN}`
+      }
+    })
+    .then((res) => {
+      props.setAntennae(res.data.result)
+    })
+    .catch((err) => console.log(err))
+  }
+
+  
+  const makeAntenna = function() {
+    axios({
+      url : URL + '/users/antennae',
+      method : 'post',
+      headers: {
+        Authorization: `Bearer ${TOKEN}`
+      },
+      data: {
+        area: 1000, //TODO: 나중에 변수로 안테나 범위 주기
+        lng: props.center.lng,
+        lat: props.center.lat,
+      }
+    })
+    .then((res) => {getAntennaList()}) //TODO: 성공한 후에 뭐해줄까?
+    .catch((err) => {console.log(err)})
+  }
+
+  const deleteAntenna = function() {
+    axios({
+      url : URL + `/users/antennae/${props.isAntenna}`,
+      method : 'delete',
+      headers: {
+        Authorization: `Bearer ${TOKEN}`
+      },
+    })
+    .then((res) => {getAntennaList()}) //TODO: 성공한 후에 뭐해줄까?
+    .catch((err) => {console.log(err)})
+  }
+
 
   const dummy = [
     {post_id: 1, title : 'TITLEaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', nickName: 'NICKNAME', date: 'DATE.MM.DD'},
@@ -53,14 +96,7 @@ const BottomSheetContainer = (props) => {
     {post_id: 5, title : 'TITLE', nickName: 'NICKNAME', date: 'DATE.MM.DD'},
     {post_id: 6, title : 'TITLE', nickName: 'NICKNAME', date: 'DATE.MM.DD'},
   ]
-  useEffect(() => {
-    setIsAntenna(
-      antennaList.filter((antenna) =>{
-        return antenna.lat === props.center.lat && antenna.lng === props.center.lng
-      }
-      )
-    )
-  }, [props.center])
+ 
   useEffect(() => {
     // Setting focus is to aid keyboard and screen reader nav when activating this iframe
     focusRef.current.focus();
@@ -78,7 +114,7 @@ const BottomSheetContainer = (props) => {
         // onDismiss={() => setOpen(false)}
         blocking={false}
         header={
-          <div>{isAntenna.length === 1 ? <button>안테나 뽑기</button> : <button>안테나 심기</button>}</div>
+          <div>{props.isAntenna ? <button onClick={() => {deleteAntenna()}}>안테나 뽑기</button> : <button onClick={() => {makeAntenna()}}>안테나 심기</button>}</div>
         }
         // 첫번쨰가 1차 높이, 두번째가 최대 높이
         snapPoints={({ maxHeight }) => [maxHeight / 4, maxHeight]}

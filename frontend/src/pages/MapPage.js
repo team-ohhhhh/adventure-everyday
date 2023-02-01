@@ -23,6 +23,8 @@ function MainMap() {
     isAround: false, // 주변 검색 상황인지
     isAroundClicked: false, // UFO가 눌렸는지
     isCircle: false, // 원이 생겼는지(자기 주위, 해당 좌표, 안테나)
+    isAntenna: false,
+    numberOfAntenna: 0
   });
 
   // 초기 렌더링 때 현재 위치로 지도 이동
@@ -36,35 +38,39 @@ function MainMap() {
 
 
   // 지도 렌더링 이전에 안테나 좌표 가져와두기
-  const [antennae, setAntennae] =useState([{
-    "antennaId": 1,
-    "area": 500,
-    "lng": 127.0397674,
-    "lat": 37.5016117,
-    "w3w": "기구.배분.심장",
-    "nearestPlace": "부산광역시"
-  },
-  {
-    "antennaId": 2,
-    "area": 500,
-    "lng": 127.007896,
-    "lat": 37.565138,
-    "w3w": "동대문 역사 문화 공원",
-    "nearestPlace": "부산광역시"
-  }])
-  // useMemo(() => {
-  //   axios({
-  //     url: URL + '/users/antennae',
-  //     method: 'get',
-  //     headers: {
-  //       Authorization: `Bearer ${TOKEN}`
-  //     }
-  //   })
-  //   .then((res) => {
-  //     setAntennae(res.data.reuslt)
-  //   })
-  //   .catch((err) => console.log(err))
-  // }, []) // dependancy는 어떻게 기준을 주어야 할까...
+  const [antennae, setAntennae] = useState([
+  //   {
+  //   "antennaId": 1,
+  //   "area": 500,
+  //   "lng": 127.0397674,
+  //   "lat": 37.5016117,
+  //   "w3w": "기구.배분.심장",
+  //   "nearestPlace": "부산광역시"
+  // },
+  // {
+  //   "antennaId": 2,
+  //   "area": 500,
+  //   "lng": 127.007896,
+  //   "lat": 37.565138,
+  //   "w3w": "동대문 역사 문화 공원",
+  //   "nearestPlace": "부산광역시"
+  // }
+])
+let TOKEN = useSelector((state) => state.TOKEN)
+let URL = useSelector((state) => state.URL)
+  useEffect(() => {
+    axios({
+      url: URL + '/users/antennae',
+      method: 'get',
+      headers: {
+        Authorization: `Bearer ${TOKEN}`
+      }
+    })
+    .then((res) => {
+      setAntennae(res.data.result)
+    })
+    .catch((err) => console.log(err))
+  }, []) //TODO: dependancy는 어떻게 기준을 주어야 할까...
 
 
 
@@ -127,6 +133,7 @@ function MainMap() {
                 },
                 isAround: true,
                 isCircle: false,
+                isAntenna: false,
               }));
             } else {
               // UFO 이미지가 떠 있다면
@@ -157,7 +164,8 @@ function MainMap() {
                         lng : antenna.lng
                       },
                       isAroundClicked : true,
-                      isCircle: true
+                      isCircle: true,
+                      isAntenna: antenna.antennaId,
                     }))
                   }}
   
@@ -227,6 +235,8 @@ function MainMap() {
                 setState((prev) => ({
                   ...prev,
                   isCircle: true,
+                  // 만약 지금 위치가 안테나 위치면 어떻게 하지...
+                  isAntenna: false,
                 }))
               }}
               style={{
@@ -303,7 +313,7 @@ function MainMap() {
           <p>{state.errMsg}</p>
 
           {/* 주변 검색 상황일때 바텀시트 등장 */}
-          { state.isCircle && <BottomSheetContainer center={state.center} antennae={antennae}/>}
+          { state.isCircle && <BottomSheetContainer center={state.center} isAntenna={state.isAntenna} setAntennae={setAntennae}/>}
         </Map>
       </div>
     </>

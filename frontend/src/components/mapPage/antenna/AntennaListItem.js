@@ -11,7 +11,9 @@ function AntennaListItem(props) {
         lng : antenna.lng
       },
       isAroundClicked : true,
-      isCircle: true
+      isCircle: true,
+      isAntenna: props.antenna.antennaId,
+      isCur: false,
     }))}}
 
   className={styles.item}
