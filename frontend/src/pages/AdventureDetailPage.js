@@ -9,7 +9,7 @@ function AdventureDetailPage() {
   console.log("ad detail page");
   return (
     <>
-      <div className={styles.container}>
+      <div className={styles.pageContainer}>
         <div className={styles.white}>
           <AdventureInfo info={id}></AdventureInfo>
         </div>
@@ -44,6 +44,8 @@ function AdventureDetailPage() {
                       </div>
                       <button className={styles.arrangeBtn}>정렬버튼</button>
                     </div>
+                    <div className={styles.article}>게시글 1</div>
+                    <div className={styles.article}>게시글 2</div>
                   </div>
                 </div>
               </Tab>

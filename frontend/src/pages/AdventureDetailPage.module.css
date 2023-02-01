@@ -1,6 +1,6 @@
-.container{
+.pageContainer{
     width: 100%;
-    height: 1000px;
+    height: 120vh;
     background-color: aqua;  
     display: flex;
     position: relative;
@@ -101,6 +101,7 @@
 
 .checkPointArticles{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     height: 3rem;
     border: 1px white solid;
@@ -131,6 +132,13 @@
 
 .arrangeBtn{
     height: fit-content;
+}
+
+.article{
+    display: flex;
+    height: 1rem;
+    width: 60%;
+    background-color: cornflowerblue;
 }
 
 .review{
