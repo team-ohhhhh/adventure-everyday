@@ -25,7 +25,7 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
-	compileOnly("com.what3words:w3w-java-wrapper:3.1.8")
+	implementation("com.what3words:w3w-java-wrapper:3.1.8")
 	implementation("org.hibernate:hibernate-spatial:6.1.6.Final")
 
 	// https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-aws
