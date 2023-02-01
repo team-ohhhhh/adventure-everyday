@@ -6,17 +6,19 @@ function AdventureInfo() {
       <div className={styles.container}>
         <div className={styles.title}>제목</div>
         <div className={styles.period}> 탐험기간: 2023-01-13 ~ 2023-01-31</div>
-        <div className={styles.content}>탐험 설명</div>
+        <div className={styles.content}>
+          요즘 같은 날씨에 딱인 탐험입니다. <br /> 힘들지 않은 예쁜 코스로
+          짜봤어요 :)
+        </div>
         <div className={styles.people}>
           <div className={styles.maker}>
             <div className={styles.makerProfileContainer}>
-              <img className={styles.makerProfile} src="/images/alien.png" />
+              <img className={styles.makerProfile} src="/images/alien.jpg" />
             </div>
             <div className={styles.makerNameAndTierContainer}>
-              <span>탐험가</span>
+              <span className={styles.makerName}>탐험가</span>
               <div className={styles.makerNameAndTier}>
-                {" "}
-                <span className={styles.makerName}> 만든사람 </span>{" "}
+                <span className={styles.makerName}> silverain_9 </span>{" "}
                 <img src="/images/alien.png" />
               </div>
             </div>
