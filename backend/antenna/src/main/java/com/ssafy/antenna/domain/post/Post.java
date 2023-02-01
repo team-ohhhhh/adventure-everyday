@@ -34,10 +34,11 @@ public class Post extends Base {
     private String nearestPlace;
     @Column(columnDefinition = "varchar(50) not null")
     private String w3w;
-    @Column(columnDefinition = "blob default null")
-    private byte[] photo;
     @Column(columnDefinition = "varchar(255) default null")
-    private String photoType;
+    private String photoUrl;
+
+    @Column(columnDefinition = "varchar(255) default null")
+    private String photoName;
     @Column(columnDefinition = "boolean not null")
     private boolean isPublic;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -54,6 +55,6 @@ public class Post extends Base {
     private List<CheckpointPost> checkpointPosts = new ArrayList<>();
 
     public PostDetailRes toResponse() {
-        return new PostDetailRes(this.postId, this.title, this.content, this.coordinate.getX(), this.coordinate.getY(), this.nearestPlace, this.w3w, this.isPublic,this.getCreateTime() , this.user.toResponse());
+        return new PostDetailRes(this.postId, this.title, this.content, this.coordinate.getX(), this.coordinate.getY(), this.nearestPlace, this.w3w, this.isPublic, this.getCreateTime(), this.getPhotoUrl(), this.user.toResponse());
     }
 }
