@@ -7,7 +7,7 @@ import style from "./LogInPage.module.css"
 
 // 로그인 페이지
 function LoginPage() {
-  let URL = useSelector((state) => state.URL)
+  let URL = useSelector((state) => state.url)
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")

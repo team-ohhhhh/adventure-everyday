@@ -19,8 +19,8 @@ const BottomSheetContainer = (props) => {
 
   
   // props.center 로 받아온 좌표로 axios
-  let URL = useSelector((state) => state.URL)
-  let TOKEN = useSelector((state) => state.TOKEN)
+  let URL = useSelector((state) => state.url)
+  let TOKEN = useSelector((state) => state.token)
   const [articleList, setArticleList] = useState([])
   useMemo(() => {
     axios({

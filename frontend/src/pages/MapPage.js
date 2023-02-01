@@ -56,8 +56,8 @@ function MainMap() {
   //   "nearestPlace": "부산광역시"
   // }
 ])
-let TOKEN = useSelector((state) => state.TOKEN)
-let URL = useSelector((state) => state.URL)
+let TOKEN = useSelector((state) => state.token)
+let URL = useSelector((state) => state.url)
   useEffect(() => {
     axios({
       url: URL + '/users/antennae',
