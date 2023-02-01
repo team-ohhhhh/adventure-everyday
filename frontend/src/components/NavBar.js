@@ -54,7 +54,11 @@ const NavBar = () => {
               setAllBlack();
             }}
           >
-            <img className={style.writeImg} src="/images/writeBtn.png" />
+            <img
+              className={style.writeImg}
+              src="/images/writeBtn.png"
+              alt="writeBtn"
+            />
           </div>
         </div>
         <div
