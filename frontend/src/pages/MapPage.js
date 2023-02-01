@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { MapMarker, Map, Circle } from "react-kakao-maps-sdk";
 import Antenna from "../components/mapPage/antenna/Antenna";
 import axios from "axios";
@@ -24,8 +24,6 @@ function MainMap() {
     isAround: false, // 주변 검색 상황인지
     isAroundClicked: false, // UFO가 눌렸는지
     isCircle: false, // 원이 생겼는지(자기 주위, 해당 좌표, 안테나)
-    isAntenna: false,
-    numberOfAntenna: 0
   });
 
   // 초기 렌더링 때 현재 위치로 지도 이동
@@ -37,47 +35,31 @@ function MainMap() {
     }));
   }, []);
 
-
-  // 지도 렌더링 이전에 안테나 좌표 가져와두기
-  const [antennae, setAntennae] = useState([
-  //   {
-  //   "antennaId": 1,
-  //   "area": 500,
-  //   "lng": 127.0397674,
-  //   "lat": 37.5016117,
-  //   "w3w": "기구.배분.심장",
-  //   "nearestPlace": "부산광역시"
-  // },
-  // {
-  //   "antennaId": 2,
-  //   "area": 500,
-  //   "lng": 127.007896,
-  //   "lat": 37.565138,
-  //   "w3w": "동대문 역사 문화 공원",
-  //   "nearestPlace": "부산광역시"
-  // }
-])
-let TOKEN = useSelector((state) => state.TOKEN)
-let URL = useSelector((state) => state.URL)
+  // lat이나 lng 값이 변화했을 때 작동할 함수 -> axios 후에 setArticleList
+  let URL = useSelector((state) => state.URL);
+  let TOKEN = useSelector((state) => state.TOKEN);
+  const [articleList, setArticleList] = useState([]);
   useEffect(() => {
     axios({
-      url: URL + '/users/antennae',
-      method: 'get',
+      url: URL + "/posts",
+      method: "get",
       headers: {
-        Authorization: `Bearer ${TOKEN}`
-      }
+        Authorization: `Bearer ${TOKEN}`,
+      },
+      params: {
+        lng: state.center.lng,
+        lat: state.center.lat,
+        area: 1, //TODO: 여기는 안테나의 경우에는 동적할당 생각하기
+      },
     })
-    .then((res) => {
-      setAntennae(res.data.result)
-    })
-    .catch((err) => console.log(err))
-  }, []) //TODO: dependancy는 어떻게 기준을 주어야 할까...
+      .then((res) => {
+        setArticleList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [state.center]); //TODO: 만약 안되면 오브젝트 풀어서 넣기
 
-
-
-
-  // lat이나 lng 값이 변화했을 때 작동할 함수 -> axios 후에 setArticleList
-  
   return (
     <div className="pageContainer">
       <div
@@ -134,7 +116,6 @@ let URL = useSelector((state) => state.URL)
                 },
                 isAround: true,
                 isCircle: false,
-                isAntenna: false,
               }));
             } else {
               // UFO 이미지가 떠 있다면
@@ -148,51 +129,6 @@ let URL = useSelector((state) => state.URL)
             }
           }}
         >
-          {/* 안테나 리스트를 순회하면서 안테나 아이콘 표시 */}
-          {antennae && (
-            antennae.map((antenna) => {
-              
-              return(
-                <MapMarker
-                  key={ antenna.antennaId }
-  
-                  onClick={()=> {
-                    console.log(antenna.antennaId)
-                    setState((prev) => ({
-                      ...prev,
-                      center : {
-                        lat : antenna.lat,
-                        lng : antenna.lng
-                      },
-                      isAroundClicked : true,
-                      isCircle: true,
-                      isAntenna: antenna.antennaId,
-                    }))
-                  }}
-  
-  
-                  image={{
-                    src: "/images/Antenna.png",
-  
-                    size: {
-                      width: 50,
-                      height: 50,
-                    },
-                    options: {
-                      offset: {
-                        x: 12,
-                        y: 20,
-                      },
-                    },
-                  }}
-                  position={{lat: antenna.lat, lng : antenna.lng}}
-                ></MapMarker>
-              )
-            })
-          )}
-
-
-
           {/* isCur(현재 위치 버튼을 눌러서 isCur가 true일 때 원과 현재마커 보여주기) */}
           {state.isCur && (
             <>
@@ -226,7 +162,7 @@ let URL = useSelector((state) => state.URL)
             </>
           )}
 
-          <Antenna antennae={antennae} setState={setState}></Antenna>
+          <Antenna></Antenna>
 
           {/* isCur가 켜져있지 않을 때만 버튼이 보임 */}
           {!state.isCur && (
@@ -236,9 +172,7 @@ let URL = useSelector((state) => state.URL)
                 setState((prev) => ({
                   ...prev,
                   isCircle: true,
-                  // 만약 지금 위치가 안테나 위치면 어떻게 하지...
-                  isAntenna: false,
-                }))
+                }));
               }}
               style={{
                 /*버튼 위치*/
@@ -312,9 +246,8 @@ let URL = useSelector((state) => state.URL)
           )}
 
           <p>{state.errMsg}</p>
-
           {/* 주변 검색 상황일때 바텀시트 등장 */}
-          { state.isCircle && <BottomSheetContainer center={state.center} isAntenna={state.isAntenna} setAntennae={setAntennae}/>}
+          {state.isCircle && <BottomSheetContainer articleList={articleList} />}
         </Map>
       </div>
     </div>
