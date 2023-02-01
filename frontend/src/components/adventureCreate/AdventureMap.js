@@ -5,7 +5,7 @@ const { kakao } = window;
 
 const AdventureMap = ({ checkPoints }) => {
   const mapRef = useRef();
-  const center = { lat: 37.50128745884959, lng: 127.03956225524968 };
+  const temp = { lat: 37.50128745884959, lng: 127.03956225524968 };
 
   const bounds = useMemo(() => {
     const bounds = new kakao.maps.LatLngBounds();
@@ -25,14 +25,14 @@ const AdventureMap = ({ checkPoints }) => {
   return (
     <div>
       <Map
-        center={center}
+        center={temp}
         style={{ width: "100%", height: "300px" }}
         ref={mapRef}
       >
         {checkPoints &&
           checkPoints.map((point) => (
             <MapMarker
-              key={`${point.lat}-${point.lng}`}
+              key={point.postId}
               position={{ lat: point.lat, lng: point.lng }}
               image={{
                 src: "/images/advMarker5.png",
