@@ -6,8 +6,8 @@ import NavBar from "./components/NavBar";
 const Navigate = () => {
   return (
     <>
-      <NavBar />
       <Outlet />
+      <NavBar />
     </>
   );
 };

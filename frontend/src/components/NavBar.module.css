@@ -1,22 +1,21 @@
 .wrapper {
   overflow: hidden;
-  position: fixed;
+  position: sticky;
   bottom: 0;
-  left: 0;
-  right: 0;
-  height: 10%;
+  height: 100px;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: flex-end; 
+  align-items: flex-end;
   border-width: 1px 0 0;
-  
-  background-color: transparent
+
+  background-color: transparent;
+  z-index: 100;
 }
 
-.container{
+.container {
   overflow: hidden;
-  
+
   bottom: 0;
   left: 0;
   right: 0;
@@ -32,17 +31,14 @@
   background-color: white;
 }
 
-
-
-.writeImg{
+.writeImg {
   width: 5rem;
   height: 5rem;
 }
 
-
 .writeButtonContainer {
   width: fit-content;
-  height: fit-content;  
+  height: fit-content;
 
   position: absolute;
   top: -4%;
@@ -50,10 +46,6 @@
 }
 
 .writeButton {
-
-
   width: fit-content;
   height: fit-content;
-  
-
 }
