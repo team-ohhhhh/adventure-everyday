@@ -3,11 +3,8 @@ import AntennaList from "./AntennaList";
 import styles from "./Antenna.module.css";
 import { useState } from "react";
 
-function Antenna(props) {
+function Antenna() {
   const [isOn, setIsOn] = useState(false);
-
-  const antennae = props.antennae
-
   function toggle() {
     setIsOn((prev) => !prev);
   }
@@ -15,7 +12,7 @@ function Antenna(props) {
     <div className={styles.container}>
       <AntennaBtn onClick={toggle}></AntennaBtn>
 
-      {isOn && <AntennaList antennae={antennae} setState={props.setState}></AntennaList>}
+      {isOn && <AntennaList></AntennaList>}
     </div>
   );
 }
