@@ -6,8 +6,9 @@ import SignUpPage from "./pages/SignUpPage";
 import AdventurePage from "./pages/AdventurePage";
 import MapPage from "./pages/MapPage";
 import ArticleCreatePage from "./pages/ArticleCreatePage";
-import Navigate from "./Navigate";
+import AdventureDetailPage from "./pages/AdventureDetailPage";
 
+import Navigate from "./Navigate";
 import "./App.css";
 
 function App() {
@@ -20,6 +21,10 @@ function App() {
         <Route element={<Navigate />}>
           <Route path="/" element={<MapPage />} />
           <Route path="/adventure" element={<AdventurePage />} />
+          <Route
+            path="/adventure/detail/:id"
+            element={<AdventureDetailPage />}
+          />
         </Route>
         <Route path="/login" element={<LogInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
