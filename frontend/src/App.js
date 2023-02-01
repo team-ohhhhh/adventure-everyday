@@ -33,6 +33,7 @@ function App() {
         <Route path="/login" element={<LogInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/write" element={<ArticleCreatePage />} />
+        <Route path="/adventure/create/*" element={<AdventureCreatePage />} />
       </Routes>
     </div>
   );

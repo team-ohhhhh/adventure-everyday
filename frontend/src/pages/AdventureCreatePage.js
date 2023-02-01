@@ -1,12 +1,22 @@
 import React from "react";
+import { Routes, Route } from "react-router-dom";
+
+import Step1CheckPoint from "../components/adventureCreate/Step1CheckPoint";
+import Step2Content from "../components/adventureCreate/Step2Content";
+import Step3Badge from "../components/adventureCreate/Step3Badge";
+import Step4Done from "../components/adventureCreate/Step4Done";
 
 const AdventureCreatePage = () => {
   return (
-    <>
+    <div className="pageContainer" style={{ padding: "30px" }}>
       <h1>탐험 생성</h1>
-      <p>탐험으로 만들 내 글을 선택하세요!</p>
-      <p>게시글은 최대 5개까지 선택할 수 있습니다.</p>
-    </>
+      <Routes>
+        <Route path="" element={<Step1CheckPoint />} />
+        <Route path="2" element={<Step2Content />} />
+        <Route path="3" element={<Step3Badge />} />
+        <Route path="4" element={<Step4Done />} />
+      </Routes>
+    </div>
   );
 };
 

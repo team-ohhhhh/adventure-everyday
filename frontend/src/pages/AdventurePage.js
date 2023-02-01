@@ -2,8 +2,6 @@ import { useNavigate } from "react-router-dom";
 import HorizontalScroll from "../components/HorizontalScroll";
 import style from "./AdventurePage.module.css";
 import { BiSearchAlt2 } from "react-icons/bi";
-import style from "./AdventurePage.module.css";
-import { BiSearchAlt2 } from "react-icons/bi";
 
 function AdventurePage() {
   const navigate = useNavigate();
