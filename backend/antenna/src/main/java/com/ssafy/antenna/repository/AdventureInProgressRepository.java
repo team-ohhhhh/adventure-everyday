@@ -13,4 +13,6 @@ public interface AdventureInProgressRepository extends JpaRepository<AdventureIn
     Optional<List<AdventureInProgress>> findAllByUser(User user);
     @Transactional
     void deleteByAdventure(Adventure adventure);
+
+    Optional<List<AdventureInProgress>> findAllByAdventure(Adventure adventure);
 }
