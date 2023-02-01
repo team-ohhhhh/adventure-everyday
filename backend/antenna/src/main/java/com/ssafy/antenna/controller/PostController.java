@@ -3,10 +3,13 @@ package com.ssafy.antenna.controller;
 import com.ssafy.antenna.domain.ResultResponse;
 import com.ssafy.antenna.domain.comment.PostCommentReq;
 import com.ssafy.antenna.domain.comment.dto.PostSubCommentReq;
+import com.ssafy.antenna.domain.like.SubCommentLike;
 import com.ssafy.antenna.domain.post.dto.PostDetailRes;
 import com.ssafy.antenna.domain.post.dto.PostUpdateReq;
+import com.ssafy.antenna.repository.PostRepository;
 import com.ssafy.antenna.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,18 +20,17 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/posts")
-@CrossOrigin("*")
 public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ResultResponse<PostDetailRes> createPost(
+    public ResultResponse<String> createPost(
             @RequestPart String title,
             @RequestPart String content,
             @RequestPart String lat,
             @RequestPart String lng,
             @RequestPart String isPublic,
-            @RequestPart(required = false) MultipartFile photo,
+            @RequestPart(required = false) MultipartFile file,
             Authentication authentication
     ) throws IOException {
         return ResultResponse.success(
@@ -39,18 +41,18 @@ public class PostController {
                         lat,
                         lng,
                         isPublic,
-                        photo
+                        file
                 )
         );
     }
 
     @GetMapping("/{postId}")
-    public ResultResponse<PostDetailRes> getPostById(@PathVariable Long postId) {
+    public ResultResponse<?> getPostById(@PathVariable Long postId) {
         return postService.getPostById(postId);
     }
 
     @DeleteMapping("/{postId}")
-    public ResultResponse<PostDetailRes> deletePost(
+    public ResultResponse<String> deletePost(
             @PathVariable Long postId,
             Authentication authentication
     ) throws IllegalAccessException {
@@ -62,13 +64,13 @@ public class PostController {
         );
     }
 
-//    @GetMapping("/{postId}/photo")
-//    public ResponseEntity<?> getPostPhoto(@PathVariable Long postId) {
-//        return postService.getPostPhoto(postId);
-//    }
-//
+    @GetMapping("/{postId}/photo")
+    public ResponseEntity<?> getPostPhoto(@PathVariable Long postId) {
+        return postService.getPostPhoto(postId);
+    }
+
     @PutMapping("/{postId}")
-    public ResultResponse<PostDetailRes> updatePost(
+    public  ResultResponse<?> updatePost(
             @PathVariable Long postId,
             @RequestBody PostUpdateReq postUpdateReq,
             Authentication authentication
@@ -90,8 +92,8 @@ public class PostController {
     }
 
     @GetMapping
-    public ResultResponse<List<PostDetailRes>> getPostWithArea(@RequestParam double lng, @RequestParam double lat, @RequestParam double area) {
-        return ResultResponse.success(postService.getPostWithArea(lng, lat, area));
+    public ResultResponse<List<PostDetailRes>> getPostWithArea(@RequestParam double lng, @RequestParam double lat, @RequestParam double area){
+        return ResultResponse.success(postService.getPostWithArea(lng,lat,area));
     }
 
     @GetMapping("/users/{userId}")

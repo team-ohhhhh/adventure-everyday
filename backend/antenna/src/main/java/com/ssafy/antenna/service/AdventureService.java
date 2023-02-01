@@ -14,11 +14,9 @@ import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
+import java.awt.geom.Path2D;
 import java.util.*;
 
 @Service
@@ -34,44 +32,26 @@ public class AdventureService {
     private final AdventureLikeRepository adventureLikeRepository;
     private final AdventureInProgressRepository adventureInProgressRepository;
     private final CheckpointPostRepository checkpointPostRepository;
-    private final AwsS3Service awsS3Service;
-    @Value("${aws-cloud.aws.s3.bucket.url}")
-    private String bucketUrl;
+
     // 탐험 추가
-    public Long createAdventure(String category, String featTitle, String featContent, String title, String content, int difficulty, LocalDateTime startDate, LocalDateTime endDate, MultipartFile photo, Long userId){
+    public void createAdventure(CreateAdventureReq createAdventureReq, Long userId){
         Optional<User> curUser = userRepository.findById(userId);
 
         // 탐험을 생성한 후,
         Adventure newAdventure = Adventure.builder()
-                .category(categoryRepository.findCategoryIdByCategory(category).orElseThrow())
-                .featTitle(featTitle)
-                .featContent(featContent)
-                .title(title)
-                .content(content)
-                .difficulty(difficulty)
-                .startDate(startDate)
-                .endDate(endDate)
+                .category(categoryRepository.findCategoryIdByCategory(createAdventureReq.category()).orElseThrow())
+                .featTitle(createAdventureReq.featTitle())
+                .featContent(createAdventureReq.featContent())
+                .title(createAdventureReq.title())
+                .content(createAdventureReq.content())
+                .difficulty(createAdventureReq.difficulty())
+                .photo(createAdventureReq.photo())
+                .startDate(createAdventureReq.startDate())
+                .endDate(createAdventureReq.endDate())
                 .user(curUser.orElseThrow())
                 .build();
-        if(photo != null){
-            String photoName = awsS3Service.uploadImage(photo);
-            String photoUrl = bucketUrl + photoName;
-            newAdventure = Adventure.builder()
-                    .category(categoryRepository.findCategoryIdByCategory(category).orElseThrow())
-                    .featTitle(featTitle)
-                    .featContent(featContent)
-                    .title(title)
-                    .content(content)
-                    .difficulty(difficulty)
-                    .startDate(startDate)
-                    .endDate(endDate)
-                    .user(curUser.orElseThrow())
-                    .photoUrl(photoUrl)
-                    .photoName(photoName)
-                    .build();
-        }
 
-        return adventureRepository.save(newAdventure).getAdventureId();
+        adventureRepository.save(newAdventure);
     }
 
     // 특정 탐험 조회
@@ -87,7 +67,7 @@ public class AdventureService {
                 newAdventure.getTitle(),
                 newAdventure.getContent(),
                 newAdventure.getDifficulty(),
-//                newAdventure.getPhoto(),
+                newAdventure.getPhoto(),
                 newAdventure.getStartDate(),
                 newAdventure.getEndDate(),
                 newAdventure.getAvgReviewRate()
@@ -135,7 +115,7 @@ public class AdventureService {
                         curAdventure.getTitle(),
                         curAdventure.getContent(),
                         curAdventure.getDifficulty(),
-//                        curAdventure.getPhoto(),
+                        curAdventure.getPhoto(),
                         curAdventure.getStartDate(),
                         curAdventure.getEndDate(),
                         curAdventure.getAvgReviewRate()
@@ -172,7 +152,7 @@ public class AdventureService {
                     adventure.getTitle(),
                     adventure.getContent(),
                     adventure.getDifficulty(),
-//                    adventure.getPhoto(),
+                    adventure.getPhoto(),
                     adventure.getStartDate(),
                     adventure.getEndDate(),
                     adventure.getAvgReviewRate()
@@ -475,7 +455,7 @@ public class AdventureService {
                     adventure.getTitle(),
                     adventure.getContent(),
                     adventure.getDifficulty(),
-//                    adventure.getPhoto(),
+                    adventure.getPhoto(),
                     adventure.getStartDate(),
                     adventure.getEndDate(),
                     adventure.getAvgReviewRate()
@@ -525,4 +505,7 @@ public class AdventureService {
 
         return readAdventureInProgressWithinDistanceRes;
     }
+
+
+
 }

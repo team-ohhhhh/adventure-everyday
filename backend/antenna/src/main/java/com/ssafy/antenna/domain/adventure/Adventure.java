@@ -34,13 +34,9 @@ public class Adventure extends Base {
     private String content;
     @Column(columnDefinition = "int not null")
     private Integer difficulty;
-
-    @Column(columnDefinition = "varchar(255) default null")
-    private String photoUrl;
-
-    @Column(columnDefinition = "varchar(255) default null")
-    private String photoName;
-
+    @Lob
+    @Column(columnDefinition = "blob default null")
+    private byte[] photo;
 //    @Column(columnDefinition = "int default 6")
 //    private int validDate;
     @Column(nullable = false)
