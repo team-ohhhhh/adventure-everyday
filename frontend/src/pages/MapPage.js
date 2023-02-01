@@ -3,7 +3,8 @@ import { MapMarker, Map, Circle } from "react-kakao-maps-sdk";
 import Antenna from "../components/mapPage/antenna/Antenna";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import BottomSheetContainer from './../components/BottomSheet/BottomSheet'
+import BottomSheetContainer from "./../components/BottomSheet/BottomSheet";
+
 function MainMap() {
   const [state, setState] = useState({
     center: {
@@ -34,42 +35,39 @@ function MainMap() {
     }));
   }, []);
 
-
   // lat이나 lng 값이 변화했을 때 작동할 함수 -> axios 후에 setArticleList
-  let URL = useSelector((state) => state.URL)
-  let TOKEN = useSelector((state) => state.TOKEN)
-  const [articleList, setArticleList] = useState([])
+  let URL = useSelector((state) => state.URL);
+  let TOKEN = useSelector((state) => state.TOKEN);
+  const [articleList, setArticleList] = useState([]);
   useEffect(() => {
     axios({
-      url: URL + '/posts',
-      method: 'get',
+      url: URL + "/posts",
+      method: "get",
       headers: {
-        Authorization: `Bearer ${TOKEN}`
+        Authorization: `Bearer ${TOKEN}`,
       },
       params: {
         lng: state.center.lng,
         lat: state.center.lat,
-        area: 1 //TODO: 여기는 안테나의 경우에는 동적할당 생각하기
-      }
+        area: 1, //TODO: 여기는 안테나의 경우에는 동적할당 생각하기
+      },
     })
-    .then((res) => {
-      setArticleList(res.data)
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-  }, [state.center]) //TODO: 만약 안되면 오브젝트 풀어서 넣기 
-
-
+      .then((res) => {
+        setArticleList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [state.center]); //TODO: 만약 안되면 오브젝트 풀어서 넣기
 
   return (
-    <>
+    <div className="pageContainer">
       <div
         style={{
           position: "relative",
           overflow: "hidden",
           width: "100%",
-          height: "850px",
+          height: "776px",
           backgroundColor: "#eeefff",
         }}
       >
@@ -170,11 +168,11 @@ function MainMap() {
           {!state.isCur && (
             <button
               onClick={() => {
-                moveCurPos()
+                moveCurPos();
                 setState((prev) => ({
                   ...prev,
                   isCircle: true,
-                }))
+                }));
               }}
               style={{
                 /*버튼 위치*/
@@ -249,10 +247,10 @@ function MainMap() {
 
           <p>{state.errMsg}</p>
           {/* 주변 검색 상황일때 바텀시트 등장 */}
-          { state.isCircle && <BottomSheetContainer articleList={articleList} />}
+          {state.isCircle && <BottomSheetContainer articleList={articleList} />}
         </Map>
       </div>
-    </>
+    </div>
   );
 
   // 현재 위치로 이동시키는 함수

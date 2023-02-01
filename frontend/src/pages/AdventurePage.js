@@ -2,12 +2,13 @@ import { useNavigate } from "react-router-dom";
 import HorizontalScroll from "../components/HorizontalScroll";
 import style from "./AdventurePage.module.css";
 import { BiSearchAlt2 } from "react-icons/bi";
+import style from "./AdventurePage.module.css";
+import { BiSearchAlt2 } from "react-icons/bi";
 
 function AdventurePage() {
   const navigate = useNavigate();
-
   return (
-    <div>
+    <div className="pageContainer">
       <div className={style.recommendPageHeader}>
         <h1>탐험</h1>
         <div className={style.searchAndCreate}>
@@ -32,6 +33,7 @@ function AdventurePage() {
         </div>
         <div>
           <HorizontalScroll contentType={"adventure"} />
+          <HorizontalScroll contentType={"adventure"} />
         </div>
       </div>
       {/* 두번째 추천 기준 */}
@@ -45,9 +47,11 @@ function AdventurePage() {
           </div>
           <div className={style.more}>
             <span>더보기</span>
+            <span>더보기</span>
           </div>
         </div>
         <div>
+          <HorizontalScroll contentType={"adventure"} />
           <HorizontalScroll contentType={"adventure"} />
         </div>
       </div>
@@ -62,9 +66,11 @@ function AdventurePage() {
           </div>
           <div className={style.more}>
             <span>더보기</span>
+            <span>더보기</span>
           </div>
         </div>
         <div>
+          <HorizontalScroll contentType={"adventure"} />
           <HorizontalScroll contentType={"adventure"} />
         </div>
       </div>
