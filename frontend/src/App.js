@@ -8,6 +8,7 @@ import NavBar from "./components/NavBar";
 import MapPage from "./pages/MapPage";
 import AdventureCreatePage from "./pages/AdventureCreatePage";
 import ArticleCreatePage from "./pages/ArticleCreatePage";
+import AdventureDetailPage from "./pages/AdventureDetailPage";
 
 function App() {
   return (
@@ -18,11 +19,16 @@ function App() {
           <Route path="/" element={<MapPage />} />
           <Route path="/login" element={<LogInPage />} />
           <Route path="/signup" element={<SignUpPage />} />
-          <Route path="/write" element={<ArticleCreatePage />} />
           <Route path="/adventure" element={<AdventurePage />} />
+          <Route
+            path="/adventure/detail/:id"
+            element={<AdventureDetailPage />}
+          />
           <Route path="/adventure/create" element={<AdventureCreatePage />} />
+          <Route path="/write" element={<ArticleCreatePage />} />
         </Routes>
       </div>
+
       <NavBar />
     </div>
   );

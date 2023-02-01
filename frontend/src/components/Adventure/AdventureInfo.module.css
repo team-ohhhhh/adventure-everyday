@@ -1,0 +1,98 @@
+.container{
+    width: 90%;
+    height: 20rem;
+    background-color: white;
+    border-radius: 1rem;
+    position: absolute;
+    left: 50%;
+    top: 5%;
+    transform:translateX(-50%);
+    /* box-shadow: 1px 1px 25px 1px rgb(156, 156, 156); */
+    display: flex;
+    flex-direction: column;
+}
+
+.title{
+    height: fit-content;
+    
+    font-weight: 700;
+    font-size: 1.6rem;
+    display: flex;
+    padding-left: 1rem;
+    color: #1C0B69;
+
+}
+
+.period{
+    height: fit-content;
+    
+    display: flex;
+    padding-left: 1rem;
+    padding-top: 0.6rem;
+
+}
+
+.content{
+    height: fit-content;
+    margin: 0.5rem;
+    border-radius: 0.3rem;
+    border: 1px gray solid;
+    display: flex;
+    padding: 1rem;
+
+
+}
+
+.people{
+    height: fit-content;
+    background-color: rgb(168, 73, 35);
+    display: flex;
+    border-bottom: 1px gray;
+
+}
+
+.etc{
+    height: fit-content;
+    background-color: rgb(202, 82, 226);
+
+}
+
+
+.maker {
+    display: flex;
+    flex-direction: row;
+    margin: 20px;
+  }
+  
+  .makerNameAndTierContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    margin-left : 10px;
+  }
+  
+  .makerProfileContainer {
+    width: 40px;
+    height: 40px;
+    border-radius: 70%;
+    overflow: hidden;
+  }
+  
+  .makerProfile {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .makerName{
+    color:#1C0B69;
+    font-weight: 600;
+  }
+  
+  .participants {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-right: 15px;
+    margin-bottom: 20px;
+  }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import style from './ArticleListItem.module.css'
+import style from "./ArticleListItem.module.css";
 
 function ArticleListItem(props) {
   const postId = props.articleListItem.postId
@@ -24,10 +24,10 @@ function ArticleListItem(props) {
           <div className={style.title}> { title } </div>
           <div className={style.nickNameAndTier}> <span className={style.nickName}> { nickName } </span> <img className={style.tier} src={`images/lv${level}.png`}/></div>
         </div>
-        <div className={style.date}> { date } </div>
+        <div className={style.date}> {date} </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default ArticleListItem
+export default ArticleListItem;
