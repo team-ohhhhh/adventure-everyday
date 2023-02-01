@@ -47,12 +47,12 @@ public class User extends Base implements UserDetails {
     private int exp;
     @Column(columnDefinition = "varchar(255) default null")
     private String introduce;
-    @Lob
-    @Column(columnDefinition = "blob default null")
-    private byte[] photo;
 
     @Column(columnDefinition = "varchar(255) default null")
-    private String photoType;
+    private String photoUrl;
+
+    @Column(columnDefinition = "varchar(255) default null")
+    private String photoName;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -101,7 +101,7 @@ public class User extends Base implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Checkpoint> checkpoints = new ArrayList<>();
 
-    public User(LocalDateTime createTime, LocalDateTime updateTime, Long userId, String email, String nickname, String password, int level, int exp, String introduce, byte[] photo) {
+    public User(LocalDateTime createTime, LocalDateTime updateTime, Long userId, String email, String nickname, String password, int level, int exp, String introduce, String photoUrl, String photoName) {
         super(createTime, updateTime);
         this.userId = userId;
         this.email = email;
@@ -110,12 +110,13 @@ public class User extends Base implements UserDetails {
         this.level = level;
         this.exp = exp;
         this.introduce = introduce;
-        this.photo = photo;
+        this.photoUrl = photoUrl;
+        this.photoName = photoName;
         this.role = Role.USER;
     }
 
     public UserDetailRes toResponse() {
-        return new UserDetailRes(this.userId, this.email, this.nickname, this.level, this.exp, this.introduce, this.photo);
+        return new UserDetailRes(this.userId, this.email, this.nickname, this.level, this.exp, this.introduce, this.photoUrl);
     }
 
     @Override
