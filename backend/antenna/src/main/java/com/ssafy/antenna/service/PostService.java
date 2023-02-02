@@ -78,7 +78,7 @@ public class PostService {
     private String bucketUrl;
 
 
-    public PostDetailWithCategory getPostById(Long postId,Long userId) {
+    public PostDetailWithCategory getPostById(Long postId, Long userId) {
         /*
          * 1. 안테나의 범위에 있는지, 참가 중인 알람을 킨 모험의 글인지, 팔로잉 중인 사람의 글인지에 따라 카테고리를 넣어주기.
          * */
@@ -89,19 +89,19 @@ public class PostService {
         //있다면, 그 글이 안테나의 범위 안에 속해있는지를 조회해야한다. -> 있다면 안테나의 id를 isChallenge에 넣어줘야함
         Optional<List<Antenna>> antennaList = antennaRepository.findAllByUser(user);
         System.out.println();
-        for (Antenna antenna:
-        antennaList.get()) {
+        for (Antenna antenna :
+                antennaList.get()) {
             System.out.println(antenna.toResponse());
         }
-        if(antennaList.isPresent()){
+        if (antennaList.isPresent()) {
             for (Antenna antenna : antennaList.get()) {
                 //안테나 별로 주변 게시글을 조회해서 그 게시글 중 내가 가진 postId가 있는지를 체크한다.
                 System.out.println(isAntenna.toString());
                 System.out.println(antenna.getCoordinate().getX());
                 Long isAntennaId = isPostWithArea(antenna.getCoordinate().getX(), antenna.getCoordinate().getY(), antenna.getArea(), postId);
-                if(isAntennaId!=0){
+                if (isAntennaId != 0) {
                     //찾았으면 종료
-                    isAntenna=antenna.getAntennaId();
+                    isAntenna = antenna.getAntennaId();
                     break;
                 }
             }
@@ -111,13 +111,13 @@ public class PostService {
         // 1. 체크포인트 게시글인지 조회
         // 2. 체크포인트 게시글이라면 거기서 나온 어드벤처id와 유저id로 탐험좋아요 테이블에서 조회해서 나온 결과값이 있나 확인
         // 3. 있으면? isChallenge에 어드벤처id를 넣어준다.
-        Optional<CheckpointPost> checkpointPost =checkpointPostRepository.findByPost(post);
-        if(checkpointPost.isPresent()){
+        Optional<CheckpointPost> checkpointPost = checkpointPostRepository.findByPost(post);
+        if (checkpointPost.isPresent()) {
             //게시글이 있다면
             Adventure adventure = adventureRepository.findById(checkpointPost.get().getAdventure().getAdventureId()).orElseThrow(AdventureNotFoundException::new);
 
-            Optional<AdventureLike> adventureLike = adventureLikeRepository.findByAdventureAndUser(adventure,user);
-            if(adventureLike.isPresent()){
+            Optional<AdventureLike> adventureLike = adventureLikeRepository.findByAdventureAndUser(adventure, user);
+            if (adventureLike.isPresent()) {
                 //알람설정한 모험이 존재하면, isChallenge에 어드벤처id를 넣어준다.
                 isChallenge = adventureLike.get().getAdventure().getAdventureId();
             }
@@ -125,9 +125,9 @@ public class PostService {
         //마지막으로, 팔로잉 중인 사람의 글인지에 따라 카테고리를 넣어주기. -> 내가 팔로워인 데이터 조회해서 팔로잉 유저들이
         //내가 가지고있는 post의 유저와 같은지 확인한다.
         Optional<List<Follow>> followList = followRepository.findAllByFollowerUser(user);
-        if(followList.isPresent()){
-            for (Follow follow: followList.get()) {
-                if(post.getUser().getUserId().equals(follow.getFollowingUser().getUserId())){
+        if (followList.isPresent()) {
+            for (Follow follow : followList.get()) {
+                if (post.getUser().getUserId().equals(follow.getFollowingUser().getUserId())) {
                     isFollowing = post.getUser().getUserId();
                 }
             }
@@ -168,7 +168,7 @@ public class PostService {
         }
     }
 
-    public PostDetailRes createPost(Long userId, String title, String content, String lat, String lng, String isPublic, MultipartFile photo, String isCheckpoint,String adventureId,String adventurePlaceId) throws IOException {
+    public PostDetailRes createPost(Long userId, String title, String content, String lat, String lng, String isPublic, MultipartFile photo, String isCheckpoint, String adventureId, String adventurePlaceId) throws IOException {
         ConvertTo3WA w3wWords = w3WUtil.getW3W(Double.parseDouble(lng), Double.parseDouble(lat));
         Post post = Post.builder()
                 .user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new))
@@ -187,7 +187,7 @@ public class PostService {
 
         Post save = postRepository.save(post);
 
-        if(Boolean.valueOf(isCheckpoint)){
+        if (Boolean.valueOf(isCheckpoint)) {
             checkpointPostRepository.save(CheckpointPost.builder()
                     .adventure(adventureRepository.findById(Long.valueOf(adventureId)).orElseThrow(AdventureNotFoundException::new))
                     .adventurePlace(adventurePlaceRepository.findById(Long.valueOf(adventurePlaceId)).orElseThrow(AdventurePlaceNotFoundException::new))
@@ -462,9 +462,9 @@ public class PostService {
                         ") as list where post_id=" + postId
                 , Long.class);
         List<Long> isAntennaId = query.getResultList();
-        if(isAntennaId.size()==0){
+        if (isAntennaId.size() == 0) {
             return 0L;
-        }else{
+        } else {
             return isAntennaId.get(0);
         }
     }

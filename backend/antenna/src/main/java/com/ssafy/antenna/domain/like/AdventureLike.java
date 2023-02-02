@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AdventureLike  extends Base {
+public class AdventureLike extends Base {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

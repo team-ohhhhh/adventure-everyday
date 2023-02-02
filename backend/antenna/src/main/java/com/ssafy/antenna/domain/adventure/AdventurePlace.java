@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-public class AdventurePlace  extends Base {
+public class AdventurePlace extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long adventurePlaceId;
@@ -45,6 +45,6 @@ public class AdventurePlace  extends Base {
     @OneToMany(mappedBy = "adventurePlace", cascade = CascadeType.ALL)
     private List<Checkpoint> checkpoints = new ArrayList<>();
 
-    @OneToMany(mappedBy = "adventurePlace",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "adventurePlace", cascade = CascadeType.ALL)
     private List<CheckpointPost> checkpointPosts = new ArrayList<>();
 }
