@@ -28,6 +28,7 @@ import com.ssafy.antenna.domain.post.mapper.PostDtoMapper;
 import com.ssafy.antenna.domain.user.Follow;
 import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.exception.not_found.AdventureNotFoundException;
+import com.ssafy.antenna.exception.not_found.AdventurePlaceNotFoundException;
 import com.ssafy.antenna.exception.not_found.UserNotFoundException;
 import com.ssafy.antenna.repository.*;
 import com.ssafy.antenna.util.CardinalDirection;
@@ -71,6 +72,7 @@ public class PostService {
     private final AdventureLikeRepository adventureLikeRepository;
     private final AdventureRepository adventureRepository;
     private final FollowRepository followRepository;
+    private final AdventurePlaceRepository adventurePlaceRepository;
 
     @Value("${aws-cloud.aws.s3.bucket.url}")
     private String bucketUrl;
@@ -159,16 +161,34 @@ public class PostService {
         }
     }
 
-    public PostDetailRes createPost(Long userId, String title, String content, String lat, String lng, String isPublic, MultipartFile photo) throws IOException {
+    public PostDetailRes createPost(Long userId, String title, String content, String lat, String lng, String isPublic, MultipartFile photo, String isCheckpoint,String adventureId,String adventurePlaceId) throws IOException {
         ConvertTo3WA w3wWords = w3WUtil.getW3W(Double.parseDouble(lng), Double.parseDouble(lat));
-        Post post = Post.builder().user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new)).title(title).content(content).coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLng(), w3wWords.getCoordinates().getLat()))).w3w(w3wWords.getWords()).nearestPlace(w3wWords.getNearestPlace()).isPublic(Boolean.valueOf(isPublic)).build();
+        Post post = Post.builder()
+                .user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new))
+                .title(title).content(content)
+                .coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLng(), w3wWords.getCoordinates().getLat())))
+                .w3w(w3wWords.getWords())
+                .nearestPlace(w3wWords.getNearestPlace())
+                .isPublic(Boolean.valueOf(isPublic))
+                .build();
         if (photo != null) {
             String photoName = awsS3Service.uploadImage(photo);
             String photoUrl = bucketUrl + photoName;
             post = Post.builder().user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new)).title(title).content(content).coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLng(), w3wWords.getCoordinates().getLat()))).w3w(w3wWords.getWords()).nearestPlace(w3wWords.getNearestPlace()).isPublic(Boolean.valueOf(isPublic)).photoUrl(photoUrl).photoName(photoName).build();
 
         }
-        postRepository.save(post);
+
+        Post save = postRepository.save(post);
+
+        if(Boolean.valueOf(isCheckpoint)){
+            checkpointPostRepository.save(CheckpointPost.builder()
+                    .adventure(adventureRepository.findById(Long.valueOf(adventureId)).orElseThrow(AdventureNotFoundException::new))
+                    .adventurePlace(adventurePlaceRepository.findById(Long.valueOf(adventurePlaceId)).orElseThrow(AdventurePlaceNotFoundException::new))
+                    .post(save)
+                    .build()
+            );
+        }
+
         return post.toResponse();
     }
 
