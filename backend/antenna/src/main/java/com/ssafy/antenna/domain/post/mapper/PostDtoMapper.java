@@ -12,14 +12,15 @@ public class PostDtoMapper implements Function<Post, PostDto> {
     public PostDto apply(Post post) {
         return new PostDto(
                 post.getPostId(),
-                post.getUser().getUserId(),
                 post.getTitle(),
                 post.getContent(),
-//                post.getCoordinate(),
+                post.getCoordinate().getX(),
+                post.getCoordinate().getY(),
                 post.getNearestPlace(),
                 post.getW3w(),
+                post.getPhotoUrl(),
                 post.getCreateTime(),
-                post.getUpdateTime()
+                post.getUser().toResponse()
         );
 
     }

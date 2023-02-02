@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import style from "./LogInPage.module.css";
+import { useSelector, useDispatch } from "react-redux"
+import { saveToken } from "./../store";
+import { useNavigate } from "react-router-dom"
+import style from "./LogInPage.module.css"
 
 // 로그인 페이지
 function LoginPage() {
@@ -11,7 +12,9 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const navigate = useNavigate();
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   // 로그인 버튼에 달린 로그인 axios -> 성공시 메인페이지로 이동
   const LogIn = function () {
@@ -24,10 +27,11 @@ function LoginPage() {
       },
     }).then((response) => {
       //TODO: 여기서 토큰 저장하시오
-      console.log(response.data);
-      navigate("/");
-    });
-  };
+      dispatch(saveToken(response.data.result.token))
+      console.log(response.data)
+      navigate('/')
+    })
+  }
 
   return (
     <div className={style.logInPage}>
