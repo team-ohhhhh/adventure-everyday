@@ -36,7 +36,7 @@ const Step1CheckPoint = () => {
   ]);
 
   const count = useMemo(() => {
-    console.log(setCheckPoints);
+    // console.log(setCheckPoints);
     return checkPoints && checkPoints.length;
   }, [checkPoints]);
 

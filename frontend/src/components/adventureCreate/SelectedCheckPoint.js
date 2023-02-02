@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./SelectedCheckPoint.module.css";
 
 const SelectedCheckPoint = ({ point }) => {
-  console.log(point);
+  // console.log(point);
   return (
     <div className={styles.container}>
       <div>
