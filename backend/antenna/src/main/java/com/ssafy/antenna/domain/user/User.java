@@ -47,7 +47,7 @@ public class User extends Base implements UserDetails {
     private int exp;
     @Column(columnDefinition = "varchar(255) default null")
     private String introduce;
-    @Lob
+
     @Column(columnDefinition = "varchar(255) default null")
     private String photoUrl;
 
