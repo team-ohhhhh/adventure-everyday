@@ -2,7 +2,6 @@ package com.ssafy.antenna.domain.category;
 
 import com.ssafy.antenna.domain.Base;
 import com.ssafy.antenna.domain.adventure.Adventure;
-import com.ssafy.antenna.domain.comment.Comment;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,12 +13,12 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @Entity
-public class Category  extends Base {
+public class Category extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId;
 
-//    @Column(columnDefinition = "varchar(255) not null")
+    //    @Column(columnDefinition = "varchar(255) not null")
     @Column(nullable = false)
     private String category;
 

@@ -102,7 +102,7 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Optional<List<Follow>> followList = followRepository.findAllByFollowingUser(user);
         List<UserDetailRes> userDetailResList = new ArrayList<>();
-        if(followList.isPresent()){
+        if (followList.isPresent()) {
             for (int i = 0; i < followList.get().size(); i++) {
                 userDetailResList.add(followList.get().get(i).getFollowerUser().toResponse());
             }
@@ -115,7 +115,7 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Optional<List<Follow>> followList = followRepository.findAllByFollowerUser(user);
         List<UserDetailRes> userDetailResList = new ArrayList<>();
-        if(followList.isPresent()){
+        if (followList.isPresent()) {
             for (int i = 0; i < followList.get().size(); i++) {
                 userDetailResList.add(followList.get().get(i).getFollowingUser().toResponse());
             }
@@ -217,6 +217,7 @@ public class UserService {
 
         return newUser;
     }
+
     @Transactional
     public User deleteProfilePhoto(Long userId) {
         //유저가 존재하는지 확인
@@ -289,7 +290,7 @@ public class UserService {
         //유저가 존재하면, 안테나 리스트 가져오기
         Optional<List<Antenna>> antennaList = antennaRepository.findAllByUser(user);
         List<DetailAntennaRes> detailAntennaResList = new ArrayList<>();
-        if(antennaList.isPresent()){
+        if (antennaList.isPresent()) {
             for (int i = 0; i < antennaList.get().size(); i++) {
                 detailAntennaResList.add(antennaList.get().get(i).toResponse());
             }

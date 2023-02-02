@@ -1,7 +1,6 @@
 package com.ssafy.antenna.domain.adventure;
 
 import com.ssafy.antenna.domain.Base;
-import com.ssafy.antenna.domain.adventure.Adventure;
 import com.ssafy.antenna.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -34,7 +33,6 @@ public class AdventureInProgress extends Base {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adventureId")
     private Adventure adventure;
-
 
 
 }

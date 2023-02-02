@@ -33,6 +33,7 @@ public class GlobalExceptionHandler {
         });
         return errors;
     }
+
     @ExceptionHandler(PersistenceException.class)
     public ResponseEntity<ResultResponse<ErrorResponse>> persistenceException() {
         log.error("{} {}", DATABASE_ERROR.name(), DATABASE_ERROR.getMessage());

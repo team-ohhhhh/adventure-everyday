@@ -121,12 +121,12 @@ public class UserController {
 
     @PostMapping("/antennae")
     public ResultResponse<DetailAntennaRes> createAntenna(@RequestBody PostAntennaReq postAntennaReq, Authentication authentication) {
-        return ResultResponse.success(userService.createAntenna(postAntennaReq,Long.valueOf(authentication.getName())));
+        return ResultResponse.success(userService.createAntenna(postAntennaReq, Long.valueOf(authentication.getName())));
     }
 
     @DeleteMapping("/antennae/{antennaId}")
     public ResultResponse<DetailAntennaRes> deleteAntenna(Authentication authentication, @PathVariable Long antennaId) {
-        return ResultResponse.success(userService.deleteAntenna(antennaId,Long.valueOf(authentication.getName())));
+        return ResultResponse.success(userService.deleteAntenna(antennaId, Long.valueOf(authentication.getName())));
     }
 
     @GetMapping("/antennae")
@@ -136,7 +136,7 @@ public class UserController {
 
     @GetMapping("/antennae/{antennaId}")
     public ResultResponse<DetailAntennaRes> getAntenna(Authentication authentication, @PathVariable Long antennaId) {
-        return ResultResponse.success(userService.getAntenna(antennaId,Long.valueOf(authentication.getName())));
+        return ResultResponse.success(userService.getAntenna(antennaId, Long.valueOf(authentication.getName())));
     }
 
     @GetMapping("/logout")
