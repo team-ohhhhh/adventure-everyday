@@ -71,7 +71,17 @@ const BottomSheetContainer = (props) => {
         lat: props.center.lat,
       }
     })
-    .then((res) => {getAntennaList()}) //TODO: 성공한 후에 뭐해줄까?
+    .then((res) => {
+      getAntennaList()
+    })
+    .then((res) => {
+      //TODO: 안테나 심으면 gif로 효과주고 바텀시트 닫기
+      props.setState((prev) => (
+        {
+        ...prev,
+        isCircle : false
+      }))
+    })
     .catch((err) => {console.log(err)})
   }
 
@@ -83,7 +93,13 @@ const BottomSheetContainer = (props) => {
         Authorization: `Bearer ${TOKEN}`
       },
     })
-    .then((res) => {getAntennaList()}) //TODO: 성공한 후에 뭐해줄까?
+    .then((res) => {getAntennaList()})
+    .then((res) => {
+      props.setState((prev) => ({
+        ...prev,
+        isAntenna: false
+      }))
+    })
     .catch((err) => {console.log(err)})
   }
 
