@@ -1,6 +1,8 @@
 package com.ssafy.antenna.service;
 
 import com.ssafy.antenna.domain.ResultResponse;
+import com.ssafy.antenna.domain.adventure.Adventure;
+import com.ssafy.antenna.domain.antenna.Antenna;
 import com.ssafy.antenna.domain.comment.Comment;
 import com.ssafy.antenna.domain.comment.PostCommentReq;
 import com.ssafy.antenna.domain.comment.SubComment;
@@ -8,6 +10,7 @@ import com.ssafy.antenna.domain.comment.SubCommentDtoMapper;
 import com.ssafy.antenna.domain.comment.dto.PostSubCommentReq;
 import com.ssafy.antenna.domain.comment.dto.SubCommentDto;
 import com.ssafy.antenna.domain.comment.dto.commentDto;
+import com.ssafy.antenna.domain.like.AdventureLike;
 import com.ssafy.antenna.domain.like.CommentLike;
 import com.ssafy.antenna.domain.like.PostLike;
 import com.ssafy.antenna.domain.like.SubCommentLike;
@@ -15,17 +18,20 @@ import com.ssafy.antenna.domain.like.dto.CommentLikeDto;
 import com.ssafy.antenna.domain.like.dto.PostLikeDto;
 import com.ssafy.antenna.domain.like.dto.SubCommentLikeDto;
 import com.ssafy.antenna.domain.location.Location;
+import com.ssafy.antenna.domain.post.CheckpointPost;
 import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.post.dto.PostDetailRes;
+import com.ssafy.antenna.domain.post.dto.PostDetailWithCategory;
 import com.ssafy.antenna.domain.post.dto.PostDto;
 import com.ssafy.antenna.domain.post.dto.PostUpdateReq;
 import com.ssafy.antenna.domain.post.mapper.PostDtoMapper;
+import com.ssafy.antenna.domain.user.Follow;
 import com.ssafy.antenna.domain.user.User;
+import com.ssafy.antenna.exception.not_found.AdventureNotFoundException;
 import com.ssafy.antenna.exception.not_found.UserNotFoundException;
 import com.ssafy.antenna.repository.*;
 import com.ssafy.antenna.util.CardinalDirection;
 import com.ssafy.antenna.util.GeometryUtil;
-import com.ssafy.antenna.util.ImageUtil;
 import com.ssafy.antenna.util.W3WUtil;
 import com.what3words.javawrapper.response.ConvertTo3WA;
 import jakarta.persistence.EntityManager;
@@ -34,8 +40,6 @@ import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,6 +48,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,28 +65,89 @@ public class PostService {
     private final SubCommentRepository subCommentRepository;
     private final SubCommentDtoMapper subCommentDtoMapper;
     private final SubCommentLikeRepository subCommentLikeRepository;
+    private final AntennaRepository antennaRepository;
+    private final AwsS3Service awsS3Service;
+    private final CheckpointPostRepository checkpointPostRepository;
+    private final AdventureLikeRepository adventureLikeRepository;
+    private final AdventureRepository adventureRepository;
+    private final FollowRepository followRepository;
+
     @Value("${aws-cloud.aws.s3.bucket.url}")
     private String bucketUrl;
 
-    private final AwsS3Service awsS3Service;
 
-//    public ResultResponse<?> getPostById(Long postId) {
-//        return ResultResponse.success(
-//                postRepository.findById(postId)
-//                        .map(postDtoMapper)
-//                        .orElseThrow(NoSuchElementException::new)
-//        );
-//    }
+    public PostDetailWithCategory getPostById(Long postId,Long userId) {
+        /*
+         * 1. 안테나의 범위에 있는지, 참가 중인 알람을 킨 모험의 글인지, 팔로잉 중인 사람의 글인지에 따라 카테고리를 넣어주기.
+         * */
+        //먼저 글이 있는지를 조회한다.
+        Post post = postRepository.findById(postId).orElseThrow(NoSuchElementException::new);
+        Long isAntenna = 0L, isChallenge = 0L, isFollowing = 0L;
+        //있다면, 그 글이 안테나의 범위 안에 속해있는지를 조회해야한다. -> 있다면 안테나의 id를 isChallenge에 넣어줘야함
+        Optional<List<Antenna>> antennaList = antennaRepository.findAllByUser(post.getUser());
+        if(antennaList.isPresent()){
+            for (Antenna antenna : antennaList.get()) {
+                //안테나 별로 주변 게시글을 조회해서 그 게시글 중 내가 가진 postId가 있는지를 체크한다.
+                Long isAntennaId = isPostWithArea(antenna.getCoordinate().getX(), antenna.getCoordinate().getY(), antenna.getArea(), postId);
+                if(isAntennaId!=0){
+                    //찾았으면 종료
+                    isAntenna=isAntennaId;
+                    break;
+                }
+            }
+        }
 
-    public ResultResponse<PostDetailRes> getPostById(Long postId) {
-        return ResultResponse.success(
-                postRepository.findById(postId).orElseThrow(NoSuchElementException::new).toResponse());
+        //이번엔 알람을 킨 모험의 글인지 조회한다.
+        // 1. 체크포인트 게시글인지 조회
+        // 2. 체크포인트 게시글이라면 거기서 나온 어드벤처id와 유저id로 탐험좋아요 테이블에서 조회해서 나온 결과값이 있나 확인
+        // 3. 있으면? isChallenge에 어드벤처id를 넣어준다.
+        Optional<CheckpointPost> checkpointPost =checkpointPostRepository.findByPost(post);
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        if(checkpointPost.isPresent()){
+            //게시글이 있다면
+            Adventure adventure = adventureRepository.findById(checkpointPost.get().getAdventure().getAdventureId()).orElseThrow(AdventureNotFoundException::new);
+
+            Optional<AdventureLike> adventureLike = adventureLikeRepository.findByAdventureAndUser(adventure,user);
+            if(adventureLike.isPresent()){
+                //알람설정한 모험이 존재하면, isChallenge에 어드벤처id를 넣어준다.
+                isChallenge = adventureLike.get().getAdventure().getAdventureId();
+            }
+        }
+        //마지막으로, 팔로잉 중인 사람의 글인지에 따라 카테고리를 넣어주기. -> 내가 팔로워인 데이터 조회해서 팔로잉 유저들이
+        //내가 가지고있는 post의 유저와 같은지 확인한다.
+        Optional<List<Follow>> followList = followRepository.findAllByFollowerUser(user);
+        if(followList.isPresent()){
+            for (Follow follow: followList.get()) {
+                if(post.getUser().getUserId().equals(follow.getFollowingUser().getUserId())){
+                    isFollowing = post.getUser().getUserId();
+                }
+            }
+        }
+        PostDetailWithCategory postDetailWithCategory = new PostDetailWithCategory(
+                post.getPostId(),
+                post.getTitle(),
+                post.getContent(),
+                post.getCoordinate().getX(),
+                post.getCoordinate().getY(),
+                post.getNearestPlace(),
+                post.getW3w(),
+                post.isPublic(),
+                post.getCreateTime(),
+                post.getPhotoUrl(),
+                isAntenna,
+                isChallenge,
+                isFollowing,
+                post.getUser().toResponse()
+        );
+
+        //getPostWithArea
+        return postDetailWithCategory;
     }
 
     public PostDetailRes deletePost(Long userId, Long postId) throws IllegalAccessException {
         Post post = postRepository.findById(postId)
                 .orElseThrow(NoSuchElementException::new);
-        if(post.getPhotoName()!=null){
+        if (post.getPhotoName() != null) {
             awsS3Service.deleteImage(post.getPhotoName());
         }
         if (post.getUser().getUserId().equals(userId)) {
@@ -326,17 +392,16 @@ public class PostService {
     }
 
     public List<PostDetailRes> getPostWithArea(double lng, double lat, double area) {
-//        System.out.println(lng + " " + lat + " " + area);
-        Location northEast = GeometryUtil.calculateByDirection(lng, lat, area, CardinalDirection.NORTHEAST
+        Location northEast = GeometryUtil.calculateByDirection(lat, lng, area, CardinalDirection.NORTHEAST
                 .getBearing());
-        Location southWest = GeometryUtil.calculateByDirection(lng, lat, area, CardinalDirection.SOUTHWEST
+        Location southWest = GeometryUtil.calculateByDirection(lat, lng, area, CardinalDirection.SOUTHWEST
                 .getBearing());
-        double x1 = northEast.lat();
-        double y1 = northEast.lng();
-        double x2 = southWest.lat();
-        double y2 = southWest.lng();
         System.out.println(northEast);
         System.out.println(southWest);
+        double x1 = northEast.lng();
+        double y1 = northEast.lat();
+        double x2 = southWest.lng();
+        double y2 = southWest.lat();
         String pointFormat = String.format("'LINESTRING(%f %f, %f %f)')", x1, y1, x2, y2);
         Query query = entityManager.createNativeQuery("" +
                                 "SELECT * FROM post as p " +
@@ -351,5 +416,31 @@ public class PostService {
         }
         return postDetailResList;
     }
+
+    public Long isPostWithArea(double lng, double lat, double area, Long postId) {
+        Location northEast = GeometryUtil.calculateByDirection(lat, lng, area, CardinalDirection.NORTHEAST
+                .getBearing());
+        Location southWest = GeometryUtil.calculateByDirection(lat, lng, area, CardinalDirection.SOUTHWEST
+                .getBearing());
+        System.out.println(northEast);
+        System.out.println(southWest);
+        double x1 = northEast.lng();
+        double y1 = northEast.lat();
+        double x2 = southWest.lng();
+        double y2 = southWest.lat();
+        String pointFormat = String.format("'LINESTRING(%f %f, %f %f)')", x1, y1, x2, y2);
+        Query query = entityManager.createNativeQuery("" +
+                        "SELECT * FROM (SELECT post_id FROM post as p " +
+                        "WHERE MBRContains(ST_LINESTRINGFROMTEXT(" + pointFormat + ", p.coordinate) and p.is_public=true" +
+                        ") as list where post_id=" + postId
+                , Long.class);
+        List<Long> isAntennaId = query.getResultList();
+        if(isAntennaId.size()==0){
+            return 0L;
+        }else{
+            return isAntennaId.get(0);
+        }
+    }
+
 
 }
