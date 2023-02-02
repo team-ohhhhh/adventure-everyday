@@ -7,8 +7,7 @@ import com.ssafy.antenna.domain.location.Location;
 import com.ssafy.antenna.domain.post.CheckpointPost;
 import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.user.User;
-import com.ssafy.antenna.exception.not_found.AdventureNotFoundException;
-import com.ssafy.antenna.exception.not_found.PostNotFoundException;
+import com.ssafy.antenna.exception.not_found.*;
 import com.ssafy.antenna.repository.*;
 import com.ssafy.antenna.util.CardinalDirection;
 import com.ssafy.antenna.util.GeometryUtil;
@@ -46,11 +45,11 @@ public class AdventureService {
 
     // 탐험 추가
     public Long createAdventure(String category, String featTitle, String featContent, String title, String content, int difficulty, LocalDateTime startDate, LocalDateTime endDate, MultipartFile photo, Long userId){
-        Optional<User> curUser = userRepository.findById(userId);
+        User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
         // 탐험을 생성한 후,
         Adventure newAdventure = Adventure.builder()
-                .category(categoryRepository.findCategoryIdByCategory(category).orElseThrow())
+                .category(categoryRepository.findCategoryIdByCategory(category).orElseThrow(CategoryNotFoundException::new))
                 .featTitle(featTitle)
                 .featContent(featContent)
                 .title(title)
@@ -58,13 +57,13 @@ public class AdventureService {
                 .difficulty(difficulty)
                 .startDate(startDate)
                 .endDate(endDate)
-                .user(curUser.orElseThrow())
+                .user(curUser)
                 .build();
         if(photo != null){
             String photoName = awsS3Service.uploadImage(photo);
             String photoUrl = bucketUrl + photoName;
             newAdventure = Adventure.builder()
-                    .category(categoryRepository.findCategoryIdByCategory(category).orElseThrow())
+                    .category(categoryRepository.findCategoryIdByCategory(category).orElseThrow(CategoryNotFoundException::new))
                     .featTitle(featTitle)
                     .featContent(featContent)
                     .title(title)
@@ -72,7 +71,7 @@ public class AdventureService {
                     .difficulty(difficulty)
                     .startDate(startDate)
                     .endDate(endDate)
-                    .user(curUser.orElseThrow())
+                    .user(curUser)
                     .photoUrl(photoUrl)
                     .photoName(photoName)
                     .build();
@@ -83,7 +82,7 @@ public class AdventureService {
 
     // 특정 탐험 조회
     public ReadAdventureRes readAdventure(Long adventureId){
-        Adventure newAdventure = adventureRepository.findById(adventureId).orElseThrow();
+        Adventure newAdventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
 
         ReadAdventureRes newReadAdventureRes = new ReadAdventureRes(
                 newAdventure.getAdventureId(),
@@ -137,7 +136,7 @@ public class AdventureService {
             System.out.println(adventureIds);
 
             for (Long i : adventureIds) {
-                Adventure curAdventure = adventureRepository.findById(i).orElseThrow();
+                Adventure curAdventure = adventureRepository.findById(i).orElseThrow(AdventureNotFoundException::new);
 
                 ReadAdventureRes newReadAdventureRes = new ReadAdventureRes(
                         curAdventure.getAdventureId(),
@@ -159,7 +158,7 @@ public class AdventureService {
         }else{
             // 생성시간 조회
             if(order.equals("update")){
-                List<Adventure>temp = adventureRepository.findAllByOrderByCreateTimeAsc().orElseThrow();
+                List<Adventure>temp = adventureRepository.findAllByOrderByCreateTimeAsc().orElseThrow(AdventureNotFoundException::new);
                 result = adventureToReadAdventureRes(temp);
             }
             // 달성자순 조회
@@ -198,7 +197,7 @@ public class AdventureService {
 
     // 특정 탐험 장소(체크포인트) 추가
     public void createAdventurePlace(Long adventureId,CreateAdventurePlaceReq[] places){
-        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
         // 좌표의 개수만큼 반복
         for(CreateAdventurePlaceReq place:places) {
             Post post = postRepository.findById(place.postId()).orElseThrow(PostNotFoundException::new);
@@ -216,12 +215,12 @@ public class AdventureService {
 
     // 특정 탐험의 장소들(체크포인트들) 조회
     public List<ReadAdventurePlaceRes> readAdventurePlace (Long adventureId){
-        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
 
         List<ReadAdventurePlaceRes> result = new ArrayList<>();
 
         // AdventurePlace를 꺼내와서,
-        List<AdventurePlace> temp = adventurePlaceRepository.findAllByAdventure(curAdventure).orElseThrow();
+        List<AdventurePlace> temp = adventurePlaceRepository.findAllByAdventure(curAdventure).orElseThrow(AdventurePlaceNotFoundException::new);
         // Response로 변환 후 return.
         for(AdventurePlace ap:temp){
             ReadAdventurePlaceRes newReadAdventurePlaceRes = new ReadAdventurePlaceRes(
@@ -242,8 +241,8 @@ public class AdventureService {
 
     // 특정 유저가 참가중인 탐험 추가(탐험 참가하기)
     public void createAdventureInProgress(Long adventureId, Long userId) {
-        User curUser = userRepository.findById(userId).orElseThrow();
-        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+        User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
         Long totalPoint = adventurePlaceRepository.countByAdventure(curAdventure);
 
         AdventureInProgress newAdventureInProgress = AdventureInProgress.builder()
@@ -257,11 +256,11 @@ public class AdventureService {
 
     // 특정 유저가 참가중인 탐험 조회
     public List<ReadAdventureInProgressRes> readAdventureInProgress(Long userId){
-        User curUser = userRepository.findById(userId).orElseThrow();
+        User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
         List<ReadAdventureInProgressRes> result = new ArrayList<>();
 
-        List<AdventureInProgress> temp = adventureInProgressRepository.findAllByUser(curUser).orElseThrow();
+        List<AdventureInProgress> temp = adventureInProgressRepository.findAllByUser(curUser).orElseThrow(AdventureInProgressNotFoundException::new);
 
         for(AdventureInProgress aip : temp){
             Integer clearRate = (int)(((double)aip.getCurrentPoint()/(double)aip.getTotalPoint())*100.0);
@@ -278,7 +277,7 @@ public class AdventureService {
 
     // 탐험 포기(특정 유저가 참가중인 탐험 삭제)
     public void deleteAdventureInProgress(Long adventureId){
-        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
 
         adventureInProgressRepository.deleteByAdventure(curAdventure);
     }
@@ -287,8 +286,8 @@ public class AdventureService {
 
     // 특정 유저가 참가중인 모험의 피드 켜기(좋아요 추가)
     public void createAdventureLike(Long adventureId,Long userId){
-        User curUser = userRepository.findById(userId).orElseThrow();
-        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+        User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
 
         AdventureLike newAdventureLike = AdventureLike.builder()
                 .user(curUser)
@@ -300,15 +299,15 @@ public class AdventureService {
 
     // 특정 유저가 참가중인 모험의 알림 조회
     public ReadAdventureLikeRes readAdventureLike(Long adventureId,Long userId){
-        User curUser = userRepository.findById(userId).orElseThrow();
-        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+        User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
 
         Optional<AdventureLike> findByAdventureandUser = adventureLikeRepository.findByAdventureAndUser(curAdventure,curUser);
 
         ReadAdventureLikeRes result=null;
 
         if(findByAdventureandUser.isPresent()){
-            result = new ReadAdventureLikeRes(findByAdventureandUser.orElseThrow().getAdventureLikeId(), Boolean.TRUE);
+            result = new ReadAdventureLikeRes(findByAdventureandUser.orElseThrow(AdventureLikeNotFoundException::new).getAdventureLikeId(), Boolean.TRUE);
         }else{
             result=new ReadAdventureLikeRes(null,Boolean.FALSE);
         }
@@ -322,9 +321,9 @@ public class AdventureService {
 
     // 특정 탐험 진행자, 달성률 조회
     public List<ReadAdventureInProgressUsersRes> readAdventureInProgressUsers(Long adventureId) {
-        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow();
+        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
 
-        List<AdventureInProgress> adventureInProgressList = adventureInProgressRepository.findAllByAdventure(adventure).orElseThrow();
+        List<AdventureInProgress> adventureInProgressList = adventureInProgressRepository.findAllByAdventure(adventure).orElseThrow(AdventureInProgressNotFoundException::new);
 
         List<ReadAdventureInProgressUsersRes> result = new ArrayList<>();
 
@@ -343,8 +342,8 @@ public class AdventureService {
 
     // 특정 탐험 달성자 추가
     public void createAdventureSucceed(Long adventureId, Long userId) {
-        User curUser = userRepository.findById(userId).orElseThrow();
-        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+        User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
 
         AdventureSucceed newAdventureSucceed = AdventureSucceed.builder()
                 .user(curUser)
@@ -356,7 +355,7 @@ public class AdventureService {
 
     // 특정 유저의 달성한 탐험id들 조회
     public List<ReadAdventureSucceedRes> readAdventureSucceedOfUser(Long userId) {
-        User curUser = userRepository.findById(userId).orElseThrow();
+        User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
         List<AdventureSucceed> adventureSucceeds = adventureSucceedRepository.findAllByUser(curUser);
 
@@ -373,8 +372,8 @@ public class AdventureService {
 
     // 특정 탐험 달성자의 후기 추가
     public void createAdventureReview(Long adventureId, CreateAdventureReviewReq createAdventureReviewReq, Long userId) {
-        User curUser = userRepository.findById(userId).orElseThrow();
-        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+        User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
 
         AdventureReview newAdventureReview = AdventureReview.builder()
                 .content(createAdventureReviewReq.content())
@@ -390,9 +389,9 @@ public class AdventureService {
     public List<ReadAdventureReviewRes> readAdventureReview(Long adventureId) {
         List<ReadAdventureReviewRes> result = new ArrayList<>();
 
-        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
 
-        List<AdventureReview> temp = adventureReviewRepository.findAllByAdventure(curAdventure).orElseThrow();
+        List<AdventureReview> temp = adventureReviewRepository.findAllByAdventure(curAdventure).orElseThrow(AdventureReviewNotFoundException::new);
 
         for(AdventureReview ar:temp){
             ReadAdventureReviewRes newReadAdventureReviewRes = new ReadAdventureReviewRes(
@@ -411,10 +410,10 @@ public class AdventureService {
 
     // 탐험 후기 수정
     public void updateAdventureReview(Long adventurereviewId, UpdateAdventureReviewReq updateAdventureReviewReq, Long userId) {
-        User curUser = userRepository.findById(userId).orElseThrow();
+        User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
         // 꺼내와서,
-        AdventureReview curAdvventureReview = adventureReviewRepository.findById(adventurereviewId).orElseThrow();
+        AdventureReview curAdvventureReview = adventureReviewRepository.findById(adventurereviewId).orElseThrow(AdventureReviewNotFoundException::new);
 
         // 내용 갈아끼운 후,
         AdventureReview updateAdventureReview = AdventureReview.builder()
@@ -438,9 +437,9 @@ public class AdventureService {
 
     // 특정 모험의 특정 좌표의 게시글 조회
     public List<ReadAdventurePlacePostRes> readAdventurePlacePost(Long adventurePlaceId) {
-        AdventurePlace curAdventurePlace = adventurePlaceRepository.findById(adventurePlaceId).orElseThrow();
+        AdventurePlace curAdventurePlace = adventurePlaceRepository.findById(adventurePlaceId).orElseThrow(AdventurePlaceNotFoundException::new);
 
-        List<CheckpointPost> checkpointPosts = checkpointPostRepository.findAllByAdventurePlace(curAdventurePlace).orElseThrow();
+        List<CheckpointPost> checkpointPosts = checkpointPostRepository.findAllByAdventurePlace(curAdventurePlace).orElseThrow(CheckpointPostNotFoundException::new);
 
         List<ReadAdventurePlacePostRes> result = new ArrayList<>();
 
@@ -455,9 +454,9 @@ public class AdventureService {
 
     // 특정 모험의 모든 장소의 게시글 조회
     public List<ReadAdventurePlacePostRes> readAdventurePosts(Long adventureId) {
-        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
 
-        List<CheckpointPost> checkpointPosts = checkpointPostRepository.findAllByAdventureOrderByCreateTimeDesc(curAdventure).orElseThrow();
+        List<CheckpointPost> checkpointPosts = checkpointPostRepository.findAllByAdventureOrderByCreateTimeDesc(curAdventure).orElseThrow(CheckpointPostNotFoundException::new);
 
         List<ReadAdventurePlacePostRes> result = new ArrayList<>();
 
@@ -474,7 +473,7 @@ public class AdventureService {
     // 모험 검색(모든 모험 키워드 조회)
     public List<ReadAdventureRes> readAdventureSearch(String keyword) {
         System.out.println(keyword);
-        List<Adventure> adventureList = adventureRepository.findByTitleContaining(keyword).orElseThrow();
+        List<Adventure> adventureList = adventureRepository.findByTitleContaining(keyword).orElseThrow(AdventureNotFoundException::new);
         System.out.println("==================================================================");
 
         List<ReadAdventureRes> readAdventureResList = new ArrayList<>();
@@ -502,7 +501,7 @@ public class AdventureService {
 
     // 특정 위치에서 일정 거리 안에 내가 참가중인 탐험과 탐험 장소 조회하기
     public List<ReadAdventureInProgressWithinDistanceRes> readAdventureInProgressWithinDistance(Double lat,Double lng,Long userId) {
-        User curUser = userRepository.findById(userId).orElseThrow();
+        User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
         Double area = 0.05;
 
