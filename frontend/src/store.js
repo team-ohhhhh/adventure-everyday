@@ -7,8 +7,14 @@ let URL = createSlice({
 
 let TOKEN = createSlice({
   name: "TOKEN",
-  initialState: null,
+  initialState: "",
+  reducers: {
+    saveToken(state, a) {
+      return a.payload;
+    },
+  },
 });
+export let { saveToken } = TOKEN.actions;
 
 export default configureStore({
   reducer: {
