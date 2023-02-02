@@ -4,6 +4,7 @@ import com.ssafy.antenna.domain.location.Location;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
+
 public class GeometryUtil {
     public static Location calculateByDirection(Double baseLongitude, Double baseLatitude, double distance,
                                                 Double bearing) {
@@ -43,6 +44,6 @@ public class GeometryUtil {
         Double latitude = 0.0;
         Double longitude = 0.0;
         String pointWKT = String.format("POINT(%s %s)", longitude, latitude);
-        return (Point)new WKTReader().read(pointWKT);
+        return (Point) new WKTReader().read(pointWKT);
     }
 }

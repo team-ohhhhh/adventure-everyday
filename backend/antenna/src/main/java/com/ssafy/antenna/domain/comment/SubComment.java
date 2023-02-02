@@ -1,7 +1,6 @@
 package com.ssafy.antenna.domain.comment;
 
 import com.ssafy.antenna.domain.Base;
-import com.ssafy.antenna.domain.comment.Comment;
 import com.ssafy.antenna.domain.like.SubCommentLike;
 import com.ssafy.antenna.domain.user.User;
 import jakarta.persistence.*;

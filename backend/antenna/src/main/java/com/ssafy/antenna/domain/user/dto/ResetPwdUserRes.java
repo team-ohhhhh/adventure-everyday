@@ -1,3 +1,4 @@
 package com.ssafy.antenna.domain.user.dto;
 
-public record ResetPwdUserRes(String newPassword) {}
+public record ResetPwdUserRes(String newPassword) {
+}

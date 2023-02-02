@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import { BottomSheet } from "react-spring-bottom-sheet";
 import "react-spring-bottom-sheet/dist/style.css";
 // import "./BottomSheet.css";
-import ArticleListItem from '../ArticleListItem';
+import SmallArticleItem from '../SmallArticleItem';
 import AdventureBanner from './../Adventure/AdventureBanner';
 import { useSelector } from "react-redux"
 import axios from "axios"
@@ -19,8 +19,8 @@ const BottomSheetContainer = (props) => {
 
   
   // props.center 로 받아온 좌표로 axios
-  let URL = useSelector((state) => state.URL)
-  let TOKEN = useSelector((state) => state.TOKEN)
+  let URL = useSelector((state) => state.url)
+  let TOKEN = useSelector((state) => state.token)
   const [articleList, setArticleList] = useState([])
   useMemo(() => {
     axios({
@@ -71,7 +71,17 @@ const BottomSheetContainer = (props) => {
         lat: props.center.lat,
       }
     })
-    .then((res) => {getAntennaList()}) //TODO: 성공한 후에 뭐해줄까?
+    .then((res) => {
+      getAntennaList()
+    })
+    .then((res) => {
+      //TODO: 안테나 심으면 gif로 효과주고 바텀시트 닫기
+      props.setState((prev) => (
+        {
+        ...prev,
+        isCircle : false
+      }))
+    })
     .catch((err) => {console.log(err)})
   }
 
@@ -83,7 +93,13 @@ const BottomSheetContainer = (props) => {
         Authorization: `Bearer ${TOKEN}`
       },
     })
-    .then((res) => {getAntennaList()}) //TODO: 성공한 후에 뭐해줄까?
+    .then((res) => {getAntennaList()})
+    .then((res) => {
+      props.setState((prev) => ({
+        ...prev,
+        isAntenna: false
+      }))
+    })
     .catch((err) => {console.log(err)})
   }
 
@@ -124,7 +140,7 @@ const BottomSheetContainer = (props) => {
           {dummy.map((dataList) => {
             if (contentType === 'article') {
                 return(
-                <ArticleListItem articleListItem={dataList}/>
+                <SmallArticleItem dataList={dataList}/>
               )}
             else if (contentType === 'adventure') {
               return(

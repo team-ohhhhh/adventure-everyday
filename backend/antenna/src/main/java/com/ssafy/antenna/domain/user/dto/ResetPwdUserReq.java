@@ -1,3 +1,4 @@
 package com.ssafy.antenna.domain.user.dto;
 
-public record ResetPwdUserReq(Long userId) {}
+public record ResetPwdUserReq(Long userId) {
+}

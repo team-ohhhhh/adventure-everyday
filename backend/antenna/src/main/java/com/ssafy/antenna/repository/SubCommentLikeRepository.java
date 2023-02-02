@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface SubCommentLikeRepository extends JpaRepository<SubCommentLike,Long> {
+public interface SubCommentLikeRepository extends JpaRepository<SubCommentLike, Long> {
     List<SubCommentLike> findAllByUser(User user);
 }

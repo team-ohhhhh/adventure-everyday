@@ -11,7 +11,7 @@ public record ReadAdventureRes(
         String title,
         String content,
         Integer difficulty,
-//        byte[] photo,
+        String photoUrl,
         LocalDateTime startDate,
         LocalDateTime endDate,
         Double avgReviewRate

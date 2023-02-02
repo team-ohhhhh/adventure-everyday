@@ -18,7 +18,8 @@ import java.util.List;
 @Builder
 @Entity
 public class Adventure extends Base {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long adventureId;
     // Req로 받는 것들.
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,7 +42,7 @@ public class Adventure extends Base {
     @Column(columnDefinition = "varchar(255) default null")
     private String photoName;
 
-//    @Column(columnDefinition = "int default 6")
+    //    @Column(columnDefinition = "int default 6")
 //    private int validDate;
     @Column(nullable = false)
     private LocalDateTime startDate;

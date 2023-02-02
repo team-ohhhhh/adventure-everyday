@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PostLike  extends Base {
+public class PostLike extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postLikeId;

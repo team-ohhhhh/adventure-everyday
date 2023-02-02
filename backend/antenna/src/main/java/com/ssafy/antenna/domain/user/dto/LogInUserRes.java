@@ -1,4 +1,8 @@
 package com.ssafy.antenna.domain.user.dto;
 
-public record LogInUserRes(String token) {
+public record LogInUserRes(
+        String token,
+        UserDetailRes userDetailRes
+
+) {
 }

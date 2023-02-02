@@ -2,6 +2,7 @@ package com.ssafy.antenna.domain.adventure;
 
 import com.ssafy.antenna.domain.Base;
 import com.ssafy.antenna.domain.post.CheckpointPost;
+import com.ssafy.antenna.domain.post.Post;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-public class AdventurePlace  extends Base {
+public class AdventurePlace extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long adventurePlaceId;
@@ -37,9 +38,13 @@ public class AdventurePlace  extends Base {
     @JoinColumn(name = "adventureId")
     private Adventure adventure;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "postId")
+    private Post post;
+
     @OneToMany(mappedBy = "adventurePlace", cascade = CascadeType.ALL)
     private List<Checkpoint> checkpoints = new ArrayList<>();
 
-    @OneToMany(mappedBy = "adventurePlace",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "adventurePlace", cascade = CascadeType.ALL)
     private List<CheckpointPost> checkpointPosts = new ArrayList<>();
 }

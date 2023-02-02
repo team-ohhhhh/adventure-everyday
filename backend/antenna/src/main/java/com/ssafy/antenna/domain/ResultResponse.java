@@ -1,7 +1,7 @@
 package com.ssafy.antenna.domain;
 
-import lombok.Getter;
 import com.ssafy.antenna.exception.AbstractAppException;
+import lombok.Getter;
 
 @Getter
 public class ResultResponse<T> {
