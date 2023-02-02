@@ -1,27 +1,10 @@
-import ArticleListItem from "../ArticleListItem";
-import ArticleListItem2 from "../ArticleListItem2";
 import styles from "./AdventureDetailInfo.module.css";
-function AdventureInfo() {
-  // 큰 articleListItem
-  const dummyBig = {
-    postId: "1",
-    title: "title",
-    photo: "/images.jpg",
-    nickName: "nickName",
-    date: "2023-02-02",
-    tier: "tier",
-  };
+import SmallArticleItem from "../SmallArticleItem";
+import BigArticleItem from "../BigArticleItem";
 
-  // 작은 articleListItem
-  const dummySmall = {
-    postId: "1",
-    title: "title",
-    date: "2023-02-02",
-    userDetail: "detail",
-    nickName: "nickName",
-    level: "2",
-    photo: "/images/alien.jpg",
-  };
+function AdventureInfo() {
+
+  const articlList = [1, 2, 3]
 
   return (
     <>
@@ -35,7 +18,7 @@ function AdventureInfo() {
             </div>
           </div>
           <div className={styles.cpArticle}>
-            <ArticleListItem2 articleListItem={dummyBig}></ArticleListItem2>
+            <BigArticleItem/>
           </div>
         </div>
         <div className={styles.checkPointArticles}>
@@ -44,7 +27,11 @@ function AdventureInfo() {
             <button className={styles.arrangeBtn}>정렬버튼</button>
           </div>
           <div className={styles.articles}>
-            <ArticleListItem articleListItem={dummySmall}></ArticleListItem>
+            {articlList.map((article) => {
+              return(
+                <SmallArticleItem data={article}/>
+              )
+            })}
             <div className={styles.article}>게시글 2</div>
           </div>
         </div>

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import { BottomSheet } from "react-spring-bottom-sheet";
 import "react-spring-bottom-sheet/dist/style.css";
 // import "./BottomSheet.css";
-import ArticleListItem from '../ArticleListItem';
+import SmallArticleItem from '../SmallArticleItem';
 import AdventureBanner from './../Adventure/AdventureBanner';
 import { useSelector } from "react-redux"
 import axios from "axios"
@@ -140,7 +140,7 @@ const BottomSheetContainer = (props) => {
           {dummy.map((dataList) => {
             if (contentType === 'article') {
                 return(
-                <ArticleListItem articleListItem={dataList}/>
+                <SmallArticleItem dataList={dataList}/>
               )}
             else if (contentType === 'adventure') {
               return(

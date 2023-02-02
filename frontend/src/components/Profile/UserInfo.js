@@ -2,6 +2,7 @@ import React from 'react';
 import style from './UserInfo.module.css'
 import { BiSearchAlt2, BiPencil } from "react-icons/bi"
 import { RiMoreFill } from  "react-icons/ri"
+import SmallArticleItem from './../SmallArticleItem';
 
 function UserInfo() {
 
@@ -40,7 +41,7 @@ function UserInfo() {
         <div className={style.followInfoNumber}><div style={{fontWeight: "700"}}>100</div>followers</div>
         <div className={style.followInfoNumber}><div style={{fontWeight: "700"}}>100</div>followings</div>
       </div>
-    
+      <SmallArticleItem />
     </div>
   </div>
   )
