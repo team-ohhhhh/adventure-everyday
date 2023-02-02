@@ -6,11 +6,11 @@ import com.ssafy.antenna.domain.antenna.dto.PostAntennaReq;
 import com.ssafy.antenna.domain.email.dto.AuthEmailRes;
 import com.ssafy.antenna.domain.email.dto.CheckEmailRes;
 import com.ssafy.antenna.domain.user.dto.*;
+import com.ssafy.antenna.exception.AbstractAppException;
 import com.ssafy.antenna.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -27,7 +27,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/{userId}")
-    public ResultResponse<UserDetailRes> getUser(@PathVariable Long userId) throws Exception {
+    public ResultResponse<UserDetailRes> getUser(@PathVariable Long userId) throws AbstractAppException {
         //validation 필요!!!!!!!!!!!!!!
         return ResultResponse.success(userService.getUser(userId).toResponse());
     }
@@ -105,13 +105,13 @@ public class UserController {
     }
 
     @PutMapping("/photo")
-    public ResultResponse<String> modifyProfilePhoto(@RequestParam MultipartFile multipartFile, Authentication authentication) {
-        return ResultResponse.success(userService.uploadImage(multipartFile, Long.valueOf(authentication.getName())));
+    public ResultResponse<UserDetailRes> modifyProfilePhoto(@RequestParam MultipartFile photo, Authentication authentication) {
+        return ResultResponse.success(userService.modifyProfilePhoto(photo, Long.valueOf(authentication.getName())).toResponse());
     }
 
-    @GetMapping("{userId}/photo")
-    public ResponseEntity<?> getProfilePhoto(@PathVariable Long userId) {
-        return userService.getImage(userId);
+    @DeleteMapping("/photo")
+    public ResultResponse<UserDetailRes> deleteProfilePhoto(Authentication authentication) {
+        return ResultResponse.success(userService.deleteProfilePhoto(Long.valueOf(authentication.getName())).toResponse());
     }
 
     @GetMapping("/{userId}/feats")

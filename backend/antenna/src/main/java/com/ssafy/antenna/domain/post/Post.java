@@ -1,6 +1,7 @@
 package com.ssafy.antenna.domain.post;
 
 import com.ssafy.antenna.domain.Base;
+import com.ssafy.antenna.domain.adventure.AdventurePlace;
 import com.ssafy.antenna.domain.comment.Comment;
 import com.ssafy.antenna.domain.like.PostLike;
 import com.ssafy.antenna.domain.post.dto.PostDetailRes;
@@ -34,10 +35,11 @@ public class Post extends Base {
     private String nearestPlace;
     @Column(columnDefinition = "varchar(50) not null")
     private String w3w;
-    @Column(columnDefinition = "blob default null")
-    private byte[] photo;
     @Column(columnDefinition = "varchar(255) default null")
-    private String photoType;
+    private String photoUrl;
+
+    @Column(columnDefinition = "varchar(255) default null")
+    private String photoName;
     @Column(columnDefinition = "boolean not null")
     private boolean isPublic;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -53,7 +55,10 @@ public class Post extends Base {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<CheckpointPost> checkpointPosts = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<AdventurePlace> adventurePlaces = new ArrayList<>();
+
     public PostDetailRes toResponse() {
-        return new PostDetailRes(this.postId, this.title, this.content, this.coordinate.getX(), this.coordinate.getY(), this.nearestPlace, this.w3w, this.isPublic,this.getCreateTime() , this.user.toResponse());
+        return new PostDetailRes(this.postId, this.title, this.content, this.coordinate.getX(), this.coordinate.getY(), this.nearestPlace, this.w3w, this.isPublic, this.getCreateTime(), this.getPhotoUrl(), this.user.toResponse());
     }
 }

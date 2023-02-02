@@ -3,7 +3,8 @@ import { MapMarker, Map, Circle } from "react-kakao-maps-sdk";
 import Antenna from "../components/mapPage/antenna/Antenna";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import BottomSheetContainer from './../components/BottomSheet/BottomSheet'
+import BottomSheetContainer from "./../components/BottomSheet/BottomSheet";
+
 function MainMap() {
   const [state, setState] = useState({
     center: {
@@ -77,13 +78,13 @@ let URL = useSelector((state) => state.url)
   // lat이나 lng 값이 변화했을 때 작동할 함수 -> axios 후에 setArticleList
   
   return (
-    <>
+    <div className="pageContainer">
       <div
         style={{
           position: "relative",
           overflow: "hidden",
           width: "100%",
-          height: "850px",
+          height: "776px",
           backgroundColor: "#eeefff",
         }}
       >
@@ -230,7 +231,7 @@ let URL = useSelector((state) => state.url)
           {!state.isCur && (
             <button
               onClick={() => {
-                moveCurPos()
+                moveCurPos();
                 setState((prev) => ({
                   ...prev,
                   isCircle: true,
@@ -315,7 +316,7 @@ let URL = useSelector((state) => state.url)
           { state.isCircle && <BottomSheetContainer antennae={antennae} center={state.center} isAntenna={state.isAntenna} setAntennae={setAntennae} setState={setState}/>}
         </Map>
       </div>
-    </>
+    </div>
   );
 
   // 현재 위치로 이동시키는 함수

@@ -4,7 +4,11 @@ import com.ssafy.antenna.domain.adventure.*;
 import com.ssafy.antenna.domain.adventure.dto.*;
 import com.ssafy.antenna.domain.like.AdventureLike;
 import com.ssafy.antenna.domain.location.Location;
+import com.ssafy.antenna.domain.post.CheckpointPost;
+import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.user.User;
+import com.ssafy.antenna.exception.not_found.AdventureNotFoundException;
+import com.ssafy.antenna.exception.not_found.PostNotFoundException;
 import com.ssafy.antenna.repository.*;
 import com.ssafy.antenna.util.CardinalDirection;
 import com.ssafy.antenna.util.GeometryUtil;
@@ -13,11 +17,12 @@ import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -31,26 +36,49 @@ public class AdventureService {
     private final AdventureReviewRepository adventureReviewRepository;
     private final AdventureLikeRepository adventureLikeRepository;
     private final AdventureInProgressRepository adventureInProgressRepository;
+    private final CheckpointPostRepository checkpointPostRepository;
+    private final AwsS3Service awsS3Service;
+    private final PostRepository postRepository;
+    @Value("${aws-cloud.aws.s3.bucket.url}")
+    private String bucketUrl;
+    private final PostLikeRepository postLikeRepository;
+    private final AntennaRepository antennaRepository;
 
     // 탐험 추가
-    public void createAdventure(CreateAdventureReq createAdventureReq, Long userId){
+    public Long createAdventure(String category, String featTitle, String featContent, String title, String content, int difficulty, LocalDateTime startDate, LocalDateTime endDate, MultipartFile photo, Long userId){
         Optional<User> curUser = userRepository.findById(userId);
 
         // 탐험을 생성한 후,
         Adventure newAdventure = Adventure.builder()
-                .category(categoryRepository.findCategoryIdByCategory(createAdventureReq.category()).orElseThrow())
-                .featTitle(createAdventureReq.featTitle())
-                .featContent(createAdventureReq.featContent())
-                .title(createAdventureReq.title())
-                .content(createAdventureReq.content())
-                .difficulty(createAdventureReq.difficulty())
-                .photo(createAdventureReq.photo())
-                .startDate(createAdventureReq.startDate())
-                .endDate(createAdventureReq.endDate())
+                .category(categoryRepository.findCategoryIdByCategory(category).orElseThrow())
+                .featTitle(featTitle)
+                .featContent(featContent)
+                .title(title)
+                .content(content)
+                .difficulty(difficulty)
+                .startDate(startDate)
+                .endDate(endDate)
                 .user(curUser.orElseThrow())
                 .build();
+        if(photo != null){
+            String photoName = awsS3Service.uploadImage(photo);
+            String photoUrl = bucketUrl + photoName;
+            newAdventure = Adventure.builder()
+                    .category(categoryRepository.findCategoryIdByCategory(category).orElseThrow())
+                    .featTitle(featTitle)
+                    .featContent(featContent)
+                    .title(title)
+                    .content(content)
+                    .difficulty(difficulty)
+                    .startDate(startDate)
+                    .endDate(endDate)
+                    .user(curUser.orElseThrow())
+                    .photoUrl(photoUrl)
+                    .photoName(photoName)
+                    .build();
+        }
 
-        adventureRepository.save(newAdventure);
+        return adventureRepository.save(newAdventure).getAdventureId();
     }
 
     // 특정 탐험 조회
@@ -59,13 +87,14 @@ public class AdventureService {
 
         ReadAdventureRes newReadAdventureRes = new ReadAdventureRes(
                 newAdventure.getAdventureId(),
+                newAdventure.getAdventureId(),
                 newAdventure.getCategory().getCategory(),
                 newAdventure.getFeatTitle(),
                 newAdventure.getFeatContent(),
                 newAdventure.getTitle(),
                 newAdventure.getContent(),
                 newAdventure.getDifficulty(),
-                newAdventure.getPhoto(),
+                newAdventure.getPhotoUrl(),
                 newAdventure.getStartDate(),
                 newAdventure.getEndDate(),
                 newAdventure.getAvgReviewRate()
@@ -76,15 +105,57 @@ public class AdventureService {
 
     // 특정 탐험 삭제
     public void deleteAdventure(Long adventureId){
+        //모험 있는지 조회
+        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
+        //있다면, 사진이 있으면 사진 삭제 처리
+        if(adventure.getPhotoName()!=null){
+            awsS3Service.deleteImage(adventure.getPhotoName());
+        }
         adventureRepository.deleteById(adventureId);
     }
 
     // 모든 탐험 조회(생성순, 달성순, 거리순)
     public List<ReadAdventureRes> readAdventures(String order, Double lat, Double lng){
-        // 거리순 조회
+        // 5km이내(변경가능) 모든 탐험 거리순으로(가까운순) 10개(변경가능) 조회
         List<ReadAdventureRes> result=new ArrayList<>();
         if(lat!=null && lng!=null){
+            Query query = entityManager.createNativeQuery(
+                                    "SELECT *, " +
+                                            "ST_Distance_Sphere(POINT("+lng.toString()+", "+lat.toString()+"), ap.coordinate) AS distance "+
+                                            "FROM adventure_place ap "+
+                                            "order by distance asc "
+                            , AdventurePlace.class)
+                    .setMaxResults(10);
+            List<AdventurePlace> adventurePlaceList = query.getResultList();
 
+            // 중복제거
+            Set<Long> adventureIds=new HashSet<>();
+            for(AdventurePlace adventurePlace:adventurePlaceList){
+                adventureIds.add(adventurePlace.getAdventure().getAdventureId());
+            }
+
+            System.out.println(adventureIds);
+
+            for (Long i : adventureIds) {
+                Adventure curAdventure = adventureRepository.findById(i).orElseThrow();
+
+                ReadAdventureRes newReadAdventureRes = new ReadAdventureRes(
+                        curAdventure.getAdventureId(),
+                        curAdventure.getUser().getUserId(),
+                        curAdventure.getCategory().getCategory(),
+                        curAdventure.getFeatTitle(),
+                        curAdventure.getFeatContent(),
+                        curAdventure.getTitle(),
+                        curAdventure.getContent(),
+                        curAdventure.getDifficulty(),
+                        curAdventure.getPhotoUrl(),
+                        curAdventure.getStartDate(),
+                        curAdventure.getEndDate(),
+                        curAdventure.getAvgReviewRate()
+                );
+
+                result.add(newReadAdventureRes);
+            }
         }else{
             // 생성시간 조회
             if(order.equals("update")){
@@ -107,13 +178,14 @@ public class AdventureService {
         for(Adventure adventure : temp){
             ReadAdventureRes newReadAdventureRes = new ReadAdventureRes(
                     adventure.getAdventureId(),
+                    adventure.getUser().getUserId(),
                     adventure.getCategory().getCategory(),
                     adventure.getFeatTitle(),
                     adventure.getFeatContent(),
                     adventure.getTitle(),
                     adventure.getContent(),
                     adventure.getDifficulty(),
-                    adventure.getPhoto(),
+                    adventure.getPhotoUrl(),
                     adventure.getStartDate(),
                     adventure.getEndDate(),
                     adventure.getAvgReviewRate()
@@ -127,15 +199,15 @@ public class AdventureService {
     // 특정 탐험 장소(체크포인트) 추가
     public void createAdventurePlace(Long adventureId,CreateAdventurePlaceReq[] places){
         Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
-
         // 좌표의 개수만큼 반복
         for(CreateAdventurePlaceReq place:places) {
+            Post post = postRepository.findById(place.postId()).orElseThrow(PostNotFoundException::new);
             AdventurePlace newAdventurePlace = AdventurePlace.builder()
                     .title(place.title())
                     .content(place.content())
-                    .coordinate(new GeometryFactory().createPoint(new Coordinate(place.coordinate()[0],place.coordinate()[1])))
-                    .photo(place.photo())
+                    .coordinate(new GeometryFactory().createPoint(new Coordinate(place.coordinate()[1],place.coordinate()[0])))
                     .adventure(curAdventure)
+                    .post(post)
                     .build();
 
             adventurePlaceRepository.save(newAdventurePlace);
@@ -157,7 +229,7 @@ public class AdventureService {
                     ap.getTitle(),
                     ap.getContent(),
                     new Double[] {ap.getCoordinate().getX(),ap.getCoordinate().getY()},
-                    ap.getPhoto()
+                    ap.getPost().getPostId()
             );
 
             result.add(newReadAdventurePlaceRes);
@@ -192,10 +264,10 @@ public class AdventureService {
         List<AdventureInProgress> temp = adventureInProgressRepository.findAllByUser(curUser).orElseThrow();
 
         for(AdventureInProgress aip : temp){
+            Integer clearRate = (int)(((double)aip.getCurrentPoint()/(double)aip.getTotalPoint())*100.0);
             ReadAdventureInProgressRes newReadAdventureInProgressRes = new ReadAdventureInProgressRes(
                     aip.getAdventure().getAdventureId(),
-                    aip.getTotalPoint(),
-                    aip.getCurrentPoint()
+                    clearRate
             );
 
             result.add(newReadAdventureInProgressRes);
@@ -248,6 +320,27 @@ public class AdventureService {
         adventureLikeRepository.deleteById(adventureLikeId);
     }
 
+    // 특정 탐험 진행자, 달성률 조회
+    public List<ReadAdventureInProgressUsersRes> readAdventureInProgressUsers(Long adventureId) {
+        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow();
+
+        List<AdventureInProgress> adventureInProgressList = adventureInProgressRepository.findAllByAdventure(adventure).orElseThrow();
+
+        List<ReadAdventureInProgressUsersRes> result = new ArrayList<>();
+
+        for(AdventureInProgress adventureInProgress:adventureInProgressList){
+            Integer clearRate = (int)(((double)adventureInProgress.getCurrentPoint()/(double)adventureInProgress.getTotalPoint())*100.0);
+            ReadAdventureInProgressUsersRes readAdventureInProgressUsersRes = new ReadAdventureInProgressUsersRes(
+                    adventureInProgress.getUser().getUserId(),
+                    clearRate
+            );
+
+            result.add(readAdventureInProgressUsersRes);
+        }
+
+        return result;
+    }
+
     // 특정 탐험 달성자 추가
     public void createAdventureSucceed(Long adventureId, Long userId) {
         User curUser = userRepository.findById(userId).orElseThrow();
@@ -261,7 +354,22 @@ public class AdventureService {
         adventureSucceedRepository.save(newAdventureSucceed);
     }
 
+    // 특정 유저의 달성한 탐험id들 조회
+    public List<ReadAdventureSucceedRes> readAdventureSucceedOfUser(Long userId) {
+        User curUser = userRepository.findById(userId).orElseThrow();
 
+        List<AdventureSucceed> adventureSucceeds = adventureSucceedRepository.findAllByUser(curUser);
+
+        List<ReadAdventureSucceedRes> result = new ArrayList<>();
+
+        for(AdventureSucceed adventureSucceed:adventureSucceeds){
+            ReadAdventureSucceedRes readAdventureSucceedRes = new ReadAdventureSucceedRes(adventureSucceed.getAdventure().getAdventureId());
+
+            result.add(readAdventureSucceedRes);
+        }
+
+        return result;
+    }
 
     // 특정 탐험 달성자의 후기 추가
     public void createAdventureReview(Long adventureId, CreateAdventureReviewReq createAdventureReviewReq, Long userId) {
@@ -328,6 +436,41 @@ public class AdventureService {
         adventureReviewRepository.deleteById(adventureReviewId);
     }
 
+    // 특정 모험의 특정 좌표의 게시글 조회
+    public List<ReadAdventurePlacePostRes> readAdventurePlacePost(Long adventurePlaceId) {
+        AdventurePlace curAdventurePlace = adventurePlaceRepository.findById(adventurePlaceId).orElseThrow();
+
+        List<CheckpointPost> checkpointPosts = checkpointPostRepository.findAllByAdventurePlace(curAdventurePlace).orElseThrow();
+
+        List<ReadAdventurePlacePostRes> result = new ArrayList<>();
+
+        for(CheckpointPost checkpointPost:checkpointPosts){
+            ReadAdventurePlacePostRes readAdventurePlacePostRes = new ReadAdventurePlacePostRes(checkpointPost.getPost().getPostId());
+
+            result.add(readAdventurePlacePostRes);
+        }
+
+        return result;
+    }
+
+    // 특정 모험의 모든 장소의 게시글 조회
+    public List<ReadAdventurePlacePostRes> readAdventurePosts(Long adventureId) {
+        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
+
+        List<CheckpointPost> checkpointPosts = checkpointPostRepository.findAllByAdventureOrderByCreateTimeDesc(curAdventure).orElseThrow();
+
+        List<ReadAdventurePlacePostRes> result = new ArrayList<>();
+
+        for(CheckpointPost checkpointPost:checkpointPosts){
+            ReadAdventurePlacePostRes readAdventurePlacePostRes = new ReadAdventurePlacePostRes(checkpointPost.getPost().getPostId());
+
+            result.add(readAdventurePlacePostRes);
+        }
+
+        return result;
+    }
+
+
     // 모험 검색(모든 모험 키워드 조회)
     public List<ReadAdventureRes> readAdventureSearch(String keyword) {
         System.out.println(keyword);
@@ -338,13 +481,14 @@ public class AdventureService {
         for(Adventure adventure:adventureList){
             ReadAdventureRes newReadAdventureRes = new ReadAdventureRes(
                     adventure.getAdventureId(),
+                    adventure.getUser().getUserId(),
                     adventure.getCategory().getCategory(),
                     adventure.getFeatTitle(),
                     adventure.getFeatContent(),
                     adventure.getTitle(),
                     adventure.getContent(),
                     adventure.getDifficulty(),
-                    adventure.getPhoto(),
+                    adventure.getPhotoUrl(),
                     adventure.getStartDate(),
                     adventure.getEndDate(),
                     adventure.getAvgReviewRate()
@@ -361,8 +505,6 @@ public class AdventureService {
         User curUser = userRepository.findById(userId).orElseThrow();
 
         Double area = 0.05;
-
-        System.out.println(lng + " " + lat + " " + area);
 
         Location northEast = GeometryUtil.calculateByDirection(lng, lat, area, CardinalDirection.NORTHEAST
                 .getBearing());
@@ -381,9 +523,6 @@ public class AdventureService {
                         , AdventurePlace.class)
                 .setMaxResults(100);
         List<AdventurePlace> adventurePlaceList = query.getResultList();
-
-        System.out.println(adventurePlaceList);
-        System.out.println(adventurePlaceList.size());
 
         List<ReadAdventureInProgressWithinDistanceRes> readAdventureInProgressWithinDistanceRes = new ArrayList<>();
         for (AdventurePlace ap :

@@ -1,0 +1,18 @@
+.fileInput {
+  display: none;
+}
+
+.beforeUpload {
+  width: 200px;
+  height: 200px;
+  background-color: lightGray;
+  margin: auto;
+  line-height: 200px;
+}
+
+.afterUpload {
+  width: 200px;
+  height: 200px;
+  margin: auto;
+  object-fit: cover;
+}

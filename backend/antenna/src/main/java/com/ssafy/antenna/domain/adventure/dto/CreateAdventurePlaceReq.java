@@ -6,6 +6,6 @@ public record CreateAdventurePlaceReq(
         String title,
         String content,
         Double[] coordinate,
-        byte[] photo
+        Long postId
 ) {
 }

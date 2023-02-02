@@ -6,9 +6,6 @@ import com.ssafy.antenna.domain.user.dto.LogInUserRes;
 import com.ssafy.antenna.domain.user.dto.PostUserReq;
 import com.ssafy.antenna.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,22 +19,17 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
-//    @PostMapping(value="/register")
-//    public ResultResponse<LogInUserRes> register(@RequestBody PostUserReq postUserReq) {
-//        return ResultResponse.success(authenticationService.register(postUserReq));
-//    }
-
-    @PostMapping(value="/register")
-    public ResultResponse<LogInUserRes> registerTest(
+    @PostMapping(value = "/register")
+    public ResultResponse<LogInUserRes> registerUser(
             @RequestPart String email,
             @RequestPart String nickname,
             @RequestPart String password,
             @RequestPart(required = false) String introduce,
-            @RequestPart(required = false) MultipartFile file
+            @RequestPart(required = false) MultipartFile photo
     ) throws IOException {
         return ResultResponse.success(
-                authenticationService.registerTest(
-                    new PostUserReq(email, nickname, password, introduce), file
+                authenticationService.registerUser(
+                        new PostUserReq(email, nickname, password, introduce), photo
                 ));
     }
 

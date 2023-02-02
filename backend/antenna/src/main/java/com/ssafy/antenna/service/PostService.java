@@ -3,7 +3,6 @@ package com.ssafy.antenna.service;
 import com.ssafy.antenna.domain.ResultResponse;
 import com.ssafy.antenna.domain.comment.Comment;
 import com.ssafy.antenna.domain.comment.PostCommentReq;
-import com.ssafy.antenna.domain.location.Location;
 import com.ssafy.antenna.domain.comment.SubComment;
 import com.ssafy.antenna.domain.comment.SubCommentDtoMapper;
 import com.ssafy.antenna.domain.comment.dto.PostSubCommentReq;
@@ -15,20 +14,17 @@ import com.ssafy.antenna.domain.like.SubCommentLike;
 import com.ssafy.antenna.domain.like.dto.CommentLikeDto;
 import com.ssafy.antenna.domain.like.dto.PostLikeDto;
 import com.ssafy.antenna.domain.like.dto.SubCommentLikeDto;
+import com.ssafy.antenna.domain.location.Location;
 import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.post.dto.PostDetailRes;
-import com.ssafy.antenna.domain.post.mapper.PostDtoMapper;
 import com.ssafy.antenna.domain.post.dto.PostDto;
 import com.ssafy.antenna.domain.post.dto.PostUpdateReq;
+import com.ssafy.antenna.domain.post.mapper.PostDtoMapper;
 import com.ssafy.antenna.domain.user.User;
-import com.ssafy.antenna.exception.ErrorCode;
 import com.ssafy.antenna.exception.not_found.UserNotFoundException;
-import com.ssafy.antenna.repository.CommentRepository;
-import com.ssafy.antenna.repository.PostRepository;
-import com.ssafy.antenna.repository.UserRepository;
+import com.ssafy.antenna.repository.*;
 import com.ssafy.antenna.util.CardinalDirection;
 import com.ssafy.antenna.util.GeometryUtil;
-import com.ssafy.antenna.repository.*;
 import com.ssafy.antenna.util.ImageUtil;
 import com.ssafy.antenna.util.W3WUtil;
 import com.what3words.javawrapper.response.ConvertTo3WA;
@@ -37,6 +33,7 @@ import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -44,8 +41,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -56,7 +53,6 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final W3WUtil w3WUtil;
-    private final ImageUtil imageUtil;
     private final CommentRepository commentRepository;
     private final PostDtoMapper postDtoMapper;
     private final PostLikeRepository postLikeRepository;
@@ -64,48 +60,64 @@ public class PostService {
     private final SubCommentRepository subCommentRepository;
     private final SubCommentDtoMapper subCommentDtoMapper;
     private final SubCommentLikeRepository subCommentLikeRepository;
+    @Value("${aws-cloud.aws.s3.bucket.url}")
+    private String bucketUrl;
 
-    public ResultResponse<?> getPostById(Long postId) {
+    private final AwsS3Service awsS3Service;
+
+//    public ResultResponse<?> getPostById(Long postId) {
+//        return ResultResponse.success(
+//                postRepository.findById(postId)
+//                        .map(postDtoMapper)
+//                        .orElseThrow(NoSuchElementException::new)
+//        );
+//    }
+
+    public ResultResponse<PostDetailRes> getPostById(Long postId) {
         return ResultResponse.success(
-                postRepository.findById(postId)
-                        .map(postDtoMapper)
-                        .orElseThrow(NoSuchElementException::new)
-        );
+                postRepository.findById(postId).orElseThrow(NoSuchElementException::new).toResponse());
     }
-    public String deletePost(Long userId, Long postId) throws IllegalAccessException {
+
+    public PostDetailRes deletePost(Long userId, Long postId) throws IllegalAccessException {
         Post post = postRepository.findById(postId)
                 .orElseThrow(NoSuchElementException::new);
-        if(post.getUser().getUserId().equals(userId)) {
+        if(post.getPhotoName()!=null){
+            awsS3Service.deleteImage(post.getPhotoName());
+        }
+        if (post.getUser().getUserId().equals(userId)) {
             postRepository.delete(post);
-            return "게시글 삭제 성공";
-        } {
+            return post.toResponse();
+        }
+        {
             throw new IllegalAccessException("잘못된 접근입니다");
         }
     }
 
-    public String createPost(Long userId, String title, String content, String lat, String lng, String isPublic, MultipartFile file) throws IOException {
+    public PostDetailRes createPost(Long userId, String title, String content, String lat, String lng, String isPublic, MultipartFile photo) throws IOException {
         ConvertTo3WA w3wWords = w3WUtil.getW3W(Double.parseDouble(lng), Double.parseDouble(lat));
-        Post post = Post.builder().user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new)).title(title).content(content).coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLat(), w3wWords.getCoordinates().getLng()))).w3w(w3wWords.getWords()).nearestPlace(w3wWords.getNearestPlace()).isPublic(Boolean.valueOf(isPublic)).build();
-        if (file != null) {
-            post.setPhoto(ImageUtil.compressImage(file.getBytes()));
-            post.setPhotoType(file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1));
+        Post post = Post.builder().user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new)).title(title).content(content).coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLng(), w3wWords.getCoordinates().getLat()))).w3w(w3wWords.getWords()).nearestPlace(w3wWords.getNearestPlace()).isPublic(Boolean.valueOf(isPublic)).build();
+        if (photo != null) {
+            String photoName = awsS3Service.uploadImage(photo);
+            String photoUrl = bucketUrl + photoName;
+            post = Post.builder().user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new)).title(title).content(content).coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLng(), w3wWords.getCoordinates().getLat()))).w3w(w3wWords.getWords()).nearestPlace(w3wWords.getNearestPlace()).isPublic(Boolean.valueOf(isPublic)).photoUrl(photoUrl).photoName(photoName).build();
+
         }
         postRepository.save(post);
-        return "SUCCESS";
+        return post.toResponse();
     }
 
-    public ResponseEntity<?> getPostPhoto(Long postId) {
-        Post post = postRepository.findById(postId).orElseThrow(NoSuchElementException::new);
-        byte[] photo;
-        try {
-            photo = ImageUtil.decompressImage(post.getPhoto());
-        } catch (NullPointerException e) {
-            throw new NoSuchElementException("사진이 없습니다");
-        }
-        return ResponseEntity.ok().contentType(MediaType.valueOf("image/" + post.getPhotoType())).body(photo);
-    }
+//    public ResponseEntity<?> getPostPhoto(Long postId) {
+//        Post post = postRepository.findById(postId).orElseThrow(NoSuchElementException::new);
+//        byte[] photo;
+//        try {
+//            photo = ImageUtil.decompressImage(post.getPhoto());
+//        } catch (NullPointerException e) {
+//            throw new NoSuchElementException("사진이 없습니다");
+//        }
+//        return ResponseEntity.ok().contentType(MediaType.valueOf("image/" + post.getPhotoType())).body(photo);
+//    }
 
-    public ResultResponse<?> updatePost(
+    public ResultResponse<PostDetailRes> updatePost(
             Long postId,
             PostUpdateReq postUpdateReq,
             Authentication authentication
@@ -114,8 +126,18 @@ public class PostService {
         if (!Long.valueOf(authentication.getName()).equals(post.getUser().getUserId())) {
             throw new IllegalAccessException();
         } else {
-            Post newPost = Post.builder().postId(post.getPostId()).user(post.getUser()).title(postUpdateReq.title()).content(postUpdateReq.content()).isPublic(Boolean.valueOf(postUpdateReq.isPublic())).photoType(post.getPhotoType()).photo(post.getPhoto()).nearestPlace(post.getNearestPlace()).w3w(post.getW3w()).coordinate(post.getCoordinate()).build();
-            return ResultResponse.success(postRepository.save(newPost).getPostId());
+            Post newPost = Post.builder()
+                    .postId(post.getPostId())
+                    .user(post.getUser())
+                    .title(postUpdateReq.title())
+                    .content(postUpdateReq.content())
+                    .isPublic(Boolean.valueOf(postUpdateReq.isPublic()))
+                    .photoUrl(post.getPhotoUrl())
+                    .photoName(post.getPhotoName())
+                    .nearestPlace(post.getNearestPlace())
+                    .w3w(post.getW3w())
+                    .coordinate(post.getCoordinate()).build();
+            return ResultResponse.success(postRepository.save(newPost).toResponse());
         }
     }
 
@@ -296,7 +318,7 @@ public class PostService {
         List<SubCommentLike> collect = subCommentLikes.stream()
                 .filter(subCommentLike -> subCommentLike.getSubComment().getSubCommentId().equals(subCommentId))
                 .collect(Collectors.toList());
-        if(!collect.isEmpty()) {
+        if (!collect.isEmpty()) {
             subCommentLikeRepository.delete(collect.get(0));
             return ResultResponse.success("삭제 성공");
         }
