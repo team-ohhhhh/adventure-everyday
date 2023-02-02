@@ -20,7 +20,12 @@ function App() {
         <Route element={<Navigate />}>
           {/* Navbar가 필요한 페이지는 이곳에 추가해주세요*/}
           <Route path="/feed" element={<FeedPage />} />
-          <Route path="/map" element={<MapPage />} />
+          {/* <Route path={["/map", "/"]} element={<MapPage />} /> */}
+        
+          {['/map', '/'].map((path) => (
+            <Route path={path} element={<MapPage/>} />
+          ))}
+        
           <Route path="/adventure" element={<AdventurePage />} />
           <Route
             path="/adventure/detail/:id"

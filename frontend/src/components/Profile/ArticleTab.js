@@ -9,11 +9,6 @@ function ArticleTab() {
     <div>
       {/*TODO: 여기에 게시글 지도 컴포넌트 넣자 */}
 
-      {
-        state.isSelected 
-        ? <HorizontalScroll contentType={"article"}/>
-        : null
-      }
     </div>
   )
 }
