@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux"
-import { saveToken } from "./../store";
+import { saveToken } from "../store/tokenSlice";
 import { useNavigate } from "react-router-dom"
 import style from "./LogInPage.module.css"
 
 // 로그인 페이지
 function LoginPage() {
-  let URL = useSelector((state) => state.URL);
+  let URL = useSelector((state) => state.url)
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

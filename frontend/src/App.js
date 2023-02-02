@@ -26,12 +26,13 @@ function App() {
             path="/adventure/detail/:id"
             element={<AdventureDetailPage />}
           />
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile/:userId" element={<ProfilePage />} />
         </Route>
         {/* Navbar가 필요하지 않은 페이지는 이곳에 추가해주세요 */}
         <Route path="/login" element={<LogInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/write" element={<ArticleCreatePage />} />
+        <Route path="/profile/:userId" element={ <ProfilePage />}/>
       </Routes>
     </div>
   );

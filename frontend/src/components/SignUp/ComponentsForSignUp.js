@@ -8,7 +8,7 @@ import style from "./ComponentsForSignUp.module.css"
 
 // 1. 이메일 인증 화면
 function EmailComponent(props) {
-  let URL = useSelector((state) => state.URL)
+  let URL = useSelector((state) => state.url)
 
   // 메일 보낸 다음 코드 입력 화면을 띄우기 위한 스위치
   const [isSent, setIsSent] = useState(false)
