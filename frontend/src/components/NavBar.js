@@ -76,6 +76,7 @@ const NavBar = () => {
           className={style.tab}
           style={{ color: `${profileTab}` }}
           onClick={() => {
+            //TODO: variable routing으로 자기유저pk 넣어주기 (redux에 저장해두고 쓰기, 로그인시에 받아오기)
             navigate("/profile");
             setAllBlack();
             setProfileTab("#1C0B69");
