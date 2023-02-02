@@ -82,18 +82,26 @@ public class PostService {
         /*
          * 1. 안테나의 범위에 있는지, 참가 중인 알람을 킨 모험의 글인지, 팔로잉 중인 사람의 글인지에 따라 카테고리를 넣어주기.
          * */
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         //먼저 글이 있는지를 조회한다.
         Post post = postRepository.findById(postId).orElseThrow(NoSuchElementException::new);
         Long isAntenna = 0L, isChallenge = 0L, isFollowing = 0L;
         //있다면, 그 글이 안테나의 범위 안에 속해있는지를 조회해야한다. -> 있다면 안테나의 id를 isChallenge에 넣어줘야함
-        Optional<List<Antenna>> antennaList = antennaRepository.findAllByUser(post.getUser());
+        Optional<List<Antenna>> antennaList = antennaRepository.findAllByUser(user);
+        System.out.println();
+        for (Antenna antenna:
+        antennaList.get()) {
+            System.out.println(antenna.toResponse());
+        }
         if(antennaList.isPresent()){
             for (Antenna antenna : antennaList.get()) {
                 //안테나 별로 주변 게시글을 조회해서 그 게시글 중 내가 가진 postId가 있는지를 체크한다.
+                System.out.println(isAntenna.toString());
+                System.out.println(antenna.getCoordinate().getX());
                 Long isAntennaId = isPostWithArea(antenna.getCoordinate().getX(), antenna.getCoordinate().getY(), antenna.getArea(), postId);
                 if(isAntennaId!=0){
                     //찾았으면 종료
-                    isAntenna=isAntennaId;
+                    isAntenna=antenna.getAntennaId();
                     break;
                 }
             }
@@ -104,7 +112,6 @@ public class PostService {
         // 2. 체크포인트 게시글이라면 거기서 나온 어드벤처id와 유저id로 탐험좋아요 테이블에서 조회해서 나온 결과값이 있나 확인
         // 3. 있으면? isChallenge에 어드벤처id를 넣어준다.
         Optional<CheckpointPost> checkpointPost =checkpointPostRepository.findByPost(post);
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         if(checkpointPost.isPresent()){
             //게시글이 있다면
             Adventure adventure = adventureRepository.findById(checkpointPost.get().getAdventure().getAdventureId()).orElseThrow(AdventureNotFoundException::new);
