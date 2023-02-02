@@ -95,11 +95,11 @@ public class PostService {
 
     public PostDetailRes createPost(Long userId, String title, String content, String lat, String lng, String isPublic, MultipartFile photo) throws IOException {
         ConvertTo3WA w3wWords = w3WUtil.getW3W(Double.parseDouble(lng), Double.parseDouble(lat));
-        Post post = Post.builder().user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new)).title(title).content(content).coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLat(), w3wWords.getCoordinates().getLng()))).w3w(w3wWords.getWords()).nearestPlace(w3wWords.getNearestPlace()).isPublic(Boolean.valueOf(isPublic)).build();
+        Post post = Post.builder().user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new)).title(title).content(content).coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLng(), w3wWords.getCoordinates().getLat()))).w3w(w3wWords.getWords()).nearestPlace(w3wWords.getNearestPlace()).isPublic(Boolean.valueOf(isPublic)).build();
         if (photo != null) {
             String photoName = awsS3Service.uploadImage(photo);
             String photoUrl = bucketUrl + photoName;
-            post = Post.builder().user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new)).title(title).content(content).coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLat(), w3wWords.getCoordinates().getLng()))).w3w(w3wWords.getWords()).nearestPlace(w3wWords.getNearestPlace()).isPublic(Boolean.valueOf(isPublic)).photoUrl(photoUrl).photoName(photoName).build();
+            post = Post.builder().user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new)).title(title).content(content).coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLng(), w3wWords.getCoordinates().getLat()))).w3w(w3wWords.getWords()).nearestPlace(w3wWords.getNearestPlace()).isPublic(Boolean.valueOf(isPublic)).photoUrl(photoUrl).photoName(photoName).build();
 
         }
         postRepository.save(post);
