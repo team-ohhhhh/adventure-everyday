@@ -1,20 +1,37 @@
-.pageContainer{
+.wrapper{
     width: 100%;
-    height: 120vh;
+    height: 100%;
     background-color: aqua;  
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    justify-content: center;
+    /* display: flex; */
+    
+    /* flex-direction: column; */
+    /* align-items: center; */
+    /* justify-content: center; */
+    overflow: auto;
 }
 
 .white{
+    
+    justify-content: center;
     width: 100%;
-    height: 30%;
+    height: 30vh;
     background-color: white;
+    
 }
 
+/* .info{
+    position: absolute;
+    z-index: 200;
+    left: 50%;
+    top: 5%;
+    transform:translateX(-50%);
+   
+} */
+
+
 .purple{
+
+
     width: 100%;
     height: 70%;
     background-color:#1C0B69;
@@ -29,120 +46,5 @@
 
 }
 
-.detail{
-    display: flex;
-    flex-direction: column;
-
-    height: fit-content;
-    
-}
-
-.map{
-    display: flex;
-    width: 100%;
-    height: 12rem;
-    justify-content: center;
-    align-items: center;
-    
-    color: white;
-    background-color: rgb(20, 192, 35);
-}
-
-.checkPoint{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-direction: column;
-    
-    width: 100%;
-
-    border: 1px white solid;
-
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-
-}
-    .cpInfo{
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        width: 85%;
-      
-    }
-
-    .cpTitle{
-        font-weight: 700;
-        font-size: 1.6rem;
-        color: white;
-
-    }
-
-    .cpDesc{
-        color: white;
-        margin-top: 0.3rem;
-
-    }
-
-    .cpArticle{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        width: 85%;
-        height: 8rem;
-        background-color: cadetblue;
-        border-radius: 0.6rem;
-
-        margin-top: 0.7rem;
-
-    }
 
 
-
-.checkPointArticles{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 3rem;
-    border: 1px white solid;
-    
-    /* padding-top: 2rem;
-    padding-bottom: 2rem; */
-  
-
-}
-
-.articleInfo{
-    display: flex;
-    flex-direction: row;
-    
-    width: 85%;
-    height: fit-content;
-    background-color: aquamarine;
-
-    justify-content: space-between;
-}
-
-.cpSubTitle{
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: white;
-
-}
-
-.arrangeBtn{
-    height: fit-content;
-}
-
-.article{
-    display: flex;
-    height: 1rem;
-    width: 60%;
-    background-color: cornflowerblue;
-}
-
-.review{
-    display: flex;
-    background-color: #432da8;
-
-}
