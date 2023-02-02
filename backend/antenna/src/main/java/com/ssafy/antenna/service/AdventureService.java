@@ -5,7 +5,10 @@ import com.ssafy.antenna.domain.adventure.dto.*;
 import com.ssafy.antenna.domain.like.AdventureLike;
 import com.ssafy.antenna.domain.location.Location;
 import com.ssafy.antenna.domain.post.CheckpointPost;
+import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.user.User;
+import com.ssafy.antenna.exception.not_found.AdventureNotFoundException;
+import com.ssafy.antenna.exception.not_found.PostNotFoundException;
 import com.ssafy.antenna.repository.*;
 import com.ssafy.antenna.util.CardinalDirection;
 import com.ssafy.antenna.util.GeometryUtil;
@@ -35,8 +38,12 @@ public class AdventureService {
     private final AdventureInProgressRepository adventureInProgressRepository;
     private final CheckpointPostRepository checkpointPostRepository;
     private final AwsS3Service awsS3Service;
+    private final PostRepository postRepository;
     @Value("${aws-cloud.aws.s3.bucket.url}")
     private String bucketUrl;
+    private final PostLikeRepository postLikeRepository;
+    private final AntennaRepository antennaRepository;
+
     // 탐험 추가
     public Long createAdventure(String category, String featTitle, String featContent, String title, String content, int difficulty, LocalDateTime startDate, LocalDateTime endDate, MultipartFile photo, Long userId){
         Optional<User> curUser = userRepository.findById(userId);
@@ -87,7 +94,7 @@ public class AdventureService {
                 newAdventure.getTitle(),
                 newAdventure.getContent(),
                 newAdventure.getDifficulty(),
-//                newAdventure.getPhoto(),
+                newAdventure.getPhotoUrl(),
                 newAdventure.getStartDate(),
                 newAdventure.getEndDate(),
                 newAdventure.getAvgReviewRate()
@@ -98,6 +105,12 @@ public class AdventureService {
 
     // 특정 탐험 삭제
     public void deleteAdventure(Long adventureId){
+        //모험 있는지 조회
+        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
+        //있다면, 사진이 있으면 사진 삭제 처리
+        if(adventure.getPhotoName()!=null){
+            awsS3Service.deleteImage(adventure.getPhotoName());
+        }
         adventureRepository.deleteById(adventureId);
     }
 
@@ -135,7 +148,7 @@ public class AdventureService {
                         curAdventure.getTitle(),
                         curAdventure.getContent(),
                         curAdventure.getDifficulty(),
-//                        curAdventure.getPhoto(),
+                        curAdventure.getPhotoUrl(),
                         curAdventure.getStartDate(),
                         curAdventure.getEndDate(),
                         curAdventure.getAvgReviewRate()
@@ -172,7 +185,7 @@ public class AdventureService {
                     adventure.getTitle(),
                     adventure.getContent(),
                     adventure.getDifficulty(),
-//                    adventure.getPhoto(),
+                    adventure.getPhotoUrl(),
                     adventure.getStartDate(),
                     adventure.getEndDate(),
                     adventure.getAvgReviewRate()
@@ -186,15 +199,15 @@ public class AdventureService {
     // 특정 탐험 장소(체크포인트) 추가
     public void createAdventurePlace(Long adventureId,CreateAdventurePlaceReq[] places){
         Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow();
-
         // 좌표의 개수만큼 반복
         for(CreateAdventurePlaceReq place:places) {
+            Post post = postRepository.findById(place.postId()).orElseThrow(PostNotFoundException::new);
             AdventurePlace newAdventurePlace = AdventurePlace.builder()
                     .title(place.title())
                     .content(place.content())
                     .coordinate(new GeometryFactory().createPoint(new Coordinate(place.coordinate()[1],place.coordinate()[0])))
-                    .photo(place.photo())
                     .adventure(curAdventure)
+                    .post(post)
                     .build();
 
             adventurePlaceRepository.save(newAdventurePlace);
@@ -216,7 +229,7 @@ public class AdventureService {
                     ap.getTitle(),
                     ap.getContent(),
                     new Double[] {ap.getCoordinate().getX(),ap.getCoordinate().getY()},
-                    ap.getPhoto()
+                    ap.getPost().getPostId()
             );
 
             result.add(newReadAdventurePlaceRes);
@@ -475,7 +488,7 @@ public class AdventureService {
                     adventure.getTitle(),
                     adventure.getContent(),
                     adventure.getDifficulty(),
-//                    adventure.getPhoto(),
+                    adventure.getPhotoUrl(),
                     adventure.getStartDate(),
                     adventure.getEndDate(),
                     adventure.getAvgReviewRate()

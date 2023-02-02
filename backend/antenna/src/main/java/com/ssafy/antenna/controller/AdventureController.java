@@ -62,8 +62,6 @@ public class AdventureController {
     // 특정 탐험 장소(체크포인트) 추가
     @PostMapping("/{adventureId}/places")
     public ResponseEntity<String> createAdventurePlace(@PathVariable Long adventureId, @RequestBody CreateAdventurePlaceReq[] places) {
-        System.out.println("=========================");
-//        System.out.println(Arrays.toString(places));
         adventureService.createAdventurePlace(adventureId, places);
         return new ResponseEntity<>("특정 탐험 장소(체크포인트) 추가 성공", HttpStatus.OK);
     }
