@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import useGeolocation from "react-hook-geolocation";
+import { Route, Routes } from "react-router-dom";
 import axios from "axios";
+import useGeolocation from "react-hook-geolocation";
 
 import Step1Location from "../components/articleCreate/Step1Location";
 import Step2Content from "../components/articleCreate/Step2Content";
@@ -16,14 +17,17 @@ const ArticleCreatePage = () => {
   // 게시글 내용
   const [article, setArticle] = useState({
     type: "text",
+    // photo: null,
+    // preview: null,
     image: { name: null, preview: null, data: null },
     lat: 37.50128745884959,
     lng: 127.03956225524968,
-    isAdv: false,
-    advId: null,
     title: "",
     content: "",
-    isPrivate: false,
+    isPublic: true,
+    isCheckPoint: false,
+    adventureId: null,
+    adventurePlaceId: null,
   });
 
   // 화면에 보여줄 주소
@@ -83,33 +87,39 @@ const ArticleCreatePage = () => {
     ]);
   }, [article.lat, article.lng]);
 
-  switch (step) {
-    case 1:
-      return (
-        <Step1Location
-          setStep={setStep}
-          article={article}
-          setArticle={setArticle}
-          advList={advList}
-          setAdvList={setAdvList}
-          address={address}
+  return (
+    <div className="pageContainer" style={{ pading: "30px" }}>
+      <h1>글 생성생성임니다</h1>
+      <Routes>
+        <Route
+          path=""
+          element={
+            <Step1Location
+              setStep={setStep}
+              article={article}
+              setArticle={setArticle}
+              advList={advList}
+              setAdvList={setAdvList}
+              address={address}
+            />
+          }
         />
-      );
-    case 2:
-      return (
-        <Step2Content
-          article={article}
-          setArticle={setArticle}
-          setStep={setStep}
-          address={address}
-          advList={advList}
+        <Route
+          path="2"
+          element={
+            <Step2Content
+              article={article}
+              setArticle={setArticle}
+              setStep={setStep}
+              address={address}
+              advList={advList}
+            />
+          }
         />
-      );
-    case 3:
-      return <Step3Done />;
-    default:
-      return <></>;
-  }
+        <Route path="3" element={<Step3Done />} />
+      </Routes>
+    </div>
+  );
 };
 
 export default ArticleCreatePage;

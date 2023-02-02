@@ -13,8 +13,8 @@ const SelectAdvList = ({ advList, setAdvList, setArticle }) => {
       if (isSelected && id === advItem.id) {
         setArticle((article) => ({
           ...article,
-          isAdv: false,
-          advId: null,
+          isCheckPoint: false,
+          adventureId: null,
         }));
         return { ...advItem, isSelected: false };
       } else if (isSelected && id !== advItem.id) {
@@ -22,8 +22,8 @@ const SelectAdvList = ({ advList, setAdvList, setArticle }) => {
       } else if (!isSelected && id === advItem.id) {
         setArticle((article) => ({
           ...article,
-          isAdv: true,
-          advId: id,
+          isCheckPoint: true,
+          adventureId: id,
         }));
         return { ...advItem, isSelected: true };
       } else {

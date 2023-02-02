@@ -2,10 +2,13 @@ import React from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import styles from "./Step2Content.module.css";
+import { useNavigate } from "react-router-dom";
 
 const Step2Content = ({ article, setStep, address, advList, setArticle }) => {
+  const navigate = useNavigate();
+
   const selectedAdv = advList.filter((advItem) => {
-    return advItem.id === article.advId;
+    return advItem.id === article.adventureId;
   })[0];
 
   const handleInput = (e) => {
@@ -18,7 +21,7 @@ const Step2Content = ({ article, setStep, address, advList, setArticle }) => {
   const handleCheck = (e) => {
     setArticle((article) => ({
       ...article,
-      isPrivate: !article.isPrivate,
+      isPublic: article.isPublic,
     }));
   };
 
@@ -33,12 +36,13 @@ const Step2Content = ({ article, setStep, address, advList, setArticle }) => {
         content: article.content,
         lat: article.lat,
         lng: article.lng,
-        isPublic: !article.isPrivate,
+        isPublic: article.isPublic,
         file: article.image.data,
       },
     })
       .then((res) => {
         console.log(res);
+        navigate("/write/3");
       })
       .then(setStep((step) => step + 1))
       .catch((err) => {
@@ -63,7 +67,7 @@ const Step2Content = ({ article, setStep, address, advList, setArticle }) => {
         <h2>선택된 장소</h2>
         <p>{address}</p>
       </div>
-      {article.isAdv && (
+      {article.isCheckPoint && (
         <div>
           <h2>선택된 모험</h2>
           <p>
@@ -91,12 +95,12 @@ const Step2Content = ({ article, setStep, address, advList, setArticle }) => {
       <h2>비공개 여부</h2>
       <input
         type="checkbox"
-        name="isPrivate"
-        checked={article.isPrivate}
+        name="isPublic"
+        checked={article.isPublic}
         onChange={handleCheck}
       />
       <div>
-        <button onClick={() => setStep((step) => step - 1)}>이전</button>
+        <button onClick={() => navigate(-1)}>이전</button>
         <button onClick={handleSubmit}>완료</button>
       </div>
     </>

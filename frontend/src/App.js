@@ -21,11 +21,11 @@ function App() {
           {/* Navbar가 필요한 페이지는 이곳에 추가해주세요*/}
           <Route path="/feed" element={<FeedPage />} />
           {/* <Route path={["/map", "/"]} element={<MapPage />} /> */}
-        
-          {['/map', '/'].map((path) => (
-            <Route path={path} element={<MapPage/>} />
+
+          {["/map", "/"].map((path) => (
+            <Route path={path} element={<MapPage />} />
           ))}
-        
+
           <Route path="/adventure" element={<AdventurePage />} />
           <Route
             path="/adventure/detail/:id"
@@ -36,8 +36,8 @@ function App() {
         {/* Navbar가 필요하지 않은 페이지는 이곳에 추가해주세요 */}
         <Route path="/login" element={<LogInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/write" element={<ArticleCreatePage />} />
-        <Route path="/profile/:userId" element={ <ProfilePage />}/>
+        <Route path="/write/*" element={<ArticleCreatePage />} />
+        <Route path="/profile/:userId" element={<ProfilePage />} />
       </Routes>
     </div>
   );

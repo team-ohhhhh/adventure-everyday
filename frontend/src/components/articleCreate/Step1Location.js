@@ -7,7 +7,6 @@ import SelectAdvList from "./SelectAdvList";
 const Step1Location = ({
   article,
   setArticle,
-  setStep,
   advList,
   setAdvList,
   address,
@@ -36,7 +35,7 @@ const Step1Location = ({
         </div>
       )}
       <button onClick={() => navigate(-1)}>취소</button>
-      <button onClick={() => setStep((step) => step + 1)}>다음</button>
+      <button onClick={() => navigate("/write/2")}>다음</button>
     </>
   );
 };
