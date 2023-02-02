@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -99,10 +100,12 @@ public class UserService {
     public List<UserDetailRes> getFollowingUser(Long userId) {
         //유저가 존재하는지 먼저 확인
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        List<Follow> followList = followRepository.findAllByFollowingUser(user);
+        Optional<List<Follow>> followList = followRepository.findAllByFollowingUser(user);
         List<UserDetailRes> userDetailResList = new ArrayList<>();
-        for (int i = 0; i < followList.size(); i++) {
-            userDetailResList.add(followList.get(i).getFollowerUser().toResponse());
+        if (followList.isPresent()) {
+            for (int i = 0; i < followList.get().size(); i++) {
+                userDetailResList.add(followList.get().get(i).getFollowerUser().toResponse());
+            }
         }
         return userDetailResList;
     }
@@ -110,11 +113,14 @@ public class UserService {
     public List<UserDetailRes> getFollowerUser(Long userId) {
         //유저가 존재하는지 먼저 확인
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        List<Follow> followList = followRepository.findAllByFollowerUser(user);
+        Optional<List<Follow>> followList = followRepository.findAllByFollowerUser(user);
         List<UserDetailRes> userDetailResList = new ArrayList<>();
-        for (int i = 0; i < followList.size(); i++) {
-            userDetailResList.add(followList.get(i).getFollowingUser().toResponse());
+        if (followList.isPresent()) {
+            for (int i = 0; i < followList.get().size(); i++) {
+                userDetailResList.add(followList.get().get(i).getFollowingUser().toResponse());
+            }
         }
+
         return userDetailResList;
     }
 
@@ -211,6 +217,7 @@ public class UserService {
 
         return newUser;
     }
+
     @Transactional
     public User deleteProfilePhoto(Long userId) {
         //유저가 존재하는지 확인
@@ -281,11 +288,14 @@ public class UserService {
         //유저가 존재하는지 확인
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         //유저가 존재하면, 안테나 리스트 가져오기
-        List<Antenna> antennaList = antennaRepository.findAllByUser(user);
+        Optional<List<Antenna>> antennaList = antennaRepository.findAllByUser(user);
         List<DetailAntennaRes> detailAntennaResList = new ArrayList<>();
-        for (int i = 0; i < antennaList.size(); i++) {
-            detailAntennaResList.add(antennaList.get(i).toResponse());
+        if (antennaList.isPresent()) {
+            for (int i = 0; i < antennaList.get().size(); i++) {
+                detailAntennaResList.add(antennaList.get().get(i).toResponse());
+            }
         }
+
         return detailAntennaResList;
     }
 

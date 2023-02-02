@@ -8,4 +8,5 @@ public record UserDetailRes(
         int exp,
         String introduce,
         String photoUrl
-) {}
+) {
+}
