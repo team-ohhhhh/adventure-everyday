@@ -2,6 +2,7 @@ package com.ssafy.antenna.domain.adventure;
 
 import com.ssafy.antenna.domain.Base;
 import com.ssafy.antenna.domain.post.CheckpointPost;
+import com.ssafy.antenna.domain.post.Post;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,6 +37,10 @@ public class AdventurePlace  extends Base {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adventureId")
     private Adventure adventure;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "postId")
+    private Post post;
 
     @OneToMany(mappedBy = "adventurePlace", cascade = CascadeType.ALL)
     private List<Checkpoint> checkpoints = new ArrayList<>();

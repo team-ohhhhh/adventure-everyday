@@ -5,6 +5,6 @@ public record ReadAdventurePlaceRes(
         String title,
         String content,
         Double[] coordinate,
-        byte[] photo
+        Long postId
 ) {
 }
