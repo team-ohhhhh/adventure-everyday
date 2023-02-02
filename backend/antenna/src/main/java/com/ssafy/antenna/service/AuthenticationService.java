@@ -54,7 +54,7 @@ public class AuthenticationService {
 
         userRepository.save(user);
         String jwtToken = jwtService.generateToken(user);
-        return new LogInUserRes(jwtToken);
+        return new LogInUserRes(jwtToken, user.toResponse());
     }
 
     public LogInUserRes authenticate(LogInUserReq logInUserReq) {
@@ -67,6 +67,6 @@ public class AuthenticationService {
                 )
         );
         String jwtToken = jwtService.generateToken(user);
-        return new LogInUserRes(jwtToken);
+        return new LogInUserRes(jwtToken, user.toResponse());
     }
 }
