@@ -11,7 +11,7 @@ public class W3WUtil {
     @Value("${w3w.token.secret}")
     private String SECRET_KEY;
 
-    public ConvertTo3WA getW3W(double lat, double lng){
+    public ConvertTo3WA getW3W(double lat, double lng) {
         What3WordsV3 api = new What3WordsV3(SECRET_KEY);
         ConvertTo3WA words = api.convertTo3wa(new Coordinates(lng, lat))
                 .language("ko")

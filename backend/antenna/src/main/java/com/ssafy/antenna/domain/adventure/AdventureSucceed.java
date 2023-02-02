@@ -1,14 +1,12 @@
 package com.ssafy.antenna.domain.adventure;
 
 import com.ssafy.antenna.domain.Base;
-import com.ssafy.antenna.domain.adventure.Adventure;
 import com.ssafy.antenna.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DialectOverride;
 
 @Data
 @AllArgsConstructor

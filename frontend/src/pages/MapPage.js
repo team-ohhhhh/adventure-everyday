@@ -25,7 +25,6 @@ function MainMap() {
     isAroundClicked: false, // UFO가 눌렸는지
     isCircle: false, // 원이 생겼는지(자기 주위, 해당 좌표, 안테나)
     isAntenna: false,
-    numberOfAntenna: 0
   });
 
   // 초기 렌더링 때 현재 위치로 지도 이동
@@ -57,8 +56,8 @@ function MainMap() {
   //   "nearestPlace": "부산광역시"
   // }
 ])
-let TOKEN = useSelector((state) => state.TOKEN)
-let URL = useSelector((state) => state.URL)
+let TOKEN = useSelector((state) => state.token)
+let URL = useSelector((state) => state.url)
   useEffect(() => {
     axios({
       url: URL + '/users/antennae',
@@ -314,7 +313,7 @@ let URL = useSelector((state) => state.URL)
           <p>{state.errMsg}</p>
 
           {/* 주변 검색 상황일때 바텀시트 등장 */}
-          { state.isCircle && <BottomSheetContainer center={state.center} isAntenna={state.isAntenna} setAntennae={setAntennae}/>}
+          { state.isCircle && <BottomSheetContainer antennae={antennae} center={state.center} isAntenna={state.isAntenna} setAntennae={setAntennae} setState={setState}/>}
         </Map>
       </div>
     </div>

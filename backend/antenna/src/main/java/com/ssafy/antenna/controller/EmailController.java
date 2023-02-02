@@ -5,8 +5,6 @@ import com.ssafy.antenna.domain.email.dto.AuthEmailReq;
 import com.ssafy.antenna.domain.email.dto.AuthEmailRes;
 import com.ssafy.antenna.service.EmailService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

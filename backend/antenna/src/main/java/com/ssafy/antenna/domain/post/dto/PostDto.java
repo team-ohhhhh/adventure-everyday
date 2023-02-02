@@ -1,7 +1,6 @@
 package com.ssafy.antenna.domain.post.dto;
 
 import com.ssafy.antenna.domain.user.dto.UserDetailRes;
-import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDateTime;
 

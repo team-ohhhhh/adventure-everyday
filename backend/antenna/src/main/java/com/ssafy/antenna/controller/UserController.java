@@ -6,6 +6,7 @@ import com.ssafy.antenna.domain.antenna.dto.PostAntennaReq;
 import com.ssafy.antenna.domain.email.dto.AuthEmailRes;
 import com.ssafy.antenna.domain.email.dto.CheckEmailRes;
 import com.ssafy.antenna.domain.user.dto.*;
+import com.ssafy.antenna.exception.AbstractAppException;
 import com.ssafy.antenna.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,7 +27,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/{userId}")
-    public ResultResponse<UserDetailRes> getUser(@PathVariable Long userId) throws Exception {
+    public ResultResponse<UserDetailRes> getUser(@PathVariable Long userId) throws AbstractAppException {
         //validation 필요!!!!!!!!!!!!!!
         return ResultResponse.success(userService.getUser(userId).toResponse());
     }
@@ -120,12 +121,12 @@ public class UserController {
 
     @PostMapping("/antennae")
     public ResultResponse<DetailAntennaRes> createAntenna(@RequestBody PostAntennaReq postAntennaReq, Authentication authentication) {
-        return ResultResponse.success(userService.createAntenna(postAntennaReq,Long.valueOf(authentication.getName())));
+        return ResultResponse.success(userService.createAntenna(postAntennaReq, Long.valueOf(authentication.getName())));
     }
 
     @DeleteMapping("/antennae/{antennaId}")
     public ResultResponse<DetailAntennaRes> deleteAntenna(Authentication authentication, @PathVariable Long antennaId) {
-        return ResultResponse.success(userService.deleteAntenna(antennaId,Long.valueOf(authentication.getName())));
+        return ResultResponse.success(userService.deleteAntenna(antennaId, Long.valueOf(authentication.getName())));
     }
 
     @GetMapping("/antennae")
@@ -135,7 +136,7 @@ public class UserController {
 
     @GetMapping("/antennae/{antennaId}")
     public ResultResponse<DetailAntennaRes> getAntenna(Authentication authentication, @PathVariable Long antennaId) {
-        return ResultResponse.success(userService.getAntenna(antennaId,Long.valueOf(authentication.getName())));
+        return ResultResponse.success(userService.getAntenna(antennaId, Long.valueOf(authentication.getName())));
     }
 
     @GetMapping("/logout")
