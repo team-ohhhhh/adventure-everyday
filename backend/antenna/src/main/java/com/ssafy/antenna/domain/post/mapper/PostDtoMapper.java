@@ -15,6 +15,8 @@ public class PostDtoMapper implements Function<Post, PostDto> {
                 post.getTitle(),
                 post.getContent(),
                 post.getW3w(),
+                post.getCoordinate().getY(),
+                post.getCoordinate().getX(),
                 post.getPhotoUrl(),
                 post.getPostLikes().size(),
                 post.getComments().size(),

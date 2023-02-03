@@ -9,6 +9,8 @@ public record PostDto(
         String title,
         String content,
         String w3w,
+		Double lat,
+		Double lng,
         String postUrl,
         Integer postLikes,
         Integer postComments,
