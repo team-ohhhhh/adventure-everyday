@@ -6,10 +6,11 @@ import com.ssafy.antenna.domain.antenna.Antenna;
 import com.ssafy.antenna.domain.comment.Comment;
 import com.ssafy.antenna.domain.comment.PostCommentReq;
 import com.ssafy.antenna.domain.comment.SubComment;
-import com.ssafy.antenna.domain.comment.SubCommentDtoMapper;
+import com.ssafy.antenna.domain.comment.dto.CommentDto;
 import com.ssafy.antenna.domain.comment.dto.PostSubCommentReq;
 import com.ssafy.antenna.domain.comment.dto.SubCommentDto;
-import com.ssafy.antenna.domain.comment.dto.commentDto;
+import com.ssafy.antenna.domain.comment.mapper.CommentDtoMapper;
+import com.ssafy.antenna.domain.comment.mapper.SubCommentDtoMapper;
 import com.ssafy.antenna.domain.like.AdventureLike;
 import com.ssafy.antenna.domain.like.CommentLike;
 import com.ssafy.antenna.domain.like.PostLike;
@@ -65,6 +66,7 @@ public class PostService {
     private final CommentLikeRepository commentLikeRepository;
     private final SubCommentRepository subCommentRepository;
     private final SubCommentDtoMapper subCommentDtoMapper;
+    private final CommentDtoMapper commentDtoMapper;
     private final SubCommentLikeRepository subCommentLikeRepository;
     private final AntennaRepository antennaRepository;
     private final AwsS3Service awsS3Service;
@@ -96,7 +98,7 @@ public class PostService {
         if (antennaList.isPresent()) {
             for (Antenna antenna : antennaList.get()) {
                 //안테나 별로 주변 게시글을 조회해서 그 게시글 중 내가 가진 postId가 있는지를 체크한다.
-                System.out.println(isAntenna.toString());
+                System.out.println(isAntenna);
                 System.out.println(antenna.getCoordinate().getX());
                 Long isAntennaId = isPostWithArea(antenna.getCoordinate().getX(), antenna.getCoordinate().getY(), antenna.getArea(), postId);
                 if (isAntennaId != 0) {
@@ -129,6 +131,7 @@ public class PostService {
             for (Follow follow : followList.get()) {
                 if (post.getUser().getUserId().equals(follow.getFollowingUser().getUserId())) {
                     isFollowing = post.getUser().getUserId();
+                    break;
                 }
             }
         }
@@ -162,8 +165,7 @@ public class PostService {
         if (post.getUser().getUserId().equals(userId)) {
             postRepository.delete(post);
             return post.toResponse();
-        }
-        {
+        } else {
             throw new IllegalAccessException("잘못된 접근입니다");
         }
     }
@@ -219,7 +221,7 @@ public class PostService {
         if (!Long.valueOf(authentication.getName()).equals(post.getUser().getUserId())) {
             throw new IllegalAccessException();
         } else {
-            Post newPost = Post.builder()
+            Post newPost = postRepository.save(Post.builder()
                     .postId(post.getPostId())
                     .user(post.getUser())
                     .title(postUpdateReq.title())
@@ -229,8 +231,8 @@ public class PostService {
                     .photoName(post.getPhotoName())
                     .nearestPlace(post.getNearestPlace())
                     .w3w(post.getW3w())
-                    .coordinate(post.getCoordinate()).build();
-            return ResultResponse.success(postRepository.save(newPost).toResponse());
+                    .coordinate(post.getCoordinate()).build());
+            return ResultResponse.success(newPost.toResponse());
         }
     }
 
@@ -242,7 +244,11 @@ public class PostService {
         Post post = postRepository.findById(postId).orElseThrow(NoSuchElementException::new);
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Comment comment = commentRepository.save(Comment.builder().post(post).user(user).content(postCommentReq.content()).build());
-        return ResultResponse.success(postId);
+        return ResultResponse.success(comment.getPost().getComments().stream()
+                .map(commentDtoMapper)
+                .collect(Collectors.toList()
+                )
+        );
     }
 
     public ResultResponse<?> getPostByUserId(Long userId) {
@@ -256,7 +262,9 @@ public class PostService {
 
     public ResultResponse<?> getCommentsByPostId(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(NoSuchElementException::new);
-        List<commentDto> commentList = post.getComments().stream().map(comment -> new commentDto(comment.getUser().getNickname(), comment.getContent())).collect(Collectors.toList());
+        List<CommentDto> commentList = post.getComments().stream()
+                .map(commentDtoMapper)
+                .collect(Collectors.toList());
         return ResultResponse.success(commentList);
     }
 
@@ -274,11 +282,12 @@ public class PostService {
     public ResultResponse<?> postPostLike(Long postId, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Post post = postRepository.findById(postId).orElseThrow(NoSuchElementException::new);
-        postLikeRepository.save(PostLike.builder()
+        PostLike save = postLikeRepository.save(PostLike.builder()
                 .user(user)
                 .post(post)
-                .build());
-        return ResultResponse.success("좋아요 등록 성공");
+                .build()
+        );
+        return ResultResponse.success(save.getPost().getPostLikes().size());
     }
 
     public ResultResponse<?> getPostLike(Long postId, Long userId) {
@@ -289,7 +298,6 @@ public class PostService {
                 .filter(postLike -> postLike.getUser().getUserId().equals(userId))
                 .collect(Collectors.toList()).isEmpty();
         return ResultResponse.success(new PostLikeDto(post.getPostLikes().size(), !isLiked));
-//        return ResultResponse.success(post.getPostLikes().size());
     }
 
     public ResultResponse<?> deletePostLike(Long postId, Long userId) {
@@ -304,7 +312,7 @@ public class PostService {
         } else {
             throw new NoSuchElementException();
         }
-        return ResultResponse.success("삭제 성공");
+        return ResultResponse.success(postLikeList.size() - 1);
     }
 
     public ResultResponse<?> postCommentLike(Long commentId, Long userId) {
@@ -316,7 +324,7 @@ public class PostService {
                 .comment(comment)
                 .user(user)
                 .build());
-        return ResultResponse.success("댓글 좋아요 성공");
+        return ResultResponse.success(save.getComment().getCommentLikes().size());
     }
 
     public ResultResponse<?> getCommentLike(Long commentId, Long userId) {
@@ -337,7 +345,7 @@ public class PostService {
                 .collect(Collectors.toList());
         if (commentLikes.size() > 0) {
             commentLikeRepository.delete(commentLikes.get(0));
-            return ResultResponse.success("좋아요 삭제 성공");
+            return ResultResponse.success(commentLikes.size() - 1);
         } else {
             throw new NoSuchElementException();
         }
@@ -355,7 +363,7 @@ public class PostService {
                         .orElseThrow(UserNotFoundException::new))
                 .content(postSubCommentReq.content())
                 .build();
-        subCommentRepository.save(subComment);
+        SubComment save = subCommentRepository.save(subComment);
         return ResultResponse.success("대댓글 작성 성공");
 
     }

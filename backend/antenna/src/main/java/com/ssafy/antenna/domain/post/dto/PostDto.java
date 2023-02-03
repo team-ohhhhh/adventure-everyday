@@ -6,14 +6,12 @@ import java.time.LocalDateTime;
 
 public record PostDto(
         Long postId,
-
         String title,
         String content,
-        double lng,
-        double lat,
-        String nearestPlace,
         String w3w,
         String postUrl,
+        Integer postLikes,
+        Integer postComments,
         LocalDateTime createdTime,
         UserDetailRes userDetailRes
 ) {
