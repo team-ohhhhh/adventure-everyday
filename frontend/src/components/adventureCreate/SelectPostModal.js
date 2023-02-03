@@ -13,7 +13,7 @@ const SelectPostModal = ({ closeModal }) => {
   const URL = useSelector((state) => state.URL);
   const userId = "1";
   const TOKEN =
-    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjc1Mjk2MjUwLCJleHAiOjE2NzU2NTYyNTB9.Vq2XbED6j1xf1xmVN8iJojElHMx237-XNShpoU0aq2Q";
+    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjc1NDEzNTk2LCJleHAiOjE2NzU3NzM1OTZ9.bL68Q9tSsRRGETi1WvItEEuWXEoy74VHTzp06LlOMNo";
 
   useEffect(() => {
     axios({
@@ -25,6 +25,7 @@ const SelectPostModal = ({ closeModal }) => {
     })
       .then((res) => {
         setPosts(res.data.result);
+        // console.log(res.data.result);
       })
       .catch((err) => {
         console.log(err);
@@ -34,9 +35,8 @@ const SelectPostModal = ({ closeModal }) => {
   return (
     <div className={styles.modalWrap}>
       <button onClick={closeModal}>close</button>
-      <h1>
-        탐험으로 만들 <br />내 글을 선택하세요
-      </h1>
+      <h1>탐험으로 만들</h1>
+      <h1>내 글을 선택하세요</h1>
       <UserPostMap posts={posts} />
     </div>
   );

@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { ScrollMenu } from "react-horizontal-scrolling-menu";
+
 import ArticleListItem from "./ArticleListItem";
 import AdventureBanner from "./Adventure/AdventureBanner";
-import { ScrollMenu } from "react-horizontal-scrolling-menu";
+
 import style from "./HorizontalScroll.module.css";
 
 // props로 contentType 지정해서 넘겨줄 것. adventure/article
@@ -48,6 +50,8 @@ function HorizontalScroll(props) {
           </ScrollMenu>
         </div>
       );
+    default:
+      return <div></div>;
   }
   // props.articleList.map(function(articleListItem){
   //   return (

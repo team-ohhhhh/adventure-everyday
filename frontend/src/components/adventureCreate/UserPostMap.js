@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Map, MapMarker, MarkerClusterer } from "react-kakao-maps-sdk";
+import HorizontalScroll from "../HorizontalScroll";
 
 import styles from "./UserPostMap.module.css";
 
@@ -7,6 +8,10 @@ const { kakao } = window;
 
 const UserPostMap = ({ posts }) => {
   const mapRef = useRef();
+
+  const [onMapPosts, setOnMapPosts] = useState([]);
+
+  useEffect(() => console.log(onMapPosts), [onMapPosts]);
 
   // 지도 클러스터 스타일
   const clusterStyle = {
@@ -46,50 +51,54 @@ const UserPostMap = ({ posts }) => {
     map.panTo(cluster.getCenter()); // 중심 이동
   };
 
-  // 클러스터 생성된 시점에 클러스터 마커 이미지 생성
-  const onClustered = (target, clusters) => {
-    clusters.forEach((cluster) => {
-      const markers = cluster._markers;
-      const images = markers
-        .filter((marker) => {
-          return marker.T.Yj !== "null";
-        })
-        .slice(0, 3)
-        .map((marker) => marker.T.Yj);
+  // 클러스터 생성된 시점에 클러스터 마커 이미지 생성 (보류)
+  // const onClustered = (target, clusters) => {
+  //   clusters.forEach((cluster) => {
+  //     const markers = cluster._markers;
+  //     const images = markers
+  //       .filter((marker) => {
+  //         return marker.T.Yj !== "null";
+  //       })
+  //       .slice(0, 3)
+  //       .map((marker) => marker.T.Yj);
 
-      console.log(images);
+  //     console.log(images);
 
-      // if ((images && images.length) <= 3 && markers.length > 3) {
-      // }
+  //     // if ((images && images.length) <= 3 && markers.length > 3) {
+  //     // }
 
-      const content = `
-      <div>
-        ${images.map(
-          (image) =>
-            `<img
-            src=${image}
-            alt=""
-            style="width: 50px; height: 50px;"
-          />`
-        )}
-        <div
-          style = "cursor: pointer; width: 50px; height: 50px; background: rgb(0, 187, 228); border-radius: 25px; color: rgb(0, 0, 0); text-align: center; font-weight: bold; line-height: 50px;">
-          ${markers.length}
-        </div>
-      </div>`;
+  //     const content = `
+  //     <div>
+  //       ${images.map(
+  //         (image) =>
+  //           `<img
+  //           src=${image}
+  //           alt=""
+  //           style="width: 50px; height: 50px;"
+  //         />`
+  //       )}
+  //       <div
+  //         style = "cursor: pointer; width: 50px; height: 50px; background: rgb(0, 187, 228); border-radius: 25px; color: rgb(0, 0, 0); text-align: center; font-weight: bold; line-height: 50px;">
+  //         ${markers.length}
+  //       </div>
+  //     </div>`;
 
-      // console.log(cluster.getClusterMarker().getContent());
-      cluster.getClusterMarker().setContent(content);
-      console.log(cluster.getClusterMarker().getContent());
-    });
-  };
+  //     // console.log(cluster.getClusterMarker().getContent());
+  //     cluster.getClusterMarker().setContent(content);
+  //     console.log(cluster.getClusterMarker().getContent());
+  //   });
+  // };
 
   // 지도 영역 변화 시 해당 영역에서 작성된 게시글 필터링
   const onIdle = (target) => {
     const sw = target.getBounds().getSouthWest();
     const ne = target.getBounds().getNorthEast();
     const bounds = new kakao.maps.LatLngBounds(sw, ne);
-    // console.log(bounds);
+    const onMapPosts = posts.filter((post) => {
+      const postLatLng = new kakao.maps.LatLng(post.lat, post.lng);
+      return bounds.contain(postLatLng);
+    });
+    setOnMapPosts(onMapPosts);
   };
 
   return (
@@ -107,7 +116,7 @@ const UserPostMap = ({ posts }) => {
           styles={[clusterStyle]}
           disableClickZoom={true}
           onClusterclick={onClusterclick}
-          onClustered={onClustered}
+          // onClustered={onClustered}
         >
           {posts &&
             posts.map((post) => (
@@ -119,7 +128,7 @@ const UserPostMap = ({ posts }) => {
                   console.log("hi");
                 }}
                 image={{
-                  src: `${post.postUrl}`,
+                  src: post.postUrl ? post.postUrl : "/images/noImage.png",
                   size: {
                     width: 50,
                     height: 50,
@@ -135,6 +144,7 @@ const UserPostMap = ({ posts }) => {
             ))}
         </MarkerClusterer>
       </Map>
+      <HorizontalScroll contentType={"article"} data={onMapPosts} />
     </div>
   );
 };
