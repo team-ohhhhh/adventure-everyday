@@ -551,5 +551,29 @@ public class AdventureService {
         return result;
     }
 
+    // 특정 모험을 진행중인 유저들의 id들을 반환.
+    public List<Long> readUserIdsByAdventureId(Long adventureId){
+        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
+
+        List<Long> result = new ArrayList<>();
+
+        // 특정 모험의 AdventureInProgress를 가져오기.
+        List<AdventureInProgress> adventureInProgressList = adventureInProgressRepository.findAllByAdventure(adventure).orElseThrow(UserNotFoundException::new);
+
+        // 그 모험을 진행중인 유저들의 id 뽑기.
+        for(AdventureInProgress adventureInProgress:adventureInProgressList){
+            result.add(adventureInProgress.getUser().getUserId());
+        }
+
+        return result;
+    }
+
+    // 특정 모험을 진행중인 유저들의 인원 수 반환.
+    public Long findUserCountByAdventure(Long adventureId){
+        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
+        return adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureInProgressNotFoundException::new);
+    }
+
+
 
 }
