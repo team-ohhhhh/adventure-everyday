@@ -62,16 +62,16 @@ public class UserController {
         return ResultResponse.success(userService.createFollowUser(Long.valueOf(authentication.getName()), createFollowUserReq));
     }
 
-    @GetMapping("/followings")
-    public ResultResponse<List<UserDetailRes>> getFollowingUser(Authentication authentication) throws Exception {
+    @GetMapping("/followings/{userId}")
+    public ResultResponse<List<UserDetailRes>> getFollowingUser(@PathVariable Long userId) throws Exception {
         //validation 필요!!!!!!!!!!!!!!
-        return ResultResponse.success(userService.getFollowingUser(Long.valueOf(authentication.getName())));
+        return ResultResponse.success(userService.getFollowingUser(userId));
     }
 
-    @GetMapping("/followers")
-    public ResultResponse<List<UserDetailRes>> getFollowerUser(Authentication authentication) throws Exception {
+    @GetMapping("/followers/{userId}")
+    public ResultResponse<List<UserDetailRes>> getFollowerUser(@PathVariable Long userId) throws Exception {
         //validation 필요!!!!!!!!!!!!!!
-        return ResultResponse.success(userService.getFollowerUser(Long.valueOf(authentication.getName())));
+        return ResultResponse.success(userService.getFollowerUser(userId));
     }
 
     @DeleteMapping("/followers/{followId}")

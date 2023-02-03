@@ -1,13 +1,14 @@
 package com.ssafy.antenna.domain.comment.dto;
 
+import com.ssafy.antenna.domain.user.dto.UserDetailRes;
+
 import java.time.LocalDateTime;
 
 public record SubCommentDto(
         Long subCommentId,
-        Long commentId,
-        Long userId,
-        String content,
+        String subCommentContent,
+        Integer subCommentLikes,
         LocalDateTime createdTime,
-        LocalDateTime updatedTime
+        UserDetailRes userDetailRes
 ) {
 }

@@ -56,6 +56,11 @@ public class PostController {
         return ResultResponse.success(postService.getPostById(postId, Long.valueOf(authentication.getName())));
     }
 
+    @GetMapping("/all")
+    public ResultResponse<List<PostDetailWithCategory>> getAllPostById(Authentication authentication) {
+        return ResultResponse.success(postService.getAllPostById(Long.valueOf(authentication.getName())));
+    }
+
     @DeleteMapping("/{postId}")
     public ResultResponse<PostDetailRes> deletePost(
             @PathVariable Long postId,
@@ -69,11 +74,6 @@ public class PostController {
         );
     }
 
-    //    @GetMapping("/{postId}/photo")
-//    public ResponseEntity<?> getPostPhoto(@PathVariable Long postId) {
-//        return postService.getPostPhoto(postId);
-//    }
-//
     @PutMapping("/{postId}")
     public ResultResponse<PostDetailRes> updatePost(
             @PathVariable Long postId,
