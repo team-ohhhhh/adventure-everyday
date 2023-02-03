@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface CheckpointPostRepository extends JpaRepository<CheckpointPost, Long> {
     Optional<List<CheckpointPost>> findAllByAdventurePlace(AdventurePlace adventurePlace);
 
+    Optional<List<CheckpointPost>> findAllByAdventure(Adventure adventure);
+
     Optional<List<CheckpointPost>> findAllByAdventureOrderByCreateTimeDesc(Adventure adventure);
 
     Optional<CheckpointPost> findByPost(Post post);
