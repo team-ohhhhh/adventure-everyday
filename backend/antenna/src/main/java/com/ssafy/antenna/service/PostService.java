@@ -364,7 +364,11 @@ public class PostService {
                 .content(postSubCommentReq.content())
                 .build();
         SubComment save = subCommentRepository.save(subComment);
-        return ResultResponse.success("대댓글 작성 성공");
+        return ResultResponse.success(
+                commentRepository.findById(commentId).get().getSubComments().stream()
+                        .map(subCommentDtoMapper)
+                        .collect(Collectors.toList())
+        );
 
     }
 
