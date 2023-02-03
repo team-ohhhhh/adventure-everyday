@@ -5,14 +5,14 @@ import { EmailComponent, PasswordComponent, NicknameComponent, IntroduceComponen
 
 
 function SignUpPage() {
-  let URL = useSelector((state) => state.URL)
+  let URL = useSelector((state) => state.url)
 
   // 로그인 단계 저장용 변수
   // 0 : 메인, 1: 이메일 선택 창, 2: 비밀번호 입력 창, 3: 닉네임 입력창, 4: 소개글 입력 창, 5: 프로필 사진 업로드 창, 6: 완료 창
   const [stage, setStage] = useState(2)
 
   // 로그인에 필요한 정보들
-  const [email, setEmail] = useState("jh8671@naver.com")
+  const [email, setEmail] = useState("1234@gmail.com")
   const [nickname, setNickname] = useState("")
   const [password, setPassword] = useState("")
   const [password2, setPassword2] = useState("")

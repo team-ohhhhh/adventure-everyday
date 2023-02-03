@@ -1,7 +1,5 @@
-import React from "react";
-import { ScrollMenu } from "react-horizontal-scrolling-menu";
-
-import ArticleListItem from "./ArticleListItem";
+import React, { useState, useEffect } from "react";
+import SmallArticleItem from "./SmallArticleItem";
 import AdventureBanner from "./Adventure/AdventureBanner";
 
 import style from "./HorizontalScroll.module.css";
@@ -44,8 +42,8 @@ function HorizontalScroll(props) {
       return (
         <div className={style.articleList}>
           <ScrollMenu>
-            {dummy.map((articleListItem) => {
-              return <ArticleListItem articleListItem={articleListItem} />;
+            {dummy.map((data) => {
+              return <SmallArticleItem data={data} />;
             })}
           </ScrollMenu>
         </div>

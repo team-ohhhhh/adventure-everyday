@@ -1,7 +1,6 @@
 package com.ssafy.antenna.domain.email;
 
 import com.ssafy.antenna.domain.Base;
-import com.ssafy.antenna.domain.user.dto.FollowDetailRes;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +23,7 @@ public class Email extends Base {
     @Column(columnDefinition = "varchar(255) not null")
     private String authNumber;
 
-    static public Email saveEmail(String email, String authNumber){
+    static public Email saveEmail(String email, String authNumber) {
         Email emails = new Email();
         emails.setEmail(email);
         emails.setAuthNumber(authNumber);

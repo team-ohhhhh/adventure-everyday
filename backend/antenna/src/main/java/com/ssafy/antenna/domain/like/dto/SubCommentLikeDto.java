@@ -1,7 +1,7 @@
 package com.ssafy.antenna.domain.like.dto;
 
-public record SubCommentLikeDto (
+public record SubCommentLikeDto(
         Integer cnt,
         Boolean isLike
-){
+) {
 }

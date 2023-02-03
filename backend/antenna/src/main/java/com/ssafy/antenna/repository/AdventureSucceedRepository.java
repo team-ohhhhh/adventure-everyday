@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface AdventureSucceedRepository extends JpaRepository<AdventureSucceed,Long> {
+public interface AdventureSucceedRepository extends JpaRepository<AdventureSucceed, Long> {
     List<AdventureSucceed> findAllByUser(User user);
 }

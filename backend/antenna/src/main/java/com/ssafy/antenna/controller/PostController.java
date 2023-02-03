@@ -4,6 +4,7 @@ import com.ssafy.antenna.domain.ResultResponse;
 import com.ssafy.antenna.domain.comment.PostCommentReq;
 import com.ssafy.antenna.domain.comment.dto.PostSubCommentReq;
 import com.ssafy.antenna.domain.post.dto.PostDetailRes;
+import com.ssafy.antenna.domain.post.dto.PostDetailWithCategory;
 import com.ssafy.antenna.domain.post.dto.PostUpdateReq;
 import com.ssafy.antenna.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,9 @@ public class PostController {
             @RequestPart String lng,
             @RequestPart String isPublic,
             @RequestPart(required = false) MultipartFile photo,
+            @RequestPart(required = false) String isCheckpoint,
+            @RequestPart(required = false) String adventureId,
+            @RequestPart(required = false) String adventurePlaceId,
             Authentication authentication
     ) throws IOException {
         return ResultResponse.success(
@@ -39,14 +43,22 @@ public class PostController {
                         lat,
                         lng,
                         isPublic,
-                        photo
+                        photo,
+                        isCheckpoint,
+                        adventureId,
+                        adventurePlaceId
                 )
         );
     }
 
     @GetMapping("/{postId}")
-    public ResultResponse<PostDetailRes> getPostById(@PathVariable Long postId) {
-        return postService.getPostById(postId);
+    public ResultResponse<PostDetailWithCategory> getPostById(@PathVariable Long postId, Authentication authentication) {
+        return ResultResponse.success(postService.getPostById(postId, Long.valueOf(authentication.getName())));
+    }
+
+    @GetMapping("/all")
+    public ResultResponse<List<PostDetailWithCategory>> getAllPostById(Authentication authentication) {
+        return ResultResponse.success(postService.getAllPostById(Long.valueOf(authentication.getName())));
     }
 
     @DeleteMapping("/{postId}")
@@ -62,11 +74,6 @@ public class PostController {
         );
     }
 
-//    @GetMapping("/{postId}/photo")
-//    public ResponseEntity<?> getPostPhoto(@PathVariable Long postId) {
-//        return postService.getPostPhoto(postId);
-//    }
-//
     @PutMapping("/{postId}")
     public ResultResponse<PostDetailRes> updatePost(
             @PathVariable Long postId,

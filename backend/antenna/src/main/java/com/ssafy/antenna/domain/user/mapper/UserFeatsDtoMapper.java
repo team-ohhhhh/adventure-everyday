@@ -1,6 +1,5 @@
 package com.ssafy.antenna.domain.user.mapper;
 
-import com.ssafy.antenna.domain.adventure.Adventure;
 import com.ssafy.antenna.domain.adventure.AdventureSucceed;
 import com.ssafy.antenna.domain.user.dto.UserFeatsDto;
 import org.springframework.stereotype.Service;

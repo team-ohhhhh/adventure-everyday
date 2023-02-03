@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface AdventureLikeRepository extends JpaRepository<AdventureLike,Long> {
+public interface AdventureLikeRepository extends JpaRepository<AdventureLike, Long> {
     Optional<AdventureLike> findByAdventureAndUser(Adventure adventure, User user);
 }
