@@ -6,18 +6,92 @@ import style from "./HorizontalScroll.module.css";
 
 // props로 contentType 지정해서 넘겨줄 것. adventure/article
 function HorizontalScroll(props) {
-  const dummy = [
+  // 탐험 더미 데이터 (특정 탐험 조회 기준 데이터)
+  const adDummy = [
     {
-      post_id: 1,
-      title: "TITLEaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      nickName: "NICKNAME",
-      date: "DATE.MM.DD",
+      adventureId: 1,
+      userId: "silverain_9",
+      category: "맛집",
+      featTitle: "걷기왕",
+      featContent: null, // 칭호 설명용으로 넣은 것이지만 사실 모험이름이라 쓸 일 없을듯
+      title: "전국 5대 맛집 탐험",
+      content: "아주 맛있는 맛집 모음이에요",
+      difficulty: "/images/diff_normal.png",
+      photoUrl: "/images/alien.jpg",
+      startDate: "2023-01-24",
+      endDate: "2023-02-03",
+      avgReviewRate: null,
     },
-    { post_id: 2, title: "TITLE", nickName: "NICKNAME", date: "DATE.MM.DD" },
-    { post_id: 3, title: "TITLE", nickName: "NICKNAME", date: "DATE.MM.DD" },
-    { post_id: 4, title: "TITLE", nickName: "NICKNAME", date: "DATE.MM.DD" },
-    { post_id: 5, title: "TITLE", nickName: "NICKNAME", date: "DATE.MM.DD" },
-    { post_id: 6, title: "TITLE", nickName: "NICKNAME", date: "DATE.MM.DD" },
+    {
+      adventureId: 2,
+      userId: "silverain_9",
+      category: "맛집",
+      featTitle: "걷기왕",
+      featContent: null,
+      title: "전국 5대 맛집 탐험",
+      content: "아주 맛있는 맛집 모음이에요",
+      difficulty: 3,
+      photoUrl: null,
+      startDate: "2023-01-24",
+      endDate: "2023-02-03",
+      avgReviewRate: null,
+    },
+    {
+      adventureId: 3,
+      userId: "silverain_9",
+      category: "맛집",
+      featTitle: "걷기왕",
+      featContent: null,
+      title: "전국 5대 맛집 탐험",
+      content: "아주 맛있는 맛집 모음이에요",
+      difficulty: 3,
+      photoUrl: null,
+      startDate: "2023-01-24",
+      endDate: "2023-02-03",
+      avgReviewRate: null,
+    },
+    {
+      adventureId: 4,
+      userId: "silverain_9",
+      category: "맛집",
+      featTitle: "걷기왕",
+      featContent: null,
+      title: "전국 5대 맛집 탐험",
+      content: "아주 맛있는 맛집 모음이에요",
+      difficulty: 3,
+      photoUrl: null,
+      startDate: "2023-01-24",
+      endDate: "2023-02-03",
+      avgReviewRate: null,
+    },
+    {
+      adventureId: 5,
+      userId: "silverain_9",
+      category: "맛집",
+      featTitle: "걷기왕",
+      featContent: null,
+      title: "전국 5대 맛집 탐험",
+      content: "아주 맛있는 맛집 모음이에요",
+      difficulty: 3,
+      photoUrl: null,
+      startDate: "2023-01-24",
+      endDate: "2023-02-03",
+      avgReviewRate: null,
+    },
+    {
+      adventureId: 6,
+      userId: "silverain_9",
+      category: "맛집",
+      featTitle: "걷기왕",
+      featContent: null,
+      title: "전국 5대 맛집 탐험",
+      content: "아주 맛있는 맛집 모음이에요",
+      difficulty: 3,
+      photoUrl: null,
+      startDate: "2023-01-24",
+      endDate: "2023-02-03",
+      avgReviewRate: null,
+    },
   ];
 
   const listItem = props.contentType;
@@ -27,7 +101,7 @@ function HorizontalScroll(props) {
       return (
         <div className={style.articleList}>
           <ScrollMenu>
-            {dummy.map((articleListItem) => {
+            {adDummy.map((articleListItem) => {
               return (
                 <AdventureBanner
                   key={articleListItem}
@@ -42,7 +116,7 @@ function HorizontalScroll(props) {
       return (
         <div className={style.articleList}>
           <ScrollMenu>
-            {dummy.map((data) => {
+            {adDummy.map((data) => {
               return <SmallArticleItem data={data} />;
             })}
           </ScrollMenu>
