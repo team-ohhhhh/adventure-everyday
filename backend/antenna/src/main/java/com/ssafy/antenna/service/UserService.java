@@ -136,7 +136,7 @@ public class UserService {
     public CheckEmailRes checkEmailUser(String email) {
         int count = userRepository.countByEmail(email);
         CheckEmailRes checkEmailRes = new CheckEmailRes(false, null);
-        if (count == 1) {
+        if (count >= 1) {
             User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
             checkEmailRes = new CheckEmailRes(true, user.toResponse());
         }

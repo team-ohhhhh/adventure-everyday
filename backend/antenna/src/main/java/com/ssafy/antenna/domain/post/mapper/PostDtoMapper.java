@@ -14,11 +14,12 @@ public class PostDtoMapper implements Function<Post, PostDto> {
                 post.getPostId(),
                 post.getTitle(),
                 post.getContent(),
-                post.getCoordinate().getX(),
-                post.getCoordinate().getY(),
-                post.getNearestPlace(),
                 post.getW3w(),
+                post.getCoordinate().getY(),
+                post.getCoordinate().getX(),
                 post.getPhotoUrl(),
+                post.getPostLikes().size(),
+                post.getComments().size(),
                 post.getCreateTime(),
                 post.getUser().toResponse()
         );
