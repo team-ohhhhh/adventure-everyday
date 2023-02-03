@@ -501,36 +501,38 @@ public class AdventureService {
     public List<ReadAdventureInProgressWithinDistanceRes> readAdventureInProgressWithinDistance(Double lat, Double lng, Long userId) {
         User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
-        Double area = 0.05;
+        Double area = 500.0;
 
         Location northEast = GeometryUtil.calculateByDirection(lng, lat, area, CardinalDirection.NORTHEAST
                 .getBearing());
         Location southWest = GeometryUtil.calculateByDirection(lng, lat, area, CardinalDirection.SOUTHWEST
                 .getBearing());
-        double x1 = northEast.lat();
-        double y1 = northEast.lng();
-        double x2 = southWest.lat();
-        double y2 = southWest.lng();
+        double x1 = northEast.lng();
+        double y1 = northEast.lat();
+        double x2 = southWest.lng();
+        double y2 = southWest.lat();
 
         String pointFormat = String.format("'LINESTRING(%f %f, %f %f)')", x1, y1, x2, y2);
         Query query = entityManager.createNativeQuery("" +
                                 "SELECT * FROM adventure_place as ap " +
-                                "WHERE ap.adventure_place_id=" + "(select aip.progress_id from adventure_in_progress as aip where aip.user_id =" + curUser.getUserId().toString() + ") "
+                                "WHERE ap.adventure_id=" + "(select aip.adventure_id from adventure_in_progress as aip where aip.user_id =" + curUser.getUserId().toString() + ") "
                                 + "and MBRContains(ST_LINESTRINGFROMTEXT(" + pointFormat + ", ap.coordinate)"
                         , AdventurePlace.class)
                 .setMaxResults(100);
         List<AdventurePlace> adventurePlaceList = query.getResultList();
 
+        System.out.println("============="+adventurePlaceList.get(0).getCoordinate().getX()+"==============");
+
         List<ReadAdventureInProgressWithinDistanceRes> readAdventureInProgressWithinDistanceRes = new ArrayList<>();
         for (AdventurePlace ap :
                 adventurePlaceList) {
-            ReadAdventureInProgressWithinDistanceRes newReadAdventureInProgressWithinDistanceRes1 = new ReadAdventureInProgressWithinDistanceRes(
+            ReadAdventureInProgressWithinDistanceRes newReadAdventureInProgressWithinDistanceRes = new ReadAdventureInProgressWithinDistanceRes(
                     ap.getAdventure().getAdventureId(),
                     ap.getAdventure().getTitle(),
                     ap.getAdventurePlaceId(),
                     ap.getTitle()
             );
-            readAdventureInProgressWithinDistanceRes.add(newReadAdventureInProgressWithinDistanceRes1);
+            readAdventureInProgressWithinDistanceRes.add(newReadAdventureInProgressWithinDistanceRes);
         }
 
         return readAdventureInProgressWithinDistanceRes;
