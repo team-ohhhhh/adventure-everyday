@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Map, MapMarker, MarkerClusterer } from "react-kakao-maps-sdk";
-import HorizontalScroll from "../HorizontalScroll";
+
+import UserPostHorizontalScroll from "./UserPostHorizontalScroll";
 
 import styles from "./UserPostMap.module.css";
 
@@ -101,13 +102,17 @@ const UserPostMap = ({ posts }) => {
     setOnMapPosts(onMapPosts);
   };
 
+  const showPosts = () => {
+    console.log("click post!");
+  };
+
   return (
-    <div>
+    <div style={{ position: "relative" }}>
       <Map
         ref={mapRef}
         center={temp}
         isPanto={true}
-        style={{ width: "100%", height: "600px" }}
+        style={{ width: "100%", height: "700px" }}
         onIdle={onIdle}
       >
         <MarkerClusterer
@@ -124,9 +129,7 @@ const UserPostMap = ({ posts }) => {
                 key={post.postId}
                 position={{ lat: post.lat, lng: post.lng }}
                 clickable={true}
-                onClick={() => {
-                  console.log("hi");
-                }}
+                onClick={showPosts}
                 image={{
                   src: post.postUrl ? post.postUrl : "/images/noImage.png",
                   size: {
@@ -144,7 +147,10 @@ const UserPostMap = ({ posts }) => {
             ))}
         </MarkerClusterer>
       </Map>
-      <HorizontalScroll contentType={"article"} data={onMapPosts} />
+
+      <div className={styles.postWrap}>
+        <UserPostHorizontalScroll posts={onMapPosts} />
+      </div>
     </div>
   );
 };

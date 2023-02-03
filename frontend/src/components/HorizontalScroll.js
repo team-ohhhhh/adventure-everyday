@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { ScrollMenu } from "react-horizontal-scrolling-menu";
+
 import SmallArticleItem from "./SmallArticleItem";
 import AdventureBanner from "./Adventure/AdventureBanner";
 

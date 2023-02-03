@@ -20,7 +20,7 @@ function App() {
     <div className="App">
       <Routes>
         <Route element={<Navigate />}>
-          {/* Navbar가 필요한 페이지는 이곳에 추가해주세요*/}
+          {/* Navbar가 필요한 페이지는 이곳에 추가해주세요 */}
           <Route path="/feed" element={<FeedPage />} />
           {/* <Route path={["/map", "/"]} element={<MapPage />} /> */}
 
@@ -43,6 +43,7 @@ function App() {
             element={<SearchPage searchType={"adventures"} />}
           />
         </Route>
+
         {/* Navbar가 필요하지 않은 페이지는 이곳에 추가해주세요 */}
         <Route path="/login" element={<LogInPage />} />
         <Route path="/signup" element={<SignUpPage />} />

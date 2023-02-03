@@ -10,14 +10,14 @@ const SelectPostModal = ({ closeModal }) => {
   const [posts, setPosts] = useState([]);
 
   // 모달 마운트 시 유저가 쓴 글 조회
-  const URL = useSelector((state) => state.URL);
-  const userId = "1";
+  const url = useSelector((state) => state.url);
+  const userId = "3";
   const TOKEN =
-    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjc1NDEzNTk2LCJleHAiOjE2NzU3NzM1OTZ9.bL68Q9tSsRRGETi1WvItEEuWXEoy74VHTzp06LlOMNo";
+    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzIiwiaWF0IjoxNjc1NDE5MTY0LCJleHAiOjE2NzU3NzkxNjR9.E6IWg9Re1hs7a1xGXwedhOWRUuyisElfFQshtVeE0T8";
 
   useEffect(() => {
     axios({
-      url: URL + "/posts/users/" + userId,
+      url: url + "/posts/users/" + userId,
       method: "get",
       headers: {
         Authorization: "Bearer " + TOKEN,
