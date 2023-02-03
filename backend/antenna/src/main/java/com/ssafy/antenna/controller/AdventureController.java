@@ -74,6 +74,8 @@ public class AdventureController {
         return ResultResponse.success(result);
     }
 
+    //
+
     // 특정 유저가 참가중인 탐험 추가(탐험 참가)
     @PostMapping("/{adventureId}/adventure-in-progress")
     public ResultResponse<String> createAdventureInProgress(@PathVariable Long adventureId, Authentication authentication) {

@@ -535,4 +535,19 @@ public class AdventureService {
 
         return readAdventureInProgressWithinDistanceRes;
     }
+
+    //
+    // API가 아닌 method.
+    //
+
+    // 특정 유저가 진행중인 특정 탐험의 달성률 조회
+    public Integer readClearRateByuserIdAndAdventureId(Long userId,Long adventureId){
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
+        AdventureInProgress adventureInProgress = adventureInProgressRepository.findByUserAndAdventure(user,adventure).orElseThrow(AdventureInProgressNotFoundException::new);
+        Integer result = (int)((double)adventureInProgress.getCurrentPoint()/(double)adventureInProgress.getTotalPoint()*100.0);
+        return result;
+    }
+
+
 }
