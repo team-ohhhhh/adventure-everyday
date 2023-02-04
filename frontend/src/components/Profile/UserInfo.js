@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import style from './UserInfo.module.css'
 import { BiSearchAlt2, BiPencil } from "react-icons/bi"
-import { RiMoreFill } from  "react-icons/ri"
 import axios from 'axios'
 import { useSelector } from "react-redux"
 import { useParams, useNavigate } from 'react-router-dom'
+import MoreButton from './MoreButton'
 
-function UserInfo() {
+
+function UserInfo(props) {
   const [user, setUser] = useState({})
   const URL = useSelector((state) => state.url)
   const TOKEN = useSelector((state) => state.token)
@@ -27,7 +28,7 @@ function UserInfo() {
     })
     .then((res) => {
       setFollowers(res.data.result)
-  
+      console.log(res.data.result)
     })
     .catch((err) => {console.log(err)});
   }
@@ -115,10 +116,13 @@ function UserInfo() {
   }, [])
 
   
+ 
+  
+  
 
 
   return (
-    <div className={style.userInfo}>
+    <div className={style.userInfo} >
       <div className={style.nicknameAndSearchAndMore}>
         <div className={style.nicknameAndIntroduce}>
           <div className={style.nickName}>
@@ -134,7 +138,8 @@ function UserInfo() {
 
           </div>
           <div>
-            <RiMoreFill />
+            {/* TODO: 팝업창 띄우기 부터 시작 */}
+            <MoreButton isOn={props.isOn} toggle={props.toggle}/> 
           </div>
       </div>
     </div>

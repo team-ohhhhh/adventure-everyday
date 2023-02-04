@@ -10,6 +10,7 @@ import AdventurePage from "./pages/AdventurePage";
 import AdventureDetailPage from "./pages/AdventureDetailPage";
 import ProfilePage from "./pages/ProfilePage";
 import SearchPage from "./pages/SearchPage";
+import PasswordChangePage from "./pages/PasswordChangePage";
 
 
 import Navigate from "./Navigate";
@@ -38,6 +39,9 @@ function App() {
           <Route path="/profile/:userId" element={<ProfilePage />} />
           <Route path="/search/user" element={<SearchPage searchType={"users"}/>} />
           <Route path="/search/adventure" element={<SearchPage searchType={"adventures"}/>} />
+          {/* <Route path="/delete" element={<UserDeletePage />} /> */}
+          <Route path="/passwordchange" element={<PasswordChangePage />} />
+          
         </Route>
         {/* Navbar가 필요하지 않은 페이지는 이곳에 추가해주세요 */}
         <Route path="/login" element={<LogInPage />} />
