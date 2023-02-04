@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux"
 import { saveToken } from "../store/tokenSlice";
-import { saveUserInfo } from "../store/userSlice";
 import { useNavigate } from "react-router-dom"
 import style from "./LogInPage.module.css"
-
 
 // 로그인 페이지
 function LoginPage() {
@@ -30,10 +28,9 @@ function LoginPage() {
     }).then((response) => {
       //TODO: 여기서 토큰 저장하시오
       dispatch(saveToken(response.data.result.token))
-      dispatch(saveUserInfo(response.data.result.userDetailRes))
       console.log(response.data)
       navigate('/')
-    }).catch((error) => console.log(error))
+    })
   }
 
   return (

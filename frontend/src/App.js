@@ -9,15 +9,11 @@ import ArticleCreatePage from "./pages/ArticleCreatePage";
 import AdventurePage from "./pages/AdventurePage";
 import AdventureDetailPage from "./pages/AdventureDetailPage";
 import ProfilePage from "./pages/ProfilePage";
-import SearchPage from "./pages/SearchPage";
-
 
 import Navigate from "./Navigate";
 import "./App.css";
 
 function App() {
-  
-
   return (
     <div className="App">
       <Routes>
@@ -36,8 +32,6 @@ function App() {
             element={<AdventureDetailPage />}
           />
           <Route path="/profile/:userId" element={<ProfilePage />} />
-          <Route path="/search/user" element={<SearchPage searchType={"users"}/>} />
-          <Route path="/search/adventure" element={<SearchPage searchType={"adventures"}/>} />
         </Route>
         {/* Navbar가 필요하지 않은 페이지는 이곳에 추가해주세요 */}
         <Route path="/login" element={<LogInPage />} />
