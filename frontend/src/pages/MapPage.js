@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import BottomSheetContainer from "./../components/BottomSheet/BottomSheet";
 
 function MainMap() {
+  console.log("맵페이지")
   const [state, setState] = useState({
     center: {
       lat: 37.5016117,

@@ -13,7 +13,7 @@ import SearchPage from "./pages/SearchPage";
 import PasswordChangePage from "./pages/PasswordChangePage";
 import UserDeletePage from "./pages/UserDeletePage";
 
-
+import AuthLayout from "./AuthLayout"
 import Navigate from "./Navigate";
 import "./App.css";
 
@@ -23,32 +23,35 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route element={<Navigate />}>
-          {/* Navbar가 필요한 페이지는 이곳에 추가해주세요*/}
-          <Route path="/feed" element={<FeedPage />} />
-          {/* <Route path={["/map", "/"]} element={<MapPage />} /> */}
-        
-          {['/map', '/'].map((path) => (
-            <Route path={path} element={<MapPage/>} />
-          ))}
-        
-          <Route path="/adventure" element={<AdventurePage />} />
-          <Route
-            path="/adventure/detail/:id"
-            element={<AdventureDetailPage />}
-          />
-          <Route path="/profile/:userId" element={<ProfilePage />} />
-          <Route path="/search/user" element={<SearchPage searchType={"users"}/>} />
-          <Route path="/search/adventure" element={<SearchPage searchType={"adventures"}/>} />
-          <Route path="/delete" element={<UserDeletePage />} />
-          <Route path="/passwordchange" element={<PasswordChangePage />} />
+        <Route element={<AuthLayout />}>
+          {/* 로그인이 필요한 페이지는 여기에 추가해주세요 */}
+          <Route element={<Navigate />}>
+            {/* Navbar가 필요한 페이지는 이곳에 추가해주세요*/}
+            <Route path="/feed" element={<FeedPage />} />
+            {/* <Route path={["/map", "/"]} element={<MapPage />} /> */}
           
+            {['/map', '/'].map((path) => (
+              <Route path={path} element={<MapPage/>} />
+            ))}
+          
+            <Route path="/adventure" element={<AdventurePage />} />
+            <Route
+              path="/adventure/detail/:id"
+              element={<AdventureDetailPage />}
+            />
+            <Route path="/profile/:userId" element={<ProfilePage />} />
+            <Route path="/search/user" element={<SearchPage searchType={"users"}/>} />
+            <Route path="/search/adventure" element={<SearchPage searchType={"adventures"}/>} />
+            <Route path="/delete" element={<UserDeletePage />} />
+            <Route path="/passwordchange" element={<PasswordChangePage />} />
+            
+          </Route>
+          {/* Navbar가 필요하지 않은 페이지는 이곳에 추가해주세요 */}
+          <Route path="/write" element={<ArticleCreatePage />} />
         </Route>
-        {/* Navbar가 필요하지 않은 페이지는 이곳에 추가해주세요 */}
+        {/* 로그인이 필요없는 페이지는 이곳에 추가해주세요 */}
         <Route path="/login" element={<LogInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/write" element={<ArticleCreatePage />} />
-        <Route path="/profile/:userId" element={ <ProfilePage />}/>
       </Routes>
     </div>
   );
