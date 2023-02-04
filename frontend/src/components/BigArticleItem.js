@@ -25,7 +25,8 @@ function BigArticleItem(props) {
       key={postId}
       className={style.articleListItem}
       onClick={() => {
-        console.log("클릭", postId); // 상세페이지 이동
+        // console.log("클릭", postId);
+        props.onPostClick(props.data);
       }}
     >
       <div

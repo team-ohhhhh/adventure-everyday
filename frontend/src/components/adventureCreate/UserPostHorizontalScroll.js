@@ -5,12 +5,18 @@ import BigArticleItem from "../BigArticleItem";
 
 import style from "./UserPostHorizontalScroll.module.css";
 
-function HorizontalScroll({ posts }) {
+function HorizontalScroll({ posts, onPostClick }) {
   return (
     <div className={style.articleList}>
       <ScrollMenu>
         {posts.map((data) => {
-          return <BigArticleItem data={data} />;
+          return (
+            <BigArticleItem
+              key={data.postId}
+              data={data}
+              onPostClick={onPostClick}
+            />
+          );
         })}
       </ScrollMenu>
     </div>
