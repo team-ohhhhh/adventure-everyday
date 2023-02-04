@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import style from './UserInfo.module.css'
 import { BiSearchAlt2, BiPencil } from "react-icons/bi"
+import { RxCheck, RxCross2 } from "react-icons/rx"
 import axios from 'axios'
 import { useSelector } from "react-redux"
 import { useParams, useNavigate } from 'react-router-dom'
@@ -115,8 +116,6 @@ function UserInfo(props) {
   }, [userId])
 
   // 유저 사진 수정
-
-
   const imgRef = useRef()
   const changePhoto = function() {
     const file = imgRef.current.files[0]
@@ -136,6 +135,30 @@ function UserInfo(props) {
     }
   }
 
+  // 자기소개 수정
+  const [introduceModify, setIntroduceModify] = useState(false)
+  const [newIntroduce, setNewIntroduce] = useState(user.introduce)
+  const onChange = (e) => {
+    setNewIntroduce(e.target.value)
+  }
+  const changeIntroduce = function() {
+    axios({
+      url : URL + '/users/profile',
+      method: 'put',
+      headers: {
+        Authorization: `Bearer ${TOKEN}`
+      },
+      data: {
+        introduce : newIntroduce
+      }
+    })
+    .then((res) => {
+      setUser(res.data.result)
+    })
+    .then(() => setIntroduceModify(false))
+    .catch((err) => {console.log(err)})
+  }
+
   
 
 
@@ -151,7 +174,12 @@ function UserInfo(props) {
               {user.nickname} <img src={`/images/lv${user.level}.png`} style={{height:"28px", weight:"28px"}}/>
           </div>
           <div className={style.introduce} style={{fontWeight: "500"}}>
-            {user.introduce} {user.userId === MyId &&<BiPencil />}
+            {!introduceModify
+            ? (<div>
+                {user.introduce} {user.userId === MyId &&<BiPencil onClick={()=>{setIntroduceModify(true)}}/>}
+              </div>)
+            : (<div><input onChange={onChange} defaultValue={user.introduce}/><RxCheck onClick={() => {changeIntroduce()}}/><RxCross2 onClick={() => {setIntroduceModify(false)}}/></div>)
+            }
           </div>
         </div>
         <div className={style.searchAndMore}>
@@ -184,8 +212,8 @@ function UserInfo(props) {
       </div>
       <div className={style.followInfo}>
         <div className={style.followInfoNumber}><div style={{fontWeight: "700"}}>20</div>posts</div>
-        <div className={style.followInfoNumber}><div style={{fontWeight: "700"}}>{followers.length}</div>followers</div>
-        <div className={style.followInfoNumber}><div style={{fontWeight: "700"}}>{followings.length}</div>followings</div>
+        <div className={style.followInfoNumber} onClick={()=> {navigate(`/profile/${userId}/followers`)}}><div style={{fontWeight: "700"}}>{followers.length}</div>followers</div>
+        <div className={style.followInfoNumber} onClick={()=> {navigate(`/profile/${userId}/followings`)}}><div style={{fontWeight: "700"}}>{followings.length}</div>followings</div>
       </div>
     </div>
   </div>

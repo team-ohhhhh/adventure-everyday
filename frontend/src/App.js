@@ -12,6 +12,7 @@ import ProfilePage from "./pages/ProfilePage";
 import SearchPage from "./pages/SearchPage";
 import PasswordChangePage from "./pages/PasswordChangePage";
 import UserDeletePage from "./pages/UserDeletePage";
+import FollowListPage from "./pages/FollowListPage";
 
 import AuthLayout from "./AuthLayout"
 import AntiAuthLayout from "./AntiAuthLayout"
@@ -41,6 +42,7 @@ function App() {
               element={<AdventureDetailPage />}
             />
             <Route path="/profile/:userId" element={<ProfilePage />} />
+            <Route path="/profile/:userId/:relationType" element={<FollowListPage />} />
             <Route path="/search/user" element={<SearchPage searchType={"users"}/>} />
             <Route path="/search/adventure" element={<SearchPage searchType={"adventures"}/>} />
             <Route path="/delete" element={<UserDeletePage />} />
