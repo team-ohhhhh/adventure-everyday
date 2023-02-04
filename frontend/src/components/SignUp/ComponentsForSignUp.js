@@ -10,31 +10,52 @@ import style from "./ComponentsForSignUp.module.css"
 function EmailComponent(props) {
   let URL = useSelector((state) => state.url)
 
+  // 메일 중복일 경우에 false => 문구 띄우기
+  const [isChecked, setIsChecked] = useState(true)
+
   // 메일 보낸 다음 코드 입력 화면을 띄우기 위한 스위치
   const [isSent, setIsSent] = useState(false)
 
   // 입력받은 코드 저장
   const [code, setCode] = useState('')
 
-  // 이메일 보내기 위한 axios -> 전송 성공시 isSent를 True로 
+  // 이메일 중복확인 먼저 => 통과되면 이메일 보내기 위한 axios -> 전송 성공시 isSent를 True로 
+  // 실패시 문구 띄우기
   const sendEmail = function() {
     axios({
-      url : URL + '/email/send',
+      url : URL + '/users/check-email',
       method: 'get',
       params: {
         email: props.email
       }
     })
-    .then(function() {
-      setIsSent(true)
-    })
-    .catch(function(err) {
-      console.log(err)
+    .then((res) => {
+      if (!res.data.result.result) {
+        setIsChecked(true)
+        console.log(res)
+        axios({
+          url : URL + '/email/send',
+          method: 'get',
+          params: {
+            email: props.email
+          }
+        })
+        .then(function() {
+          setIsSent(true)
+        })
+        .catch(function(err) {
+          console.log(err)
+        })
+      } else {
+        setIsChecked(false)
+      }
+
     })
   }
 
   // 입력한 코드가 맞는지 확인하는 axios -> 확인되면 다음 화면으로
   const validate = function() {
+    
     axios({
       url : URL + '/email/auth',
       method : 'post',
@@ -62,15 +83,17 @@ function EmailComponent(props) {
 
   return(
     <div>
-      <div className="titleHolder">
+      <div className={style.titleHolder}>
         <h1>사용할 이메일을</h1>
         <h1>입력해주세요</h1>
       </div>
       <div className={style.inputAndButton}>
+        {!isChecked && <div >이미 가입된 이메일입니다.</div>}  
         <input className={style.signUpInput} onChange={(event) => { props.setEmail(event.target.value) }} placeholder="이메일"></input>
         {/* TODO: 여기에 이메일 형식 validation!!! */}
-        <button   onClick={ () => {sendEmail()} } className={style.signUpButton}>인증 요청</button>
-      </div>             
+        <button onClick={ () => {sendEmail()} } className={style.signUpButton}>인증 요청</button>
+    
+      </div>
       { isSent ? 
       <div>
         <div className={style.inputAndButton}>

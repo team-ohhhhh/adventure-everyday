@@ -9,7 +9,7 @@ function MoreButton(props) {
   return (
     <div className={style.buttonContainer}>
       <RiMoreFill onClick={props.toggle}/>
-      {props.isOn && <MoreList />} 
+      {props.isOn && <MoreList isMe={props.isMe}/>} 
     </div>
     )
 

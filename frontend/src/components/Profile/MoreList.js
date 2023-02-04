@@ -5,7 +5,7 @@ import { deleteUserInfo } from "./../../store/userSlice"
 import { deleteToken } from "./../../store/tokenSlice"
 
 
-function MoreList() {
+function MoreList({ isMe }) {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -16,15 +16,22 @@ function MoreList() {
     navigate('/login')
   }
 
+  if (isMe) {
+    return ( 
+      <div className={style.MoreList}>
+        <div className={style.MoreListItem} onClick={() => {logout()}}> 로그아웃 </div>
+        <div className={style.MoreListItem} onClick={()=> navigate('/passwordchange')}> 비밀번호 변경 </div>
+        <div className={style.MoreListItem} onClick={()=> navigate('/delete')}> 탈퇴하기 </div>
+      </div>
+    )
+  } else {
+    return (
+      <div className={style.MoreList}>
+        <div className={style.MoreListItem} style={{color:'red'}}> 신고 </div>
+      </div>
+    )
+  }
 
-
-  return (
-    <div className={style.MoreList}>
-      <div className={style.MoreListItem} onClick={() => {logout()}}> 로그아웃 </div>
-      <div className={style.MoreListItem} onClick={()=> navigate('/passwordchange')}> 비밀번호 변경 </div>
-      <div className={style.MoreListItem} onClick={()=> navigate('/delete')}> 탈퇴하기 </div>
-    </div>
-  )
 
 }
 

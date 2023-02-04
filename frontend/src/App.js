@@ -14,6 +14,7 @@ import PasswordChangePage from "./pages/PasswordChangePage";
 import UserDeletePage from "./pages/UserDeletePage";
 
 import AuthLayout from "./AuthLayout"
+import AntiAuthLayout from "./AntiAuthLayout"
 import Navigate from "./Navigate";
 import "./App.css";
 
@@ -49,9 +50,11 @@ function App() {
           {/* Navbar가 필요하지 않은 페이지는 이곳에 추가해주세요 */}
           <Route path="/write" element={<ArticleCreatePage />} />
         </Route>
-        {/* 로그인이 필요없는 페이지는 이곳에 추가해주세요 */}
-        <Route path="/login" element={<LogInPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
+        {/* 로그인 상태에서 가면 안되는 페이지는 이곳에 추가해주세요 */}
+        <Route element={<AntiAuthLayout />}>
+          <Route path="/login" element={<LogInPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+        </Route>
       </Routes>
     </div>
   );

@@ -13,7 +13,7 @@ function SearchComponent(props) {
   let URL = useSelector((state) => state.url)
   const searchType = props.searchType
 
-  const [search, setSearch] = useState(null)
+  const [search, setSearch] = useState('')
   const [result, setResult] = useState([])
 
   const onChange = (e) => {
