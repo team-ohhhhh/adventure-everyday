@@ -11,6 +11,7 @@ import AdventureDetailPage from "./pages/AdventureDetailPage";
 import ProfilePage from "./pages/ProfilePage";
 import SearchPage from "./pages/SearchPage";
 import PasswordChangePage from "./pages/PasswordChangePage";
+import UserDeletePage from "./pages/UserDeletePage";
 
 
 import Navigate from "./Navigate";
@@ -39,7 +40,7 @@ function App() {
           <Route path="/profile/:userId" element={<ProfilePage />} />
           <Route path="/search/user" element={<SearchPage searchType={"users"}/>} />
           <Route path="/search/adventure" element={<SearchPage searchType={"adventures"}/>} />
-          {/* <Route path="/delete" element={<UserDeletePage />} /> */}
+          <Route path="/delete" element={<UserDeletePage />} />
           <Route path="/passwordchange" element={<PasswordChangePage />} />
           
         </Route>
