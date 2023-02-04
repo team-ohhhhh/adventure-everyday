@@ -2,6 +2,7 @@ package com.ssafy.antenna.service;
 
 import com.ssafy.antenna.domain.adventure.*;
 import com.ssafy.antenna.domain.adventure.dto.*;
+import com.ssafy.antenna.domain.category.Category;
 import com.ssafy.antenna.domain.like.AdventureLike;
 import com.ssafy.antenna.domain.location.Location;
 import com.ssafy.antenna.domain.post.CheckpointPost;
@@ -44,7 +45,7 @@ public class AdventureService {
     private final AntennaRepository antennaRepository;
 
     // 탐험 추가
-    public Long createAdventure(String category, String featTitle, String featContent, String title, String content, int difficulty, LocalDateTime startDate, LocalDateTime endDate, MultipartFile photo, Long userId) {
+    public Long createAdventure(String category, String featTitle, String featContent, String title, String content, String difficulty, LocalDateTime startDate, LocalDateTime endDate, MultipartFile photo, Long userId) {
         User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
         // 탐험을 생성한 후,
@@ -536,6 +537,20 @@ public class AdventureService {
         }
 
         return readAdventureInProgressWithinDistanceRes;
+    }
+
+    // 탐험 카테고리 조회
+    public List<String> readCategories() {
+        List<String> result = new ArrayList<>();
+
+        List<Category> categories = categoryRepository.findAll();
+
+        for(Category category:categories){
+            result.add(category.getCategory());
+        }
+
+        return result;
+
     }
 
     //

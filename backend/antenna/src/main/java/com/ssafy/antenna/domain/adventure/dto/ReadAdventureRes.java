@@ -10,7 +10,7 @@ public record ReadAdventureRes(
         String featContent,
         String title,
         String content,
-        Integer difficulty,
+        String difficulty,
         String photoUrl,
         LocalDateTime startDate,
         LocalDateTime endDate,

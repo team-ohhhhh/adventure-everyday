@@ -28,7 +28,7 @@ public class AdventureController {
                                                               @RequestParam String featContent,
                                                               @RequestParam String title,
                                                               @RequestParam String content,
-                                                              @RequestParam int difficulty,
+                                                              @RequestParam String difficulty,
                                                               @RequestParam LocalDateTime startDate,
                                                               @RequestParam LocalDateTime endDate,
                                                               @RequestParam(required = false) MultipartFile photo,
@@ -195,4 +195,10 @@ public class AdventureController {
         return ResultResponse.success(result);
     }
 
+    // 탐험 카테고리 조회
+    @GetMapping("/categories")
+    public ResultResponse<List<String>> readCategories(){
+        List<String> result = adventureService.readCategories();
+        return ResultResponse.success(result);
+    }
 }
