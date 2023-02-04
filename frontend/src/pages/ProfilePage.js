@@ -1,34 +1,18 @@
-import { useState } from "react";
+import React from "react";
 import UserInfo from "./../components/Profile/UserInfo";
 import { useParams } from "react-router-dom";
 import Tabs, { Tab } from "react-best-tabs";
 import variables from "../components/ProfileTab.scss";
 import styles from "./ProfilePage.module.css";
-import AdventureOnProgressTab from './../components/Profile/AdventureOnProgressTab'
-import AdventureCompletedTab from './../components/Profile/AdventureCompletedTab'
-import AdventureCreatedTab from './../components/Profile/AdventureCreatedTab'
 
 function ProfilePage() {
   let { userId } = useParams();
-  
-
   variables.$noneActiveTextColor = "black";
 
-  // 더보기 버튼 토글 + 페이지 터치시 닫히도록
-  const [isOn, setIsOn]  = useState(false)
-  function toggle() {
-    setIsOn((prev) => !prev)
-  }
-  function pageTouch() {
-    if (isOn) {
-      setIsOn(false)
-    }
-  }
-
   return (
-    <div className="pageContainer" onClick={pageTouch}>
+    <div className="pageContainer">
       <div>
-        <UserInfo userId={userId} toggle={toggle} isOn={isOn}/>
+        <UserInfo userId={userId} />
       </div>
       <div>
         <Tabs
@@ -42,13 +26,13 @@ function ProfilePage() {
             <div className={styles.tabWrapper}>게시글 컴포넌트</div>
           </Tab>
           <Tab title="탐험 중" className="mr-4">
-            <AdventureOnProgressTab className={styles.tabWrapper} />
+            <div className={styles.tabWrapper}>탐험 중 컴포넌트</div>
           </Tab>
           <Tab title="완료한 탐험" className="mr-4">
-            <AdventureCompletedTab className={styles.tabWrapper}/>
+            <div className={styles.tabWrapper}>완료한 탐험 컴포넌트</div>
           </Tab>
           <Tab title="만든 탐험" className="mr-4">
-            <AdventureCreatedTab className={styles.tabWrapper}/>
+            <div className={styles.tabWrapper}> 만든 탐험 컴포넌트</div>
           </Tab>
         </Tabs>
       </div>

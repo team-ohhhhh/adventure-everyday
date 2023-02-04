@@ -8,7 +8,7 @@ function ArticleTab() {
   return (
     <div>
       {/*TODO: 여기에 게시글 지도 컴포넌트 넣자 */}
-      <HorizontalScroll articleList={articleList} contetnType={"article"}/>
+
     </div>
   )
 }

@@ -12,7 +12,7 @@ function SignUpPage() {
   const [stage, setStage] = useState(2)
 
   // 로그인에 필요한 정보들
-  const [email, setEmail] = useState("1234@gmail.com")
+  const [email, setEmail] = useState("gittgi768@gmail.com")
   const [nickname, setNickname] = useState("")
   const [password, setPassword] = useState("")
   const [password2, setPassword2] = useState("")
