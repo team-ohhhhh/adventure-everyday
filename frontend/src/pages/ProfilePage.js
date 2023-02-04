@@ -4,14 +4,9 @@ import { useParams } from "react-router-dom";
 import Tabs, { Tab } from "react-best-tabs";
 import variables from "../components/ProfileTab.scss";
 import styles from "./ProfilePage.module.css";
-import AdventureOnProgressTab from './../components/Profile/AdventureOnProgressTab'
-import AdventureCompletedTab from './../components/Profile/AdventureCompletedTab'
-import AdventureCreatedTab from './../components/Profile/AdventureCreatedTab'
 
 function ProfilePage() {
   let { userId } = useParams();
-  
-
   variables.$noneActiveTextColor = "black";
 
   return (
@@ -31,13 +26,13 @@ function ProfilePage() {
             <div className={styles.tabWrapper}>게시글 컴포넌트</div>
           </Tab>
           <Tab title="탐험 중" className="mr-4">
-            <AdventureOnProgressTab className={styles.tabWrapper} />
+            <div className={styles.tabWrapper}>탐험 중 컴포넌트</div>
           </Tab>
           <Tab title="완료한 탐험" className="mr-4">
-            <AdventureCompletedTab className={styles.tabWrapper}/>
+            <div className={styles.tabWrapper}>완료한 탐험 컴포넌트</div>
           </Tab>
           <Tab title="만든 탐험" className="mr-4">
-            <AdventureCreatedTab className={styles.tabWrapper}/>
+            <div className={styles.tabWrapper}> 만든 탐험 컴포넌트</div>
           </Tab>
         </Tabs>
       </div>
