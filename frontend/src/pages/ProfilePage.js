@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import UserInfo from "./../components/Profile/UserInfo";
 import { useParams } from "react-router-dom";
 import Tabs, { Tab } from "react-best-tabs";
@@ -14,10 +14,21 @@ function ProfilePage() {
 
   variables.$noneActiveTextColor = "black";
 
+  // 더보기 버튼 토글 + 페이지 터치시 닫히도록
+  const [isOn, setIsOn]  = useState(false)
+  function toggle() {
+    setIsOn((prev) => !prev)
+  }
+  function pageTouch() {
+    if (isOn) {
+      setIsOn(false)
+    }
+  }
+
   return (
-    <div className="pageContainer">
+    <div className="pageContainer" onClick={pageTouch}>
       <div>
-        <UserInfo userId={userId} />
+        <UserInfo userId={userId} toggle={toggle} isOn={isOn}/>
       </div>
       <div>
         <Tabs
