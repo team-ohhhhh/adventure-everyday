@@ -51,14 +51,14 @@ function FollowListPage() {
     } else {
       navigate(`/profile/${userId}`)
     } // 뒤에 인자를 이상한걸로 들어와서 조회하려고 할때는 그냥 프로필로 보내버리기
-  })
+  }, [])
   
 
   return(
     <div className="pageContainer">
       { userList.length !== 0
       ? userList.map((user) => {
-          return <SimpleUserBanner data={user}/>
+          return <SimpleUserBanner data={user.userDetailRes}/>
         })
       : <div>목록이 없습니다...</div>
       }
