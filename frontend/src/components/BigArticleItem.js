@@ -2,6 +2,7 @@ import React from "react";
 import style from "./BigArticleItem.module.css";
 
 function BigArticleItem(props) {
+  console.log(props.data);
   //변수 꺼내쓰기
   const postId = props.data.postId;
   const title = props.data.title;
@@ -25,8 +26,7 @@ function BigArticleItem(props) {
       key={postId}
       className={style.articleListItem}
       onClick={() => {
-        // console.log("클릭", postId);
-        props.onPostClick(props.data);
+        console.log("클릭", postId);
       }}
     >
       <div

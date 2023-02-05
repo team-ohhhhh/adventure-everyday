@@ -6,14 +6,14 @@ import UserPostMap from "./UserPostMap";
 
 import styles from "./SelectPostModal.module.css";
 
-const SelectPostModal = ({ closeModal }) => {
+const SelectPostModal = ({ closeModal, selectPost }) => {
   const [posts, setPosts] = useState([]);
 
   // 모달 마운트 시 유저가 쓴 글 조회
   const url = useSelector((state) => state.url);
-  const userId = "3";
+  const userId = "1";
   const TOKEN =
-    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzIiwiaWF0IjoxNjc1NDE5MTY0LCJleHAiOjE2NzU3NzkxNjR9.E6IWg9Re1hs7a1xGXwedhOWRUuyisElfFQshtVeE0T8";
+    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjc1NTc4MzU3LCJleHAiOjE2NzU5MzgzNTd9.H_1_PJ4Y2KM4GAFM3pKU4rvt8Dk8LVkqVOnIy1VRsB4";
 
   useEffect(() => {
     axios({
@@ -37,7 +37,7 @@ const SelectPostModal = ({ closeModal }) => {
       <button onClick={closeModal}>close</button>
       <h1>탐험으로 만들</h1>
       <h1>내 글을 선택하세요</h1>
-      <UserPostMap posts={posts} />
+      <UserPostMap posts={posts} selectPost={selectPost} />
     </div>
   );
 };

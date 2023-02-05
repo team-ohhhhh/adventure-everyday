@@ -1,14 +1,13 @@
 import React from "react";
 
+import BigArticleItem from "../BigArticleItem";
+
 import styles from "./SelectedCheckPoint.module.css";
 
-const SelectedCheckPoint = ({ point }) => {
+const SelectedCheckPoint = ({ point, unSelectPost }) => {
   // console.log(point);
   return (
     <div className={styles.container}>
-      <div>
-        <h2>게시글 자리</h2>
-      </div>
       <div>
         <input
           type="text"
@@ -17,20 +16,25 @@ const SelectedCheckPoint = ({ point }) => {
           // value={article.title}
           // onChange={handleInput}
         />
-        <textarea
-          type="text"
-          name="content"
-          placeholder="체크포인트 내용을 입력해주세요"
-          // value={article.content}
-          // onChange={handleInput}
-        />
+        <button onClick={() => unSelectPost(point)}>삭제</button>
+      </div>
+      <div>
+        대표
         <input
           type="checkbox"
-          name="isPrivate"
-          // checked={article.isPrivate}
+          name="isRep"
+          // checked={article.isRep}
           // onChange={handleCheck}
         />
+        <BigArticleItem data={point} />
       </div>
+      <textarea
+        type="text"
+        name="content"
+        placeholder="체크포인트 내용을 입력해주세요"
+        // value={article.content}
+        // onChange={handleInput}
+      />
     </div>
   );
 };

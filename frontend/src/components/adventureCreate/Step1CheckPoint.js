@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import AdventureMap from "./AdventureMap";
@@ -7,38 +7,20 @@ import SelectPostModal from "./SelectPostModal";
 
 import styles from "./Step1CheckPoint.module.css";
 
-const Step1CheckPoint = () => {
+const Step1CheckPoint = ({ checkPoints, setCheckPoints }) => {
   const navigate = useNavigate();
 
   const [showModal, setShowModal] = useState(false);
-  const [checkPoints, setCheckPoints] = useState([
-    {
-      title: "title1",
-      content: "강남구청역",
-      lat: 37.517186,
-      lng: 127.04128,
-      postId: 1,
-    },
-    {
-      title: "title2",
-      content: "멀티캠퍼스",
-      lat: 37.50128745884959,
-      lng: 127.03956225524968,
-      postId: 2,
-    },
-    {
-      title: "title3",
-      content: "건대입구역",
-      lat: 37.540693,
-      lng: 127.07023,
-      postId: 3,
-    },
-  ]);
 
   const count = useMemo(() => {
     // console.log(setCheckPoints);
     return checkPoints && checkPoints.length;
   }, [checkPoints]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    console.log("hi");
+  }, []);
 
   const openModal = () => {
     setShowModal(true);
@@ -49,6 +31,26 @@ const Step1CheckPoint = () => {
     document.body.style.overflow = "unset";
   };
 
+  const selectPost = (post) => {
+    // console.log("닫기!", post);
+    const check = checkPoints.every((point) => {
+      return point.postId !== post.postId;
+    });
+    if (check) {
+      setCheckPoints((checkPoints) => [...checkPoints, post]);
+      closeModal();
+    } else {
+      alert("이미 선택한 게시글입니다.");
+    }
+  };
+
+  const unSelectPost = (post) => {
+    const newCheckPoints = checkPoints.filter((point) => {
+      return point.postId !== post.postId;
+    });
+    setCheckPoints(newCheckPoints);
+  };
+
   return (
     <>
       <p>탐험으로 만들 내 글을 선택하세요!</p>
@@ -57,7 +59,11 @@ const Step1CheckPoint = () => {
       <p>현재 체크포인트 개수 {count}/5</p>
 
       {checkPoints.map((point) => (
-        <SelectedCheckPoint key={point.postId} point={point} />
+        <SelectedCheckPoint
+          key={point.postId}
+          point={point}
+          unSelectPost={unSelectPost}
+        />
       ))}
 
       <div className={styles.addBox} onClick={openModal}>
@@ -69,7 +75,9 @@ const Step1CheckPoint = () => {
       <button onClick={() => navigate(-1)}>취소</button>
       <button onClick={() => navigate("/adventure/create/2")}>다음</button>
 
-      {showModal && <SelectPostModal closeModal={closeModal} />}
+      {showModal && (
+        <SelectPostModal closeModal={closeModal} selectPost={selectPost} />
+      )}
     </>
   );
 };

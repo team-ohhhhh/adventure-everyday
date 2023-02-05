@@ -1,20 +1,21 @@
 import React from "react";
 import { ScrollMenu } from "react-horizontal-scrolling-menu";
 
-import BigArticleItem from "../BigArticleItem";
+import UserPostItem from "./UserPostItem";
 
 import style from "./UserPostHorizontalScroll.module.css";
 
-function HorizontalScroll({ posts, onPostClick }) {
+function UserPostHorizontalScroll({ posts, onPostClick, onPostSelect }) {
   return (
     <div className={style.articleList}>
       <ScrollMenu>
         {posts.map((data) => {
           return (
-            <BigArticleItem
+            <UserPostItem
               key={data.postId}
               data={data}
               onPostClick={onPostClick}
+              onPostSelect={onPostSelect}
             />
           );
         })}
@@ -23,4 +24,4 @@ function HorizontalScroll({ posts, onPostClick }) {
   );
 }
 
-export default HorizontalScroll;
+export default UserPostHorizontalScroll;
