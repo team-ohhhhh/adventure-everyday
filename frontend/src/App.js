@@ -13,6 +13,8 @@ import SearchPage from "./pages/SearchPage";
 import PasswordChangePage from "./pages/PasswordChangePage";
 import UserDeletePage from "./pages/UserDeletePage";
 import FollowListPage from "./pages/FollowListPage";
+import ArticleDetailPage from "./pages/ArticleDetailPage";
+import ArticleUpdatePage from "./pages/ArticleUpdatePage";
 
 import AuthLayout from "./AuthLayout"
 import AntiAuthLayout from "./AntiAuthLayout"
@@ -47,10 +49,12 @@ function App() {
             <Route path="/search/adventure" element={<SearchPage searchType={"adventures"}/>} />
             <Route path="/delete" element={<UserDeletePage />} />
             <Route path="/passwordchange" element={<PasswordChangePage />} />
+            <Route path="/article/:articleId" element={<ArticleDetailPage />} />
             
           </Route>
           {/* Navbar가 필요하지 않은 페이지는 이곳에 추가해주세요 */}
           <Route path="/write" element={<ArticleCreatePage />} />
+          <Route path="/article/:articleId/update" element={<ArticleUpdatePage />} />
         </Route>
         {/* 로그인 상태에서 가면 안되는 페이지는 이곳에 추가해주세요 */}
         <Route element={<AntiAuthLayout />}>
