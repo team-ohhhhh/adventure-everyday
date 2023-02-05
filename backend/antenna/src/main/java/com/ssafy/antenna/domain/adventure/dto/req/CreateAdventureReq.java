@@ -1,4 +1,4 @@
-package com.ssafy.antenna.domain.adventure.dto;
+package com.ssafy.antenna.domain.adventure.dto.req;
 
 import java.time.LocalDateTime;
 

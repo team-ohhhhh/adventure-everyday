@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useSelector } from "react-redux";
 import AdventureBanner from "../components/Adventure/AdventureBanner";
 import SimpleUserBanner from "./../components/Profile/SimpleUserBanner";
+import style from "./SearchPage.module.css"
 
 
 function SearchComponent(props) {
@@ -12,7 +13,7 @@ function SearchComponent(props) {
   let URL = useSelector((state) => state.url)
   const searchType = props.searchType
 
-  const [search, setSearch] = useState("")
+  const [search, setSearch] = useState('')
   const [result, setResult] = useState([])
 
   const onChange = (e) => {
@@ -20,7 +21,7 @@ function SearchComponent(props) {
   }
 
   useEffect(() => {
-    // 유저 검색
+    // 유저 검색 TODO: 쓰고 지우면 ''이 되면서 모든 유저가 다나옴...
     console.log(searchType)
     if (searchType === 'users') {
       axios({
@@ -35,7 +36,6 @@ function SearchComponent(props) {
       })
       .then((res)=> {
         setResult(res.data.result)
-        console.log(res)
       })
       .catch((err) => {console.log(err)})
 
@@ -61,8 +61,8 @@ function SearchComponent(props) {
 
 
   return (
-    <div>
-      <input type="text" value={search} onChange={onChange} /> 
+    <div className="pageContainer">
+      <input className={style.searchBar} type="text" value={search} onChange={onChange} placeholder={`${searchType === 'users' ? '유저를' : '모험을'} 검색해보세요.`}/> 
       <div>
         {searchType === 'users' 
         ? result.map((user) => {

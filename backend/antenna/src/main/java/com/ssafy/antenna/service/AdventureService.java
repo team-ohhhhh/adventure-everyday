@@ -1,7 +1,14 @@
 package com.ssafy.antenna.service;
 
 import com.ssafy.antenna.domain.adventure.*;
-import com.ssafy.antenna.domain.adventure.dto.*;
+import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventurePlaceReq;
+import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventureReviewReq;
+import com.ssafy.antenna.domain.adventure.dto.req.UpdateAdventureReviewReq;
+import com.ssafy.antenna.domain.adventure.dto.res.*;
+import com.ssafy.antenna.domain.adventure.dto.sub.SubAdventurePlace;
+import com.ssafy.antenna.domain.adventure.dto.sub.SubCoordinate;
+import com.ssafy.antenna.domain.adventure.dto.sub.UserIdPhotoUrl;
+import com.ssafy.antenna.domain.category.Category;
 import com.ssafy.antenna.domain.like.AdventureLike;
 import com.ssafy.antenna.domain.location.Location;
 import com.ssafy.antenna.domain.post.CheckpointPost;
@@ -44,7 +51,7 @@ public class AdventureService {
     private final AntennaRepository antennaRepository;
 
     // 탐험 추가
-    public Long createAdventure(String category, String featTitle, String featContent, String title, String content, int difficulty, LocalDateTime startDate, LocalDateTime endDate, MultipartFile photo, Long userId) {
+    public Long createAdventure(String category, String featTitle, String featContent, String title, String content, String difficulty, LocalDateTime startDate, LocalDateTime endDate, MultipartFile photo, Long userId) {
         User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
         // 탐험을 생성한 후,
@@ -81,25 +88,65 @@ public class AdventureService {
     }
 
     // 특정 탐험 조회
-    public ReadAdventureRes readAdventure(Long adventureId) {
-        Adventure newAdventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
+    public ReadAdventureRes readAdventure(Long adventureId,Long userId) {
+        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
 
-        ReadAdventureRes newReadAdventureRes = new ReadAdventureRes(
-                newAdventure.getAdventureId(),
-                newAdventure.getAdventureId(),
-                newAdventure.getCategory().getCategory(),
-                newAdventure.getFeatTitle(),
-                newAdventure.getFeatContent(),
-                newAdventure.getTitle(),
-                newAdventure.getContent(),
-                newAdventure.getDifficulty(),
-                newAdventure.getPhotoUrl(),
-                newAdventure.getStartDate(),
-                newAdventure.getEndDate(),
-                newAdventure.getAvgReviewRate()
+        // 현재 이 모험id로 AdventureInProgress 가져오기.
+        List<AdventureInProgress> adventureInProgressList = adventureInProgressRepository.findAllByAdventure(adventure).orElseThrow();
+
+        // AdventureInProgress 유저들의 id만 골라오기.
+        List<Long> userIds = new ArrayList<>();
+
+        for(AdventureInProgress adventureInProgress:adventureInProgressList){
+            userIds.add(adventureInProgress.getUser().getUserId());
+        }
+
+        // 유저id로 유저id와 사진 가져오기.
+        List<UserIdPhotoUrl> userIdPhotoUrls = getUserIdPhotoUrl(userIds);
+
+        // isParticipating
+        Boolean participation = Boolean.FALSE;
+        if(isParticipating(adventureId,userId)){
+            participation=Boolean.TRUE;
+        }
+
+        // subAdventurePlaces
+        List<SubAdventurePlace> subAdventurePlaces = new ArrayList<>();
+        // 이 모험의 AdventurePlace들을 가져와서 id와 좌표만 뽑는다.
+        List<AdventurePlace> adventurePlaceList = adventurePlaceRepository.findAllByAdventure(adventure).orElseThrow(AdventureNotFoundException::new);
+
+        for (AdventurePlace adventurePlace:adventurePlaceList){
+            SubCoordinate subCoordinate = new SubCoordinate(adventurePlace.getCoordinate().getX(),adventurePlace.getCoordinate().getY());
+            subAdventurePlaces.add(new SubAdventurePlace(adventurePlace.getAdventurePlaceId(), subCoordinate));
+        }
+
+        ReadAdventureRes readAdventureRes = new ReadAdventureRes(
+                adventure.getAdventureId(),
+                adventure.getTitle(),
+                adventure.getContent(),
+                adventure.getStartDate(),
+                adventure.getEndDate(),
+                adventure.getDifficulty(),
+                adventure.getCategory().getCategory(),
+                adventure.getAvgReviewRate(),
+                new UserIdPhotoUrl(adventure.getUser().getUserId(),adventure.getUser().getPhotoUrl()),
+                adventure.getUser().getNickname(),
+                userIdPhotoUrls,
+                adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureNotFoundException::new),
+                participation,
+                subAdventurePlaces
         );
 
-        return newReadAdventureRes;
+        return readAdventureRes;
+    }
+
+    private boolean isParticipating(Long adventureId, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
+        if(adventureInProgressRepository.findByUserAndAdventure(user,adventure).isPresent()){
+            return true;
+        }
+        return false;
     }
 
     // 특정 탐험 삭제
@@ -114,9 +161,8 @@ public class AdventureService {
     }
 
     // 모든 탐험 조회(생성순, 달성순, 거리순)
-    public List<ReadAdventureRes> readAdventures(String order, Double lat, Double lng) {
-        // 5km이내(변경가능) 모든 탐험 거리순으로(가까운순) 10개(변경가능) 조회
-        List<ReadAdventureRes> result = new ArrayList<>();
+    public List<ReadAdventuresRes> readAdventures(String order, Double lat, Double lng) {
+        List<ReadAdventuresRes> result = new ArrayList<>();
         if (lat != null && lng != null) {
             Query query = entityManager.createNativeQuery(
                             "SELECT *, " +
@@ -136,21 +182,30 @@ public class AdventureService {
             System.out.println(adventureIds);
 
             for (Long i : adventureIds) {
-                Adventure curAdventure = adventureRepository.findById(i).orElseThrow(AdventureNotFoundException::new);
+                Adventure adventure = adventureRepository.findById(i).orElseThrow(AdventureNotFoundException::new);
 
-                ReadAdventureRes newReadAdventureRes = new ReadAdventureRes(
-                        curAdventure.getAdventureId(),
-                        curAdventure.getUser().getUserId(),
-                        curAdventure.getCategory().getCategory(),
-                        curAdventure.getFeatTitle(),
-                        curAdventure.getFeatContent(),
-                        curAdventure.getTitle(),
-                        curAdventure.getContent(),
-                        curAdventure.getDifficulty(),
-                        curAdventure.getPhotoUrl(),
-                        curAdventure.getStartDate(),
-                        curAdventure.getEndDate(),
-                        curAdventure.getAvgReviewRate()
+                // 현재 이 모험id로 AdventureInProgress 가져오기.
+                List<AdventureInProgress> adventureInProgressList = adventureInProgressRepository.findAllByAdventure(adventure).orElseThrow();
+
+                // AdventureInProgress 유저들의 id만 골라오기.
+                List<Long> userIds = new ArrayList<>();
+
+                for(AdventureInProgress adventureInProgress:adventureInProgressList){
+                    userIds.add(adventureInProgress.getUser().getUserId());
+                }
+
+                // 유저id로 유저id와 사진 가져오기.
+                List<UserIdPhotoUrl> userIdPhotoUrls = getUserIdPhotoUrl(userIds);
+
+                ReadAdventuresRes newReadAdventureRes = new ReadAdventuresRes(
+                        adventure.getAdventureId(),
+                        adventure.getTitle(),
+                        adventure.getDifficulty(),
+                        adventure.getPhotoUrl(),
+                        new UserIdPhotoUrl(adventure.getUser().getUserId(),adventure.getUser().getPhotoUrl()),
+                        adventure.getUser().getNickname(),
+                        userIdPhotoUrls,
+                        adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureNotFoundException::new)
                 );
 
                 result.add(newReadAdventureRes);
@@ -159,7 +214,35 @@ public class AdventureService {
             // 생성시간 조회
             if (order.equals("update")) {
                 List<Adventure> temp = adventureRepository.findAllByOrderByCreateTimeAsc().orElseThrow(AdventureNotFoundException::new);
-                result = adventureToReadAdventureRes(temp);
+
+                for (Adventure adventure : temp) {
+                    // 현재 이 모험으로 AdventureInProgress 가져오기.
+                    List<AdventureInProgress> adventureInProgressList = adventureInProgressRepository.findAllByAdventure(adventure).orElseThrow();
+
+                    // AdventureInProgress 유저들의 id만 골라오기.
+                    List<Long> userIds = new ArrayList<>();
+
+                    for(AdventureInProgress adventureInProgress:adventureInProgressList){
+                        userIds.add(adventureInProgress.getUser().getUserId());
+                    }
+
+                    // 유저id로 유저id와 사진 가져오기.
+
+                    List<UserIdPhotoUrl> userIdPhotoUrls = getUserIdPhotoUrl(userIds);
+
+                    ReadAdventuresRes newReadAdventureRes = new ReadAdventuresRes(
+                            adventure.getAdventureId(),
+                            adventure.getTitle(),
+                            adventure.getDifficulty(),
+                            adventure.getPhotoUrl(),
+                            new UserIdPhotoUrl(adventure.getUser().getUserId(),adventure.getUser().getPhotoUrl()),
+                            adventure.getUser().getNickname(),
+                            userIdPhotoUrls,
+                            adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureNotFoundException::new)
+                    );
+
+                    result.add(newReadAdventureRes);
+                }
             }
             // 달성자순 조회
             else if (order.equals("user")) {
@@ -170,26 +253,12 @@ public class AdventureService {
         return result;
     }
 
-    // Adventure를 ReadAdventureRes로 변환.
-    public List<ReadAdventureRes> adventureToReadAdventureRes(List<Adventure> temp) {
-        List<ReadAdventureRes> result = new ArrayList<>();
+    private List<UserIdPhotoUrl> getUserIdPhotoUrl(List<Long> userIds) {
+        List<UserIdPhotoUrl> result = new ArrayList<>();
 
-        for (Adventure adventure : temp) {
-            ReadAdventureRes newReadAdventureRes = new ReadAdventureRes(
-                    adventure.getAdventureId(),
-                    adventure.getUser().getUserId(),
-                    adventure.getCategory().getCategory(),
-                    adventure.getFeatTitle(),
-                    adventure.getFeatContent(),
-                    adventure.getTitle(),
-                    adventure.getContent(),
-                    adventure.getDifficulty(),
-                    adventure.getPhotoUrl(),
-                    adventure.getStartDate(),
-                    adventure.getEndDate(),
-                    adventure.getAvgReviewRate()
-            );
-            result.add(newReadAdventureRes);
+        for(Long userId:userIds){
+            User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+            result.add(new UserIdPhotoUrl(user.getUserId(),user.getPhotoUrl()));
         }
 
         return result;
@@ -469,33 +538,33 @@ public class AdventureService {
 
 
     // 모험 검색(모든 모험 키워드 조회)
-    public List<ReadAdventureRes> readAdventureSearch(String keyword) {
-        System.out.println(keyword);
-        List<Adventure> adventureList = adventureRepository.findByTitleContaining(keyword).orElseThrow(AdventureNotFoundException::new);
-        System.out.println("==================================================================");
-
-        List<ReadAdventureRes> readAdventureResList = new ArrayList<>();
-        for (Adventure adventure : adventureList) {
-            ReadAdventureRes newReadAdventureRes = new ReadAdventureRes(
-                    adventure.getAdventureId(),
-                    adventure.getUser().getUserId(),
-                    adventure.getCategory().getCategory(),
-                    adventure.getFeatTitle(),
-                    adventure.getFeatContent(),
-                    adventure.getTitle(),
-                    adventure.getContent(),
-                    adventure.getDifficulty(),
-                    adventure.getPhotoUrl(),
-                    adventure.getStartDate(),
-                    adventure.getEndDate(),
-                    adventure.getAvgReviewRate()
-            );
-
-            readAdventureResList.add(newReadAdventureRes);
-        }
-
-        return readAdventureResList;
-    }
+//    public List<ReadAdventuresRes> readAdventureSearch(String keyword) {
+//        System.out.println(keyword);
+//        List<Adventure> adventureList = adventureRepository.findByTitleContaining(keyword).orElseThrow(AdventureNotFoundException::new);
+//        System.out.println("==================================================================");
+//
+//        List<ReadAdventuresRes> readAdventureResList = new ArrayList<>();
+//        for (Adventure adventure : adventureList) {
+//            ReadAdventuresRes newReadAdventureRes = new ReadAdventuresRes(
+//                    adventure.getAdventureId(),
+//                    adventure.getUser().getUserId(),
+//                    adventure.getCategory().getCategory(),
+//                    adventure.getFeatTitle(),
+//                    adventure.getFeatContent(),
+//                    adventure.getTitle(),
+//                    adventure.getContent(),
+//                    adventure.getDifficulty(),
+//                    adventure.getPhotoUrl(),
+//                    adventure.getStartDate(),
+//                    adventure.getEndDate(),
+//                    adventure.getAvgReviewRate()
+//            );
+//
+//            readAdventureResList.add(newReadAdventureRes);
+//        }
+//
+//        return readAdventureResList;
+//    }
 
     // 특정 위치에서 일정 거리 안에 내가 참가중인 탐험과 탐험 장소 조회하기
     public List<ReadAdventureInProgressWithinDistanceRes> readAdventureInProgressWithinDistance(Double lat, Double lng, Long userId) {
@@ -538,6 +607,20 @@ public class AdventureService {
         return readAdventureInProgressWithinDistanceRes;
     }
 
+    // 탐험 카테고리 조회
+    public List<String> readCategories() {
+        List<String> result = new ArrayList<>();
+
+        List<Category> categories = categoryRepository.findAll();
+
+        for(Category category:categories){
+            result.add(category.getCategory());
+        }
+
+        return result;
+
+    }
+
     //
     // API가 아닌 method.
     //
@@ -550,6 +633,30 @@ public class AdventureService {
         Integer result = (int)((double)adventureInProgress.getCurrentPoint()/(double)adventureInProgress.getTotalPoint()*100.0);
         return result;
     }
+
+    // 특정 모험을 진행중인 유저들의 id들을 반환.
+    public List<Long> readUserIdsByAdventureId(Long adventureId){
+        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
+
+        List<Long> result = new ArrayList<>();
+
+        // 특정 모험의 AdventureInProgress를 가져오기.
+        List<AdventureInProgress> adventureInProgressList = adventureInProgressRepository.findAllByAdventure(adventure).orElseThrow(UserNotFoundException::new);
+
+        // 그 모험을 진행중인 유저들의 id 뽑기.
+        for(AdventureInProgress adventureInProgress:adventureInProgressList){
+            result.add(adventureInProgress.getUser().getUserId());
+        }
+
+        return result;
+    }
+
+    // 특정 모험을 진행중인 유저들의 인원 수 반환.
+    public Long findUserCountByAdventure(Long adventureId){
+        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
+        return adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureInProgressNotFoundException::new);
+    }
+
 
 
 }

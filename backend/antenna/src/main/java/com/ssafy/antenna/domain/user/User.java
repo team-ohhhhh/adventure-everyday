@@ -41,7 +41,7 @@ public class User extends Base implements UserDetails {
     private String nickname;
     @Column(columnDefinition = "varchar(255) not null")
     private String password;
-    @Column(columnDefinition = "int default 0")
+    @Column(columnDefinition = "int default 1")
     private int level;
     @Column(columnDefinition = "int default 0")
     private int exp;
