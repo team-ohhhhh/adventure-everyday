@@ -63,13 +63,13 @@ public class UserController {
     }
 
     @GetMapping("/followings/{userId}")
-    public ResultResponse<List<UserDetailRes>> getFollowingUser(@PathVariable Long userId) throws Exception {
+    public ResultResponse<List<GetFollowRes>> getFollowingUser(@PathVariable Long userId) throws Exception {
         //validation 필요!!!!!!!!!!!!!!
         return ResultResponse.success(userService.getFollowingUser(userId));
     }
 
     @GetMapping("/followers/{userId}")
-    public ResultResponse<List<UserDetailRes>> getFollowerUser(@PathVariable Long userId) throws Exception {
+    public ResultResponse<List<GetFollowRes>> getFollowerUser(@PathVariable Long userId) throws Exception {
         //validation 필요!!!!!!!!!!!!!!
         return ResultResponse.success(userService.getFollowerUser(userId));
     }
