@@ -29,6 +29,7 @@ function UserInfo(props) {
     })
     .then((res) => {
       setFollowers(res.data.result)
+      
     })
     .catch((err) => {console.log(err)});
   }
@@ -74,7 +75,7 @@ function UserInfo(props) {
   
 
   const unfollow = function() {
-    const relationId = followers.find((user) => user.id === MyId).relationId //TODO: 여기 변수명 수정
+    const relationId = followers.find((user) => user.userDetailRes.userId === MyId).followId //TODO: 여기 변수명 수정
     axios({
       url: URL + `/users/followers/${relationId}`, //TODO: 관계번호로 해야함...
       method: 'delete',
@@ -204,7 +205,7 @@ function UserInfo(props) {
         </div>
         {user.userId !== MyId && 
           <div style={{marginTop : '10px'}}>
-            {followers.find(user => user.userId === MyId) 
+            {followers.find(user => user.userDetailRes.userId === MyId) 
             ? <button onClick={() => {unfollow()}} className={style.unfollowButton}>unfollow</button> 
             : <button onClick={() => {follow()}} className={style.followButton}>follow</button>}
           </div>
