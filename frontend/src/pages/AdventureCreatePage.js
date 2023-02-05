@@ -23,7 +23,6 @@ const AdventureCreatePage = () => {
 
   return (
     <div className="pageContainer" style={{ padding: "30px" }}>
-      <h1>탐험 생성</h1>
       <Routes>
         <Route
           path=""
@@ -42,7 +41,7 @@ const AdventureCreatePage = () => {
             <Step2Content checkPoints={checkPoints} adv={adv} setAdv={setAdv} />
           }
         />
-        <Route path="3" element={<Step3Badge />} />
+        <Route path="3" element={<Step3Badge adv={adv} setAdv={setAdv} />} />
         <Route path="4" element={<Step4Done />} />
       </Routes>
     </div>

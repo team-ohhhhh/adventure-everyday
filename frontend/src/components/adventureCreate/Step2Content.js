@@ -14,8 +14,8 @@ const Step2Content = ({ checkPoints, adv, setAdv }) => {
     { value: "등산", name: "등산" },
   ];
 
-  const [dateRange, setDateRange] = useState([null, null]);
-  const [startDate, endDate] = dateRange;
+  // const [dateRange, setDateRange] = useState([null, null]);
+  // const [startDate, endDate] = dateRange;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -37,6 +37,8 @@ const Step2Content = ({ checkPoints, adv, setAdv }) => {
 
   return (
     <div>
+      <h1>탐험 생성</h1>
+
       <h2>내 탐험지도</h2>
       <AdventureMap checkPoints={checkPoints} />
       <h2>탐험 카테고리</h2>
