@@ -9,7 +9,7 @@ let tokenSlice = createSlice({
       return a.payload
     },
     deleteToken(state){
-      return ''
+      return null
     }
   }
 })

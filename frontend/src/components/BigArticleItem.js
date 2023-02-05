@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import style from "./BigArticleItem.module.css";
+import { useNavigate } from "react-router-dom";
 
 function BigArticleItem(props) {
   // console.log(props.data);
@@ -21,12 +22,14 @@ function BigArticleItem(props) {
   // const date = 'yy.mm.dd'
   // const w3w = '보라돌이, 뚜비, 나나'
 
+  const navigate = useNavigate();
+
   return (
     <div
       key={postId}
       className={style.articleListItem}
       onClick={() => {
-        console.log("클릭", postId);
+        navigate(`/article/${postId}`);
       }}
     >
       <div
