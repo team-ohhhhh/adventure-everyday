@@ -27,12 +27,31 @@ public class TestController {
 
     @PostMapping("/category")
     public ResponseEntity<String> createCategory() {
+        // 카테고리가 만들어졌는지 체크
+        if(categoryRepository.findById(1l).isPresent()){
+            return new ResponseEntity<>("이미 카테고리가 생성되어 있습니다", HttpStatus.OK);
+        }
         Category testCategory = Category.builder()
+                .category("여행")
+                .build();
+        categoryRepository.save(testCategory);
+        testCategory = Category.builder()
                 .category("맛집")
                 .build();
-        // 저장해줌
         categoryRepository.save(testCategory);
-        return new ResponseEntity<>("카테고리생성성공~~", HttpStatus.OK);
+        testCategory = Category.builder()
+                .category("추억")
+                .build();
+        categoryRepository.save(testCategory);
+        testCategory = Category.builder()
+                .category("운동")
+                .build();
+        categoryRepository.save(testCategory);
+        testCategory = Category.builder()
+                .category("취미")
+                .build();
+        categoryRepository.save(testCategory);
+        return new ResponseEntity<>("여행, 맛집, 추억, 운동, 취미 카테고리 생성 성공", HttpStatus.OK);
     }
 
     @GetMapping("/main")
