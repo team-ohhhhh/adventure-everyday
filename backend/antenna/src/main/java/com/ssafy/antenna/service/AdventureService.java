@@ -1,12 +1,14 @@
 package com.ssafy.antenna.service;
 
 import com.ssafy.antenna.domain.adventure.*;
+import com.ssafy.antenna.domain.adventure.dto.click.ReadAdventurePlaceClickRes;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventurePlaceReq;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventureReviewReq;
 import com.ssafy.antenna.domain.adventure.dto.req.UpdateAdventureReviewReq;
 import com.ssafy.antenna.domain.adventure.dto.res.*;
 import com.ssafy.antenna.domain.adventure.dto.sub.SubAdventurePlace;
 import com.ssafy.antenna.domain.adventure.dto.sub.SubCoordinate;
+import com.ssafy.antenna.domain.adventure.dto.sub.SubPost;
 import com.ssafy.antenna.domain.adventure.dto.sub.UserIdPhotoUrl;
 import com.ssafy.antenna.domain.category.Category;
 import com.ssafy.antenna.domain.like.AdventureLike;
@@ -619,6 +621,42 @@ public class AdventureService {
 
         return result;
 
+    }
+
+    // 탐험 장소 하나 눌렀을 때
+
+    public ReadAdventurePlaceClickRes readAdventurePlaceClick(Long adventurePlaceId) {
+        AdventurePlace adventurePlace = adventurePlaceRepository.findById(adventurePlaceId).orElseThrow(AdventurePlaceNotFoundException::new);
+
+        List<CheckpointPost> checkpointPosts = checkpointPostRepository.findAllByAdventurePlace(adventurePlace).orElseThrow(CheckpointPostNotFoundException::new);
+
+        List<SubPost> subPostList = new ArrayList<>();
+
+        for(CheckpointPost checkpointPost:checkpointPosts){
+            Post post = checkpointPost.getPost();
+            SubPost subPost = new SubPost(
+                    post.getPostId(),
+                    post.getPhotoUrl(),
+                    post.getTitle(),
+                    post.getUser().getNickname(),
+                    null,
+                    post.getCreateTime()
+            );
+            subPostList.add(subPost);
+        }
+
+        ReadAdventurePlaceClickRes readAdventurePlaceClickRes = new ReadAdventurePlaceClickRes(
+                adventurePlaceId,
+                adventurePlace.getTitle(),
+                adventurePlace.getContent(),
+                adventurePlace.getPost().getPhotoUrl(),
+                adventurePlace.getPost().getTitle(),
+                adventurePlace.getPost().getW3w(),
+                adventurePlace.getPost().getCreateTime(),
+                subPostList
+        );
+
+        return readAdventurePlaceClickRes;
     }
 
     //
