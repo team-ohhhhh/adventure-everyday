@@ -97,31 +97,31 @@ public class UserService {
         return newFollow.toResponse();
     }
 
-    public List<UserDetailRes> getFollowingUser(Long userId) {
+    public List<GetFollowRes> getFollowingUser(Long userId) {
         //유저가 존재하는지 먼저 확인
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Optional<List<Follow>> followList = followRepository.findAllByFollowingUser(user);
-        List<UserDetailRes> userDetailResList = new ArrayList<>();
+        List<GetFollowRes> getFollowResList = new ArrayList<>();
         if (followList.isPresent()) {
-            for (int i = 0; i < followList.get().size(); i++) {
-                userDetailResList.add(followList.get().get(i).getFollowerUser().toResponse());
+            for (Follow follow :followList.get()) {
+                getFollowResList.add(new GetFollowRes(follow.getFollowId(),follow.getFollowerUser().toResponse()));
             }
         }
-        return userDetailResList;
+        return getFollowResList;
     }
 
-    public List<UserDetailRes> getFollowerUser(Long userId) {
+    public List<GetFollowRes> getFollowerUser(Long userId) {
         //유저가 존재하는지 먼저 확인
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Optional<List<Follow>> followList = followRepository.findAllByFollowerUser(user);
-        List<UserDetailRes> userDetailResList = new ArrayList<>();
+        List<GetFollowRes> getFollowResList = new ArrayList<>();
         if (followList.isPresent()) {
-            for (int i = 0; i < followList.get().size(); i++) {
-                userDetailResList.add(followList.get().get(i).getFollowingUser().toResponse());
+            for (Follow follow :followList.get()) {
+                getFollowResList.add(new GetFollowRes(follow.getFollowId(),follow.getFollowingUser().toResponse()));
             }
         }
 
-        return userDetailResList;
+        return getFollowResList;
     }
 
     public Follow deleteFollowingUser(Long userId, Long followId) {
