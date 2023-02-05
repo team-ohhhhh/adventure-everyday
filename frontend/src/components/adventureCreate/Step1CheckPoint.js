@@ -72,6 +72,58 @@ const Step1CheckPoint = ({
     setAdvCheckPoints(newAdvCheckPoints);
   };
 
+  const getDistance = (lat1, lon1, lat2, lon2) => {
+    if (lat1 === lat2 && lon1 === lon2) return 0;
+
+    var radLat1 = (Math.PI * lat1) / 180;
+    var radLat2 = (Math.PI * lat2) / 180;
+    var theta = lon1 - lon2;
+    var radTheta = (Math.PI * theta) / 180;
+    var dist =
+      Math.sin(radLat1) * Math.sin(radLat2) +
+      Math.cos(radLat1) * Math.cos(radLat2) * Math.cos(radTheta);
+    if (dist > 1) dist = 1;
+
+    dist = Math.acos(dist);
+    dist = (dist * 180) / Math.PI;
+    dist = dist * 60 * 1.1515 * 1.609344 * 1000;
+    if (dist < 100) dist = Math.round(dist / 10) * 10;
+    else dist = Math.round(dist / 100) * 100;
+
+    return dist;
+  };
+
+  const exp = useMemo(() => {
+    let dist = 0;
+    for (let i = 0; i < checkPoints.length; i++) {
+      for (let j = 0; j < checkPoints.length; j++) {
+        dist += getDistance(
+          checkPoints[i].lat,
+          checkPoints[i].lng,
+          checkPoints[j].lat,
+          checkPoints[j].lng
+        );
+      }
+    }
+    dist /= checkPoints.length * 2;
+    // console.log(dist / 50);
+    return dist / 50;
+  }, [checkPoints]);
+
+  const difficulty = useMemo(() => {
+    if (exp < 100) {
+      return 1;
+    } else if (exp < 500) {
+      return 2;
+    } else if (exp < 1500) {
+      return 3;
+    } else if (exp < 5000) {
+      return 4;
+    } else {
+      return 5;
+    }
+  }, [exp]);
+
   return (
     <>
       <h1>탐험 생성</h1>
@@ -99,16 +151,21 @@ const Step1CheckPoint = ({
 
       <AdventureMap checkPoints={checkPoints} />
 
-      <div>이 탐험의 난이도</div>
+      {checkPoints.length ? (
+        <div>이 탐험의 난이도 {difficulty}</div>
+      ) : (
+        <div></div>
+      )}
 
       <button onClick={() => navigate(-1)}>취소</button>
       <button
         onClick={() => {
-          if (checkPoints.length < 1) {
-            alert("체크포인트를 1개 이상 선택해주세요.");
+          if (checkPoints.length < 2) {
+            alert("체크포인트를 2개 이상 선택해주세요.");
           } else if (!adv.photo) {
             alert("대표 이미지를 선택해 주세요.");
           } else {
+            setAdv((adv) => ({ ...adv, difficulty: difficulty }));
             navigate("/adventure/create/2");
           }
         }}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -43,9 +43,11 @@ const Step2Content = ({ checkPoints, adv, setAdv }) => {
       <AdventureMap checkPoints={checkPoints} />
       <h2>탐험 카테고리</h2>
       <select onChange={handleSelect}>
-        {categories.map((category) => {
-          return <option value={category.value}>{category.name}</option>;
-        })}
+        {categories.map((category) => (
+          <option key={category.value} value={category.value}>
+            {category.name}
+          </option>
+        ))}
       </select>
 
       <h2>탐험 기간</h2>

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import styles from "./Step3Badge.module.css";
+// import { useSelector } from "react-redux";
 
-const Step3Badge = ({ adv, setAdv }) => {
+const Step3Badge = ({ adv, setAdv, advCheckPoints }) => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
 
@@ -27,8 +29,55 @@ const Step3Badge = ({ adv, setAdv }) => {
     document.body.style.overflow = "unset";
   };
 
+  // const url = useSelector((state) => state.url);
+  // const token = useSelector((state) => state.token);
+  const url = "http://i8a305.p.ssafy.io:8080";
+  const token =
+    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjc1MzI2MDA4LCJleHAiOjE2NzU2ODYwMDh9.qmZRLGiF5d_lQbMGiX23zpWjWI3l9LdwrqDOAXVgJ8I";
+
+  const handleSubmit = (e) => {
+    console.log(adv);
+
+    const formData = new FormData();
+    formData.append("category", adv.category);
+    formData.append("featTitle", adv.featTitle);
+    formData.append("featContent", adv.featTitle);
+    formData.append("title", adv.title);
+    formData.append("content", adv.content);
+    formData.append("difficulty", adv.difficulty);
+    formData.append("startDate", adv.startDate);
+    formData.append("endDate", adv.endDate);
+    formData.append("photo", adv.photo);
+
+    axios
+      .post(url + "/adventures", formData, {
+        headers: {
+          "Content-type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        // console.log(res);
+        const advId = res.data.result.adventureId;
+        axios.post(
+          url + "/adventures/" + advId + "/places",
+          JSON.stringify(advCheckPoints),
+          {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          }
+        );
+      })
+      .then(() => {
+        navigate("/adventure/create/4");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
-    <div>
+    <>
       <h1>탐험 생성</h1>
 
       <h2>내 탐험의 보물</h2>
@@ -56,10 +105,10 @@ const Step3Badge = ({ adv, setAdv }) => {
           <p>곧 모험이 완성됩니다</p>
           <p>탐험을 완성하고 나면 수정과 삭제가 불가능합니다</p>
           <button onClick={closeModal}>취소</button>
-          <button onClick={() => navigate("/adventure/create/4")}>완료</button>
+          <button onClick={handleSubmit}>완료</button>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

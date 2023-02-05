@@ -11,7 +11,7 @@ const AdventureCreatePage = () => {
   const [advCheckPoints, setAdvCheckPoints] = useState([]);
   const [adv, setAdv] = useState({
     category: "맛집",
-    featTitle: null,
+    featTitle: "",
     featContent: null,
     title: null,
     content: null,
@@ -43,7 +43,16 @@ const AdventureCreatePage = () => {
             <Step2Content checkPoints={checkPoints} adv={adv} setAdv={setAdv} />
           }
         />
-        <Route path="3" element={<Step3Badge adv={adv} setAdv={setAdv} />} />
+        <Route
+          path="3"
+          element={
+            <Step3Badge
+              adv={adv}
+              setAdv={setAdv}
+              advCheckPoints={advCheckPoints}
+            />
+          }
+        />
         <Route path="4" element={<Step4Done />} />
       </Routes>
     </div>
