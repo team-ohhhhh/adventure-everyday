@@ -238,6 +238,7 @@ public class PostService {
 
         Post save = postRepository.save(post);
 
+
         if (Boolean.valueOf(isCheckpoint)) {
             checkpointPostRepository.save(CheckpointPost.builder()
                     .adventure(adventureRepository.findById(Long.valueOf(adventureId)).orElseThrow(AdventureNotFoundException::new))

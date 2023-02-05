@@ -12,6 +12,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(NOT_FOUND, "해당하는 유저를 찾을 수 없습니다."),
     POST_NOT_FOUND(NOT_FOUND, "해당하는 글을 찾을 수 없습니다."),
     ADVENTURE_NOT_FOUND(NOT_FOUND, "해당하는 탐험을 찾을 수 없습니다."),
+    ADVENTURE_PLACE_NOT_FOUND(NOT_FOUND, "해당하는 탐험장소를 찾을 수 없습니다."),
     ADVENTURE_IN_PROGRESS_NOT_FOUND(NOT_FOUND, "해당하는 참가중인 탐험을 찾을 수 없습니다."),
     ADVENTURE_LIKE_NOT_FOUND(NOT_FOUND, "해당하는 탐험 알림을 찾을 수 없습니다."),
     ADVENTURE_REVIEW_NOT_FOUND(NOT_FOUND, "해당하는 탐험 리뷰를 찾을 수 없습니다."),
