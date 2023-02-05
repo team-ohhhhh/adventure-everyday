@@ -1,0 +1,19 @@
+.topBar {
+  position: sticky;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height : 5vh;
+  font-size: large;
+  padding-top: 1vh;
+  font-weight: 600;
+  padding-left: 1vh;
+  padding-right: 1vh;
+
+}
+
+
+.right {
+  visibility: hidden;
+}
