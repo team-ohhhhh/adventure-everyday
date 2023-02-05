@@ -8,6 +8,7 @@ import com.ssafy.antenna.domain.antenna.dto.PostAntennaReq;
 import com.ssafy.antenna.domain.email.dto.AuthEmailRes;
 import com.ssafy.antenna.domain.email.dto.CheckEmailRes;
 import com.ssafy.antenna.domain.user.Follow;
+import com.ssafy.antenna.domain.user.NextLevelExp;
 import com.ssafy.antenna.domain.user.Role;
 import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.domain.user.dto.*;
@@ -103,8 +104,8 @@ public class UserService {
         Optional<List<Follow>> followList = followRepository.findAllByFollowingUser(user);
         List<GetFollowRes> getFollowResList = new ArrayList<>();
         if (followList.isPresent()) {
-            for (Follow follow :followList.get()) {
-                getFollowResList.add(new GetFollowRes(follow.getFollowId(),follow.getFollowerUser().toResponse()));
+            for (Follow follow : followList.get()) {
+                getFollowResList.add(new GetFollowRes(follow.getFollowId(), follow.getFollowerUser().toResponse()));
             }
         }
         return getFollowResList;
@@ -116,8 +117,8 @@ public class UserService {
         Optional<List<Follow>> followList = followRepository.findAllByFollowerUser(user);
         List<GetFollowRes> getFollowResList = new ArrayList<>();
         if (followList.isPresent()) {
-            for (Follow follow :followList.get()) {
-                getFollowResList.add(new GetFollowRes(follow.getFollowId(),follow.getFollowingUser().toResponse()));
+            for (Follow follow : followList.get()) {
+                getFollowResList.add(new GetFollowRes(follow.getFollowId(), follow.getFollowingUser().toResponse()));
             }
         }
 
@@ -305,6 +306,65 @@ public class UserService {
         //유저가 존재하면, 유저와 안테나를 함께 조회
         Antenna antenna = antennaRepository.findByAntennaIdAndUser(antennaId, user).orElseThrow(AntennaNotFoundException::new);
         return antenna.toResponse();
+    }
+
+    public UserDetailRes addExpUser(int exp, Long userId) {
+        //유저가 존재하는지 확인
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        //유저가 존재하면, add한 경험치가 다음 레벨로 넘어갈 정도인지 확인
+        int resultLevel = user.getLevel();
+        int resultExp = 0;
+        switch (user.getLevel()) {
+            case 1:
+                if (user.getExp() + exp >= NextLevelExp.ONE.value()){
+                    resultLevel+=1;
+                    resultExp = user.getExp() + exp - NextLevelExp.ONE.value();
+                }else{
+                    resultExp = user.getExp() + exp;
+                }
+                    break;
+            case 2:
+                if (user.getExp() + exp >= NextLevelExp.TWO.value()){
+                    resultLevel+=1;
+                    resultExp = user.getExp() + exp - NextLevelExp.TWO.value();
+                }else{
+                    resultExp = user.getExp() + exp;
+                }
+                break;
+            case 3:
+                if (user.getExp() + exp >= NextLevelExp.THREE.value()){
+                    resultLevel+=1;
+                    resultExp = user.getExp() + exp - NextLevelExp.THREE.value();
+                }else{
+                    resultExp = user.getExp() + exp;
+                }
+                break;
+            case 4:
+                if (user.getExp() + exp >= NextLevelExp.FOUR.value()){
+                    resultLevel+=1;
+                    resultExp = user.getExp() + exp - NextLevelExp.FOUR.value();
+                }else{
+                    resultExp = user.getExp() + exp;
+                }
+                break;
+            case 5:
+                resultExp = user.getExp() + exp;
+                break;
+        }
+        //경험치 계산 완료 후, 유저 저장
+        User newUser = User.builder()
+                .userId(user.getUserId())
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .password(user.getPassword())
+                .level(resultLevel)
+                .exp(resultExp)
+                .introduce(user.getIntroduce())
+                .role(Role.USER)
+                .photoUrl(user.getPhotoUrl())
+                .photoName(user.getPhotoName()).build();
+        userRepository.save(newUser);
+        return newUser.toResponse();
     }
 
 }

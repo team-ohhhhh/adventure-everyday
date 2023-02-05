@@ -1,6 +1,7 @@
 package com.ssafy.antenna.controller;
 
 import com.ssafy.antenna.domain.ResultResponse;
+import com.ssafy.antenna.domain.adventure.dto.click.ReadAdventurePlaceClickRes;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventurePlaceReq;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventureReviewReq;
 import com.ssafy.antenna.domain.adventure.dto.req.UpdateAdventureReviewReq;
@@ -202,4 +203,11 @@ public class AdventureController {
         List<String> result = adventureService.readCategories();
         return ResultResponse.success(result);
     }
+
+    // 탐험 장소 하나 눌렀을 때
+    @GetMapping("/adventure-places/{adventurePlaceId}")
+    public ResultResponse<ReadAdventurePlaceClickRes> readAdventurePlaceClick(@PathVariable Long adventurePlaceId){
+        return ResultResponse.success(adventureService.readAdventurePlaceClick(adventurePlaceId));
+    }
+
 }
