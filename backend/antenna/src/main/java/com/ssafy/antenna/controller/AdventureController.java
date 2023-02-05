@@ -1,11 +1,12 @@
 package com.ssafy.antenna.controller;
 
 import com.ssafy.antenna.domain.ResultResponse;
-import com.ssafy.antenna.domain.adventure.dto.*;
+import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventurePlaceReq;
+import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventureReviewReq;
+import com.ssafy.antenna.domain.adventure.dto.req.UpdateAdventureReviewReq;
+import com.ssafy.antenna.domain.adventure.dto.res.*;
 import com.ssafy.antenna.service.AdventureService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import com.ssafy.antenna.domain.ResultResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,11 +41,11 @@ public class AdventureController {
     }
 
     // 특정 탐험 조회
-    @GetMapping("/{adventureId}")
-    public ResultResponse<ReadAdventureRes> readAdventure(@PathVariable Long adventureId) {
-        ReadAdventureRes result = adventureService.readAdventure(adventureId);
-        return ResultResponse.success(result);
-    }
+//    @GetMapping("/{adventureId}")
+//    public ResultResponse<ReadAdventureRes> readAdventure(@PathVariable Long adventureId) {
+//        ReadAdventureRes result = adventureService.readAdventure(adventureId);
+//        return ResultResponse.success(result);
+//    }
 
     // 특정 탐험 삭제
     @DeleteMapping("/{adventureId}")
@@ -56,7 +57,7 @@ public class AdventureController {
 
     // 모든 탐험 조회(생성순, 달성순, 거리순)
     @GetMapping()
-    public ResultResponse<List<ReadAdventureRes>> readAdventures(@RequestParam String order, @RequestParam(required = false) Double lat, @RequestParam(required = false) Double lng) {
+    public ResultResponse<List<ReadAdventuresRes>> readAdventures(@RequestParam String order, @RequestParam(required = false) Double lat, @RequestParam(required = false) Double lng) {
         return ResultResponse.success(adventureService.readAdventures(order, lat, lng));
     }
 
@@ -182,11 +183,11 @@ public class AdventureController {
     }
 
     // 모험 검색(모든 모험 키워드 조회)
-    @GetMapping("/search")
-    public ResultResponse<List<ReadAdventureRes>> readAdventureSearch(@RequestParam String keyword) {
-        List<ReadAdventureRes> result = adventureService.readAdventureSearch(keyword);
-        return ResultResponse.success(result);
-    }
+//    @GetMapping("/search")
+//    public ResultResponse<List<ReadAdventuresRes>> readAdventureSearch(@RequestParam String keyword) {
+//        List<ReadAdventuresRes> result = adventureService.readAdventureSearch(keyword);
+//        return ResultResponse.success(result);
+//    }
 
     // 특정 위치에서 일정 거리 안에 특정 유저가 참가중인 탐험과 탐험 장소 조회하기
     @GetMapping("/adventure-in-progress/check")
