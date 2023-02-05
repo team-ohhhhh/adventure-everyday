@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MapMarker, Map, useMap } from "react-kakao-maps-sdk";
 import styles from "./AdventureDetailMap.module.css";
-function AdventureDetailMap() {
+function AdventureDetailMap(props) {
   const MARKER_WIDTH = 33; // 기본, 클릭 마커의 너비
   const MARKER_HEIGHT = 36; // 기본, 클릭 마커의 높이
   const OFFSET_X = 12; // 기본, 클릭 마커의 기준 X좌표
@@ -17,7 +17,6 @@ function AdventureDetailMap() {
   const SPRITE_HEIGHT = 146; // 스프라이트 이미지 높이
   const SPRITE_GAP = 10; // 스프라이트 이미지에서 마커간 간격
 
-  console.log("생성");
   const mapRef = useRef();
 
   const positions = [

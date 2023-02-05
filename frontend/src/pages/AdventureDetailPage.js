@@ -5,35 +5,35 @@ import AdventureDetailReview from "../components/Adventure/AdventureDetailReview
 import styles from "./AdventureDetailPage.module.css";
 import Tabs, { Tab } from "react-best-tabs";
 import tabs from "../components/AdventureDetailTab.module.scss";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
 function AdventureDetailPage() {
-  let { id } = useParams();
+  const params = useParams(); // 특정 탐험 id가져오기
 
   let TOKEN = useSelector((state) => state.token);
-
-  const params = useParams(); // 특정 탐험 id가져오기
-  console.log(params.id);
   let URL = useSelector((state) => state.url);
-  // const ReadAdventureDetail = function () {
-  //   axios({
-  //     url: URL + `/adventures/${params.id}`,
-  //     headers: {
-  //       Authorization: `Bearer ${TOKEN}`,
-  //     },
-  //     method: "get",
-  //   }).then((response) => {
-  //     console.log(response.data);
-  //   });
-  // };
 
-  // useMemo(() => {
-  //   ReadAdventureDetail();
-  // }, []);
+  let [adventureDetail, setAdventureDetail] = useState({});
 
-  // 더미데이터로 테스트 // axios 총 몇번 요청?
+  function ReadAdventureDetail() {
+    axios({
+      url: URL + `/adventures/${params.id}`,
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+      },
+      method: "get",
+    }).then((response) => {
+      setAdventureDetail(response.data.result);
+      console.log("axios 성공");
+      console.log(response.data.result);
+    });
+  }
+  // 탐험 상세 정보 받아오기
+  useEffect(() => {
+    ReadAdventureDetail();
+  }, []);
 
   // ad info로 넘길 데이터 (1. 하얀 부분 데이터)
   const dummy = {
@@ -98,8 +98,8 @@ function AdventureDetailPage() {
         <div className={styles.white}>
           <AdventureInfo
             className={styles.info}
-            key={dummy.adventureId}
-            info={dummy}
+            key={adventureDetail.adventureId}
+            info={adventureDetail}
           ></AdventureInfo>
         </div>
 
@@ -114,8 +114,8 @@ function AdventureDetailPage() {
             >
               <Tab title="탐험 지도" className="mr-2">
                 <AdventureDetailInfo
-                  key={dummy.adventureId}
-                  info={dummy2}
+                  key={adventureDetail.adventureId}
+                  info={adventureDetail.subAdventurePlaces}
                 ></AdventureDetailInfo>
               </Tab>
               <Tab title="탐험 후기" className="mr-2">

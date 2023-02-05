@@ -16,7 +16,6 @@ function AdventureBanner(props) {
       }}
       onClick={() => {
         navigate(`/adventure/detail/${adventureItem.adventureId}`);
-        console.log(adventureItem);
       }}
     >
       <div className={style.titleAndDifficulty}>
