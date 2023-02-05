@@ -4,7 +4,13 @@ import BigArticleItem from "../BigArticleItem";
 
 import styles from "./SelectedCheckPoint.module.css";
 
-const SelectedCheckPoint = ({ point, unSelectPost, setAdvCheckPoints }) => {
+const SelectedCheckPoint = ({
+  point,
+  unSelectPost,
+  setAdvCheckPoints,
+  isRep,
+  setAdv,
+}) => {
   const [checkPointInfo, setCheckPointInfo] = useState({
     title: "",
     content: "",
@@ -28,6 +34,13 @@ const SelectedCheckPoint = ({ point, unSelectPost, setAdvCheckPoints }) => {
     });
   };
 
+  const handleCheck = (e) => {
+    setAdv((adv) => ({
+      ...adv,
+      photo: point.postUrl,
+    }));
+  };
+
   return (
     <div className={styles.container}>
       <div>
@@ -45,8 +58,8 @@ const SelectedCheckPoint = ({ point, unSelectPost, setAdvCheckPoints }) => {
         <input
           type="checkbox"
           name="isRep"
-          checked={point.isRep}
-          // onChange={handleCheck}
+          checked={isRep}
+          onChange={handleCheck}
         />
         <BigArticleItem data={point} />
       </div>
@@ -61,4 +74,4 @@ const SelectedCheckPoint = ({ point, unSelectPost, setAdvCheckPoints }) => {
   );
 };
 
-export default SelectedCheckPoint;
+export default React.memo(SelectedCheckPoint);

@@ -12,6 +12,8 @@ const Step1CheckPoint = ({
   setCheckPoints,
   advCheckPoints,
   setAdvCheckPoints,
+  adv,
+  setAdv,
 }) => {
   const navigate = useNavigate();
 
@@ -86,6 +88,8 @@ const Step1CheckPoint = ({
           unSelectPost={unSelectPost}
           advCheckPoints={advCheckPoints}
           setAdvCheckPoints={setAdvCheckPoints}
+          isRep={adv.photo === point.postUrl}
+          setAdv={setAdv}
         />
       ))}
 
@@ -102,6 +106,8 @@ const Step1CheckPoint = ({
         onClick={() => {
           if (checkPoints.length < 1) {
             alert("체크포인트를 1개 이상 선택해주세요.");
+          } else if (!adv.photo) {
+            alert("대표 이미지를 선택해 주세요.");
           } else {
             navigate("/adventure/create/2");
           }

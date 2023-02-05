@@ -32,6 +32,8 @@ const AdventureCreatePage = () => {
               setCheckPoints={setCheckPoints}
               advCheckPoints={advCheckPoints}
               setAdvCheckPoints={setAdvCheckPoints}
+              adv={adv}
+              setAdv={setAdv}
             />
           }
         />
