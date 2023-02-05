@@ -1,10 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 
 import BigArticleItem from "../BigArticleItem";
 
 import styles from "./SelectedCheckPoint.module.css";
 
-const SelectedCheckPoint = ({ point, unSelectPost, setCheckPoints }) => {
+const SelectedCheckPoint = ({ point, unSelectPost, setAdvCheckPoints }) => {
+  const [checkPointInfo, setCheckPointInfo] = useState({
+    title: "",
+    content: "",
+    coordinate: [point.lat, point.lng],
+    postId: point.postId,
+  });
+
+  const handleInput = (e) => {
+    setCheckPointInfo((checkPointInfo) => ({
+      ...checkPointInfo,
+      [e.target.name]: e.target.value,
+    }));
+    setAdvCheckPoints((advCheckPoints) => {
+      return advCheckPoints.map((advCheckPoint) => {
+        if (advCheckPoint.postId === checkPointInfo.postId) {
+          return checkPointInfo;
+        } else {
+          return advCheckPoint;
+        }
+      });
+    });
+  };
+
   return (
     <div className={styles.container}>
       <div>
@@ -12,8 +35,8 @@ const SelectedCheckPoint = ({ point, unSelectPost, setCheckPoints }) => {
           type="text"
           name="title"
           placeholder="체크포인트 이름을 설정해주세요"
-          value={point.advTitle}
-          // onChange={handleInput}
+          value={checkPointInfo.title}
+          onChange={handleInput}
         />
         <button onClick={() => unSelectPost(point)}>삭제</button>
       </div>
@@ -31,8 +54,8 @@ const SelectedCheckPoint = ({ point, unSelectPost, setCheckPoints }) => {
         type="text"
         name="content"
         placeholder="체크포인트 내용을 입력해주세요"
-        value={point.advContent}
-        // onChange={handleInput}
+        value={checkPointInfo.content}
+        onChange={handleInput}
       />
     </div>
   );

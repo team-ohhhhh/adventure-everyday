@@ -13,7 +13,7 @@ const SelectPostModal = ({ closeModal, selectPost }) => {
   const url = useSelector((state) => state.url);
   const userId = "1";
   const TOKEN =
-    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjc1NTc4MzU3LCJleHAiOjE2NzU5MzgzNTd9.H_1_PJ4Y2KM4GAFM3pKU4rvt8Dk8LVkqVOnIy1VRsB4";
+    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjc1NjAxMDY5LCJleHAiOjE2NzU5NjEwNjl9.hLb1M2qGM2omvM6mrMqkOMKCxh-GFLKOtpBVhCgewFg";
 
   useEffect(() => {
     axios({

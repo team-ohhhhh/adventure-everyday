@@ -10,7 +10,7 @@ const AdventureCreatePage = () => {
   const [checkPoints, setCheckPoints] = useState([]);
   const [advCheckPoints, setAdvCheckPoints] = useState([]);
   const [adv, setAdv] = useState({
-    category: "탐험",
+    category: "맛집",
     featTitle: null,
     featContent: null,
     title: null,

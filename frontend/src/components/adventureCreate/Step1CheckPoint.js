@@ -27,8 +27,12 @@ const Step1CheckPoint = ({
   }, []);
 
   const openModal = () => {
-    setShowModal(true);
-    document.body.style.overflow = "hidden";
+    if (checkPoints.length === 5) {
+      alert("체크포인트는 최대 5개까지 선택할 수 있습니다.");
+    } else {
+      setShowModal(true);
+      document.body.style.overflow = "hidden";
+    }
   };
   const closeModal = () => {
     setShowModal(false);
@@ -80,7 +84,8 @@ const Step1CheckPoint = ({
           key={point.postId}
           point={point}
           unSelectPost={unSelectPost}
-          setCheckPoints={setCheckPoints}
+          advCheckPoints={advCheckPoints}
+          setAdvCheckPoints={setAdvCheckPoints}
         />
       ))}
 
@@ -93,7 +98,17 @@ const Step1CheckPoint = ({
       <div>이 탐험의 난이도</div>
 
       <button onClick={() => navigate(-1)}>취소</button>
-      <button onClick={() => navigate("/adventure/create/2")}>다음</button>
+      <button
+        onClick={() => {
+          if (checkPoints.length < 1) {
+            alert("체크포인트를 1개 이상 선택해주세요.");
+          } else {
+            navigate("/adventure/create/2");
+          }
+        }}
+      >
+        다음
+      </button>
 
       {showModal && (
         <SelectPostModal closeModal={closeModal} selectPost={selectPost} />
