@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import useGeolocation from "react-hook-geolocation";
+import { Route, Routes } from "react-router-dom";
 import axios from "axios";
+import useGeolocation from "react-hook-geolocation";
 
 import Step1Location from "../components/articleCreate/Step1Location";
 import Step2Content from "../components/articleCreate/Step2Content";
@@ -9,45 +10,38 @@ import Step3Done from "../components/articleCreate/Step3Done";
 const API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY;
 
 const ArticleCreatePage = () => {
-  // 게시글 작성 단계
-  // 1 : 장소 선택, 2 : 내용 입력, 3 : 완료
-  const [step, setStep] = useState(1);
-
-  // 게시글 내용
   const [article, setArticle] = useState({
-    type: "text",
-    image: { name: null, preview: null, data: null },
-    lat: 37.50128745884959,
-    lng: 127.03956225524968,
-    isAdv: false,
-    advId: null,
+    isText: true,
+    photo: null,
+    preview: null,
+    lat: 37.50128745884959, // 기본 위도
+    lng: 127.03956225524968, // 기본 경도
+    address: null,
     title: "",
     content: "",
-    isPrivate: false,
+    isPublic: true,
+    isCheckPoint: false,
+    adventureId: null,
+    adventurePlaceId: null,
   });
 
-  // 화면에 보여줄 주소
-  const [address, setAddress] = useState();
-
-  // 후보 탐험 목록
-  const [advList, setAdvList] = useState();
+  const [checkPointList, setCheckPointList] = useState([]);
 
   // 현재 위치 또는 게시글 타입 변화 시 위경도 데이터 업데이트
   const geolocation = useGeolocation();
   useEffect(() => {
-    if (article.type === "text" && geolocation.latitude) {
+    if (article.isText && geolocation.latitude) {
       setArticle((article) => ({
         ...article,
         lat: geolocation.latitude,
         lng: geolocation.longitude,
       }));
     }
-  }, [geolocation.latitude, geolocation.longitude, article.type]);
+  }, [geolocation.latitude, geolocation.longitude, article.isText]);
 
   // 위경도 데이터 변화 시
-  // 1. 좌표->주소 변환 api 호출
-  // 2. 탐험 리스트 조회 api 호출
   useEffect(() => {
+    // 1. 좌표 -> 주소 변환
     axios
       .get("https://dapi.kakao.com/v2/local/geo/coord2address.json", {
         params: {
@@ -62,12 +56,15 @@ const ArticleCreatePage = () => {
       .then((res) => {
         const data = res.data.documents;
         if (data && data.length) {
-          setAddress(data[0].address.address_name);
+          setArticle((article) => ({
+            ...article,
+            address: data[0].address.address_name,
+          }));
         }
       });
 
-    // 탐험 요청 (백엔드 완성 시 업데이트 예정)
-    setAdvList([
+    // 2. 탐험 리스트 조회 api 호출
+    setCheckPointList([
       {
         id: 1,
         adv: "추억이 가득 쌓이는 탐험",
@@ -83,33 +80,34 @@ const ArticleCreatePage = () => {
     ]);
   }, [article.lat, article.lng]);
 
-  switch (step) {
-    case 1:
-      return (
-        <Step1Location
-          setStep={setStep}
-          article={article}
-          setArticle={setArticle}
-          advList={advList}
-          setAdvList={setAdvList}
-          address={address}
+  return (
+    <div className="pageContainer" style={{ padding: "30px" }}>
+      <Routes>
+        <Route
+          path=""
+          element={
+            <Step1Location
+              article={article}
+              setArticle={setArticle}
+              checkPointList={checkPointList}
+              setCheckPointList={setCheckPointList}
+            />
+          }
         />
-      );
-    case 2:
-      return (
-        <Step2Content
-          article={article}
-          setArticle={setArticle}
-          setStep={setStep}
-          address={address}
-          advList={advList}
+        <Route
+          path="2"
+          element={
+            <Step2Content
+              article={article}
+              setArticle={setArticle}
+              checkPointList={checkPointList}
+            />
+          }
         />
-      );
-    case 3:
-      return <Step3Done />;
-    default:
-      return <></>;
-  }
+        <Route path="3" element={<Step3Done />} />
+      </Routes>
+    </div>
+  );
 };
 
 export default ArticleCreatePage;

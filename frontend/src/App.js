@@ -60,7 +60,7 @@ function App() {
             <Route path="/article/:articleId" element={<ArticleDetailPage />} />
           </Route>
           {/* Navbar가 필요하지 않은 페이지는 이곳에 추가해주세요 */}
-          <Route path="/write" element={<ArticleCreatePage />} />
+          <Route path="/write/*" element={<ArticleCreatePage />} />
           <Route path="/adventure/create/*" element={<AdventureCreatePage />} />
           <Route
             path="/article/:articleId/update"

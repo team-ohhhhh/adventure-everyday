@@ -6,9 +6,9 @@ const Step3Done = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      navigate("/"); // 추후 게시글 상세 페이지로 수정
+      navigate("/map"); // 추후 게시글 상세 페이지로 수정
     }, 3000);
-  }, [navigate]);
+  }, []);
 
   return (
     <>
