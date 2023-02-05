@@ -35,23 +35,6 @@ function AdventureDetailPage() {
     ReadAdventureDetail();
   }, []);
 
-  // ad info로 넘길 데이터 (1. 하얀 부분 데이터)
-  const dummy = {
-    adventureId: 1,
-    userId: "silverain_9",
-    advetureMakerTier: 2,
-    category: "맛집",
-    featTitle: "걷기왕",
-    featContent: null, // 칭호 설명용으로 넣은 것이지만 사실 모험이름이라 쓸 일 없을듯
-    title: "adventure1",
-    content: "아주 맛있는 맛집 모음이에요",
-    difficulty: "/images/diff_normal.png",
-    photoUrl: "/images/alien.jpg",
-    startDate: "2023-01-24",
-    endDate: "2023-02-03",
-    avgReviewRate: 4.5,
-  };
-
   // ad detail info로 넘길 데이터 (2. 체크포인트 관련 데이터)
   const dummy2 = {
     adventureId: 1,
@@ -115,7 +98,7 @@ function AdventureDetailPage() {
               <Tab title="탐험 지도" className="mr-2">
                 <AdventureDetailInfo
                   key={adventureDetail.adventureId}
-                  info={adventureDetail.subAdventurePlaces}
+                  info={dummy2}
                 ></AdventureDetailInfo>
               </Tab>
               <Tab title="탐험 후기" className="mr-2">

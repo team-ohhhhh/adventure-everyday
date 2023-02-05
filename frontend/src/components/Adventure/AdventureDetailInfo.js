@@ -93,9 +93,8 @@ function AdventureInfo(props) {
               꽃이랑 풀이 많아서 사진찍기 참 좋아요!
             </div>
           </div>
-          <div className={styles.cpArticle}>
-            <BigArticleItem />
-          </div>
+          {/* postId undefined 오류나서 big article 잠깐 없앰.. */}
+          <div className={styles.cpArticle}>{/* <BigArticleItem /> */}</div>
         </div>
         <div className={styles.checkPointArticles}>
           <div className={styles.articleInfo}>
