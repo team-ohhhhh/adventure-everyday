@@ -51,7 +51,7 @@ function ArticleDetail({article}) {
   useEffect(() => {
     getComments()
     getLikes()
-    if (article.userDetailRes.userId === 1) {
+    if (article.userDetailRes.userId === USER.userId) {
       setIsMe(true)
     } else {
       setIsMe(false)

@@ -36,7 +36,7 @@ import axios from "axios"
 function ArticleUpdatePage() {
   let article = useSelector((state) => state.article)
   let URL = useSelector((state) => state.url)
-  let TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjc1NTc4MzU3LCJleHAiOjE2NzU5MzgzNTd9.H_1_PJ4Y2KM4GAFM3pKU4rvt8Dk8LVkqVOnIy1VRsB4'
+  let TOKEN = useSelector((state) => state.token)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
