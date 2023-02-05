@@ -29,9 +29,7 @@ const Step2Content = ({ article, setArticle, checkPointList }) => {
   };
 
   const url = useSelector((state) => state.url);
-  // const token = useSelector((state) => state.token);
-  const token =
-    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjc1MzI1NjAzLCJleHAiOjE2NzU2ODU2MDN9.eiJgU-w2raqNDBciGlsrAAmO-0f0dVe_NgwjOSFAj1M";
+  const token = useSelector((state) => state.token);
 
   const handleSubmit = (e) => {
     const formData = new FormData();
@@ -44,7 +42,7 @@ const Step2Content = ({ article, setArticle, checkPointList }) => {
     formData.append("isCheckPoint", article.isCheckPoint);
     formData.append("adventureId", article.adventureId);
     formData.append("adventurePlaceId", article.adventurePlaceId);
-    // 제대로 처리하기
+
     axios
       .post(url + "/posts", formData, {
         headers: {
