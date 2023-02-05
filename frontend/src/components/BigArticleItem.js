@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import style from './BigArticleItem.module.css'
+import { useNavigate } from "react-router-dom";
 
 function BigArticleItem(props) {
   // //변수 꺼내쓰기
@@ -21,8 +22,10 @@ function BigArticleItem(props) {
   const date = 'yy.mm.dd'
   const w3w = '보라돌이, 뚜비, 나나'
 
+  const navigate = useNavigate()
+
   return (
-    <div key={ postId } className={style.articleListItem} onClick={() => {console.log("클릭", postId)}}>
+    <div key={ postId } className={style.articleListItem} onClick={() => {navigate(`/article/${postId}`)}}>
       <div className={style.photo} style={{backgroundImage: `url(${photo})`}}></div>
       
       <div className={style.titleAndW3w}>
