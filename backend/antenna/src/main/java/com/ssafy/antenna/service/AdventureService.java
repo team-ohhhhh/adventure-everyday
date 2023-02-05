@@ -5,6 +5,8 @@ import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventurePlaceReq;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventureReviewReq;
 import com.ssafy.antenna.domain.adventure.dto.req.UpdateAdventureReviewReq;
 import com.ssafy.antenna.domain.adventure.dto.res.*;
+import com.ssafy.antenna.domain.adventure.dto.sub.SubAdventurePlace;
+import com.ssafy.antenna.domain.adventure.dto.sub.SubCoordinate;
 import com.ssafy.antenna.domain.adventure.dto.sub.UserIdPhotoUrl;
 import com.ssafy.antenna.domain.category.Category;
 import com.ssafy.antenna.domain.like.AdventureLike;
@@ -86,9 +88,66 @@ public class AdventureService {
     }
 
     // 특정 탐험 조회
-//    public ReadAdventureRes readAdventure(Long adventureId) {
-//
-//    }
+    public ReadAdventureRes readAdventure(Long adventureId,Long userId) {
+        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
+
+        // 현재 이 모험id로 AdventureInProgress 가져오기.
+        List<AdventureInProgress> adventureInProgressList = adventureInProgressRepository.findAllByAdventure(adventure).orElseThrow();
+
+        // AdventureInProgress 유저들의 id만 골라오기.
+        List<Long> userIds = new ArrayList<>();
+
+        for(AdventureInProgress adventureInProgress:adventureInProgressList){
+            userIds.add(adventureInProgress.getUser().getUserId());
+        }
+
+        // 유저id로 유저id와 사진 가져오기.
+        List<UserIdPhotoUrl> userIdPhotoUrls = getUserIdPhotoUrl(userIds);
+
+        // isParticipating
+        Boolean participation = Boolean.FALSE;
+        if(isParticipating(adventureId,userId)){
+            participation=Boolean.TRUE;
+        }
+
+        // subAdventurePlaces
+        List<SubAdventurePlace> subAdventurePlaces = new ArrayList<>();
+        // 이 모험의 AdventurePlace들을 가져와서 id와 좌표만 뽑는다.
+        List<AdventurePlace> adventurePlaceList = adventurePlaceRepository.findAllByAdventure(adventure).orElseThrow(AdventureNotFoundException::new);
+
+        for (AdventurePlace adventurePlace:adventurePlaceList){
+            SubCoordinate subCoordinate = new SubCoordinate(adventurePlace.getCoordinate().getX(),adventurePlace.getCoordinate().getY());
+            subAdventurePlaces.add(new SubAdventurePlace(adventurePlace.getAdventurePlaceId(), subCoordinate));
+        }
+
+        ReadAdventureRes readAdventureRes = new ReadAdventureRes(
+                adventure.getAdventureId(),
+                adventure.getTitle(),
+                adventure.getContent(),
+                adventure.getStartDate(),
+                adventure.getEndDate(),
+                adventure.getDifficulty(),
+                adventure.getCategory().getCategory(),
+                adventure.getAvgReviewRate(),
+                new UserIdPhotoUrl(adventure.getUser().getUserId(),adventure.getUser().getPhotoUrl()),
+                adventure.getUser().getNickname(),
+                userIdPhotoUrls,
+                adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureNotFoundException::new),
+                participation,
+                subAdventurePlaces
+        );
+
+        return readAdventureRes;
+    }
+
+    private boolean isParticipating(Long adventureId, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
+        if(adventureInProgressRepository.findByUserAndAdventure(user,adventure).isPresent()){
+            return true;
+        }
+        return false;
+    }
 
     // 특정 탐험 삭제
     public void deleteAdventure(Long adventureId) {

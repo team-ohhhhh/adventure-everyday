@@ -41,11 +41,11 @@ public class AdventureController {
     }
 
     // 특정 탐험 조회
-//    @GetMapping("/{adventureId}")
-//    public ResultResponse<ReadAdventureRes> readAdventure(@PathVariable Long adventureId) {
-//        ReadAdventureRes result = adventureService.readAdventure(adventureId);
-//        return ResultResponse.success(result);
-//    }
+    @GetMapping("/{adventureId}")
+    public ResultResponse<ReadAdventureRes> readAdventure(@PathVariable Long adventureId, Authentication authentication) {
+        ReadAdventureRes result = adventureService.readAdventure(adventureId,Long.valueOf(authentication.getName()));
+        return ResultResponse.success(result);
+    }
 
     // 특정 탐험 삭제
     @DeleteMapping("/{adventureId}")
