@@ -5,18 +5,67 @@ import BigArticleItem from "../BigArticleItem";
 import AdventureDetailMap from "./AdventureDetailMap";
 import { useMemo } from "react";
 
-function AdventureInfo() {
+function AdventureInfo(props) {
   const articlList = [1, 2, 3];
+
+  // props로 넘어오는 데이터 미리보기
+  const dummy2 = {
+    adventureId: 1,
+    checkPoints: [
+      {
+        checkPointId: 1,
+        coordinate: [37.5666805, 126.9784147], // 체크포인트 위치
+        title: "check point title 1", // 체크포인트 소개
+        content: "check point content", // 체크포인트 상세소개
+
+        // 탐험 생성자의 게시글 정보
+        postId: 1,
+        articlePhoto: "/images.jpg",
+        articleTitle: "article Title",
+        articlePos: "강아지, 고양이, 고릴라",
+        articleDate: "2023-02-04",
+
+        // 탐험 생성자 제외 나머지 사람들의 게시글 정보
+        articles: [
+          {
+            postId: 2,
+            articlePhoto: "/images.jpg",
+            articleTitle: "헤헤",
+            articleNickname: "nickName",
+            articleDate: "2023-02-05",
+          },
+          {
+            postId: 3,
+            articlePhoto: "/images.jpg",
+            articleTitle: "히히",
+            articleNickname: "nickName",
+            articleDate: "2023-02-05",
+          },
+        ],
+      },
+    ],
+  };
 
   const positions = [
     { lat: 33.44975, lng: 126.56967 },
-    { lat: 33.450579, lng: 126.56956 },
-    { lat: 33.4506468, lng: 126.5707 },
+    // { lat: 33.450579, lng: 126.56956 },
+    // { lat: 33.4506468, lng: 126.5707 },
   ];
 
   const bounds = useMemo(() => {
     // bounds에 북동쪽 좌표 정보와 남서쪽 좌표정보 저장
     const bounds = new kakao.maps.LatLngBounds();
+
+    // 체크포인트 좌표들 props에서 받아와 저장
+    for (var i = 0; i < props.info.checkPoints.length; i++) {
+      positions[i].lat = props.info.checkPoints[i].coordinate[0];
+      positions[i].lng = props.info.checkPoints[i].coordinate[1];
+    }
+
+    // 체크포인트 좌표 확인
+    for (var i = 0; i < positions.length; i++) {
+      console.log("pos" + positions[i].lat, positions[i].lng);
+    }
 
     // 마커를 돌며 bounds 범위 정해주기
     positions.forEach((point) => {
@@ -49,7 +98,7 @@ function AdventureInfo() {
           </div>
           <div className={styles.articles}>
             {articlList.map((article) => {
-              return <SmallArticleItem data={article} />;
+              return <SmallArticleItem key={article} data={article} />;
             })}
             <div className={styles.article}>게시글 2</div>
           </div>

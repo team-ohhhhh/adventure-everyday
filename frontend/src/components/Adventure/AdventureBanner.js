@@ -28,10 +28,7 @@ function AdventureBanner(props) {
       <div className={style.makerAndParticipants}>
         <div className={style.maker}>
           <div className={style.makerProfileContainer}>
-            <img
-              className={style.makerProfile}
-              src={adventureItem.adventureMakerProfile}
-            />
+            <img className={style.makerProfile} src={adventureItem.photoUrl} />
           </div>
           <div className={style.makerNameAndTierContainer}>
             <span>탐험가</span>
@@ -41,7 +38,9 @@ function AdventureBanner(props) {
                 {" "}
                 {adventureItem.userId}{" "}
               </span>{" "}
-              <img src={adventureItem.advetureMakerTier + ".png"} />
+              <img
+                src={"/images/lv" + adventureItem.advetureMakerTier + ".png"}
+              />
             </div>
           </div>
         </div>

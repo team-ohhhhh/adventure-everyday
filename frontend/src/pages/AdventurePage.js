@@ -18,9 +18,9 @@ function AdventurePage() {
       <div>
         <div className={style.recommendListInfo}>
           <div className={style.adventureTitle}>
-            <div className={style.recommendTitle}>첫번째 기준 제목</div>
+            <div className={style.recommendTitle}>내 주변의 탐험</div>
             <div className={style.recommendInfo}>
-              첫번째 기준에 대한 설명 자리
+              지금 바로 시작할 수 있어요
             </div>
           </div>
           <div className={style.more}>
