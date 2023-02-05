@@ -33,8 +33,8 @@ public class Adventure extends Base {
     private String title;
     @Column(columnDefinition = "varchar(255) default null")
     private String content;
-    @Column(columnDefinition = "int not null")
-    private Integer difficulty;
+    @Column(nullable = false)
+    private String difficulty;
 
     @Column(columnDefinition = "varchar(255) default null")
     private String photoUrl;
