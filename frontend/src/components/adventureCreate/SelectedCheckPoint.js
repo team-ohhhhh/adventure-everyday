@@ -4,8 +4,7 @@ import BigArticleItem from "../BigArticleItem";
 
 import styles from "./SelectedCheckPoint.module.css";
 
-const SelectedCheckPoint = ({ point, unSelectPost }) => {
-  // console.log(point);
+const SelectedCheckPoint = ({ point, unSelectPost, setCheckPoints }) => {
   return (
     <div className={styles.container}>
       <div>
@@ -13,7 +12,7 @@ const SelectedCheckPoint = ({ point, unSelectPost }) => {
           type="text"
           name="title"
           placeholder="체크포인트 이름을 설정해주세요"
-          // value={article.title}
+          value={point.advTitle}
           // onChange={handleInput}
         />
         <button onClick={() => unSelectPost(point)}>삭제</button>
@@ -23,7 +22,7 @@ const SelectedCheckPoint = ({ point, unSelectPost }) => {
         <input
           type="checkbox"
           name="isRep"
-          // checked={article.isRep}
+          checked={point.isRep}
           // onChange={handleCheck}
         />
         <BigArticleItem data={point} />
@@ -32,7 +31,7 @@ const SelectedCheckPoint = ({ point, unSelectPost }) => {
         type="text"
         name="content"
         placeholder="체크포인트 내용을 입력해주세요"
-        // value={article.content}
+        value={point.advContent}
         // onChange={handleInput}
       />
     </div>

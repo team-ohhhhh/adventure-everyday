@@ -7,7 +7,12 @@ import SelectPostModal from "./SelectPostModal";
 
 import styles from "./Step1CheckPoint.module.css";
 
-const Step1CheckPoint = ({ checkPoints, setCheckPoints }) => {
+const Step1CheckPoint = ({
+  checkPoints,
+  setCheckPoints,
+  advCheckPoints,
+  setAdvCheckPoints,
+}) => {
   const navigate = useNavigate();
 
   const [showModal, setShowModal] = useState(false);
@@ -19,7 +24,6 @@ const Step1CheckPoint = ({ checkPoints, setCheckPoints }) => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    console.log("hi");
   }, []);
 
   const openModal = () => {
@@ -39,6 +43,13 @@ const Step1CheckPoint = ({ checkPoints, setCheckPoints }) => {
     if (check) {
       setCheckPoints((checkPoints) => [...checkPoints, post]);
       closeModal();
+      const newCheckPoint = {
+        title: "",
+        content: "",
+        coordinate: [post.lat, post.lng],
+        postId: post.postId,
+      };
+      setAdvCheckPoints((advCheckPoints) => [...advCheckPoints, newCheckPoint]);
     } else {
       alert("이미 선택한 게시글입니다.");
     }
@@ -49,6 +60,10 @@ const Step1CheckPoint = ({ checkPoints, setCheckPoints }) => {
       return point.postId !== post.postId;
     });
     setCheckPoints(newCheckPoints);
+    const newAdvCheckPoints = advCheckPoints.filter((point) => {
+      return point.postId !== post.postId;
+    });
+    setAdvCheckPoints(newAdvCheckPoints);
   };
 
   return (
@@ -63,6 +78,7 @@ const Step1CheckPoint = ({ checkPoints, setCheckPoints }) => {
           key={point.postId}
           point={point}
           unSelectPost={unSelectPost}
+          setCheckPoints={setCheckPoints}
         />
       ))}
 
@@ -71,6 +87,8 @@ const Step1CheckPoint = ({ checkPoints, setCheckPoints }) => {
       </div>
 
       <AdventureMap checkPoints={checkPoints} />
+
+      <div>이 탐험의 난이도</div>
 
       <button onClick={() => navigate(-1)}>취소</button>
       <button onClick={() => navigate("/adventure/create/2")}>다음</button>

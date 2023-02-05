@@ -17,7 +17,7 @@ const AdventureMap = ({ checkPoints }) => {
   }, [checkPoints]);
 
   useEffect(() => {
-    // console.log("setBounds");
+    console.log("setBounds");
     const map = mapRef.current;
     if (map) map.setBounds(bounds);
   });

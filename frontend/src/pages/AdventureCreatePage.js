@@ -8,6 +8,18 @@ import Step4Done from "../components/adventureCreate/Step4Done";
 
 const AdventureCreatePage = () => {
   const [checkPoints, setCheckPoints] = useState([]);
+  const [advCheckPoints, setAdvCheckPoints] = useState([]);
+  const [adv, setAdv] = useState({
+    category: "탐험",
+    featTitle: null,
+    featContent: null,
+    title: null,
+    content: null,
+    difficulty: null,
+    startDate: null,
+    endDate: null,
+    photo: null,
+  });
 
   return (
     <div className="pageContainer" style={{ padding: "30px" }}>
@@ -19,10 +31,17 @@ const AdventureCreatePage = () => {
             <Step1CheckPoint
               checkPoints={checkPoints}
               setCheckPoints={setCheckPoints}
+              advCheckPoints={advCheckPoints}
+              setAdvCheckPoints={setAdvCheckPoints}
             />
           }
         />
-        <Route path="2" element={<Step2Content />} />
+        <Route
+          path="2"
+          element={
+            <Step2Content checkPoints={checkPoints} adv={adv} setAdv={setAdv} />
+          }
+        />
         <Route path="3" element={<Step3Badge />} />
         <Route path="4" element={<Step4Done />} />
       </Routes>
