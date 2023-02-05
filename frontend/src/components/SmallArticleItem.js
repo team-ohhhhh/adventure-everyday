@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import style from "./SmallArticleItem.module.css";
+import { useNavigate } from 'react-router-dom'
 
 function SmallArticleItem(props) {
   // //변수 꺼내쓰기
@@ -20,13 +21,14 @@ function SmallArticleItem(props) {
   const tier = 1
   const date = 'yy.mm.dd'
 
-
+  const navigate = useNavigate()
+  
   return (
     <div
       key={postId}
       className={style.articleListItem}
       onClick={() => {
-        console.log("클릭");
+        navigate(`/article/${postId}`);
       }}
     >
       {/* 포토 src 바꿔주기 */}
