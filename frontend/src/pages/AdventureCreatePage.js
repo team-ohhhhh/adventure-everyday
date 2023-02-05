@@ -12,9 +12,9 @@ const AdventureCreatePage = () => {
   const [adv, setAdv] = useState({
     category: "맛집",
     featTitle: "",
-    featContent: null,
-    title: null,
-    content: null,
+    featContent: "",
+    title: "",
+    content: "",
     difficulty: null,
     startDate: null,
     endDate: null,

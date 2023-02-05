@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import styles from "./Step3Badge.module.css";
-// import { useSelector } from "react-redux";
 
 const Step3Badge = ({ adv, setAdv, advCheckPoints }) => {
   const navigate = useNavigate();
@@ -29,11 +29,8 @@ const Step3Badge = ({ adv, setAdv, advCheckPoints }) => {
     document.body.style.overflow = "unset";
   };
 
-  // const url = useSelector((state) => state.url);
-  // const token = useSelector((state) => state.token);
-  const url = "http://i8a305.p.ssafy.io:8080";
-  const token =
-    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjc1MzI2MDA4LCJleHAiOjE2NzU2ODYwMDh9.qmZRLGiF5d_lQbMGiX23zpWjWI3l9LdwrqDOAXVgJ8I";
+  const url = useSelector((state) => state.url);
+  const token = useSelector((state) => state.token);
 
   const handleSubmit = (e) => {
     console.log(adv);
@@ -63,8 +60,10 @@ const Step3Badge = ({ adv, setAdv, advCheckPoints }) => {
           url + "/adventures/" + advId + "/places",
           JSON.stringify(advCheckPoints),
           {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${token}`,
+            headers: {
+              "Content-type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
       })

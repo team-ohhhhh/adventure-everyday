@@ -151,7 +151,7 @@ const Step1CheckPoint = ({
 
       <AdventureMap checkPoints={checkPoints} />
 
-      {checkPoints.length ? (
+      {checkPoints.length > 1 ? (
         <div>이 탐험의 난이도 {difficulty}</div>
       ) : (
         <div></div>

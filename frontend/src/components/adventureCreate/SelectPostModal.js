@@ -9,18 +9,17 @@ import styles from "./SelectPostModal.module.css";
 const SelectPostModal = ({ closeModal, selectPost }) => {
   const [posts, setPosts] = useState([]);
 
-  // 모달 마운트 시 유저가 쓴 글 조회
   const url = useSelector((state) => state.url);
-  const userId = "1";
-  const TOKEN =
-    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjc1NjAxMDY5LCJleHAiOjE2NzU5NjEwNjl9.hLb1M2qGM2omvM6mrMqkOMKCxh-GFLKOtpBVhCgewFg";
+  const token = useSelector((state) => state.token);
+  const user = useSelector((state) => state.user);
 
+  // 모달 마운트 시 유저가 쓴 글 조회
   useEffect(() => {
     axios({
-      url: url + "/posts/users/" + userId,
+      url: url + "/posts/users/" + user.userId,
       method: "get",
       headers: {
-        Authorization: "Bearer " + TOKEN,
+        Authorization: "Bearer " + token,
       },
     })
       .then((res) => {
