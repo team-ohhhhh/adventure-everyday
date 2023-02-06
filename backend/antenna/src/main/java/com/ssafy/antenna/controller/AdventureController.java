@@ -3,6 +3,7 @@ package com.ssafy.antenna.controller;
 import com.ssafy.antenna.domain.ResultResponse;
 import com.ssafy.antenna.domain.adventure.dto.click.ReadAdventurePlaceClickRes;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventurePlaceReq;
+import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventureReq;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventureReviewReq;
 import com.ssafy.antenna.domain.adventure.dto.req.UpdateAdventureReviewReq;
 import com.ssafy.antenna.domain.adventure.dto.res.*;
@@ -20,25 +21,14 @@ import java.util.List;
 @RequestMapping("/adventures")
 @CrossOrigin("*") // 일시적으로 CORS 오류 해결
 public class AdventureController {
-
     private final AdventureService adventureService;
 
     // 탐험 추가
     @PostMapping
-    public ResultResponse<CreateAdventureRes> createAdventure(@RequestParam String category,
-                                                              @RequestParam String featTitle,
-                                                              @RequestParam String featContent,
-                                                              @RequestParam String title,
-                                                              @RequestParam String content,
-                                                              @RequestParam String difficulty,
-                                                              @RequestParam LocalDateTime startDate,
-                                                              @RequestParam LocalDateTime endDate,
-                                                              @RequestParam(required = false) MultipartFile photo,
-                                                              Authentication authentication) {
+    public ResultResponse<String> createAdventure(@RequestBody CreateAdventureReq createAdventureReq, Authentication authentication) {
+        adventureService.createAdventure(createAdventureReq,Long.valueOf(authentication.getName()));
         //탐험 추가
-        System.out.println("test~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        return ResultResponse.success(new CreateAdventureRes(adventureService.createAdventure(category,
-                featTitle, featContent, title, content, difficulty, startDate, endDate, photo, Long.valueOf(authentication.getName()))));
+        return ResultResponse.success("탐험 추가 성공");
     }
 
     // 특정 탐험 조회
@@ -209,5 +199,12 @@ public class AdventureController {
     public ResultResponse<ReadAdventurePlaceClickRes> readAdventurePlaceClick(@PathVariable Long adventurePlaceId){
         return ResultResponse.success(adventureService.readAdventurePlaceClick(adventurePlaceId));
     }
+
+    // '탐험 후기'탭 눌렀을 때
+    @GetMapping("/{adventureId}/adventure-review")
+    public ResultResponse<ReadAdventureReviewClickRes> readAdventureReviewClick(@PathVariable Long adventureId){
+        return ResultResponse.success(adventureService.readAdventureReviewClick(adventureId));
+    }
+
 
 }
