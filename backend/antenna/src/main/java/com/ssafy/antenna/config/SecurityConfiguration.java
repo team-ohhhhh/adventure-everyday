@@ -1,5 +1,6 @@
 package com.ssafy.antenna.config;
 
+import com.ssafy.antenna.util.CustomAccessDeniedHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,7 +8,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -21,19 +21,23 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        String prefix = "/api/v1";
         http
                 .csrf()
                 .disable()
                 .cors()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/users/antenna", "/test/**", "/auth/**", "/email/**", "/users/check-email", "/users/password/reset", "/users/check-nickname")
+//                .requestMatchers(prefix + "/users/antenna", prefix + "/test/**", prefix + "/auth/**",
+//                        prefix + "/email/**", prefix + "/users/check-email", prefix + "/users/password/reset", prefix + "/users/check-nickname")
+                .requestMatchers("/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(new CustomAccessDeniedHandler())
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

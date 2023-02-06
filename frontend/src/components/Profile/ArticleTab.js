@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import HorizontalScroll from "./../HorizontalScroll"
+
 import axios from 'axios'
 import { useSelector } from "react-redux"
+import ProfileArticleMap from "./ProfileArticleMap"
 
 function ArticleTab({ userId }) {
   const [state, setState] = useState({
@@ -30,9 +31,11 @@ function ArticleTab({ userId }) {
 
   
   return (
-    <div>
+    <div >
       {/*TODO: 여기에 게시글 지도 컴포넌트 넣자 */}
-      <HorizontalScroll articleList={articleList} contentType={"article"}/>
+      <ProfileArticleMap articleList={articleList}/>
+        
+
     </div>
   )
 }

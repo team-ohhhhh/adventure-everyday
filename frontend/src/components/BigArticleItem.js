@@ -9,8 +9,8 @@ function BigArticleItem(props) {
   const title = props.data.title;
   // const content = props.data.content;
   const w3w = props.data.w3w;
-  const date = props.data.createdTime.substr(0, 10);
-  const photo = props.data.postUrl;
+  const date = props.data.createTime.substr(0, 10);
+  const photo = props.data.photoUrl;
   // const userDetailRes = props.data.userDetailRes;
 
   // // dummy data
