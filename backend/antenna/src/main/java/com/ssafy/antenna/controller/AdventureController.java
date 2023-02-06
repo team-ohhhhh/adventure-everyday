@@ -21,7 +21,6 @@ import java.util.List;
 @RequestMapping("/adventures")
 @CrossOrigin("*") // 일시적으로 CORS 오류 해결
 public class AdventureController {
-
     private final AdventureService adventureService;
 
     // 탐험 추가
@@ -200,5 +199,12 @@ public class AdventureController {
     public ResultResponse<ReadAdventurePlaceClickRes> readAdventurePlaceClick(@PathVariable Long adventurePlaceId){
         return ResultResponse.success(adventureService.readAdventurePlaceClick(adventurePlaceId));
     }
+
+    // '탐험 후기'탭 눌렀을 때
+    @GetMapping("/{adventureId}/adventure-review")
+    public ResultResponse<ReadAdventureReviewClickRes> readAdventureReviewClick(@PathVariable Long adventureId){
+        return ResultResponse.success(adventureService.readAdventureReviewClick(adventureId));
+    }
+
 
 }

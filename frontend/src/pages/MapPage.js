@@ -4,8 +4,11 @@ import Antenna from "../components/mapPage/antenna/Antenna";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import BottomSheetContainer from "./../components/BottomSheet/BottomSheet";
+import SmallArticleItem from './../components/SmallArticleItem';
+import { useNavigate } from "react-router-dom";
 
 function MainMap() {
+  const navigate = useNavigate()
   const [state, setState] = useState({
     center: {
       lat: 37.5016117,
@@ -123,6 +126,7 @@ let URL = useSelector((state) => state.url)
             console.log("dragStart");
           }}
           onClick={(_t, mouseEvent) => {
+            setIsOpen(0);
             if (!state.isAroundClicked) {
               // UFO 이미지가 떠 있지 않다면
               // 지도 클릭시 그 곳에 ufo 이미지 뜸
@@ -282,11 +286,11 @@ let URL = useSelector((state) => state.url)
                 }}
                 image={{
                   src: "/images/alien.jpg",
-
                   size: {
                     width: 30,
                     height: 30,
                   },
+                  style: {filter: "drop-shadow(5px 5px 5px #000)" },
                   options: {
                     offset: {
                       x: 12,
@@ -303,7 +307,7 @@ let URL = useSelector((state) => state.url)
           {state.isAround && state.isAroundClicked && (
             <Circle
               center={state.click}
-              radius={100}
+              radius={500}
               strokeWeight={5} // 선의 두께입니다
               strokeColor={"#00529E"} // 선의 색깔입니다
               strokeOpacity={0} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
@@ -332,15 +336,29 @@ let URL = useSelector((state) => state.url)
                   },
                   options: {
                     offset: {
-                      x: 50,
-                      y: 50,
+                      x: 10,
+                      y: 10,
                     },
                   },
                 }}
                 // clickable={true}
-                onClick={() => setIsOpen((prev) => !prev)}
+                onClick={() => setIsOpen((prev) => {
+                  if (prev) {
+                    return 0
+                  } else {
+                    return article.postId
+                  }
+                })}
                 position={{lat:article.lat, lng:article.lng}}
-              >{isOpen && <div>여기가 {article.title} 의 인포 윈도우 </div>}</MapMarker>)
+              >
+                {/*TODO: 여기 어떻게 이미지 CSS ㅜㅠ */}
+                {isOpen === article.postId && 
+                <div>
+                  <div onClick={() => {
+                    navigate(`/article/${article.postId}`)}}><img style={{height:"5vh", width:"5vh", objectFit:"true"}} src={article.photoUrl} 
+                  /></div>
+                </div>
+                }</MapMarker>)
             })
           }
 
