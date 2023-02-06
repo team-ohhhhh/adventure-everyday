@@ -1,11 +1,17 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
+
+import ArticleMap from "./ArticleMap";
+
 import styles from "./Step2Content.module.css";
 
-const Step2Content = ({ article, setStep, address, advList, setArticle }) => {
-  const selectedAdv = advList.filter((advItem) => {
-    return advItem.id === article.advId;
+const Step2Content = ({ article, setArticle, checkPointList }) => {
+  const navigate = useNavigate();
+
+  const selectedAdv = checkPointList.filter((checkpoint) => {
+    return checkpoint.id === article.adventureId;
   })[0];
 
   const handleInput = (e) => {
@@ -18,29 +24,35 @@ const Step2Content = ({ article, setStep, address, advList, setArticle }) => {
   const handleCheck = (e) => {
     setArticle((article) => ({
       ...article,
-      isPrivate: !article.isPrivate,
+      isPublic: article.isPublic,
     }));
   };
 
-  const URL = useSelector((state) => state.URL);
+  const url = useSelector((state) => state.url);
+  const token = useSelector((state) => state.token);
+
   const handleSubmit = (e) => {
-    // 제대로 처리하기
-    axios({
-      url: URL + "/posts",
-      method: "post",
-      data: {
-        title: article.title,
-        content: article.content,
-        lat: article.lat,
-        lng: article.lng,
-        isPublic: !article.isPrivate,
-        file: article.image.data,
-      },
-    })
-      .then((res) => {
-        console.log(res);
+    const formData = new FormData();
+    formData.append("title", article.title);
+    formData.append("content", article.content);
+    formData.append("lat", article.lat);
+    formData.append("lng", article.lng);
+    formData.append("isPublic", article.isPublic);
+    formData.append("photo", article.photo);
+    formData.append("isCheckPoint", article.isCheckPoint);
+    formData.append("adventureId", article.adventureId);
+    formData.append("adventurePlaceId", article.adventurePlaceId);
+
+    axios
+      .post(url + "/posts", formData, {
+        headers: {
+          "Content-type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .then(setStep((step) => step + 1))
+      .then(() => {
+        navigate("/write/3");
+      })
       .catch((err) => {
         console.log(err);
       });
@@ -48,31 +60,31 @@ const Step2Content = ({ article, setStep, address, advList, setArticle }) => {
 
   return (
     <>
-      <h1>게시글 정보</h1>
-      {article.type === "image" && (
+      {article.isText ? (
         <div>
-          <h2>선택된 사진</h2>
+          <h1>선택된 위치</h1>
+          <ArticleMap lat={article.lat} lng={article.lng} />
+        </div>
+      ) : (
+        <div>
+          <h1>선택된 사진</h1>
           <img
             className={styles.uploadedImage}
-            src={article.image.preview}
-            alt={article.image.name}
+            src={article.preview}
+            alt={article.photo.name}
           ></img>
+          <p>{article.address}</p>
         </div>
       )}
-      <div>
-        <h2>선택된 장소</h2>
-        <p>{address}</p>
-      </div>
-      {article.isAdv && (
+      {article.isCheckPoint && (
         <div>
-          <h2>선택된 모험</h2>
+          <h1>선택된 탐험</h1>
           <p>
             {selectedAdv.adv} - {selectedAdv.checkpoint}
           </p>
         </div>
       )}
-      <h1>내용 작성</h1>
-      <h2>제목</h2>
+      <h1>게시글 작성</h1>
       <input
         type="text"
         name="title"
@@ -80,7 +92,6 @@ const Step2Content = ({ article, setStep, address, advList, setArticle }) => {
         value={article.title}
         onChange={handleInput}
       />
-      <h2>내용</h2>
       <textarea
         type="text"
         name="content"
@@ -88,15 +99,15 @@ const Step2Content = ({ article, setStep, address, advList, setArticle }) => {
         value={article.content}
         onChange={handleInput}
       />
-      <h2>비공개 여부</h2>
+      <span>비공개</span>
       <input
         type="checkbox"
-        name="isPrivate"
-        checked={article.isPrivate}
+        name="isPublic"
+        checked={article.isPublic}
         onChange={handleCheck}
       />
       <div>
-        <button onClick={() => setStep((step) => step - 1)}>이전</button>
+        <button onClick={() => navigate(-1)}>이전</button>
         <button onClick={handleSubmit}>완료</button>
       </div>
     </>
