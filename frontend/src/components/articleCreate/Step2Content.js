@@ -152,7 +152,7 @@ const Step2Content = ({ article, setArticle, checkPointList, styles }) => {
           checked={!article.isPublic}
           onChange={handleCheck}
         />
-        <label for="isPublic">비공개</label>
+        <label htmlFor="isPublic">비공개</label>
       </div>
 
       <div className={styles.btnContainer}>
