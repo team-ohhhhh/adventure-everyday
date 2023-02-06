@@ -23,7 +23,7 @@ const Step2Content = ({ article, setArticle, checkPointList, styles }) => {
       "작성 중인 내용은 저장되지 않습니다. 작성을 취소하고 나가시겠습니까?"
     );
     if (answer) {
-      navigate(-1);
+      navigate(-2);
     }
   };
 
@@ -106,7 +106,7 @@ const Step2Content = ({ article, setArticle, checkPointList, styles }) => {
             선택된 사진
           </h1>
           <img
-            className={styles.uploadedImage}
+            className={styles.uploadedImg}
             src={article.preview}
             alt={article.photo.name}
           ></img>
@@ -145,14 +145,16 @@ const Step2Content = ({ article, setArticle, checkPointList, styles }) => {
       <div className={styles.checkboxContainer}>
         <span>비공개</span>
         <input
-          className={styles.checkbox}
+          className={styles.input}
           type="checkbox"
           id="isPublic"
           name="isPublic"
           checked={!article.isPublic}
           onChange={handleCheck}
         />
-        <label htmlFor="isPublic">비공개</label>
+        <label htmlFor="isPublic" className={styles.label}>
+          비공개
+        </label>
       </div>
 
       <div className={styles.btnContainer}>
