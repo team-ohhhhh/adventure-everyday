@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/test")
+@RequestMapping("${API}/test")
 @CrossOrigin("*") // 일시적으로 CORS 오류 해결
 public class TestController {
     private final CategoryRepository categoryRepository;
