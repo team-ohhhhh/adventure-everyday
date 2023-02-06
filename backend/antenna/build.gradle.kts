@@ -29,6 +29,8 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
+    implementation("org.json:json:20220924")
+    implementation("com.googlecode.json-simple:json-simple:1.1.1")
 }
 
 tasks.withType<Test> {
