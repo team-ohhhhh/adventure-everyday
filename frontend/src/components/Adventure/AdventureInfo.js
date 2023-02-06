@@ -2,28 +2,45 @@ import styles from "./AdventureInfo.module.css";
 import ProfileCircle from "../ProfileCircle";
 
 function AdventureInfo(props) {
+  console.log("photoUrl" + props.info.userIdPhotoUrl); // 이 부분이 부모 컴포넌트 첫 렌더링 땐 undefined이고 리렌더링 될 땐 나옴
   return (
     <>
       <div className={styles.container}>
         <div className={styles.titleContainer}>
-          <div className={styles.title}>걷기 딱 좋은 탐험</div>
+          <div className={styles.title}>{props.info.adventureTitle}</div>
           <img className={styles.diff} src="/images/diff_easy.png"></img>
         </div>
-        <div className={styles.period}> 탐험기간: 2023-01-13 ~ 2023-01-31</div>
-        <div className={styles.content}>
-          요즘 같은 날씨에 딱인 탐험입니다. <br /> 힘들지 않은 예쁜 코스로
-          짜봤어요 :)
+        <div className={styles.period}>
+          {props.info.adventureStartDate && (
+            <span>
+              {props.info.adventureStartDate.substr(0, 10)}~
+              {props.info.adventureEndDate.substr(0, 10)}
+            </span>
+          )}
         </div>
+        <div className={styles.content}>{props.info.adventureContent}</div>
         <div className={styles.people}>
           <div className={styles.maker}>
             <div className={styles.makerProfileContainer}>
-              <ProfileCircle src={"/images/alien.jpg"}></ProfileCircle>
+              <ProfileCircle
+                src={
+                  props.info.userIdPhotoUrl
+                    ? props.info.userIdPhotoUrl.photoUrl
+                    : "/defaultProfile.jpg"
+                }
+              ></ProfileCircle>
             </div>
             <div className={styles.makerNameAndTierContainer}>
               <span className={styles.makerName}>탐험가</span>
               <div className={styles.makerNameAndTier}>
-                <span className={styles.makerName}> silverain_9 </span>
-                <img className={styles.makerTier} src="/images/lv2.png" />
+                <span className={styles.makerName}>
+                  {" "}
+                  {props.info.userNickname}{" "}
+                </span>
+                <img
+                  className={styles.makerTier}
+                  src={props.info.userIdPhotoUrl}
+                />
               </div>
             </div>
           </div>
@@ -38,11 +55,15 @@ function AdventureInfo(props) {
           <div className={styles.typeAndStars}>
             <div className={styles.desc}>
               <div className={styles.normal}>종류: </div>
-              <div className={styles.highlight}>#취미</div>
+              <div className={styles.highlight}>
+                #{props.info.adventureCategory}
+              </div>
             </div>
             <div className={styles.desc}>
               <div className={styles.normal}>평점:</div>
-              <div className={styles.highlight}>4.5점</div>
+              <div className={styles.highlight}>
+                {props.info.adventureAvgReviewRate}
+              </div>
             </div>
           </div>
           <div className={styles.button}>

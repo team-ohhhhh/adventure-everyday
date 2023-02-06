@@ -13,6 +13,11 @@ public class ErrorResponse {
         this.message = errorCode.getMessage();
     }
 
+    public ErrorResponse(ErrorCode errorCode, String msg) {
+        this.errorCode = errorCode.name();
+        this.message = msg;
+    }
+
     public static ErrorResponse of(ErrorCode errorCode) {
         return new ErrorResponse(errorCode);
     }
