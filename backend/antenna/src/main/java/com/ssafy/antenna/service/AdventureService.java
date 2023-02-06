@@ -53,10 +53,8 @@ public class AdventureService {
     private final AntennaRepository antennaRepository;
 
     // 탐험 추가
-    public Long createAdventure(String category, String featTitle, String featContent, String title, String content, String difficulty, LocalDateTime startDate, LocalDateTime endDate, MultipartFile photo, Long userId,CreateAdventurePlaceReq[] places) {
+    public Long createAdventure(String category, String featTitle, String featContent, String title, String content, String difficulty, LocalDateTime startDate, LocalDateTime endDate, MultipartFile photo, Long userId) {
         User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-
-        System.out.println(places.length);
 
         // 탐험을 생성한 후,
         Adventure newAdventure = Adventure.builder()
