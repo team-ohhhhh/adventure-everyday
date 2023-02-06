@@ -14,7 +14,7 @@ public record PostDto(
         String photoUrl,
         Integer postLikes,
         Integer postComments,
-        LocalDateTime createdTime,
+        LocalDateTime createTime,
         UserDetailRes userDetailRes
 ) {
 }
