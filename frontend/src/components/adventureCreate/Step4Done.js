@@ -1,23 +1,23 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Step3Done = () => {
+const Step4Done = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
     setTimeout(() => {
-      navigate("/map"); // 추후 게시글 상세 페이지로 수정
-    }, 3000);
+      navigate("/adventure"); // 추후 모험 상세 페이지로 수정
+    }, 4000);
   }, []);
 
   return (
     <>
-      <h2>작성 완료</h2>
+      <h1>탐험 생성 완료!</h1>
       <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
       <lottie-player
-        src="https://assets10.lottiefiles.com/private_files/lf30_bmi15k55.json"
+        src="https://assets7.lottiefiles.com/packages/lf20_rj4titti.json"
         background="transparent"
-        speed="1"
+        speed="1.5"
         style={{ width: "300px", height: "300px" }}
         autoplay
       ></lottie-player>
@@ -25,4 +25,4 @@ const Step3Done = () => {
   );
 };
 
-export default Step3Done;
+export default Step4Done;

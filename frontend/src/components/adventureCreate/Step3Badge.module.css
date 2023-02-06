@@ -1,0 +1,11 @@
+.modalWrap {
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 85%;
+  height: 30%;
+  overflow: auto;
+  background-color: rgb(211, 78, 78);
+}

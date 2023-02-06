@@ -11,10 +11,10 @@ public record PostDto(
         String w3w,
 		Double lat,
 		Double lng,
-        String postUrl,
+        String photoUrl,
         Integer postLikes,
         Integer postComments,
-        LocalDateTime createdTime,
+        LocalDateTime createTime,
         UserDetailRes userDetailRes
 ) {
 }

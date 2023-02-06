@@ -4,7 +4,11 @@ import { Map, MapMarker } from "react-kakao-maps-sdk";
 const ArticleMap = ({ lat, lng }) => {
   return (
     <div>
-      <Map center={{ lat, lng }} style={{ width: "100%", height: "360px" }}>
+      <Map
+        center={{ lat, lng }}
+        style={{ width: "100%", height: "360px" }}
+        level={4}
+      >
         <MapMarker
           position={{ lat, lng }}
           image={{
