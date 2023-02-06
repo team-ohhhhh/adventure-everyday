@@ -1,27 +1,14 @@
 import React from "react";
 import { ScrollMenu } from "react-horizontal-scrolling-menu";
 
-import SmallArticleItem from "./SmallArticleItem";
+import BigArticleItem from "./BigArticleItem";
 import AdventureBanner from "./Adventure/AdventureBanner";
 
 import style from "./HorizontalScroll.module.css";
 
 // props로 contentType 지정해서 넘겨줄 것. adventure/article
 function HorizontalScroll(props) {
-  const dummy = [
-    {
-      post_id: 1,
-      title: "TITLEaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      nickName: "NICKNAME",
-      date: "DATE.MM.DD",
-    },
-    { post_id: 2, title: "TITLE", nickName: "NICKNAME", date: "DATE.MM.DD" },
-    { post_id: 3, title: "TITLE", nickName: "NICKNAME", date: "DATE.MM.DD" },
-    { post_id: 4, title: "TITLE", nickName: "NICKNAME", date: "DATE.MM.DD" },
-    { post_id: 5, title: "TITLE", nickName: "NICKNAME", date: "DATE.MM.DD" },
-    { post_id: 6, title: "TITLE", nickName: "NICKNAME", date: "DATE.MM.DD" },
-  ];
-
+  const dummy =[]
   const listItem = props.contentType;
 
   switch (listItem) {
@@ -32,20 +19,20 @@ function HorizontalScroll(props) {
             {dummy.map((articleListItem) => {
               return (
                 <AdventureBanner
-                  key={articleListItem}
-                  articleListItem={articleListItem}
+                key={articleListItem}
+                articleListItem={articleListItem}
                 />
-              );
-            })}
+                );
+              })}
           </ScrollMenu>
         </div>
       );
-    case "article":
+      case "article":
       return (
         <div className={style.articleList}>
           <ScrollMenu>
-            {dummy.map((data) => {
-              return <SmallArticleItem data={data} />;
+            {props.articleList.map((data) => {
+              return <BigArticleItem data={data} />;
             })}
           </ScrollMenu>
         </div>

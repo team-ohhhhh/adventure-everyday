@@ -21,7 +21,7 @@ const BottomSheetContainer = (props) => {
   // props.center 로 받아온 좌표로 axios
   let URL = useSelector((state) => state.url)
   let TOKEN = useSelector((state) => state.token)
-  const [articleList, setArticleList] = useState([])
+
   useMemo(() => {
     axios({
       url: URL + '/posts',
@@ -36,7 +36,8 @@ const BottomSheetContainer = (props) => {
       }
     })
     .then((res) => {
-      setArticleList(res.data)
+      console.log(res.data.result)
+      props.setArticleList(res.data.result)
     })
     .catch((err) => {
       console.log(err)
@@ -104,14 +105,7 @@ const BottomSheetContainer = (props) => {
   }
 
 
-  const dummy = [
-    {post_id: 1, title : 'TITLEaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', nickName: 'NICKNAME', date: 'DATE.MM.DD'},
-    {post_id: 2, title : 'TITLE', nickName: 'NICKNAME', date: 'DATE.MM.DD'},
-    {post_id: 3, title : 'TITLE', nickName: 'NICKNAME', date: 'DATE.MM.DD'},
-    {post_id: 4, title : 'TITLE', nickName: 'NICKNAME', date: 'DATE.MM.DD'},
-    {post_id: 5, title : 'TITLE', nickName: 'NICKNAME', date: 'DATE.MM.DD'},
-    {post_id: 6, title : 'TITLE', nickName: 'NICKNAME', date: 'DATE.MM.DD'},
-  ]
+  
  
   useEffect(() => {
     // Setting focus is to aid keyboard and screen reader nav when activating this iframe
@@ -137,14 +131,14 @@ const BottomSheetContainer = (props) => {
       >
         <div className="forScrollBar">
           {/* dummy => list로 교체 */}
-          {dummy.map((dataList) => {
+          {props.articleList.map((data) => {
             if (contentType === 'article') {
                 return(
-                <SmallArticleItem dataList={dataList}/>
+                <SmallArticleItem data={data}/>
               )}
             else if (contentType === 'adventure') {
               return(
-                <AdventureBanner AdventureListItem={dataList}/>
+                <AdventureBanner AdventureListItem={data}/>
               )}
             })    
           }

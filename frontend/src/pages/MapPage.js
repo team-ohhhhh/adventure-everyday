@@ -72,8 +72,11 @@ let URL = useSelector((state) => state.url)
     .catch((err) => console.log(err))
   }, []) //TODO: dependancy는 어떻게 기준을 주어야 할까...
 
-
-
+  // 게시글 리스트 저장 => axios는 바텀시트에서 됨
+  const [articleList, setArticleList] = useState([])
+  
+  // 게시글 핀 인포윈도우 제어용 변수 
+  const [isOpen, setIsOpen] = useState(false)
 
   // lat이나 lng 값이 변화했을 때 작동할 함수 -> axios 후에 setArticleList
   
@@ -313,7 +316,34 @@ let URL = useSelector((state) => state.url)
           <p>{state.errMsg}</p>
 
           {/* 주변 검색 상황일때 바텀시트 등장 */}
-          { state.isCircle && <BottomSheetContainer antennae={antennae} center={state.center} isAntenna={state.isAntenna} setAntennae={setAntennae} setState={setState}/>}
+          { state.isCircle && <BottomSheetContainer antennae={antennae} center={state.center} isAntenna={state.isAntenna} setAntennae={setAntennae} setState={setState} articleList={articleList} setArticleList={setArticleList}/>}
+
+          {/* 맵에 게시글 핀 찍기 */}
+          { state.isCircle && 
+            articleList.map((article) => {
+              return(
+              <MapMarker
+                image={{
+                  src: "/images/articlePin2.png",
+
+                  size: {
+                    width: 100,
+                    height: 100,
+                  },
+                  options: {
+                    offset: {
+                      x: 50,
+                      y: 50,
+                    },
+                  },
+                }}
+                // clickable={true}
+                onClick={() => setIsOpen((prev) => !prev)}
+                position={{lat:article.lat, lng:article.lng}}
+              >{isOpen && <div>여기가 {article.title} 의 인포 윈도우 </div>}</MapMarker>)
+            })
+          }
+
         </Map>
       </div>
     </div>
