@@ -182,3 +182,16 @@
   width: 100%;
   border-radius: 6px;
 }
+
+@media (hover: hover) and (pointer: fine) {
+  .option:hover {
+    cursor: pointer;
+    color: white;
+    background-color: #1c0b69;
+  }
+}
+
+.selected {
+  color: white;
+  background-color: #1c0b69;
+}

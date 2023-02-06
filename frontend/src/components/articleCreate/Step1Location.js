@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import ImageUploadForm from "./ImageUploadForm";
@@ -6,6 +6,7 @@ import ArticleMap from "./ArticleMap";
 import CheckPointList from "./CheckPointList";
 
 import { AiOutlineClose } from "react-icons/ai";
+import useGeolocation from "react-hook-geolocation";
 
 const Step1Location = ({
   article,
@@ -14,7 +15,11 @@ const Step1Location = ({
   setCheckPointList,
   styles,
 }) => {
+  // console.log(checkPointList);
   const navigate = useNavigate();
+  const geolocation = useGeolocation();
+
+  const [isAdvSelected, setIsAdvSelected] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -27,6 +32,19 @@ const Step1Location = ({
     if (answer) {
       navigate(-1);
     }
+  };
+
+  const handleNext = () => {
+    if (article.isText && !geolocation.latitude) {
+      alert(
+        "위치 정보가 확인되지 않습니다. 위치 접근을 허용하여 주시거나, 위치 데이터가 존재하는 사진을 업로드하여 게시글 작성 바랍니다."
+      );
+      return;
+    } else if (checkPointList && !isAdvSelected) {
+      alert("탐험을 선택해주세요.");
+      return;
+    }
+    navigate("/write/2");
   };
 
   return (
@@ -59,17 +77,19 @@ const Step1Location = ({
         <div>
           <h1 className={styles.header}>탐험 선택</h1>
           <CheckPointList
+            article={article}
             setArticle={setArticle}
             checkPointList={checkPointList}
-            setCheckPointList={setCheckPointList}
             styles={styles}
+            isAdvSelected={isAdvSelected}
+            setIsAdvSelected={setIsAdvSelected}
           />
         </div>
       )}
 
       <div className={styles.btnContainer}>
         <div></div>
-        <div className={styles.blueBtn} onClick={() => navigate("/write/2")}>
+        <div className={styles.blueBtn} onClick={handleNext}>
           다음
         </div>
       </div>

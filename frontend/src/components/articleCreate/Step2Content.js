@@ -118,7 +118,7 @@ const Step2Content = ({ article, setArticle, checkPointList, styles }) => {
         <div>
           <h1 className={styles.header}>선택된 탐험</h1>
           <div className={styles.textContainer}>
-            {selectedAdv.adv} - {selectedAdv.checkpoint}
+            {article.adventureTitle} - {article.adventurePlaceTitle}
           </div>
         </div>
       )}
