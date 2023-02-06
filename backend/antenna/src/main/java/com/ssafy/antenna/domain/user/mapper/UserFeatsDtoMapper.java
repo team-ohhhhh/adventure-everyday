@@ -11,8 +11,7 @@ public class UserFeatsDtoMapper implements Function<AdventureSucceed, UserFeatsD
     @Override
     public UserFeatsDto apply(AdventureSucceed adventureSucceed) {
         return new UserFeatsDto(
-                adventureSucceed.getAdventure().getFeatTitle(),
-                adventureSucceed.getAdventure().getFeatContent(),
+                adventureSucceed.getAdventure().getFeat(),
                 adventureSucceed.isSelected()
         );
     }

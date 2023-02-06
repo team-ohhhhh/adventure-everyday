@@ -1,17 +1,21 @@
 package com.ssafy.antenna.domain.adventure.dto.req;
 
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.time.LocalDateTime;
 
 public record CreateAdventureReq(
         String category,
-        String featTitle,
-        String featContent,
+        String feat,
         String title,
         String content,
-        int difficulty,
-        byte[] photo,
+        String difficulty,
+        Long exp,
         LocalDateTime startDate,
-        LocalDateTime endDate
+        LocalDateTime endDate,
+        Long RepresentativePostId,
+        CreateAdventurePlaceReq[] createAdventurePlaceReqs
 
 ) {
 }
