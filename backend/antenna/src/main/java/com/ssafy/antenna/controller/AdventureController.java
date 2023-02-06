@@ -206,5 +206,10 @@ public class AdventureController {
         return ResultResponse.success(adventureService.readAdventureReviewClick(adventureId));
     }
 
+    // '탐험 중'탭 눌렀을 때
+    @GetMapping("/clicks/adventure-in-progress/users/{userId}")
+    public ResultResponse<List<ReadAdventureInProgressClickRes>> readAdventureInProgressClick(@PathVariable Long userId){
+        return ResultResponse.success(adventureService.readAdventureInProgressClick(userId));
+    }
 
 }

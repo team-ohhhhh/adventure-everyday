@@ -14,6 +14,7 @@ import com.ssafy.antenna.domain.location.Location;
 import com.ssafy.antenna.domain.post.CheckpointPost;
 import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.user.User;
+import com.ssafy.antenna.exception.conflict.DuplicatedAdventureInProgressException;
 import com.ssafy.antenna.exception.not_found.*;
 import com.ssafy.antenna.repository.*;
 import com.ssafy.antenna.util.CardinalDirection;
@@ -307,6 +308,12 @@ public class AdventureService {
     public void createAdventureInProgress(Long adventureId, Long userId) {
         User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
+
+        // 이미 userid와 adventureid로 참가중인 정보가 있다면 예외처리.
+        if(adventureInProgressRepository.findByUserAndAdventure(curUser,curAdventure).isPresent()){
+            throw new DuplicatedAdventureInProgressException();
+        }
+
         Long totalPoint = adventurePlaceRepository.countByAdventure(curAdventure);
 
         AdventureInProgress newAdventureInProgress = AdventureInProgress.builder()
@@ -680,6 +687,56 @@ public class AdventureService {
         return readAdventureReviewClickRes;
     }
 
+    // '탐험 중'탭 눌렀을 때
+    public List<ReadAdventureInProgressClickRes> readAdventureInProgressClick(Long userId) {
+        // 현재 프로필으 주인 User
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+        List<ReadAdventureInProgressClickRes> result = new ArrayList<>();
+
+        // 프로필 주인이 참여중인 AIP
+        List<AdventureInProgress> adventureInProgressList = adventureInProgressRepository.findAllByUser(user).orElseThrow(AdventureInProgressNotFoundException::new);
+
+        // 참여중인 모험을 돌면서
+        for(AdventureInProgress adventureInProgress:adventureInProgressList){
+            // 프로필의 유저가 참여중인 탐험 중 1개.
+            Adventure adventure = adventureRepository.findById(adventureInProgress.getAdventure().getAdventureId()).orElseThrow(AdventureNotFoundException::new);
+            // 달성률 구해주기
+            // (달성한 좌표개수/총 좌표개수) * 100을 int로.
+            Long clearRate = Long.valueOf((int)((1.0*adventureInProgress.getCurrentPoint())/(1.0*adventureInProgress.getTotalPoint())*100.0));
+            // 현재 이 모험에 참여중인 유저 모험에 참여한 순으로 5명까지.
+            // 그럼 AIP를 ByAdventureOrderByCreatetime을 구해서
+            List<AdventureInProgress> aIPList=adventureInProgressRepository.findALlByAdventureOrderByCreateTime(adventure).orElseThrow(AdventureNotFoundException::new);
+
+            // 그 속의 유저들의 이미지들을 뽑아옴.
+            List<String> userPhotoUrlList = new ArrayList<>();
+
+            for(AdventureInProgress aIP:aIPList){
+                userPhotoUrlList.add(aIP.getUser().getPhotoUrl());
+            }
+            // userCount는 countByAdventure
+            Long userCount = adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureInProgressNotFoundException::new);
+
+            // RAPCR 하나씩 만들어 줌.
+            ReadAdventureInProgressClickRes readAdventureInProgressClickRes = new ReadAdventureInProgressClickRes(
+                    adventure.getAdventureId(),
+                    adventure.getTitle(),
+                    adventure.getDifficulty(),
+                    clearRate,
+                    adventure.getUser().getUserId(),
+                    adventure.getUser().getPhotoUrl(),
+                    adventure.getUser().getNickname(),
+                    Long.valueOf(adventure.getUser().getLevel()),
+                    userPhotoUrlList,
+                    userCount
+            );
+
+            result.add(readAdventureInProgressClickRes);
+        }
+
+        return result;
+    }
+
     //
     // API가 아닌 method.
     //
@@ -715,7 +772,4 @@ public class AdventureService {
         Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
         return adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureInProgressNotFoundException::new);
     }
-
-
-
 }
