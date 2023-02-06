@@ -40,7 +40,7 @@ const Step1Location = ({
         "위치 정보가 확인되지 않습니다. 위치 접근을 허용하여 주시거나, 위치 데이터가 존재하는 사진을 업로드하여 게시글 작성 바랍니다."
       );
       return;
-    } else if (checkPointList && !isAdvSelected) {
+    } else if (checkPointList.length > 0 && !isAdvSelected) {
       alert("탐험을 선택해주세요.");
       return;
     }
@@ -66,14 +66,14 @@ const Step1Location = ({
         <h1 className={styles.header}>장소</h1>
         <ArticleMap lat={article.lat} lng={article.lng} />
         <div className={styles.textContainer}>{article.address}</div>
-        {checkPointList && (
+        {checkPointList.length > 0 && (
           <div className={styles.alertContainer}>
             앗! 이 위치에서 작성 가능한 탐험이 있어요!
           </div>
         )}
       </div>
 
-      {checkPointList && (
+      {checkPointList.length > 0 && (
         <div>
           <h1 className={styles.header}>탐험 선택</h1>
           <CheckPointList
