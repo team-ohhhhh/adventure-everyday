@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import style from "./NavBar.module.css";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux"
+import { useSelector } from "react-redux";
 
 const NavBar = () => {
-  const USER = useSelector((state) => state.user)
+  const USER = useSelector((state) => state.user);
   const [feedTab, setFeedTab] = useState("black");
   const [mapTab, setMapTab] = useState("black");
   const [adventureTab, setAdventureTab] = useState("black");
