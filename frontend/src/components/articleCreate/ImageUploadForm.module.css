@@ -3,16 +3,29 @@
 }
 
 .beforeUpload {
-  width: 200px;
-  height: 200px;
-  background-color: lightGray;
-  margin: auto;
-  line-height: 200px;
+  box-sizing: border-box;
+  width: 130px;
+  height: 130px;
+  border: 2px solid #1c0b69;
+  border-radius: 6px;
+  line-height: 155px;
+}
+
+.afterUploadContainer {
+  display: flex;
+  justify-content: flex-start;
+  position: relative;
 }
 
 .afterUpload {
-  width: 200px;
-  height: 200px;
-  margin: auto;
+  width: 130px;
+  height: 130px;
+  border-radius: 6px;
   object-fit: cover;
+}
+
+.removeBtn {
+  position: absolute;
+  left: 105px;
+  top: 5px;
 }

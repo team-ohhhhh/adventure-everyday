@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import useGeolocation from "react-hook-geolocation";
 
 import Step1Location from "../components/articleCreate/Step1Location";
 import Step2Content from "../components/articleCreate/Step2Content";
 import Step3Done from "../components/articleCreate/Step3Done";
+
+import styles from "./ArticleCreatePage.module.css";
 
 const API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY;
 
@@ -22,7 +25,9 @@ const ArticleCreatePage = () => {
     isPublic: true,
     isCheckPoint: false,
     adventureId: null,
+    adventureIdTitle: "",
     adventurePlaceId: null,
+    adventurePlaceIdTitle: "",
   });
 
   const [checkPointList, setCheckPointList] = useState([]);
@@ -38,6 +43,9 @@ const ArticleCreatePage = () => {
       }));
     }
   }, [geolocation.latitude, geolocation.longitude, article.isText]);
+
+  const url = useSelector((state) => state.url);
+  const token = useSelector((state) => state.token);
 
   // 위경도 데이터 변화 시
   useEffect(() => {
@@ -64,24 +72,29 @@ const ArticleCreatePage = () => {
       });
 
     // 2. 탐험 리스트 조회 api 호출
-    setCheckPointList([
-      {
-        id: 1,
-        adv: "추억이 가득 쌓이는 탐험",
-        checkpoint: "깃기 생가",
-        isSelected: false,
-      },
-      {
-        id: 2,
-        adv: "방방곡곡 맛집 탐방",
-        checkpoint: "대우부대찌개",
-        isSelected: false,
-      },
-    ]);
+    axios
+      .get(url + "/adventures/adventure-in-progress/check", {
+        params: {
+          // lat: 37.570437,
+          // lng: 127.084167,
+          lat: article.lng,
+          lng: article.lat,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        // console.log(res.data.result);
+        setCheckPointList(res.data.result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [article.lat, article.lng]);
 
   return (
-    <div className="pageContainer" style={{ padding: "30px" }}>
+    <div className={styles.pageContainer}>
       <Routes>
         <Route
           path=""
@@ -91,6 +104,7 @@ const ArticleCreatePage = () => {
               setArticle={setArticle}
               checkPointList={checkPointList}
               setCheckPointList={setCheckPointList}
+              styles={styles}
             />
           }
         />
@@ -101,10 +115,11 @@ const ArticleCreatePage = () => {
               article={article}
               setArticle={setArticle}
               checkPointList={checkPointList}
+              styles={styles}
             />
           }
         />
-        <Route path="3" element={<Step3Done />} />
+        <Route path="3" element={<Step3Done styles={styles} />} />
       </Routes>
     </div>
   );
