@@ -83,7 +83,7 @@ const ArticleCreatePage = () => {
   }, [article.lat, article.lng]);
 
   return (
-    <div className={`pageContainer ${styles.pageContainer}`}>
+    <div className={styles.pageContainer}>
       <Routes>
         <Route
           path=""
@@ -108,7 +108,7 @@ const ArticleCreatePage = () => {
             />
           }
         />
-        <Route path="3" element={<Step3Done />} />
+        <Route path="3" element={<Step3Done styles={styles} />} />
       </Routes>
     </div>
   );

@@ -2,7 +2,12 @@ import React from "react";
 
 import CheckPointItem from "./CheckPointItem";
 
-const CheckPointList = ({ setArticle, checkPointList, setCheckPointList }) => {
+const CheckPointList = ({
+  setArticle,
+  checkPointList,
+  setCheckPointList,
+  styles,
+}) => {
   const onSelect = (isSelected, id) => {
     const newCheckPointList = checkPointList.map((advItem) => {
       if (isSelected && id === advItem.id) {
@@ -32,16 +37,13 @@ const CheckPointList = ({ setArticle, checkPointList, setCheckPointList }) => {
 
   return (
     <>
-      <h1>탐험</h1>
-      <div>
-        {checkPointList.map((checkpoint) => (
-          <CheckPointItem
-            key={checkpoint.id}
-            checkpoint={checkpoint}
-            onSelect={onSelect}
-          />
-        ))}
-      </div>
+      {checkPointList.map((checkpoint) => (
+        <CheckPointItem
+          key={checkpoint.id}
+          checkpoint={checkpoint}
+          onSelect={onSelect}
+        />
+      ))}
     </>
   );
 };
