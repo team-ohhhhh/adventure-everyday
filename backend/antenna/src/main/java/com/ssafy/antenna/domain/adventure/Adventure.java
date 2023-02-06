@@ -26,16 +26,15 @@ public class Adventure extends Base {
     @JoinColumn(name = "categoryId")
     private Category category;
     @Column(columnDefinition = "varchar(255) not null")
-    private String featTitle;
-    @Column(columnDefinition = "varchar(255) not null")
-    private String featContent;
+    private String feat;
     @Column(columnDefinition = "varchar(255) not null")
     private String title;
     @Column(columnDefinition = "varchar(255) default null")
     private String content;
     @Column(nullable = false)
     private String difficulty;
-
+    @Column(nullable = false)
+    private Long exp;
     @Column(columnDefinition = "varchar(255) default null")
     private String photoUrl;
 
