@@ -9,10 +9,10 @@ function SignUpPage() {
 
   // 로그인 단계 저장용 변수
   // 0 : 메인, 1: 이메일 선택 창, 2: 비밀번호 입력 창, 3: 닉네임 입력창, 4: 소개글 입력 창, 5: 프로필 사진 업로드 창, 6: 완료 창
-  const [stage, setStage] = useState(2)
+  const [stage, setStage] = useState(0)
 
   // 로그인에 필요한 정보들
-  const [email, setEmail] = useState("gittgi768@gmail.com")
+  const [email, setEmail] = useState("")
   const [nickname, setNickname] = useState("")
   const [password, setPassword] = useState("")
   const [password2, setPassword2] = useState("")
@@ -46,8 +46,27 @@ function SignUpPage() {
   switch (stage) {
     case 0:
       return (
-        <div>
-          <button className="signUpButton" onClick={ () => {setStage(stage+1)}}>이메일로 회원가입</button>
+        <div className="pageContainer" style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems:"center",
+        }}>
+          <button className="signUpButton" onClick={ () => {setStage(stage+1)}} 
+          style={{
+            width:"60%",
+            height:"48px",
+            borderRadius: "999px",
+            background: "#1c0b69",
+            border: "0px",
+            padding:"15px",
+            /* font-family: "Roboto"; */
+            fontStyle: "normal",
+            fontWeight: "700",
+            fontSize: "16px",
+            lineHeight: "100%",
+            color: "#ffffff"
+          }}>이메일로 회원가입</button>
         </div>
       )
       case 1:

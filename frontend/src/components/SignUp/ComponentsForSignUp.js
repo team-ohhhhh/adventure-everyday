@@ -10,31 +10,54 @@ import style from "./ComponentsForSignUp.module.css"
 function EmailComponent(props) {
   let URL = useSelector((state) => state.url)
 
+  // 메일 중복일 경우에 false => 문구 띄우기
+  const [isChecked, setIsChecked] = useState(true)
+
   // 메일 보낸 다음 코드 입력 화면을 띄우기 위한 스위치
   const [isSent, setIsSent] = useState(false)
 
   // 입력받은 코드 저장
   const [code, setCode] = useState('')
 
-  // 이메일 보내기 위한 axios -> 전송 성공시 isSent를 True로 
+  // 이메일 중복확인 먼저 => 통과되면 이메일 보내기 위한 axios -> 전송 성공시 isSent를 True로 
+  // 실패시 문구 띄우기
   const sendEmail = function() {
     axios({
-      url : URL + '/email/send',
+      url : URL + '/users/check-email',
       method: 'get',
       params: {
         email: props.email
       }
     })
-    .then(function() {
-      setIsSent(true)
-    })
-    .catch(function(err) {
-      console.log(err)
+    .then((res) => {
+      if (!res.data.result.result) {
+        setIsChecked(true)
+        console.log(res)
+        axios({
+          url : URL + '/email/send',
+          method: 'get',
+          params: {
+            email: props.email
+          }
+        })
+        .then(function() {
+          setIsSent(true)
+        })
+        .catch(function(err) {
+          console.log(err)
+        })
+      } else {
+        setIsChecked(false)
+      }
+
     })
   }
 
+
+  const [isCodeCorrect, setIsCodeCorrect] = useState(true)
   // 입력한 코드가 맞는지 확인하는 axios -> 확인되면 다음 화면으로
   const validate = function() {
+    
     axios({
       url : URL + '/email/auth',
       method : 'post',
@@ -45,36 +68,41 @@ function EmailComponent(props) {
       
     })
     .then((response) => {
-      if (response.data) {
-        console.log(props.stage)
+      if (response.data.result.result) {
+        console.log(response)
         props.setStage(props.stage + 1)
       }
       else {
-        // TODO: validation 통과못하면 스테이트 바꿔서 메세지를 html로 띄우자
-        alert('인증코드가 틀렸습니다')
+        setIsCodeCorrect(false)
       }
     })
     .catch((error) => {
       console.log(error)
     })
   }
+  
+  
+
 
 
   return(
     <div>
-      <div className="titleHolder">
+      <div className={style.titleHolder}>
         <h1>사용할 이메일을</h1>
         <h1>입력해주세요</h1>
       </div>
       <div className={style.inputAndButton}>
+        {!isChecked && <div >이미 가입된 이메일입니다.</div>}  
         <input className={style.signUpInput} onChange={(event) => { props.setEmail(event.target.value) }} placeholder="이메일"></input>
         {/* TODO: 여기에 이메일 형식 validation!!! */}
-        <button   onClick={ () => {sendEmail()} } className={style.signUpButton}>인증 요청</button>
-      </div>             
+        <button onClick={ () => {sendEmail()} } className={style.signUpButton}>인증 요청</button>
+    
+      </div>
       { isSent ? 
       <div>
         <div className={style.inputAndButton}>
           {/* TODO: 여기에 인증코드 validation!!! */}
+          {!isCodeCorrect && <div>인증코드가 다릅니다.</div>} 
           <input className={style.signUpInput} onChange={(event) => { setCode(event.target.value) }} placeholder="인증 코드"></input>
           <button onClick={ () => {validate()}} className={style.signUpButton}>확인</button>
         </div>
@@ -109,6 +137,54 @@ function PasswordComponent(props) {
 }
 
 function NicknameComponent(props) {
+  // 닉네임 중복체크
+  let URL = useSelector((state) => state.url)
+  const [isNicknameChecked, setIsNicknameChecked] = useState(false) // 닉네임 중복을 체크하면 true
+  const [nicknameCheckResult, setNicknameCheckResult] = useState(false) // 닉네임 중복 체크 결과
+
+  // 중복체크 함수
+  const nicknameCheck = function() {
+    axios({
+      url : URL + '/users/check-nickname',
+      method : 'get',
+      params : {
+        nickname : props.nickname
+      }
+    })
+    .then((res)=>{
+      setIsNicknameChecked(true)
+      if (res.data.result.result) {
+        setNicknameCheckResult(false)
+  
+      } else if (!res.data.result.result) {
+        setNicknameCheckResult(true)
+
+      }
+    })
+    .catch((err) => console.log(err))
+  }
+
+  // 다음으로 가기전에 닉네임을 바꾸는 경우 방지
+  const goNext = function() {
+    axios({
+      url : URL + '/users/check-nickname',
+      method : 'get',
+      params : {
+        nickname : props.nickname
+      }
+    })
+    .then((res)=>{
+      if (res.data.result.result) {
+        setNicknameCheckResult(false)
+  
+      } else if (!res.data.result.result) {
+        // setNicknameCheckResult(true)
+        props.setStage(props.stage + 1)
+      }
+    })
+    }
+  
+
   return (
     <div>
       <div className={style.titleHolder}>
@@ -116,11 +192,12 @@ function NicknameComponent(props) {
         <h1>입력해주세요</h1>
       </div>
       <div className={style.inputAndButton}>
-        <input className={style.signUpInput} onChange={(event) => { props.setNickname(event.target.value) }} placeholder="닉네임"></input>
+        {isNicknameChecked && !nicknameCheckResult ? <div>이미 있는 닉네임입니다.</div> : <div>사용 가능한 닉네임입니다.</div>}
+        <input className={style.signUpInput} onChange={(event) => { props.setNickname(event.target.value) }} placeholder="닉네임" defaultValue={props.nickname}></input>
         <div className={style.buttonBox}>
           <button className={style.signUpButton} onClick={() => { props.setStage(props.stage - 1)}}>이전</button>
           {/* TODO: 여기에 닉네임 형식 validation!!! */}
-          <button onClick={() => { props.setStage(props.stage + 1)}} className={style.signUpButton}>다음</button>
+          {isNicknameChecked && nicknameCheckResult ? <button onClick={() => { goNext() }} className={style.signUpButton}>다음</button> : <button onClick={() => { nicknameCheck() }} className={style.signUpButton}>중복 체크</button>}
         </div>
       </div>
     </div>

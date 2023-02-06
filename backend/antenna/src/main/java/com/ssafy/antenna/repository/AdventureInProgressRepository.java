@@ -19,4 +19,6 @@ public interface AdventureInProgressRepository extends JpaRepository<AdventureIn
 
     Optional<AdventureInProgress> findByUserAndAdventure(User user,Adventure adventure);
 
+    Optional<Long> countByAdventure(Adventure adventure);
+
 }

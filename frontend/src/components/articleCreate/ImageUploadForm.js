@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import EXIF from "exif-js";
+
 import styles from "./ImageUploadForm.module.css";
 
 const GPSConvert = (metadata) => {
@@ -41,8 +42,9 @@ const ImageUploadForm = ({ article, setArticle }) => {
             ...article,
             lat,
             lng,
-            type: "image",
-            image: { data: file, preview: url, name: file.name },
+            isText: false,
+            photo: file,
+            preview: url,
           }));
         } else {
           alert("위치정보가 없는 사진입니다. 다른 사진을 선택해주세요.");
@@ -53,8 +55,9 @@ const ImageUploadForm = ({ article, setArticle }) => {
 
   const removePhoto = () => {
     setArticle({
-      type: "text",
-      image: { data: null, preview: null, name: null },
+      isText: true,
+      photo: null,
+      preview: null,
     });
   };
 
@@ -67,7 +70,7 @@ const ImageUploadForm = ({ article, setArticle }) => {
         ref={fileInputRef}
         onChange={uploadPhoto}
       />
-      {!article.image.preview ? (
+      {!article.preview ? (
         <div
           className={styles.beforeUpload}
           onClick={handleClickFileInput}
@@ -76,8 +79,8 @@ const ImageUploadForm = ({ article, setArticle }) => {
         <div>
           <img
             className={styles.afterUpload}
-            src={article.image.preview}
-            alt={article.image.name}
+            src={article.preview}
+            alt={article.photo.name}
             onClick={handleClickFileInput}
           />
           <button onClick={removePhoto}>X</button>

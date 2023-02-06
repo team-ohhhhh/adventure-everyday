@@ -1,42 +1,46 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+
 import ImageUploadForm from "./ImageUploadForm";
 import ArticleMap from "./ArticleMap";
-import SelectAdvList from "./SelectAdvList";
+import CheckPointList from "./CheckPointList";
 
 const Step1Location = ({
   article,
   setArticle,
-  setStep,
-  advList,
-  setAdvList,
-  address,
+  checkPointList,
+  setCheckPointList,
 }) => {
   const navigate = useNavigate();
 
   return (
     <>
       <div>
-        <h1>사진(선택)</h1>
+        <h1>사진을 선택해주세요(선택)</h1>
         <ImageUploadForm article={article} setArticle={setArticle} />
       </div>
+
       <div>
         <h1>장소</h1>
         <ArticleMap lat={article.lat} lng={article.lng} />
-        <p>{address}</p>
+        <p>{article.address}</p>
+        {checkPointList && <p>앗! 이 위치에서 작성 가능한 모험이 있어요!</p>}
       </div>
-      {advList && (
+
+      {checkPointList && (
         <div>
-          <h2>집중집중!!! 탐험이 있어요~</h2>
-          <SelectAdvList
+          <CheckPointList
             setArticle={setArticle}
-            advList={advList}
-            setAdvList={setAdvList}
+            checkPointList={checkPointList}
+            setCheckPointList={setCheckPointList}
           />
         </div>
       )}
-      <button onClick={() => navigate(-1)}>취소</button>
-      <button onClick={() => setStep((step) => step + 1)}>다음</button>
+
+      <div>
+        <button onClick={() => navigate(-1)}>취소</button>
+        <button onClick={() => navigate("/write/2")}>다음</button>
+      </div>
     </>
   );
 };
