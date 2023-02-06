@@ -7,10 +7,7 @@ import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventureReq;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventureReviewReq;
 import com.ssafy.antenna.domain.adventure.dto.req.UpdateAdventureReviewReq;
 import com.ssafy.antenna.domain.adventure.dto.res.*;
-import com.ssafy.antenna.domain.adventure.dto.sub.SubAdventurePlace;
-import com.ssafy.antenna.domain.adventure.dto.sub.SubCoordinate;
-import com.ssafy.antenna.domain.adventure.dto.sub.SubPost;
-import com.ssafy.antenna.domain.adventure.dto.sub.UserIdPhotoUrl;
+import com.ssafy.antenna.domain.adventure.dto.sub.*;
 import com.ssafy.antenna.domain.category.Category;
 import com.ssafy.antenna.domain.like.AdventureLike;
 import com.ssafy.antenna.domain.location.Location;
@@ -652,6 +649,35 @@ public class AdventureService {
         );
 
         return readAdventurePlaceClickRes;
+    }
+
+    // '탐험 후기'탭 눌렀을 때
+    public ReadAdventureReviewClickRes readAdventureReviewClick(Long adventureId) {
+        // 모험을 얻어와서
+        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
+
+        // 그 탐험의 AdventureReview를 가져옴.
+        List<AdventureReview> adventureReviews = adventureReviewRepository.findAllByAdventure(adventure).orElseThrow(AdventureReviewNotFoundException::new);
+        // 리뷰를 돌면서 리스트를 생성해줌.
+        List<SubAdventureReview> subAdventureReviews = new ArrayList<>();
+        for(AdventureReview adventureReview:adventureReviews){
+            SubAdventureReview subAdventureReview = new SubAdventureReview(
+                    adventureReview.getUser().getNickname(),
+                    Long.valueOf(adventureReview.getUser().getLevel()),
+                    Long.valueOf(adventureReview.getRate()),
+                    adventureReview.getContent(),
+                    adventureReview.getCreateTime()
+            );
+            subAdventureReviews.add(subAdventureReview);
+        }
+
+        // 만들고 리턴.
+        ReadAdventureReviewClickRes readAdventureReviewClickRes = new ReadAdventureReviewClickRes(
+                adventure.getFeat(),
+                subAdventureReviews
+        );
+
+        return readAdventureReviewClickRes;
     }
 
     //
