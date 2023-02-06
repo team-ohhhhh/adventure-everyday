@@ -62,7 +62,11 @@ function AdventureInfo(props) {
             <div className={styles.desc}>
               <div className={styles.normal}>평점:</div>
               <div className={styles.highlight}>
-                {props.info.adventureAvgReviewRate}
+                {props.info.adventureAvgReviewRate ? (
+                  <span>{props.info.adventureAvgReviewRate}</span>
+                ) : (
+                  <span>100점</span>
+                )}
               </div>
             </div>
           </div>
