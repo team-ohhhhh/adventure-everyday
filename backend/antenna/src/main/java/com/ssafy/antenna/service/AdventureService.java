@@ -3,6 +3,7 @@ package com.ssafy.antenna.service;
 import com.ssafy.antenna.domain.adventure.*;
 import com.ssafy.antenna.domain.adventure.dto.click.ReadAdventurePlaceClickRes;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventurePlaceReq;
+import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventureReq;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventureReviewReq;
 import com.ssafy.antenna.domain.adventure.dto.req.UpdateAdventureReviewReq;
 import com.ssafy.antenna.domain.adventure.dto.res.*;
@@ -27,9 +28,8 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -53,40 +53,37 @@ public class AdventureService {
     private final AntennaRepository antennaRepository;
 
     // 탐험 추가
-    public Long createAdventure(String category, String featTitle, String featContent, String title, String content, String difficulty, LocalDateTime startDate, LocalDateTime endDate, MultipartFile photo, Long userId) {
+    public void createAdventure(@RequestBody CreateAdventureReq createAdventureReq, Long userId) {
         User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
         // 탐험을 생성한 후,
-        Adventure newAdventure = Adventure.builder()
-                .category(categoryRepository.findCategoryIdByCategory(category).orElseThrow(CategoryNotFoundException::new))
-                .featTitle(featTitle)
-                .featContent(featContent)
-                .title(title)
-                .content(content)
-                .difficulty(difficulty)
-                .startDate(startDate)
-                .endDate(endDate)
+        Adventure adventure = Adventure.builder()
+                .category(categoryRepository.findCategoryIdByCategory(createAdventureReq.category()).orElseThrow(CategoryNotFoundException::new))
+                .feat(createAdventureReq.feat())
+                .title(createAdventureReq.title())
+                .content(createAdventureReq.content())
+                .difficulty(createAdventureReq.difficulty())
+                .exp(createAdventureReq.exp())
+                .startDate(createAdventureReq.startDate())
+                .endDate(createAdventureReq.endDate())
+                .photoUrl(postRepository.findById(createAdventureReq.RepresentativePostId()).orElseThrow(PhotoNotFoundException::new).getPhotoUrl())
+                .photoName(postRepository.findById(createAdventureReq.RepresentativePostId()).orElseThrow(PhotoNotFoundException::new).getPhotoName())
                 .user(curUser)
                 .build();
-        if (photo != null) {
-            String photoName = awsS3Service.uploadImage(photo);
-            String photoUrl = bucketUrl + photoName;
-            newAdventure = Adventure.builder()
-                    .category(categoryRepository.findCategoryIdByCategory(category).orElseThrow(CategoryNotFoundException::new))
-                    .featTitle(featTitle)
-                    .featContent(featContent)
-                    .title(title)
-                    .content(content)
-                    .difficulty(difficulty)
-                    .startDate(startDate)
-                    .endDate(endDate)
-                    .user(curUser)
-                    .photoUrl(photoUrl)
-                    .photoName(photoName)
+        // 탐험 저장
+        adventureRepository.save(adventure);
+        // 탐험 장소를 생성한 후,
+        for(CreateAdventurePlaceReq createAdventurePlaceReq: createAdventureReq.createAdventurePlaceReqs()){
+            AdventurePlace adventurePlace = AdventurePlace.builder()
+                    .title(createAdventurePlaceReq.adventurePlaceTitle())
+                    .content(createAdventurePlaceReq.adventurePlaceContent())
+                    .coordinate(new GeometryFactory().createPoint(new Coordinate(createAdventurePlaceReq.coordinate().lng(), createAdventurePlaceReq.coordinate().lat())))
+                    .post(postRepository.findById(createAdventurePlaceReq.postId()).orElseThrow(PhotoNotFoundException::new))
+                    .adventure(adventure)
                     .build();
+            // 탐험 장소 저장
+            adventurePlaceRepository.save(adventurePlace);
         }
-
-        return adventureRepository.save(newAdventure).getAdventureId();
     }
 
     // 특정 탐험 조회
@@ -118,7 +115,7 @@ public class AdventureService {
         List<AdventurePlace> adventurePlaceList = adventurePlaceRepository.findAllByAdventure(adventure).orElseThrow(AdventureNotFoundException::new);
 
         for (AdventurePlace adventurePlace:adventurePlaceList){
-            SubCoordinate subCoordinate = new SubCoordinate(adventurePlace.getCoordinate().getX(),adventurePlace.getCoordinate().getY());
+            SubCoordinate subCoordinate = new SubCoordinate(adventurePlace.getCoordinate().getY(),adventurePlace.getCoordinate().getX());
             subAdventurePlaces.add(new SubAdventurePlace(adventurePlace.getAdventurePlaceId(), subCoordinate));
         }
 
@@ -273,9 +270,9 @@ public class AdventureService {
         for (CreateAdventurePlaceReq place : places) {
             Post post = postRepository.findById(place.postId()).orElseThrow(PostNotFoundException::new);
             AdventurePlace newAdventurePlace = AdventurePlace.builder()
-                    .title(place.title())
-                    .content(place.content())
-                    .coordinate(new GeometryFactory().createPoint(new Coordinate(place.coordinate()[1], place.coordinate()[0])))
+                    .title(place.adventurePlaceTitle())
+                    .content(place.adventurePlaceContent())
+                    .coordinate(new GeometryFactory().createPoint(new Coordinate(place.coordinate().lng(), place.coordinate().lat())))
                     .adventure(curAdventure)
                     .post(post)
                     .build();
@@ -572,7 +569,7 @@ public class AdventureService {
     public List<ReadAdventureInProgressWithinDistanceRes> readAdventureInProgressWithinDistance(Double lat, Double lng, Long userId) {
         User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
-        Double area = 500.0;
+        Double area = 0.05;
 
         Location northEast = GeometryUtil.calculateByDirection(lng, lat, area, CardinalDirection.NORTHEAST
                 .getBearing());
@@ -591,8 +588,6 @@ public class AdventureService {
                         , AdventurePlace.class)
                 .setMaxResults(100);
         List<AdventurePlace> adventurePlaceList = query.getResultList();
-
-        System.out.println("============="+adventurePlaceList.get(0).getCoordinate().getX()+"==============");
 
         List<ReadAdventureInProgressWithinDistanceRes> readAdventureInProgressWithinDistanceRes = new ArrayList<>();
         for (AdventurePlace ap :
