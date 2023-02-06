@@ -11,8 +11,12 @@ function AdventureInfo(props) {
           <img className={styles.diff} src="/images/diff_easy.png"></img>
         </div>
         <div className={styles.period}>
-          {" "}
-          {props.info.adventureStartDate}~{props.info.adventureEndDate}
+          {props.info.adventureStartDate && (
+            <span>
+              {props.info.adventureStartDate.substr(0, 10)}~
+              {props.info.adventureEndDate.substr(0, 10)}
+            </span>
+          )}
         </div>
         <div className={styles.content}>{props.info.adventureContent}</div>
         <div className={styles.people}>

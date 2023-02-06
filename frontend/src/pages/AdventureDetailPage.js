@@ -4,7 +4,7 @@ import AdventureDetailInfo from "../components/Adventure/AdventureDetailInfo";
 import AdventureDetailReview from "../components/Adventure/AdventureDetailReview";
 import styles from "./AdventureDetailPage.module.css";
 import Tabs, { Tab } from "react-best-tabs";
-import tabs from "../components/AdventureDetailTab.module.scss";
+import tabs from "./AdventureDetailTab.module.scss";
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -35,46 +35,6 @@ function AdventureDetailPage() {
     ReadAdventureDetail();
   }, []);
 
-  // ad detail info로 넘길 데이터 (2. 체크포인트 관련 데이터)
-  const dummy2 = {
-    adventureId: 1,
-    checkPoints: [
-      {
-        checkPointId: 1,
-        coordinate: [37.5666805, 126.9784147], // 체크포인트 위치
-        title: "check point title 1", // 체크포인트 소개
-        content: "check point content", // 체크포인트 상세소개
-
-        // 탐험 생성자의 게시글 정보
-        postId: 1,
-        articlePhoto: "/images.jpg",
-        articleTitle: "article Title",
-        articlePos: "강아지, 고양이, 고릴라",
-        articleDate: "2023-02-04",
-
-        // 탐험 생성자 제외 나머지 사람들의 게시글 정보
-        articles: [
-          {
-            postId: 2,
-            articlePhoto: "/images.jpg",
-            articleTitle: "헤헤",
-            articleNickname: "nickName",
-            articleDate: "2023-02-05",
-          },
-          {
-            postId: 3,
-            articlePhoto: "/images.jpg",
-            articleTitle: "히히",
-            articleNickname: "nickName",
-            articleDate: "2023-02-05",
-          },
-        ],
-      },
-    ],
-  };
-
-  // ad detail review로 넘길 데이터
-
   return (
     <div className="pageContainer">
       <div className={styles.wrapper}>
@@ -98,7 +58,7 @@ function AdventureDetailPage() {
               <Tab title="탐험 지도" className="mr-2">
                 <AdventureDetailInfo
                   key={adventureDetail.adventureId}
-                  info={dummy2}
+                  info={adventureDetail}
                 ></AdventureDetailInfo>
               </Tab>
               <Tab title="탐험 후기" className="mr-2">
