@@ -96,9 +96,9 @@ function AdventureDetailInfo(props) {
             <button className={styles.arrangeBtn}>정렬버튼</button>
           </div>
           <div className={styles.articles}>
-            {articlList.map((article) => {
+            {/* {articlList.map((article) => {
               return <SmallArticleItem key={article} data={article} />;
-            })}
+            })} */}
             <div className={styles.article}>게시글 2</div>
           </div>
         </div>
