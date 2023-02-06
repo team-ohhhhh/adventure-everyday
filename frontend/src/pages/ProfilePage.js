@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import Tabs, { Tab } from "react-best-tabs";
 import variables from "../components/ProfileTab.scss";
 import styles from "./ProfilePage.module.css";
+import ArticleTab from './../components/Profile/ArticleTab'
 import AdventureOnProgressTab from './../components/Profile/AdventureOnProgressTab'
 import AdventureCompletedTab from './../components/Profile/AdventureCompletedTab'
 import AdventureCreatedTab from './../components/Profile/AdventureCreatedTab'
@@ -39,7 +40,7 @@ function ProfilePage() {
           onClick={(event, tab) => console.log(event, tab)}
         >
           <Tab title="게시글" className="mr-4">
-            <div className={styles.tabWrapper}>게시글 컴포넌트</div>
+            <ArticleTab className={styles.tabWrapper} userId={userId}/>
           </Tab>
           <Tab title="탐험 중" className="mr-4">
             <AdventureOnProgressTab className={styles.tabWrapper} />
