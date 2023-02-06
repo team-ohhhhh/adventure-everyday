@@ -10,6 +10,7 @@ const Step1Location = ({
   setArticle,
   checkPointList,
   setCheckPointList,
+  styles,
 }) => {
   const navigate = useNavigate();
 

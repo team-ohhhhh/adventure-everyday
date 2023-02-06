@@ -7,6 +7,8 @@ import Step1Location from "../components/articleCreate/Step1Location";
 import Step2Content from "../components/articleCreate/Step2Content";
 import Step3Done from "../components/articleCreate/Step3Done";
 
+import styles from "./ArticleCreatePage.module.css";
+
 const API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY;
 
 const ArticleCreatePage = () => {
@@ -81,7 +83,7 @@ const ArticleCreatePage = () => {
   }, [article.lat, article.lng]);
 
   return (
-    <div className="pageContainer" style={{ padding: "30px" }}>
+    <div className={`pageContainer ${styles.pageContainer}`}>
       <Routes>
         <Route
           path=""
@@ -91,6 +93,7 @@ const ArticleCreatePage = () => {
               setArticle={setArticle}
               checkPointList={checkPointList}
               setCheckPointList={setCheckPointList}
+              styles={styles}
             />
           }
         />
@@ -101,6 +104,7 @@ const ArticleCreatePage = () => {
               article={article}
               setArticle={setArticle}
               checkPointList={checkPointList}
+              styles={styles}
             />
           }
         />

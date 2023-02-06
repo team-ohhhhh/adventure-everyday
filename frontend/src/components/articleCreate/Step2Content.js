@@ -50,7 +50,8 @@ const Step2Content = ({ article, setArticle, checkPointList }) => {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then(() => {
+      .then((res) => {
+        // console.log(res);
         navigate("/write/3");
       })
       .catch((err) => {
