@@ -8,13 +8,7 @@ import CheckPointList from "./CheckPointList";
 import { AiOutlineClose } from "react-icons/ai";
 import useGeolocation from "react-hook-geolocation";
 
-const Step1Location = ({
-  article,
-  setArticle,
-  checkPointList,
-  setCheckPointList,
-  styles,
-}) => {
+const Step1Location = ({ article, setArticle, checkPointList, styles }) => {
   // console.log(checkPointList);
   const navigate = useNavigate();
   const geolocation = useGeolocation();
