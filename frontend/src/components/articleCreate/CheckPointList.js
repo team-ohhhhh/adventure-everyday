@@ -1,48 +1,86 @@
 import React from "react";
 
-import CheckPointItem from "./CheckPointItem";
+const CheckPointList = ({
+  article,
+  setArticle,
+  checkPointList,
+  styles,
+  isAdvSelected,
+  setIsAdvSelected,
+}) => {
+  const onSelect = (point) => {
+    setIsAdvSelected(true);
+    setArticle((article) => ({
+      ...article,
+      isCheckPoint: true,
+      adventureId: point.adventureId,
+      adventureTitle: point.adventureTitle,
+      adventurePlaceId: point.adventurePlaceId,
+      adventurePlaceTitle: point.adventurePlaceTitle,
+    }));
+  };
 
-const CheckPointList = ({ setArticle, checkPointList, setCheckPointList }) => {
-  const onSelect = (isSelected, id) => {
-    const newCheckPointList = checkPointList.map((advItem) => {
-      if (isSelected && id === advItem.id) {
-        setArticle((article) => ({
-          ...article,
-          isCheckPoint: false,
-          adventureId: null,
-          adventurePlaceId: null,
-        }));
-        return { ...advItem, isSelected: false };
-      } else if (isSelected && id !== advItem.id) {
-        return { ...advItem };
-      } else if (!isSelected && id === advItem.id) {
-        setArticle((article) => ({
-          ...article,
-          isCheckPoint: true,
-          adventureId: id,
-          adventurePlaceId: id,
-        }));
-        return { ...advItem, isSelected: true };
-      } else {
-        return { ...advItem, isSelected: false };
-      }
-    });
-    setCheckPointList(newCheckPointList);
+  const onNotSelect = () => {
+    setIsAdvSelected(true);
+    setArticle((article) => ({
+      ...article,
+      isCheckPoint: false,
+      adventureId: null,
+      adventureTitle: null,
+      adventurePlaceId: null,
+      adventurePlaceTitle: null,
+    }));
+  };
+
+  const checkSelect = (adventureId, adventurePlaceId) => {
+    if (!article.isCheckPoint) {
+      return false;
+    } else if (
+      !(
+        article.adventureId === adventureId &&
+        article.adventurePlaceId === adventurePlaceId
+      )
+    ) {
+      return false;
+    }
+    return true;
+  };
+
+  const checkNotSelect = () => {
+    if (isAdvSelected && !article.isCheckPoint) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   return (
-    <>
-      <h1>탐험</h1>
-      <div>
-        {checkPointList.map((checkpoint) => (
-          <CheckPointItem
-            key={checkpoint.id}
-            checkpoint={checkpoint}
-            onSelect={onSelect}
-          />
-        ))}
+    <div>
+      {checkPointList.map((point) => (
+        <div key={`${point.adventureId}-${point.adventurePlaceId}`}>
+          <div
+            className={`${styles.textContainer} ${styles.option} ${
+              checkSelect(point.adventureId, point.adventurePlaceId)
+                ? styles.selected
+                : ""
+            }`}
+            onClick={() => {
+              onSelect(point);
+            }}
+          >
+            {point.adventureTitle} - {point.adventurePlaceTitle}
+          </div>
+        </div>
+      ))}
+      <div
+        className={`${styles.textContainer} ${styles.option}  ${
+          checkNotSelect() ? styles.selected : ""
+        }`}
+        onClick={onNotSelect}
+      >
+        선택 안 함
       </div>
-    </>
+    </div>
   );
 };
 

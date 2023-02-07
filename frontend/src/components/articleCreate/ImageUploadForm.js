@@ -2,6 +2,8 @@ import React, { useRef } from "react";
 import EXIF from "exif-js";
 
 import styles from "./ImageUploadForm.module.css";
+import { RiImageAddLine } from "react-icons/ri";
+import { AiOutlineClose } from "react-icons/ai";
 
 const GPSConvert = (metadata) => {
   const dmsLaRef = metadata.GPSLatitudeRef;
@@ -71,19 +73,24 @@ const ImageUploadForm = ({ article, setArticle }) => {
         onChange={uploadPhoto}
       />
       {!article.preview ? (
-        <div
-          className={styles.beforeUpload}
-          onClick={handleClickFileInput}
-        ></div>
+        <div className={styles.beforeUpload} onClick={handleClickFileInput}>
+          <RiImageAddLine color="#1c0b69" size={40} />
+        </div>
       ) : (
         <div>
-          <img
-            className={styles.afterUpload}
-            src={article.preview}
-            alt={article.photo.name}
-            onClick={handleClickFileInput}
-          />
-          <button onClick={removePhoto}>X</button>
+          <div className={styles.afterUploadContainer}>
+            <img
+              className={styles.afterUpload}
+              src={article.preview}
+              alt={article.photo.name}
+              onClick={handleClickFileInput}
+            />
+            <AiOutlineClose
+              className={styles.removeBtn}
+              size={20}
+              onClick={removePhoto}
+            />
+          </div>
         </div>
       )}
     </div>

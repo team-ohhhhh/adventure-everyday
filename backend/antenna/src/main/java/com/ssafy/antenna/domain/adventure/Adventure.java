@@ -32,7 +32,7 @@ public class Adventure extends Base {
     @Column(columnDefinition = "varchar(255) default null")
     private String content;
     @Column(nullable = false)
-    private String difficulty;
+    private Long difficulty;
     @Column(nullable = false)
     private Long exp;
     @Column(columnDefinition = "varchar(255) default null")
