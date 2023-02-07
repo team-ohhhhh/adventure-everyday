@@ -173,7 +173,7 @@ const UserPostMap = ({ myPosts, selectPost, userHeight }) => {
         ref={mapRef}
         center={temp}
         isPanto={true}
-        style={{ width: "100%", height: "600px" }}
+        style={{ width: "100%", height: userHeight }}
         onIdle={onIdle}
         onClick={onMapClick}
       >
@@ -196,7 +196,9 @@ const UserPostMap = ({ myPosts, selectPost, userHeight }) => {
                   onMarkerClick(marker, post.postId);
                 }}
                 image={{
-                  src: post.postUrl ? post.postUrl : "/images/noImage.png",
+                  src: post.postUrl
+                    ? post.postUrl
+                    : "/images/noImage_square.png",
                   size: {
                     width: 50,
                     height: 50,
@@ -236,7 +238,7 @@ const UserPostMap = ({ myPosts, selectPost, userHeight }) => {
             }
             alt={postDetail.title}
           />
-          <div>{postDetail.createdTime.substr(0, 10)}</div>
+          <div>{postDetail.createdTime}</div>
           <div>{postDetail.title}</div>
           <div>{postDetail.content}</div>
           <button onClick={closeModal}>취소</button>

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
@@ -35,9 +35,9 @@ const SelectPostModal = ({ myPosts, setMyPosts, closeModal, selectPost }) => {
 
   const userHeight = useMemo(() => {
     const map = mapRef.current;
-    const mapHeight = map.getBoundingClientRect();
+    const mapHeight = map ? map.getBoundingClientRect().top : 150;
     const viewHeight = document.documentElement.clientHeight;
-    console.log(viewHeight);
+    return viewHeight - mapHeight;
   }, [mapRef.current]);
 
   return (

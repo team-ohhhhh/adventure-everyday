@@ -10,7 +10,7 @@ import styles from "./ArticleCreatePage.module.css";
 
 const AdventureCreatePage = () => {
   const [adventure, setAdventure] = useState({
-    category: "맛집",
+    category: "여행",
     feat: "",
     title: "",
     content: "",
@@ -44,7 +44,7 @@ const AdventureCreatePage = () => {
           path="2"
           element={
             <Step2Content
-              myPosts={myPosts}
+              checkpoints={checkpoints}
               adventure={adventure}
               setAdventure={setAdventure}
             />

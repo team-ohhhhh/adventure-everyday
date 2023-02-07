@@ -2,12 +2,14 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import AdventureMap from "./AdventureMap";
-import SelectedCheckPoint from "./SelectedCheckPoint";
+import CheckPointItem from "./CheckPointItem";
 import SelectPostModal from "./SelectPostModal";
 
 import styles from "./Step1CheckPoint.module.css";
 import styles2 from "../../pages/ArticleCreatePage.module.css";
+import { AiOutlineClose } from "react-icons/ai";
 import { MdAddLocationAlt } from "react-icons/md";
+import { BsInfoCircle } from "react-icons/bs";
 
 const Step1CheckPoint = ({
   myPosts,
@@ -26,8 +28,8 @@ const Step1CheckPoint = ({
   }, []);
 
   const count = useMemo(() => {
-    return myPosts && myPosts.length;
-  }, [myPosts]);
+    return checkpoints && checkpoints.length;
+  }, [checkpoints]);
 
   const openModal = () => {
     if (myPosts.length === 5) {
@@ -56,6 +58,12 @@ const Step1CheckPoint = ({
           lng: post.lng,
         },
         postId: post.postId,
+        postDetail: {
+          title: post.title,
+          w3w: post.w3w,
+          date: post.createTime,
+          photo: post.photoUrl,
+        },
       };
       setCheckpoints((checkpoints) => [...checkpoints, newCheckpoint]);
       closeModal();
@@ -119,9 +127,46 @@ const Step1CheckPoint = ({
     }
   }, [exp]);
 
+  const handleQuit = () => {
+    if (checkpoints.length > 0) {
+      const answer = window.confirm(
+        "작성 중인 내용은 저장되지 않습니다. 작성을 취소하고 나가시겠습니까?"
+      );
+      if (answer) {
+        navigate(-1);
+      }
+    } else {
+      navigate(-1);
+    }
+  };
+
+  const handleNext = () => {
+    if (checkpoints.length < 2) {
+      alert("체크포인트를 2개 이상 선택해주세요.");
+    } else if (!adventure.RepresentativePostId) {
+      alert("대표 이미지를 선택해 주세요.");
+    } else {
+      const done = checkpoints.every(
+        (point) => point.adventurePlaceTitle && point.adventurePlaceContent
+      );
+      if (done) {
+        setAdventure((adventure) => ({ ...adventure, difficulty, exp }));
+        navigate("/adventure/create/2");
+      } else {
+        alert("체크포인트 이름과 내용을 빠짐없이 작성해 주세요.");
+      }
+    }
+  };
+
   return (
-    <>
-      <h1 className={styles2.header}>탐험 생성</h1>
+    <div>
+      <div className={styles2.closeContainer}>
+        <AiOutlineClose onClick={handleQuit} size={35} />
+      </div>
+
+      <h1 className={styles2.header} style={{ marginTop: "1rem" }}>
+        탐험 생성
+      </h1>
       <div className={styles.detail}>
         탐험으로 만들 내 글을 선택하세요!
         <br />
@@ -129,13 +174,12 @@ const Step1CheckPoint = ({
       </div>
 
       <div className={styles.status}>현재 체크포인트 개수 {count}/5</div>
-
-      {checkpoints.map((point) => (
-        <SelectedCheckPoint
+      {checkpoints.map((point, idx) => (
+        <CheckPointItem
           key={point.postId}
+          idx={idx + 1}
           point={point}
           deselectPost={deselectPost}
-          checkpoints={checkpoints}
           setCheckpoints={setCheckpoints}
           isRep={adventure.RepresentativePostId === point.postId}
           setAdventure={setAdventure}
@@ -151,24 +195,24 @@ const Step1CheckPoint = ({
 
       <h3 className={styles.subHeader}>탐험 지도 미리보기</h3>
       <AdventureMap checkpoints={checkpoints} />
+      {checkpoints.length > 1 && (
+        <div className={styles.diffContainer}>
+          <BsInfoCircle size={16} />
+          <div className={styles.diffText}>이 탐험의 난이도</div>
+          <img
+            className={styles.diffImg}
+            src={`/images/diff_${difficulty}.png`}
+            alt={`difficulty_${difficulty}`}
+          />
+        </div>
+      )}
 
-      {checkpoints.length > 1 && <div>이 탐험의 난이도 {difficulty}</div>}
-
-      <button onClick={() => navigate(-1)}>취소</button>
-      <button
-        onClick={() => {
-          if (checkpoints.length < 2) {
-            alert("체크포인트를 2개 이상 선택해주세요.");
-          } else if (!adventure.photo) {
-            alert("대표 이미지를 선택해 주세요.");
-          } else {
-            setAdventure((adv) => ({ ...adv, difficulty: difficulty }));
-            navigate("/adventure/create/2");
-          }
-        }}
-      >
-        다음
-      </button>
+      <div className={styles2.btnContainer}>
+        <div></div>
+        <div className={styles2.blueBtn} onClick={handleNext}>
+          다음
+        </div>
+      </div>
 
       {showModal && (
         <SelectPostModal
@@ -178,7 +222,7 @@ const Step1CheckPoint = ({
           selectPost={selectPost}
         />
       )}
-    </>
+    </div>
   );
 };
 

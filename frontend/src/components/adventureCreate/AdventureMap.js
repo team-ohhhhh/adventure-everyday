@@ -11,15 +11,18 @@ const AdventureMap = ({ checkpoints }) => {
     const bounds = new kakao.maps.LatLngBounds();
 
     checkpoints.forEach((point) => {
-      bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
+      bounds.extend(
+        new kakao.maps.LatLng(point.coordinate.lat, point.coordinate.lng)
+      );
     });
-    console.log(bounds);
     return bounds;
   }, [checkpoints]);
 
   useEffect(() => {
     const map = mapRef.current;
-    if (map && bounds) map.setBounds(bounds);
+    if (map && !bounds.isEmpty()) {
+      map.setBounds(bounds);
+    }
   });
 
   return (
@@ -33,7 +36,10 @@ const AdventureMap = ({ checkpoints }) => {
           checkpoints.map((point) => (
             <MapMarker
               key={point.postId}
-              position={{ lat: point.lat, lng: point.lng }}
+              position={{
+                lat: point.coordinate.lat,
+                lng: point.coordinate.lng,
+              }}
               image={{
                 src: "/images/advMarker5.png",
                 size: {
