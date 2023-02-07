@@ -228,4 +228,10 @@ public class AdventureController {
         adventureService.createRepresentativeTreasures(adventureId,Long.valueOf(authentication.getName()));
         return ResultResponse.success("대표 보물로 선택 성공");
     }
+
+    // '만든 탐험' 탭 눌렀을 때
+    @GetMapping("/clicks/adventure-creations/users/{userId}")
+    public ResultResponse<List<ReadAdventureCreationsClickRes>> readAdventureCreationsClick(@PathVariable Long userId){
+        return ResultResponse.success(adventureService.readAdventureCreationsClick(userId));
+    }
 }
