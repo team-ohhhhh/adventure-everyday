@@ -246,6 +246,10 @@ public class PostService {
                     .post(save)
                     .build()
             );
+
+            // adventureInProgress에 달성좌표 업데이트해주고
+            // 완료했으면 aIP에서 빼주고, succeed에 넣어준다.
+            // 그리고 경험치 업데이트.
         }
 
         return post.toResponse();
