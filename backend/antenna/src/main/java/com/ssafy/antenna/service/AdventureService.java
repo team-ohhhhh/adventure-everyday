@@ -215,7 +215,7 @@ public class AdventureService {
         } else {
             // 생성시간 조회
             if (order.equals("update")) {
-                List<Adventure> temp = adventureRepository.findAllByOrderByCreateTimeAsc().orElseThrow(AdventureNotFoundException::new);
+                List<Adventure> temp = adventureRepository.findAllByOrderByCreateTimeDesc().orElseThrow(AdventureNotFoundException::new);
 
                 for (Adventure adventure : temp) {
                     // 현재 이 모험으로 AdventureInProgress 가져오기.
@@ -854,6 +854,51 @@ public class AdventureService {
         ));
     }
 
+    // '만든 탐험' 탭 눌렀을 때
+    public List<ReadAdventureCreationsClickRes> readAdventureCreationsClick(Long userId) {
+        // 현재 프로필의 주인 User
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+        List<ReadAdventureCreationsClickRes> result = new ArrayList<>();
+
+        // 프로필 주인이 만든 Adventure
+        List<Adventure> adventureList = adventureRepository.findAllByUserOrderByCreateTimeDesc(user).orElseThrow();
+
+        // 만든 모험을 돌면서
+        for(Adventure adventure:adventureList){
+            // 현재 이 모험에 참여중인 유저 모험에 참여한 순으로 5명까지.
+            // 그럼 AIP를 ByAdventureOrderByCreatetime을 구해서
+            List<AdventureInProgress> aIPList=adventureInProgressRepository.findTop5ByAdventureOrderByCreateTimeDesc(adventure).orElseThrow(AdventureNotFoundException::new);
+
+            // 그 속의 유저들의 이미지들을 뽑아옴.
+            List<String> userPhotoUrlList = new ArrayList<>();
+
+            for(AdventureInProgress aIP:aIPList){
+                userPhotoUrlList.add(aIP.getUser().getPhotoUrl());
+            }
+            // userCount는 countByAdventure
+            Long userCount = adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureInProgressNotFoundException::new);
+
+            // RACCR 하나씩 만들어 줌.
+            ReadAdventureCreationsClickRes readAdventureInProgressClickRes = new ReadAdventureCreationsClickRes(
+                    adventure.getAdventureId(),
+                    adventure.getPhotoUrl(),
+                    adventure.getTitle(),
+                    adventure.getDifficulty(),
+                    adventure.getUser().getUserId(),
+                    adventure.getUser().getPhotoUrl(),
+                    adventure.getUser().getNickname(),
+                    Long.valueOf(adventure.getUser().getLevel()),
+                    userPhotoUrlList,
+                    userCount
+            );
+
+            result.add(readAdventureInProgressClickRes);
+        }
+
+        return result;
+    }
+
     //
     // API가 아닌 method.
     //
@@ -889,4 +934,6 @@ public class AdventureService {
         Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
         return adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureInProgressNotFoundException::new);
     }
+
+
 }
