@@ -1,7 +1,7 @@
 package com.ssafy.antenna.controller;
 
 import com.ssafy.antenna.domain.ResultResponse;
-import com.ssafy.antenna.domain.adventure.dto.click.ReadAdventurePlaceClickRes;
+import com.ssafy.antenna.domain.adventure.dto.click.*;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventurePlaceReq;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventureReq;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventureReviewReq;
@@ -11,9 +11,7 @@ import com.ssafy.antenna.service.AdventureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -182,8 +180,8 @@ public class AdventureController {
 
     // 특정 위치에서 일정 거리 안에 특정 유저가 참가중인 탐험과 탐험 장소 조회하기
     @GetMapping("/adventure-in-progress/check")
-    public ResultResponse<List<ReadAdventureInProgressWithinDistanceRes>> readAdventureInProgressWithinDistance(@RequestParam Double lat, @RequestParam Double lng, Authentication authentication) {
-        List<ReadAdventureInProgressWithinDistanceRes> result = adventureService.readAdventureInProgressWithinDistance(lng, lat, Long.valueOf(authentication.getName()));
+    public ResultResponse<List<ReadAdventureInProgressWithinDistanceRes>> readAdventureInProgressWithinDistance(@RequestParam Double lat, @RequestParam Double lng,@RequestParam Double area, Authentication authentication) {
+        List<ReadAdventureInProgressWithinDistanceRes> result = adventureService.readAdventureInProgressWithinDistance(lng, lat,area, Long.valueOf(authentication.getName()));
         return ResultResponse.success(result);
     }
 
@@ -206,5 +204,28 @@ public class AdventureController {
         return ResultResponse.success(adventureService.readAdventureReviewClick(adventureId));
     }
 
+    // '탐험 중'탭 눌렀을 때
+    @GetMapping("/clicks/adventure-in-progress/users/{userId}")
+    public ResultResponse<List<ReadAdventureInProgressClickRes>> readAdventureInProgressClick(@PathVariable Long userId){
+        return ResultResponse.success(adventureService.readAdventureInProgressClick(userId));
+    }
 
+    // '완료한 탐험' 탭 눌렀을 때
+    @GetMapping("/clicks/adventure-succeed/users/{userId}")
+    public ResultResponse<ReadAdventureSucceedClickRes> readAdventureSucceedClick(@PathVariable Long userId){
+        return ResultResponse.success(adventureService.readAdventureSucceedClick(userId));
+    }
+
+    // 보물 '더보기' 눌렀을 때
+    @GetMapping("/clicks/treasures/users/{userId}")
+    public ResultResponse<ReadAdventureTreasuresMoreClickRes> readAdventureTreasuresMoreClick(@PathVariable Long userId, Authentication authentication){
+        return ResultResponse.success(adventureService.readAdventureTreasuresMoreClick(userId,Long.valueOf(authentication.getName())));
+    }
+
+    // 대표 보물로 선택하기
+    @PostMapping("/{adventureId}/treasures/representatives")
+    public ResultResponse<String> createRepresentativeTreasures(@PathVariable Long adventureId, Authentication authentication){
+        adventureService.createRepresentativeTreasures(adventureId,Long.valueOf(authentication.getName()));
+        return ResultResponse.success("대표 보물로 선택 성공");
+    }
 }

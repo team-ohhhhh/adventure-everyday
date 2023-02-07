@@ -1,7 +1,7 @@
 package com.ssafy.antenna.service;
 
 import com.ssafy.antenna.domain.adventure.*;
-import com.ssafy.antenna.domain.adventure.dto.click.ReadAdventurePlaceClickRes;
+import com.ssafy.antenna.domain.adventure.dto.click.*;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventurePlaceReq;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventureReq;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventureReviewReq;
@@ -14,6 +14,8 @@ import com.ssafy.antenna.domain.location.Location;
 import com.ssafy.antenna.domain.post.CheckpointPost;
 import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.user.User;
+import com.ssafy.antenna.domain.user.dto.UserDetailRes;
+import com.ssafy.antenna.exception.conflict.DuplicatedAdventureInProgressException;
 import com.ssafy.antenna.exception.not_found.*;
 import com.ssafy.antenna.repository.*;
 import com.ssafy.antenna.util.CardinalDirection;
@@ -191,16 +193,20 @@ public class AdventureService {
                 }
 
                 // 유저id로 유저id와 사진 가져오기.
-                List<UserIdPhotoUrl> userIdPhotoUrls = getUserIdPhotoUrl(userIds);
+                List<UserDetailRes> users = new ArrayList<>();
+
+                for(Long userId:userIds){
+                    User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+                    users.add(user.toResponse());
+                }
 
                 ReadAdventuresRes newReadAdventureRes = new ReadAdventuresRes(
                         adventure.getAdventureId(),
                         adventure.getTitle(),
                         adventure.getDifficulty(),
                         adventure.getPhotoUrl(),
-                        new UserIdPhotoUrl(adventure.getUser().getUserId(),adventure.getUser().getPhotoUrl()),
-                        adventure.getUser().getNickname(),
-                        userIdPhotoUrls,
+                        userRepository.findById(adventure.getUser().getUserId()).orElseThrow(UserNotFoundException::new).toResponse(),
+                        users,
                         adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureNotFoundException::new)
                 );
 
@@ -224,16 +230,20 @@ public class AdventureService {
 
                     // 유저id로 유저id와 사진 가져오기.
 
-                    List<UserIdPhotoUrl> userIdPhotoUrls = getUserIdPhotoUrl(userIds);
+                    List<UserDetailRes> users = new ArrayList<>();
+
+                    for(Long userId:userIds){
+                        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+                        users.add(user.toResponse());
+                    }
 
                     ReadAdventuresRes newReadAdventureRes = new ReadAdventuresRes(
                             adventure.getAdventureId(),
                             adventure.getTitle(),
                             adventure.getDifficulty(),
                             adventure.getPhotoUrl(),
-                            new UserIdPhotoUrl(adventure.getUser().getUserId(),adventure.getUser().getPhotoUrl()),
-                            adventure.getUser().getNickname(),
-                            userIdPhotoUrls,
+                            userRepository.findById(adventure.getUser().getUserId()).orElseThrow(UserNotFoundException::new).toResponse(),
+                            users,
                             adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureNotFoundException::new)
                     );
 
@@ -307,6 +317,12 @@ public class AdventureService {
     public void createAdventureInProgress(Long adventureId, Long userId) {
         User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
+
+        // 이미 userid와 adventureid로 참가중인 정보가 있다면 예외처리.
+        if(adventureInProgressRepository.findByUserAndAdventure(curUser,curAdventure).isPresent()){
+            throw new DuplicatedAdventureInProgressException();
+        }
+
         Long totalPoint = adventurePlaceRepository.countByAdventure(curAdventure);
 
         AdventureInProgress newAdventureInProgress = AdventureInProgress.builder()
@@ -420,7 +436,7 @@ public class AdventureService {
     public List<ReadAdventureSucceedRes> readAdventureSucceedOfUser(Long userId) {
         User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
-        List<AdventureSucceed> adventureSucceeds = adventureSucceedRepository.findAllByUser(curUser);
+        List<AdventureSucceed> adventureSucceeds = adventureSucceedRepository.findAllByUser(curUser).orElseThrow(AdventureSucceedNotFoundException::new);
 
         List<ReadAdventureSucceedRes> result = new ArrayList<>();
 
@@ -563,10 +579,10 @@ public class AdventureService {
 //    }
 
     // 특정 위치에서 일정 거리 안에 내가 참가중인 탐험과 탐험 장소 조회하기
-    public List<ReadAdventureInProgressWithinDistanceRes> readAdventureInProgressWithinDistance(Double lat, Double lng, Long userId) {
+    public List<ReadAdventureInProgressWithinDistanceRes> readAdventureInProgressWithinDistance(Double lat, Double lng,Double area, Long userId) {
         User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
-        Double area = 0.05;
+//        Double area = 0.05;
 
         Location northEast = GeometryUtil.calculateByDirection(lng, lat, area, CardinalDirection.NORTHEAST
                 .getBearing());
@@ -630,8 +646,7 @@ public class AdventureService {
                     post.getPostId(),
                     post.getPhotoUrl(),
                     post.getTitle(),
-                    post.getUser().getNickname(),
-                    null,
+                    userRepository.findById(post.getUser().getUserId()).orElseThrow(UserNotFoundException::new).toResponse(),
                     post.getCreateTime()
             );
             subPostList.add(subPost);
@@ -680,6 +695,165 @@ public class AdventureService {
         return readAdventureReviewClickRes;
     }
 
+    // '탐험 중'탭 눌렀을 때
+    public List<ReadAdventureInProgressClickRes> readAdventureInProgressClick(Long userId) {
+        // 현재 프로필의 주인 User
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+        List<ReadAdventureInProgressClickRes> result = new ArrayList<>();
+
+        // 프로필 주인이 참여중인 AIP
+        List<AdventureInProgress> adventureInProgressList = adventureInProgressRepository.findAllByUser(user).orElseThrow(AdventureInProgressNotFoundException::new);
+
+        // 참여중인 모험을 돌면서
+        for(AdventureInProgress adventureInProgress:adventureInProgressList){
+            // 프로필의 유저가 참여중인 탐험 중 1개.
+            Adventure adventure = adventureRepository.findById(adventureInProgress.getAdventure().getAdventureId()).orElseThrow(AdventureNotFoundException::new);
+            // 달성률 구해주기
+            // (달성한 좌표개수/총 좌표개수) * 100을 int로.
+            Long clearRate = Long.valueOf((int)((1.0*adventureInProgress.getCurrentPoint())/(1.0*adventureInProgress.getTotalPoint())*100.0));
+            // 현재 이 모험에 참여중인 유저 모험에 참여한 순으로 5명까지.
+            // 그럼 AIP를 ByAdventureOrderByCreatetime을 구해서
+            List<AdventureInProgress> aIPList=adventureInProgressRepository.findTop5ByAdventureOrderByCreateTimeDesc(adventure).orElseThrow(AdventureNotFoundException::new);
+
+            // 그 속의 유저들의 이미지들을 뽑아옴.
+            List<String> userPhotoUrlList = new ArrayList<>();
+
+            for(AdventureInProgress aIP:aIPList){
+                userPhotoUrlList.add(aIP.getUser().getPhotoUrl());
+            }
+            // userCount는 countByAdventure
+            Long userCount = adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureInProgressNotFoundException::new);
+
+            // RAPCR 하나씩 만들어 줌.
+            ReadAdventureInProgressClickRes readAdventureInProgressClickRes = new ReadAdventureInProgressClickRes(
+                    adventure.getAdventureId(),
+                    adventure.getPhotoUrl(),
+                    adventure.getTitle(),
+                    adventure.getDifficulty(),
+                    clearRate,
+                    adventure.getUser().getUserId(),
+                    adventure.getUser().getPhotoUrl(),
+                    adventure.getUser().getNickname(),
+                    Long.valueOf(adventure.getUser().getLevel()),
+                    userPhotoUrlList,
+                    userCount
+            );
+
+            result.add(readAdventureInProgressClickRes);
+        }
+
+        return result;
+    }
+
+    // '완료한 탐험' 눌렀을 때
+    public ReadAdventureSucceedClickRes readAdventureSucceedClick(Long userId) {
+        // 현재 프로필의 주인 User
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+        List<SubReadAdventureSucceedClickRes> subReadAdventureSucceedClickResList = new ArrayList<>();
+
+        // 프로필 주인이 완료한 탐험 AS
+        List<AdventureSucceed> adventureSucceeds = adventureSucceedRepository.findAllByUser(user).orElseThrow(AdventureSucceedNotFoundException::new);
+
+        // 리턴할 보물 List
+        List<SubTreasure> treasures = new ArrayList<>();
+
+        // 완료한 모험을 돌면서
+        for(AdventureSucceed adventureSucceed:adventureSucceeds){
+            // 프로필의 유저가 완료한 탐험 중 1개.
+            Adventure adventure = adventureRepository.findById(adventureSucceed.getAdventure().getAdventureId()).orElseThrow(AdventureNotFoundException::new);
+
+            // adventureSucceed의 isSelected가 true라면 대표 보물에 넣어줌.
+            if(adventureSucceed.isSelected()){
+                treasures.add(new SubTreasure(adventure.getAdventureId(),adventure.getFeat(),adventure.getTitle()));
+            }
+
+            // 현재 이 모험을 완료한 유저 모험에 완료한 순으로 5명까지.
+            // 그럼 AI를 ByAdventureOrderByCreatetime을 구해서
+            List<AdventureSucceed> aSList=adventureSucceedRepository.findTop5ByAdventureOrderByCreateTimeDesc(adventure).orElseThrow(AdventureSucceedNotFoundException::new);
+
+            // 그 속의 유저들의 이미지들을 뽑아옴.
+            List<String> userPhotoUrlList = new ArrayList<>();
+
+            for(AdventureSucceed aS:aSList){
+                userPhotoUrlList.add(aS.getUser().getPhotoUrl());
+            }
+            // userCount는 countByAdventure
+            Long userCount = adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureInProgressNotFoundException::new);
+
+            // SubReadAdventureSucceedClickRes 하나씩 만들어 줌.
+            SubReadAdventureSucceedClickRes subReadAdventureSucceedClickRes = new SubReadAdventureSucceedClickRes(
+                    adventure.getAdventureId(),
+                    adventure.getPhotoUrl(),
+                    adventure.getTitle(),
+                    adventure.getDifficulty(),
+                    adventure.getUser().getUserId(),
+                    adventure.getUser().getPhotoUrl(),
+                    adventure.getUser().getNickname(),
+                    Long.valueOf(adventure.getUser().getLevel()),
+                    userPhotoUrlList,
+                    userCount
+            );
+
+            subReadAdventureSucceedClickResList.add(subReadAdventureSucceedClickRes);
+        } // 완료한 모험 for
+
+        // 반환 ReadAdventureSucceedClickRes 생성.
+        ReadAdventureSucceedClickRes result = new ReadAdventureSucceedClickRes(
+                treasures
+                ,subReadAdventureSucceedClickResList
+        );
+
+        return result;
+    }
+    // 보물 '더보기' 눌렀을 때
+    public ReadAdventureTreasuresMoreClickRes readAdventureTreasuresMoreClick(Long userId, Long myUserId) {
+        User me = userRepository.findById(myUserId).orElseThrow(UserNotFoundException::new);
+        User you = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+        Long cnt = adventureSucceedRepository.countByUser(you).orElseThrow(AdventureSucceedNotFoundException::new);
+
+        Boolean possible = false;
+        if(userId.equals(myUserId)){
+            possible=true;
+        }
+
+        List<AdventureSucceed> adventureSucceeds = adventureSucceedRepository.findAllByUser(you).orElseThrow(AdventureSucceedNotFoundException::new);
+
+        List<SubTreasure> treasures = new ArrayList<>();
+        for(AdventureSucceed adventureSucceed:adventureSucceeds){
+            SubTreasure subTreasure = new SubTreasure(
+                    adventureSucceed.getAdventure().getAdventureId(),
+                    adventureSucceed.getAdventure().getFeat(),
+                    adventureSucceed.getAdventure().getTitle()
+            );
+
+            treasures.add(subTreasure);
+        }
+
+        ReadAdventureTreasuresMoreClickRes readAdventureTreasuresMoreClickRes = new ReadAdventureTreasuresMoreClickRes(
+                cnt,
+                possible,
+                treasures
+        );
+
+        return readAdventureTreasuresMoreClickRes;
+    }
+
+    // 대표 보물로 선택하기
+    public void createRepresentativeTreasures(Long adventureId, Long userId) {
+        User user= userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
+        AdventureSucceed adventureSucceed = adventureSucceedRepository.findByUserAndAdventure(user,adventure).orElseThrow(AdventureSucceedNotFoundException::new);
+        adventureSucceedRepository.save(new AdventureSucceed(
+                adventureSucceed.getSucceedId(),
+           user,
+           adventure,
+           true
+        ));
+    }
+
     //
     // API가 아닌 method.
     //
@@ -715,7 +889,4 @@ public class AdventureService {
         Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
         return adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureInProgressNotFoundException::new);
     }
-
-
-
 }

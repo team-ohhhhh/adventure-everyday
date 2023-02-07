@@ -15,6 +15,7 @@ public enum ErrorCode {
     ADVENTURE_NOT_FOUND(NOT_FOUND, "해당하는 탐험을 찾을 수 없습니다."),
     ADVENTURE_PLACE_NOT_FOUND(NOT_FOUND, "해당하는 탐험장소를 찾을 수 없습니다."),
     ADVENTURE_IN_PROGRESS_NOT_FOUND(NOT_FOUND, "해당하는 참가중인 탐험을 찾을 수 없습니다."),
+    ADVENTURE_SUCCEED_NOT_FOUND(NOT_FOUND, "해당하는 완료한 탐험을 찾을 수 없습니다."),
     ADVENTURE_LIKE_NOT_FOUND(NOT_FOUND, "해당하는 탐험 알림을 찾을 수 없습니다."),
     ADVENTURE_REVIEW_NOT_FOUND(NOT_FOUND, "해당하는 탐험 리뷰를 찾을 수 없습니다."),
     CHECKPOINT_POST_NOT_FOUND(NOT_FOUND, "해당하는 체크포인트 게시글을 찾을 수 없습니다."),
@@ -33,6 +34,7 @@ public enum ErrorCode {
     DUPLICATED_NICKNAME(CONFLICT, "이미 사용중인 닉네임입니다."),
     DUPLICATED_EMAIL(CONFLICT, "이미 사용중인 이메일입니다."),
     DUPLICATED_FOLLOW(CONFLICT, "이미 팔로우 중입니다."),
+    DUPLICATED_ADVENTURE_IN_PROGRESS(CONFLICT, "이미 참가중인 모헙입니다."),
     FOLLOW_NOT_ME(BAD_REQUEST, "나를 팔로우 할 수 없습니다."),
     DATABASE_ERROR(INTERNAL_SERVER_ERROR, "데이터베이스 에러"),
     CERTIFICATION_SEND_NOT_FOUND(NOT_FOUND, "인증 번호 전송 내역이 없습니다.");
