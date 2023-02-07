@@ -6,7 +6,6 @@ import com.ssafy.antenna.domain.user.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +21,6 @@ public interface AdventureInProgressRepository extends JpaRepository<AdventureIn
 
     Optional<Long> countByAdventure(Adventure adventure);
 
-    Optional<List<AdventureInProgress>> findTop5ByAdventureOrderByCreateTime(Adventure adventure);
+    Optional<List<AdventureInProgress>> findTop5ByAdventureOrderByCreateTimeDesc(Adventure adventure);
 
 }
