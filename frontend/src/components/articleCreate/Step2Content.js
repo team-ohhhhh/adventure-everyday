@@ -2,14 +2,15 @@ import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import useGeolocation from "react-hook-geolocation";
 
 import ArticleMap from "./ArticleMap";
 
-// import styles from "./Step2Content.module.css";
 import { AiOutlineClose } from "react-icons/ai";
 
 const Step2Content = ({ article, setArticle, checkPointList, styles }) => {
   const navigate = useNavigate();
+  const geolocation = useGeolocation();
 
   const titleRef = useRef();
   const contentRef = useRef();
@@ -26,10 +27,6 @@ const Step2Content = ({ article, setArticle, checkPointList, styles }) => {
       navigate(-2);
     }
   };
-
-  const selectedAdv = checkPointList.filter((checkpoint) => {
-    return checkpoint.id === article.adventureId;
-  })[0];
 
   const handleInput = (e) => {
     setArticle((article) => ({
@@ -49,7 +46,12 @@ const Step2Content = ({ article, setArticle, checkPointList, styles }) => {
   const token = useSelector((state) => state.token);
 
   const handleSubmit = (e) => {
-    if (article.title.length < 1) {
+    if (article.isText && !geolocation.latitude) {
+      alert(
+        "위치 정보가 확인되지 않습니다. 위치 접근을 허용하여 주시거나, 위치 데이터가 존재하는 사진을 업로드하여 게시글 작성 바랍니다."
+      );
+      return;
+    } else if (article.title.length < 1) {
       alert("제목을 입력해주세요.");
       titleRef.current.focus();
       return;
