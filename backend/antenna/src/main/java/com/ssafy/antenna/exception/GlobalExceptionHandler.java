@@ -44,12 +44,12 @@ public class GlobalExceptionHandler {
                 .body(ResultResponse.error(ErrorResponse.of(DATABASE_ERROR)));
     }
 
-    @ExceptionHandler({ AuthenticationException.class })
-    @ResponseBody
-    public ResponseEntity<ResultResponse<ErrorResponse>> handleAuthenticationException(AuthenticationException e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(ResultResponse.error(ErrorResponse.of(INVALID_TOKEN)));
-    }
+//    @ExceptionHandler({ AuthenticationException.class })
+//    @ResponseBody
+//    public ResponseEntity<ResultResponse<ErrorResponse>> handleAuthenticationException(AuthenticationException e) {
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+//                .body(ResultResponse.error(ErrorResponse.of(INVALID_TOKEN)));
+//    }
 
     @ExceptionHandler(AbstractAppException.class)
     public ResponseEntity<ResultResponse<ErrorResponse>> abstractBaseExceptionHandler(AbstractAppException e) {

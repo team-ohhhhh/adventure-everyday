@@ -5,11 +5,14 @@ import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.domain.user.dto.LogInUserReq;
 import com.ssafy.antenna.domain.user.dto.LogInUserRes;
 import com.ssafy.antenna.domain.user.dto.PostUserReq;
+import com.ssafy.antenna.exception.not_found.UserNotFoundException;
 import com.ssafy.antenna.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,11 +32,15 @@ public class AuthenticationService {
     @Value("${aws-cloud.aws.s3.bucket.url}")
     private String bucketUrl;
 
+    @Value("${kakao.rest-token}")
+    String kakaoToken;
+
     public LogInUserRes registerUser(PostUserReq postUserReq, MultipartFile photo) throws IOException {
         User user = User.builder()
                 .email(postUserReq.email())
                 .nickname(postUserReq.nickname())
                 .password(passwordEncoder.encode(postUserReq.password()))
+                .level(1)
                 .introduce((postUserReq.introduce() != null) ? postUserReq.introduce() : null)
                 .role(Role.USER)
                 .build();
@@ -46,6 +53,7 @@ public class AuthenticationService {
                     .password(passwordEncoder.encode(postUserReq.password()))
                     .photoUrl(photoUrl)
                     .photoName(photoName)
+                    .level(1)
                     .introduce((postUserReq.introduce() != null) ? postUserReq.introduce() : null)
                     .role(Role.USER)
                     .build();
@@ -59,14 +67,16 @@ public class AuthenticationService {
 
     public LogInUserRes authenticate(LogInUserReq logInUserReq) {
         User user = userRepository.findByEmail(logInUserReq.email())
-                .orElseThrow();
-        authenticationManager.authenticate(
+                .orElseThrow(UserNotFoundException::new);
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         user.getUserId(),
                         logInUserReq.password()
                 )
         );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwtToken = jwtService.generateToken(user);
         return new LogInUserRes(jwtToken, user.toResponse());
     }
+
 }

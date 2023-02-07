@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/adventures")
+@RequestMapping("${API}/adventures")
 @CrossOrigin("*") // 일시적으로 CORS 오류 해결
 public class AdventureController {
     private final AdventureService adventureService;

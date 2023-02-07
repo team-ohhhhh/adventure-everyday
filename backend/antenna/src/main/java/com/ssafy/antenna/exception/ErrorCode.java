@@ -7,6 +7,7 @@ import static org.springframework.http.HttpStatus.*;
 public enum ErrorCode {
     INVALID_PASSWORD(UNAUTHORIZED, "잘못된 패스워드입니다."),
     INVALID_TOKEN(UNAUTHORIZED, "잘못된 토큰입니다."),
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 토큰입니다."),
     USER_NOT_LOGGED_IN(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다."),
     INVALID_PERMISSION(FORBIDDEN, "권한이 없습니다."),
     USER_NOT_FOUND(NOT_FOUND, "해당하는 유저를 찾을 수 없습니다."),
@@ -22,6 +23,7 @@ public enum ErrorCode {
     PHOTO_NOT_FOUND(NOT_FOUND, "저장할 사진을 찾을 수 없습니다."),
     ANTENNA_NOT_FOUND(NOT_FOUND, "해당하는 안테나를 찾을 수 없습니다."),
     EMAIL_NOT_FOUND(NOT_FOUND, "해당하는 이메일을 찾을 수 없습니다."),
+    EMAIL_EMPTY(NOT_FOUND, "이메일을 찾을 수 없습니다. 이메일 정보를 제공해주세요."),
     BAD_CONSTANT(BAD_REQUEST, "잘못된 인자입니다."),
     BOOK_NOT_FOUND(NOT_FOUND, "해당하는 책 정보를 찾을 수 없습니다."),
     REVIEW_NOT_FOUND(NOT_FOUND, "해당하는 리뷰를 찾을 수 없습니다."),

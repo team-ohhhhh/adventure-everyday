@@ -2,17 +2,9 @@ import style from "./AdventureBanner.module.css";
 import { Route, Routes, useNavigate } from "react-router";
 import AdventureDetailPage from "../../pages/AdventurePage";
 function AdventureBanner(props) {
+  console.log(props.id);
   const navigate = useNavigate();
-  const dummy = {
-    adventureId: 1,
-    title: "걷기 딱 좋은 탐험",
-    difficulty: "easy",
-    backgroundImage: "AdventureDummy.jpg",
-    adventureMakerProfile: "profile.jpg",
-    adventureMakerName: "snowman",
-    advetureMakerTier: "bronze",
-    particpantsList: [],
-  };
+  const adventureItem = props.articleListItem;
 
   return (
     // TODO: onClick 이벤트로 해당 모험으로 네비게이트 달아주기(모험 id 값을 파라미터로)
@@ -20,24 +12,22 @@ function AdventureBanner(props) {
     <div
       className={style.banner}
       style={{
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${dummy.backgroundImage})`,
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${adventureItem.photoUrl})`,
       }}
       onClick={() => {
-        navigate(`/adventure/detail/${props.articleListItem.post_id}`);
-        console.log(props.articleListItem);
+        navigate(`/adventure/detail/${adventureItem.adventureId}`);
       }}
     >
       <div className={style.titleAndDifficulty}>
-        <div className={style.title}>{dummy.title}</div>
-        <div className={style.difficulty}>{dummy.difficulty}</div>
+        <div className={style.title}>{adventureItem.title}</div>
+        <div className={style.difficulty}>
+          <img src={adventureItem.difficulty}></img>
+        </div>
       </div>
       <div className={style.makerAndParticipants}>
         <div className={style.maker}>
           <div className={style.makerProfileContainer}>
-            <img
-              className={style.makerProfile}
-              src={dummy.adventureMakerProfile}
-            />
+            <img className={style.makerProfile} src={adventureItem.photoUrl} />
           </div>
           <div className={style.makerNameAndTierContainer}>
             <span>탐험가</span>
@@ -45,9 +35,11 @@ function AdventureBanner(props) {
               {" "}
               <span className={style.makerName}>
                 {" "}
-                {dummy.adventureMakerName}{" "}
+                {adventureItem.userId}{" "}
               </span>{" "}
-              <img src={dummy.advetureMakerTier + ".png"} />
+              <img
+                src={"/images/lv" + adventureItem.advetureMakerTier + ".png"}
+              />
             </div>
           </div>
         </div>

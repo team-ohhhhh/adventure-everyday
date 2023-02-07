@@ -6,7 +6,7 @@ const ArticleMap = ({ lat, lng }) => {
     <div>
       <Map
         center={{ lat, lng }}
-        style={{ width: "100%", height: "360px" }}
+        style={{ width: "100%", height: "250px" }}
         level={4}
       >
         <MapMarker

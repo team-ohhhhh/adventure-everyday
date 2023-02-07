@@ -4,8 +4,11 @@ import Antenna from "../components/mapPage/antenna/Antenna";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import BottomSheetContainer from "./../components/BottomSheet/BottomSheet";
+import SmallArticleItem from './../components/SmallArticleItem';
+import { useNavigate } from "react-router-dom";
 
 function MainMap() {
+  const navigate = useNavigate()
   const [state, setState] = useState({
     center: {
       lat: 37.5016117,
@@ -72,8 +75,11 @@ let URL = useSelector((state) => state.url)
     .catch((err) => console.log(err))
   }, []) //TODO: dependancy는 어떻게 기준을 주어야 할까...
 
-
-
+  // 게시글 리스트 저장 => axios는 바텀시트에서 됨
+  const [articleList, setArticleList] = useState([])
+  
+  // 게시글 핀 인포윈도우 제어용 변수 
+  const [isOpen, setIsOpen] = useState(false)
 
   // lat이나 lng 값이 변화했을 때 작동할 함수 -> axios 후에 setArticleList
   
@@ -120,6 +126,7 @@ let URL = useSelector((state) => state.url)
             console.log("dragStart");
           }}
           onClick={(_t, mouseEvent) => {
+            setIsOpen(0);
             if (!state.isAroundClicked) {
               // UFO 이미지가 떠 있지 않다면
               // 지도 클릭시 그 곳에 ufo 이미지 뜸
@@ -279,11 +286,11 @@ let URL = useSelector((state) => state.url)
                 }}
                 image={{
                   src: "/images/alien.jpg",
-
                   size: {
                     width: 30,
                     height: 30,
                   },
+                  style: {filter: "drop-shadow(5px 5px 5px #000)" },
                   options: {
                     offset: {
                       x: 12,
@@ -300,7 +307,7 @@ let URL = useSelector((state) => state.url)
           {state.isAround && state.isAroundClicked && (
             <Circle
               center={state.click}
-              radius={100}
+              radius={500}
               strokeWeight={5} // 선의 두께입니다
               strokeColor={"#00529E"} // 선의 색깔입니다
               strokeOpacity={0} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
@@ -313,7 +320,48 @@ let URL = useSelector((state) => state.url)
           <p>{state.errMsg}</p>
 
           {/* 주변 검색 상황일때 바텀시트 등장 */}
-          { state.isCircle && <BottomSheetContainer antennae={antennae} center={state.center} isAntenna={state.isAntenna} setAntennae={setAntennae} setState={setState}/>}
+          { state.isCircle && <BottomSheetContainer antennae={antennae} center={state.center} isAntenna={state.isAntenna} setAntennae={setAntennae} setState={setState} articleList={articleList} setArticleList={setArticleList}/>}
+
+          {/* 맵에 게시글 핀 찍기 */}
+          { state.isCircle && 
+            articleList.map((article) => {
+              return(
+              <MapMarker
+                image={{
+                  src: "/images/articlePin2.png",
+
+                  size: {
+                    width: 100,
+                    height: 100,
+                  },
+                  options: {
+                    offset: {
+                      x: 10,
+                      y: 10,
+                    },
+                  },
+                }}
+                // clickable={true}
+                onClick={() => setIsOpen((prev) => {
+                  if (prev) {
+                    return 0
+                  } else {
+                    return article.postId
+                  }
+                })}
+                position={{lat:article.lat, lng:article.lng}}
+              >
+                {/*TODO: 여기 어떻게 이미지 CSS ㅜㅠ */}
+                {isOpen === article.postId && 
+                <div>
+                  <div onClick={() => {
+                    navigate(`/article/${article.postId}`)}}><img style={{height:"5vh", width:"5vh", objectFit:"true"}} src={article.photoUrl} 
+                  /></div>
+                </div>
+                }</MapMarker>)
+            })
+          }
+
         </Map>
       </div>
     </div>

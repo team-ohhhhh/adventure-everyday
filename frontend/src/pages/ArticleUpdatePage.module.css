@@ -1,12 +1,9 @@
 .container {
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: flex-start;
   margin: 2.5vh 2.5vh 2.5vh 2.5vh;
-  
 }
-
-
 
 .photoHeader {
   font-style: normal;
@@ -16,15 +13,13 @@
 }
 
 .photoHolder {
-  width : 90vw
+  width: 90vw;
 }
 
 .photo {
-  width : 100%;
+  width: 100%;
   border-radius: 5px;
 }
-
-
 
 .titleLabel {
   font-style: normal;
@@ -33,24 +28,23 @@
   line-height: 29px;
 }
 
-
 .title {
   font-size: large;
   padding-left: 2vh;
-  height : 6vh;
-  border: 2px solid #1C0B69;
+  height: 6vh;
+  border: 2px solid #1c0b69;
   border-radius: 6px;
   box-sizing: border-box;
-  width : 100%;
+  width: 100%;
 }
 
 .content {
   font-size: 20px;
   padding-left: 2vh;
-  border: 2px solid #1C0B69;
+  border: 2px solid #1c0b69;
   border-radius: 6px;
-  height : 20vh;
-  width : 100%;
+  height: 20vh;
+  width: 100%;
   box-sizing: border-box;
   margin-top: 3vh;
   font-weight: 500;
@@ -61,12 +55,12 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-top: 5vh
+  margin-top: 5vh;
 }
 
 .update {
-  background: #1C0B69;
-  border: 1px solid #1C0B69;
+  background: #1c0b69;
+  border: 1px solid #1c0b69;
   border-radius: 8px;
   height: 5vh;
   width: 10vh;
@@ -74,19 +68,18 @@
 }
 
 .back {
-  border: 1px solid #1C0B69;
+  border: 1px solid #1c0b69;
   border-radius: 8px;
   height: 5vh;
   width: 10vh;
-  background : white;
-  color:#1C0B69;
+  background: white;
+  color: #1c0b69;
 }
 
 /* TODO: 포커스줘야하나.. */
-input:focus{
-  outline:none;
+input:focus {
+  outline: none;
 }
-textarea:focus{
-  outline:none;
-
+textarea:focus {
+  outline: none;
 }
