@@ -177,37 +177,33 @@ public class AdventureService {
                 adventureIds.add(adventurePlace.getAdventure().getAdventureId());
             }
 
-            System.out.println(adventureIds);
-
             for (Long i : adventureIds) {
                 Adventure adventure = adventureRepository.findById(i).orElseThrow(AdventureNotFoundException::new);
 
                 // 현재 이 모험id로 AdventureInProgress 가져오기.
-                List<AdventureInProgress> adventureInProgressList = adventureInProgressRepository.findAllByAdventure(adventure).orElseThrow();
+                List<AdventureInProgress> adventureInProgressList = adventureInProgressRepository.findTop5ByAdventureOrderByCreateTimeDesc(adventure).orElseThrow();
 
-                // AdventureInProgress 유저들의 id만 골라오기.
-                List<Long> userIds = new ArrayList<>();
+                List<String> userPhotoUrlList = new ArrayList<>();
 
-                for(AdventureInProgress adventureInProgress:adventureInProgressList){
-                    userIds.add(adventureInProgress.getUser().getUserId());
+                for(AdventureInProgress aIP:adventureInProgressList){
+                    userPhotoUrlList.add(aIP.getUser().getPhotoUrl());
                 }
 
-                // 유저id로 유저id와 사진 가져오기.
-                List<UserDetailRes> users = new ArrayList<>();
+                // userCount는 countByAdventure
+                Long userCount = adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureInProgressNotFoundException::new);
 
-                for(Long userId:userIds){
-                    User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-                    users.add(user.toResponse());
-                }
 
                 ReadAdventuresRes newReadAdventureRes = new ReadAdventuresRes(
                         adventure.getAdventureId(),
+                        adventure.getPhotoUrl(),
                         adventure.getTitle(),
                         adventure.getDifficulty(),
-                        adventure.getPhotoUrl(),
-                        userRepository.findById(adventure.getUser().getUserId()).orElseThrow(UserNotFoundException::new).toResponse(),
-                        users,
-                        adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureNotFoundException::new)
+                        adventure.getUser().getUserId(),
+                        adventure.getUser().getPhotoUrl(),
+                        adventure.getUser().getNickname(),
+                        Long.valueOf(adventure.getUser().getLevel()),
+                        userPhotoUrlList,
+                        userCount
                 );
 
                 result.add(newReadAdventureRes);
@@ -218,33 +214,30 @@ public class AdventureService {
                 List<Adventure> temp = adventureRepository.findAllByOrderByCreateTimeDesc().orElseThrow(AdventureNotFoundException::new);
 
                 for (Adventure adventure : temp) {
-                    // 현재 이 모험으로 AdventureInProgress 가져오기.
-                    List<AdventureInProgress> adventureInProgressList = adventureInProgressRepository.findAllByAdventure(adventure).orElseThrow();
+                    // 현재 이 모험id로 AdventureInProgress 가져오기.
+                    List<AdventureInProgress> adventureInProgressList = adventureInProgressRepository.findTop5ByAdventureOrderByCreateTimeDesc(adventure).orElseThrow();
 
-                    // AdventureInProgress 유저들의 id만 골라오기.
-                    List<Long> userIds = new ArrayList<>();
+                    List<String> userPhotoUrlList = new ArrayList<>();
 
-                    for(AdventureInProgress adventureInProgress:adventureInProgressList){
-                        userIds.add(adventureInProgress.getUser().getUserId());
+                    for(AdventureInProgress aIP:adventureInProgressList){
+                        userPhotoUrlList.add(aIP.getUser().getPhotoUrl());
                     }
 
-                    // 유저id로 유저id와 사진 가져오기.
+                    // userCount는 countByAdventure
+                    Long userCount = adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureInProgressNotFoundException::new);
 
-                    List<UserDetailRes> users = new ArrayList<>();
-
-                    for(Long userId:userIds){
-                        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-                        users.add(user.toResponse());
-                    }
 
                     ReadAdventuresRes newReadAdventureRes = new ReadAdventuresRes(
                             adventure.getAdventureId(),
+                            adventure.getPhotoUrl(),
                             adventure.getTitle(),
                             adventure.getDifficulty(),
-                            adventure.getPhotoUrl(),
-                            userRepository.findById(adventure.getUser().getUserId()).orElseThrow(UserNotFoundException::new).toResponse(),
-                            users,
-                            adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureNotFoundException::new)
+                            adventure.getUser().getUserId(),
+                            adventure.getUser().getPhotoUrl(),
+                            adventure.getUser().getNickname(),
+                            Long.valueOf(adventure.getUser().getLevel()),
+                            userPhotoUrlList,
+                            userCount
                     );
 
                     result.add(newReadAdventureRes);
@@ -842,15 +835,15 @@ public class AdventureService {
     }
 
     // 대표 보물로 선택하기
-    public void createRepresentativeTreasures(Long adventureId, Long userId) {
+    public void createRepresentativeTreasures(Long adventureId, Long userId,Boolean selected) {
         User user= userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
         AdventureSucceed adventureSucceed = adventureSucceedRepository.findByUserAndAdventure(user,adventure).orElseThrow(AdventureSucceedNotFoundException::new);
         adventureSucceedRepository.save(new AdventureSucceed(
                 adventureSucceed.getSucceedId(),
-           user,
-           adventure,
-           true
+                user,
+                adventure,
+                selected
         ));
     }
 
