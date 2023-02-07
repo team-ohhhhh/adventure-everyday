@@ -103,7 +103,6 @@ const ArticleCreatePage = () => {
               article={article}
               setArticle={setArticle}
               checkPointList={checkPointList}
-              setCheckPointList={setCheckPointList}
               styles={styles}
             />
           }
