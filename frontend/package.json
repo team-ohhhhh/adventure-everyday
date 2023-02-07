@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@emeraldpay/hashicon-react": "^0.5.2",
+    "@ramonak/react-progress-bar": "^5.0.3",
     "@react-spring/web": "^9.6.1",
     "@reduxjs/toolkit": "^1.9.1",
     "@testing-library/jest-dom": "^5.16.5",
