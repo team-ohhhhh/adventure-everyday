@@ -4,8 +4,12 @@ import com.ssafy.antenna.domain.ResultResponse;
 import com.ssafy.antenna.domain.user.dto.LogInUserReq;
 import com.ssafy.antenna.domain.user.dto.LogInUserRes;
 import com.ssafy.antenna.domain.user.dto.PostUserReq;
+import com.ssafy.antenna.exception.not_found.EmailEmptyException;
+import com.ssafy.antenna.exception.not_found.NicknameEmptyException;
+import com.ssafy.antenna.exception.not_found.PasswordEmptyException;
 import com.ssafy.antenna.service.AuthenticationService;
 import com.ssafy.antenna.service.KakaoService;
+import com.ssafy.antenna.util.ValidationRegex;
 import lombok.RequiredArgsConstructor;
 import org.apache.el.parser.Token;
 import org.springframework.http.HttpHeaders;
@@ -28,12 +32,19 @@ public class AuthenticationController {
     private final KakaoService kakaoService;
     @PostMapping(value = "/register")
     public ResultResponse<LogInUserRes> registerUser(
-            @RequestPart String email,
-            @RequestPart String nickname,
-            @RequestPart String password,
-            @RequestPart(required = false) String introduce,
-            @RequestPart(required = false) MultipartFile photo
+            @RequestParam String email,
+            @RequestParam String nickname,
+            @RequestParam String password,
+            @RequestParam(required = false) String introduce,
+            @RequestParam(required = false) MultipartFile photo
     ) throws IOException {
+        //validation
+        if(email.length()==0)
+            throw new EmailEmptyException();
+        if(nickname.length()==0)
+            throw new NicknameEmptyException();
+        if(password.length()==0)
+            throw new PasswordEmptyException();
         return ResultResponse.success(
                 authenticationService.registerUser(
                         new PostUserReq(email, nickname, password, introduce), photo
@@ -42,6 +53,12 @@ public class AuthenticationController {
 
     @PostMapping("/authenticate")
     public ResultResponse<LogInUserRes> authenticate(@RequestBody LogInUserReq logInUserReq) {
+        if(logInUserReq.email().length()==0)
+            throw new EmailEmptyException();
+        if(!ValidationRegex.isRegexEmail(logInUserReq.email()))
+
+        if(logInUserReq.password().length()==0)
+            throw new PasswordEmptyException();
         return ResultResponse.success(authenticationService.authenticate(logInUserReq));
     }
 
