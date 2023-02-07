@@ -33,8 +33,8 @@ function App() {
             <Route path="/feed" element={<FeedPage />} />
             {/* <Route path={["/map", "/"]} element={<MapPage />} /> */}
 
-            {["/map", "/"].map((path) => (
-              <Route path={path} element={<MapPage />} />
+            {["/map", "/"].map((path, idx) => (
+              <Route key={idx} path={path} element={<MapPage />} />
             ))}
 
             <Route path="/adventure" element={<AdventurePage />} />

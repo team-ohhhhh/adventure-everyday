@@ -7,7 +7,7 @@ import styles from "./UserPostMap.module.css";
 
 const { kakao } = window;
 
-const UserPostMap = ({ posts, selectPost }) => {
+const UserPostMap = ({ myPosts, selectPost, userHeight }) => {
   // 카카오맵 객체
   const mapRef = useRef();
   // 마커 객체
@@ -33,11 +33,11 @@ const UserPostMap = ({ posts, selectPost }) => {
   // 1. 게시글 영역 계산
   const bounds = useMemo(() => {
     const bounds = new kakao.maps.LatLngBounds();
-    posts.forEach((post) => {
+    myPosts.forEach((post) => {
       bounds.extend(new kakao.maps.LatLng(post.lat, post.lng));
     });
     return bounds;
-  }, [posts]);
+  }, [myPosts]);
   // 2. 지도에 계산된 영역 반영
   useEffect(() => {
     const map = mapRef.current;
@@ -49,7 +49,7 @@ const UserPostMap = ({ posts, selectPost }) => {
     const sw = target.getBounds().getSouthWest();
     const ne = target.getBounds().getNorthEast();
     const bounds = new kakao.maps.LatLngBounds(sw, ne);
-    const newOnMapPosts = posts.filter((post) => {
+    const newOnMapPosts = myPosts.filter((post) => {
       const postLatLng = new kakao.maps.LatLng(post.lat, post.lng);
       return bounds.contain(postLatLng);
     });
@@ -173,7 +173,7 @@ const UserPostMap = ({ posts, selectPost }) => {
         ref={mapRef}
         center={temp}
         isPanto={true}
-        style={{ width: "100%", height: "700px" }}
+        style={{ width: "100%", height: "600px" }}
         onIdle={onIdle}
         onClick={onMapClick}
       >
@@ -185,8 +185,8 @@ const UserPostMap = ({ posts, selectPost }) => {
           onClusterclick={onClusterclick}
           // onClustered={onClustered}
         >
-          {posts &&
-            posts.map((post) => (
+          {myPosts &&
+            myPosts.map((post) => (
               <MapMarker
                 key={post.postId}
                 ref={(el) => (markerRef.current[post.postId] = el)}

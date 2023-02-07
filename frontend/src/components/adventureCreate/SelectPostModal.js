@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
 import UserPostMap from "./UserPostMap";
 
 import styles from "./SelectPostModal.module.css";
+import styles2 from "../../pages/ArticleCreatePage.module.css";
+import { AiOutlineClose } from "react-icons/ai";
 
-const SelectPostModal = ({ closeModal, selectPost }) => {
-  const [posts, setPosts] = useState([]);
-
+const SelectPostModal = ({ myPosts, setMyPosts, closeModal, selectPost }) => {
   const url = useSelector((state) => state.url);
   const token = useSelector((state) => state.token);
   const user = useSelector((state) => state.user);
@@ -23,20 +23,43 @@ const SelectPostModal = ({ closeModal, selectPost }) => {
       },
     })
       .then((res) => {
-        setPosts(res.data.result);
         // console.log(res.data.result);
+        setMyPosts(res.data.result);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
 
+  const mapRef = useRef();
+
+  const userHeight = useMemo(() => {
+    const map = mapRef.current;
+    const mapHeight = map.getBoundingClientRect();
+    const viewHeight = document.documentElement.clientHeight;
+    console.log(viewHeight);
+  }, [mapRef.current]);
+
   return (
     <div className={styles.modalWrap}>
-      <button onClick={closeModal}>close</button>
-      <h1>탐험으로 만들</h1>
-      <h1>내 글을 선택하세요</h1>
-      <UserPostMap posts={posts} selectPost={selectPost} />
+      <div className={styles.modalBody}>
+        <AiOutlineClose
+          className={styles.closeBtn}
+          onClick={closeModal}
+          size={30}
+        />
+        <h1 className={styles2.header}>
+          탐험으로 만들
+          <br />내 글을 선택하세요
+        </h1>
+      </div>
+      <div ref={mapRef}>
+        <UserPostMap
+          myPosts={myPosts}
+          selectPost={selectPost}
+          userHeight={userHeight}
+        />
+      </div>
     </div>
   );
 };
