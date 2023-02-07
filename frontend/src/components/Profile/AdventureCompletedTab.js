@@ -24,8 +24,8 @@ function AdventureCompletedTab() {
 
   return(
     <div>
-      {adventureList.map((adventure) => {
-        return <AdventureBanner adventure={adventure}/>
+      {adventureList.map((adventureItem) => {
+        return <AdventureBanner adventureItem={adventureItem}/>
       })}
     </div>
   )
