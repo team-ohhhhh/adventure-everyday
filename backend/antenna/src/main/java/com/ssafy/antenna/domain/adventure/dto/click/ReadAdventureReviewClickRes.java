@@ -1,4 +1,4 @@
-package com.ssafy.antenna.domain.adventure.dto.res;
+package com.ssafy.antenna.domain.adventure.dto.click;
 
 import com.ssafy.antenna.domain.adventure.dto.sub.SubAdventureReview;
 
