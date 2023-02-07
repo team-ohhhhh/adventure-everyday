@@ -1,7 +1,10 @@
 package com.ssafy.antenna.controller;
 
 import com.ssafy.antenna.domain.ResultResponse;
+import com.ssafy.antenna.domain.adventure.dto.click.ReadAdventureInProgressClickRes;
 import com.ssafy.antenna.domain.adventure.dto.click.ReadAdventurePlaceClickRes;
+import com.ssafy.antenna.domain.adventure.dto.click.ReadAdventureReviewClickRes;
+import com.ssafy.antenna.domain.adventure.dto.click.ReadAdventureSucceedClickRes;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventurePlaceReq;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventureReq;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventureReviewReq;
@@ -11,9 +14,7 @@ import com.ssafy.antenna.service.AdventureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -206,5 +207,15 @@ public class AdventureController {
         return ResultResponse.success(adventureService.readAdventureReviewClick(adventureId));
     }
 
+    // '탐험 중'탭 눌렀을 때
+    @GetMapping("/clicks/adventure-in-progress/users/{userId}")
+    public ResultResponse<List<ReadAdventureInProgressClickRes>> readAdventureInProgressClick(@PathVariable Long userId){
+        return ResultResponse.success(adventureService.readAdventureInProgressClick(userId));
+    }
 
+//    // '완료한 탐험' 탭 눌렀을 때
+//    @GetMapping("/clicks/adventure-succeed/users/{userId}")
+//    public ResultResponse<ReadAdventureSucceedClickRes> readAdventureSucceedClick(@PathVariable Long userId){
+//        return ResultResponse.success(adventureService.readAdventureSucceedClick(userId));
+//    }
 }
