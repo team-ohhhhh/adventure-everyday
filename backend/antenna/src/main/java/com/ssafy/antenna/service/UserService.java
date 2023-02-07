@@ -250,16 +250,6 @@ public class UserService {
         return newUser.toResponse();
     }
 
-
-    public ResultResponse<List<UserFeatsDto>> getUserFeats(Long userId) {
-        List<AdventureSucceed> adventureSucceeds = adventureSucceedRepository.findAllByUser(
-                userRepository.findById(userId).orElseThrow(UserNotFoundException::new));
-        List<UserFeatsDto> result = adventureSucceeds.stream()
-                .map(userFeatsDtoMapper)
-                .collect(Collectors.toList());
-        return ResultResponse.success(result);
-    }
-
     public DetailAntennaRes createAntenna(PostAntennaReq postAntennaReq, Long userId) {
         //유저가 존재하는지 먼저 확인
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
