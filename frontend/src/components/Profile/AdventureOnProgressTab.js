@@ -4,28 +4,33 @@ import axios from 'axios';
 import { useSelector } from "react-redux"
 
 
-function AdventureOnProgressTab() {
+function AdventureOnProgressTab({userId}) {
   const [adventureList, setAdventureList] = useState([])
   const URL = useSelector((state) => state.url)
+  const TOKEN = useSelector((state) => state.token)
 
  
   
-  // useEffect(() => {
-  //   axios({
-  //     url: URL + '/adventures/adventure-in-progress',
-  //     method : 'get',
+  useEffect(() => {
+    axios({
+      url: URL + `/adventures/clicks/adventure-in-progress/users/${userId}`,
+      method : 'get',
+      headers: {
+        Authorization: `Bearer ${TOKEN}`
+      },
 
-  //   })
-  //   .then((res) => {
-
-  //   })
-  // },[])
+    })
+    .then((res) => {
+      setAdventureList(res.data.result)
+    })
+    .catch((err) => console.log(err))
+  },[])
 
 
   return(
     <div>
-      {adventureList.map((adventure) => {
-        return <AdventureBanner adventure={adventure}/>
+      {adventureList.map((adventureItem) => {
+        return <AdventureBanner adventureItem={adventureItem} /*isInProgress={isInProgress}*//>
       })}
     </div>
   )

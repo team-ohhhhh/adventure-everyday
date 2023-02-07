@@ -4,13 +4,15 @@ import { useSelector } from 'react-redux'
 import { useEffect, useState, useMemo } from 'react'
 import style from './ArticleDetail.module.css'
 import { AiOutlineHeart, AiFillHeart, AiFillMessage } from  "react-icons/ai"
-
+import { useNavigate } from 'react-router-dom'
 
 
 function ArticleDetail({article}) {
   let URL = useSelector((state) => state.url)
   let TOKEN = useSelector((state) => state.token)
   let USER = useSelector((state) => state.user)
+
+  const navigate = useNavigate()
 
 
   // 해당 게시글의 좋아요 수 및 좋아요 여부 알아오기
@@ -131,7 +133,7 @@ function ArticleDetail({article}) {
         <div className={style.time}>{article.createTime}</div> {/*TODO: 시간 차이 구하는 알고리즘.. */ }
         <div className={style.likeAndComment}>
           <div className={style.like}>{isLike ? <AiFillHeart style={{fontSize:"larger", marginRight:"1vw"}} onClick={()=>{unDoLike()}}/> : <AiOutlineHeart style={{fontSize:"larger", marginRight:"1vw"}} onClick={()=>{doLike()}}/>}{likes}</div>
-          <div className={style.comment}><AiFillMessage style={{fontSize:"larger", marginRight:"1vw"}}/>{comments.length}</div>
+          <div className={style.comment} onClick={() => {navigate(`/article/${article.postId}/comments`)}}><AiFillMessage style={{fontSize:"larger", marginRight:"1vw"}} />{comments.length}</div>
         </div>
       </div>
 

@@ -85,7 +85,7 @@ function AdventureDetailInfo(props) {
               {checkPointInfo.adventurePlaceContent}
             </div>
           </div>
-          {/* postId undefined 오류나서 big article 잠깐 없앰.. */}
+
           <div className={styles.cpArticle}>
             <BigArticleItem data={checkPointInfo} />
           </div>
@@ -96,9 +96,9 @@ function AdventureDetailInfo(props) {
             <button className={styles.arrangeBtn}>정렬버튼</button>
           </div>
           <div className={styles.articles}>
-            {/* {articlList.map((article) => {
+            {checkPointInfo.subPostList.map((article) => {
               return <SmallArticleItem key={article} data={article} />;
-            })} */}
+            })}
             <div className={styles.article}>게시글 2</div>
           </div>
         </div>

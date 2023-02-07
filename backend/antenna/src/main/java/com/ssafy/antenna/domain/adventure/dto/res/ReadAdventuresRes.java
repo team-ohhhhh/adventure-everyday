@@ -7,11 +7,14 @@ import java.util.List;
 
 public record ReadAdventuresRes(
         Long adventureId,
+        String adventurePhotoUrl,
         String adventureTitle,
         Long adventureDifficulty,
-        String adventurePhotoUrl,
-        UserDetailRes userDetailRes,
-        List<UserDetailRes> userDetailResList,
+        Long userId,
+        String userPhotoUrl,
+        String userNickname,
+        Long userLevel,
+        List<String> userPhotoUrlList,
         Long userCount
 
 ) {
