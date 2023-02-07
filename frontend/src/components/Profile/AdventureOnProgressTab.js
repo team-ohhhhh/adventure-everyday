@@ -30,7 +30,7 @@ function AdventureOnProgressTab({userId}) {
   return(
     <div>
       {adventureList.map((adventureItem) => {
-        return <AdventureBanner adventureItem={adventureItem} isInProgress={isInProgress}/>
+        return <AdventureBanner adventureItem={adventureItem} /*isInProgress={isInProgress}*//>
       })}
     </div>
   )
