@@ -1,9 +1,51 @@
+.subHeader {
+  margin-top: 3rem;
+  text-align: left;
+  line-height: 2.5rem;
+}
+
+.detail {
+  text-align: left;
+  line-height: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.status {
+  text-align: right;
+  color: #1c0b69;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
 .addBox {
+  box-sizing: border-box;
   width: 100%;
-  height: 100px;
+  height: 130px;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
   border: 2px solid #1c0b69;
   border-radius: 8px;
   color: #1c0b69;
   font-weight: bold;
-  line-height: 100px;
+  line-height: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.diffContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.diffText {
+  margin-left: 0.3rem;
+  margin-right: 0.5rem;
+}
+
+.diffImg {
+  height: 1.5rem;
 }

@@ -20,11 +20,15 @@ const Step2Content = ({ article, setArticle, checkPointList, styles }) => {
   }, []);
 
   const handleQuit = () => {
-    const answer = window.confirm(
-      "작성 중인 내용은 저장되지 않습니다. 작성을 취소하고 나가시겠습니까?"
-    );
-    if (answer) {
+    if (!(article.photo || article.title || article.content)) {
       navigate(-2);
+    } else {
+      const answer = window.confirm(
+        "작성 중인 내용은 저장되지 않습니다. 작성을 취소하고 나가시겠습니까?"
+      );
+      if (answer) {
+        navigate(-2);
+      }
     }
   };
 
@@ -48,7 +52,7 @@ const Step2Content = ({ article, setArticle, checkPointList, styles }) => {
   const handleSubmit = (e) => {
     if (article.isText && !geolocation.latitude) {
       alert(
-        "위치 정보가 확인되지 않습니다. 위치 접근을 허용하여 주시거나, 위치 데이터가 존재하는 사진을 업로드하여 게시글 작성 바랍니다."
+        "위치 정보가 확인되지 않습니다. 위치 접근을 허용한 뒤 잠시 기다려주세요. 또는 위치 데이터가 존재하는 사진을 업로드하여 게시글 작성 바랍니다."
       );
       return;
     } else if (article.title.length < 1) {

@@ -6,50 +6,57 @@ import Step2Content from "../components/adventureCreate/Step2Content";
 import Step3Badge from "../components/adventureCreate/Step3Badge";
 import Step4Done from "../components/adventureCreate/Step4Done";
 
+import styles from "./ArticleCreatePage.module.css";
+
 const AdventureCreatePage = () => {
-  const [checkPoints, setCheckPoints] = useState([]);
-  const [advCheckPoints, setAdvCheckPoints] = useState([]);
-  const [adv, setAdv] = useState({
-    category: "맛집",
-    featTitle: "",
-    featContent: "",
+  const [adventure, setAdventure] = useState({
+    category: "여행",
+    feat: "",
     title: "",
     content: "",
     difficulty: null,
+    exp: null,
     startDate: null,
     endDate: null,
-    photo: null,
+    RepresentativePostId: null,
+    createAdventurePlaceReqs: [],
   });
+  const [checkpoints, setCheckpoints] = useState([]);
+  const [myPosts, setMyPosts] = useState([]);
 
   return (
-    <div className="pageContainer" style={{ padding: "30px" }}>
+    <div className={styles.pageContainer}>
       <Routes>
         <Route
           path=""
           element={
             <Step1CheckPoint
-              checkPoints={checkPoints}
-              setCheckPoints={setCheckPoints}
-              advCheckPoints={advCheckPoints}
-              setAdvCheckPoints={setAdvCheckPoints}
-              adv={adv}
-              setAdv={setAdv}
+              myPosts={myPosts}
+              setMyPosts={setMyPosts}
+              checkpoints={checkpoints}
+              setCheckpoints={setCheckpoints}
+              adventure={adventure}
+              setAdventure={setAdventure}
             />
           }
         />
         <Route
           path="2"
           element={
-            <Step2Content checkPoints={checkPoints} adv={adv} setAdv={setAdv} />
+            <Step2Content
+              checkpoints={checkpoints}
+              adventure={adventure}
+              setAdventure={setAdventure}
+            />
           }
         />
         <Route
           path="3"
           element={
             <Step3Badge
-              adv={adv}
-              setAdv={setAdv}
-              advCheckPoints={advCheckPoints}
+              adventure={adventure}
+              setAdventure={setAdventure}
+              checkpoints={checkpoints}
             />
           }
         />
