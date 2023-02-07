@@ -1,7 +1,10 @@
 package com.ssafy.antenna.service;
 
 import com.ssafy.antenna.domain.adventure.*;
+import com.ssafy.antenna.domain.adventure.dto.click.ReadAdventureInProgressClickRes;
 import com.ssafy.antenna.domain.adventure.dto.click.ReadAdventurePlaceClickRes;
+import com.ssafy.antenna.domain.adventure.dto.click.ReadAdventureReviewClickRes;
+import com.ssafy.antenna.domain.adventure.dto.click.ReadAdventureSucceedClickRes;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventurePlaceReq;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventureReq;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventureReviewReq;
@@ -706,7 +709,7 @@ public class AdventureService {
             Long clearRate = Long.valueOf((int)((1.0*adventureInProgress.getCurrentPoint())/(1.0*adventureInProgress.getTotalPoint())*100.0));
             // 현재 이 모험에 참여중인 유저 모험에 참여한 순으로 5명까지.
             // 그럼 AIP를 ByAdventureOrderByCreatetime을 구해서
-            List<AdventureInProgress> aIPList=adventureInProgressRepository.findALlByAdventureOrderByCreateTime(adventure).orElseThrow(AdventureNotFoundException::new);
+            List<AdventureInProgress> aIPList=adventureInProgressRepository.findTop5ByAdventureOrderByCreateTime(adventure).orElseThrow(AdventureNotFoundException::new);
 
             // 그 속의 유저들의 이미지들을 뽑아옴.
             List<String> userPhotoUrlList = new ArrayList<>();
@@ -736,6 +739,13 @@ public class AdventureService {
 
         return result;
     }
+
+    //
+//    public ReadAdventureSucceedClickRes readAdventureSucceedClick(Long userId) {
+//        // 현재 유저의 완료된 탐험을 가져온다.
+//
+//        //
+//    }
 
     //
     // API가 아닌 method.
@@ -772,4 +782,6 @@ public class AdventureService {
         Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
         return adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureInProgressNotFoundException::new);
     }
+
+
 }
