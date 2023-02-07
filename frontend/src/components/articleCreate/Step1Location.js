@@ -1,45 +1,91 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import ImageUploadForm from "./ImageUploadForm";
 import ArticleMap from "./ArticleMap";
 import CheckPointList from "./CheckPointList";
 
-const Step1Location = ({
-  article,
-  setArticle,
-  checkPointList,
-  setCheckPointList,
-}) => {
+import { AiOutlineClose } from "react-icons/ai";
+import useGeolocation from "react-hook-geolocation";
+
+const Step1Location = ({ article, setArticle, checkPointList, styles }) => {
+  // console.log(checkPointList);
   const navigate = useNavigate();
+  const geolocation = useGeolocation();
+
+  const [isAdvSelected, setIsAdvSelected] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const handleQuit = () => {
+    const answer = window.confirm(
+      "작성 중인 내용은 저장되지 않습니다. 작성을 취소하고 나가시겠습니까?"
+    );
+    if (answer) {
+      navigate(-1);
+    }
+  };
+
+  const handleNext = () => {
+    if (article.isText && !geolocation.latitude) {
+      alert(
+        "위치 정보가 확인되지 않습니다. 위치 접근을 허용하여 주시거나, 위치 데이터가 존재하는 사진을 업로드하여 게시글 작성 바랍니다."
+      );
+      return;
+    } else if (checkPointList.length > 0 && !isAdvSelected) {
+      alert("탐험을 선택해주세요.");
+      return;
+    }
+    navigate("/write/2");
+  };
 
   return (
     <>
+      <div className={styles.closeContainer}>
+        <AiOutlineClose onClick={handleQuit} size={35} />
+      </div>
+
       <div>
-        <h1>사진을 선택해주세요(선택)</h1>
+        <h1 className={styles.header} style={{ marginTop: "1rem" }}>
+          사진을
+          <br />
+          선택해주세요<span style={{ fontSize: "1rem" }}> (선택)</span>
+        </h1>
         <ImageUploadForm article={article} setArticle={setArticle} />
       </div>
 
       <div>
-        <h1>장소</h1>
+        <h1 className={styles.header}>장소</h1>
         <ArticleMap lat={article.lat} lng={article.lng} />
-        <p>{article.address}</p>
-        {checkPointList && <p>앗! 이 위치에서 작성 가능한 모험이 있어요!</p>}
+        <div className={styles.textContainer}>{article.address}</div>
+        {checkPointList.length > 0 && (
+          <div className={styles.alertContainer}>
+            앗! 이 위치에서 작성 가능한 탐험이 있어요!
+          </div>
+        )}
       </div>
 
-      {checkPointList && (
+      {checkPointList.length > 0 && (
         <div>
+          <h1 className={styles.header}>탐험 선택</h1>
           <CheckPointList
+            article={article}
             setArticle={setArticle}
             checkPointList={checkPointList}
-            setCheckPointList={setCheckPointList}
+            styles={styles}
+            isAdvSelected={isAdvSelected}
+            setIsAdvSelected={setIsAdvSelected}
           />
         </div>
       )}
 
-      <div>
-        <button onClick={() => navigate(-1)}>취소</button>
-        <button onClick={() => navigate("/write/2")}>다음</button>
+      <div className={styles.btnContainer}>
+        <div></div>
+        <div className={styles.blueBtn} onClick={handleNext}>
+          다음
+        </div>
       </div>
     </>
   );

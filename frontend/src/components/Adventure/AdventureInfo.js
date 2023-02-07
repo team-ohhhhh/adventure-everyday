@@ -1,8 +1,35 @@
 import styles from "./AdventureInfo.module.css";
 import ProfileCircle from "../ProfileCircle";
+import { FiShare2 } from "react-icons/fi";
+import { HiOutlineBellAlert } from "react-icons/hi2";
+import ParticipantsCircle from "./ParticipantsCircle";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 function AdventureInfo(props) {
-  console.log("photoUrl" + props.info.userIdPhotoUrl); // 이 부분이 부모 컴포넌트 첫 렌더링 땐 undefined이고 리렌더링 될 땐 나옴
+  console.log("ad info");
+  console.log(props.info); // 이 부분이 부모 컴포넌트 첫 렌더링 땐 undefined이고 리렌더링 될 땐 나옴
+
+  const params = useParams(); // 특정 탐험 id가져오기
+  const navigate = useNavigate();
+
+  let TOKEN = useSelector((state) => state.token);
+  let URL = useSelector((state) => state.url);
+
+  function Participate() {
+    axios({
+      url: URL + `/adventures/${params.id}/adventure-in-progress`,
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+      },
+      method: "post",
+    }).then((response) => {
+      console.log("참가 결과");
+      console.log(response.data.result);
+    });
+  }
+
   return (
     <>
       <div className={styles.container}>
@@ -45,10 +72,9 @@ function AdventureInfo(props) {
             </div>
           </div>
           <div className={styles.participants}>
-            <ProfileCircle src={"/defaultProfile.jpg"}></ProfileCircle>
-            <ProfileCircle src={"/defaultProfile.jpg"}></ProfileCircle>
-            <ProfileCircle src={"/defaultProfile.jpg"}></ProfileCircle>
-            <ProfileCircle src={"/defaultProfile.jpg"}></ProfileCircle>
+            <ParticipantsCircle
+              photoList={props.info.userIdPhotoUrlList}
+            ></ParticipantsCircle>
           </div>
         </div>
         <div className={styles.etc}>
@@ -71,27 +97,47 @@ function AdventureInfo(props) {
             </div>
           </div>
           <div className={styles.button}>
-            <button>알</button>
-            <button>공</button>
+            <button className={styles.notice}>
+              <HiOutlineBellAlert size={23} />
+            </button>
+            <button className={styles.share}>
+              <FiShare2 size={23} />
+            </button>
+
+            {/* 참여 안한 상태에서 참여하기 버튼 보여주기 */}
+            {!props.info.participation && (
+              <button
+                className={styles.participate}
+                onClick={() => {
+                  console.log("참여!");
+                  console.log(props.info.participation);
+                  Participate();
+                }}
+              >
+                참여하기
+              </button>
+            )}
+
+            {/* 참여한 상태에서 포기하기 버튼 보여주기 */}
+            {props.info.participation && (
+              <button
+                className={styles.giveup}
+                onClick={() => {
+                  console.log("포기!");
+                }}
+              >
+                포기하기
+              </button>
+            )}
+
+            {/* 탐험 달성하면 후기 달성 버튼 보이기 */}
             <button
-              style={{
-                /*버튼 디자인 */
-                justifyItems: "center",
-                alignItems: "center",
-
-                width: "fit-content",
-                height: "fit-content",
-                padding: "0.4rem",
-                paddingLeft: "0.8rem",
-                paddingRight: "0.8rem",
-
-                background: "#1C0B69",
-                borderRadius: "2rem",
-                color: "#ffffff",
-                fontWeight: "bold",
+              className={styles.review}
+              onClick={() => {
+                navigate(`/adventure/detail/${params.id}/createReview`);
               }}
             >
-              참여하기
+              후기작성
             </button>
           </div>
         </div>

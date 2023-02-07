@@ -7,6 +7,7 @@ import com.ssafy.antenna.domain.email.dto.AuthEmailRes;
 import com.ssafy.antenna.domain.email.dto.CheckEmailRes;
 import com.ssafy.antenna.domain.user.dto.*;
 import com.ssafy.antenna.exception.AbstractAppException;
+import com.ssafy.antenna.exception.not_found.UserNotFoundException;
 import com.ssafy.antenna.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,7 +29,6 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public ResultResponse<UserDetailRes> getUser(@PathVariable Long userId) throws AbstractAppException {
-        //validation 필요!!!!!!!!!!!!!!
         return ResultResponse.success(userService.getUser(userId).toResponse());
     }
 
@@ -114,10 +114,10 @@ public class UserController {
         return ResultResponse.success(userService.deleteProfilePhoto(Long.valueOf(authentication.getName())).toResponse());
     }
 
-    @GetMapping("/{userId}/feats")
-    public ResultResponse<List<UserFeatsDto>> getUserFeats(@PathVariable Long userId) {
-        return userService.getUserFeats(userId);
-    }
+//    @GetMapping("/{userId}/feats")
+//    public ResultResponse<List<UserFeatsDto>> getUserFeats(@PathVariable Long userId) {
+//        return userService.getUserFeats(userId);
+//    }
 
     @PostMapping("/antennae")
     public ResultResponse<DetailAntennaRes> createAntenna(@RequestBody PostAntennaReq postAntennaReq, Authentication authentication) {

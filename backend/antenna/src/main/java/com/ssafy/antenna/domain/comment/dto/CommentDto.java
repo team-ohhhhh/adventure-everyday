@@ -8,7 +8,8 @@ import java.util.List;
 public record CommentDto(
         Long commentId,
         String commentContent,
-        Integer commentLikes,
+//        Integer commentLikes,
+        List<Long> userIdxList,
         LocalDateTime createdTime,
         UserDetailRes userDetailRes,
         List<SubCommentDto> subCommentDtoList
