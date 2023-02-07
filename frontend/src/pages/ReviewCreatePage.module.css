@@ -1,0 +1,110 @@
+.reviewContainer{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    /* background-color: aquamarine; */
+}
+
+.header{
+    /* background-color: rgb(94, 255, 0); */
+    width: 100%;
+    height: 10rem;
+    display: flex;
+    justify-content: flex-start
+    
+}
+
+.decoIcon4{
+    width: 7.2rem;
+    height: 9rem;
+}
+.title{
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1c0b69;
+    /* background-color: blueviolet; */
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 1rem;
+
+
+}
+.stars{
+    /* background-color: aqua; */
+
+    padding-top: 2rem;
+    padding-left: 1rem;
+}
+
+.inputContainer{
+    display: flex;
+    padding: 1rem;
+}
+  
+  .contentInput {
+    margin-top: 1rem;
+    box-sizing: border-box;
+    width: 100%;
+    height: 200px;
+    border: 2px solid #1c0b69;
+    border-radius: 6px;
+    padding: 10px 15px;
+    font-size: 1rem;
+    font-family: Pretendard;
+    line-height: 1.5rem;
+    
+    /* margin: 1rem */
+  }
+  
+  .contentInput::placeholder {
+    color: #1c0b69;
+    font-weight: bold;
+    font-family: Pretendard;
+  }
+
+  .blueBtn {
+    width: 70px;
+    height: 45px;
+    line-height: 45px;
+    border: 2px solid #1c0b69;
+    border-radius: 6px;
+    background-color: #1c0b69;
+    color: white;
+    font-weight: bold;
+  }
+
+  .whiteBtn {
+    width: 70px;
+    height: 45px;
+    line-height: 45px;
+    border: 2px solid #1c0b69;
+    border-radius: 6px;
+    background-color: white;
+    color: #1c0b69;
+    font-weight: bold;
+  }
+
+  .decoIcon3{
+    /* background-color: antiquewhite; */
+    width: 12rem;
+    height: 10rem;
+
+  }
+
+  .buttons{
+    height: fit-content;
+    /* background-color: blue; */
+    padding-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+  }
+
+  .footer{
+    width: 100%;
+    height: 14rem;
+    /* background-color: blue; */
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+  }

@@ -16,6 +16,7 @@ import UserDeletePage from "./pages/UserDeletePage";
 import FollowListPage from "./pages/FollowListPage";
 import ArticleDetailPage from "./pages/ArticleDetailPage";
 import ArticleUpdatePage from "./pages/ArticleUpdatePage";
+import ReviewCreatePage from "./pages/ReviewCreatePage";
 
 import AuthLayout from "./AuthLayout";
 import AntiAuthLayout from "./AntiAuthLayout";
@@ -62,6 +63,10 @@ function App() {
           {/* Navbar가 필요하지 않은 페이지는 이곳에 추가해주세요 */}
           <Route path="/write/*" element={<ArticleCreatePage />} />
           <Route path="/adventure/create/*" element={<AdventureCreatePage />} />
+          <Route
+            path="/adventure/detail/:id/createReview"
+            element={<ReviewCreatePage />}
+          ></Route>
           <Route
             path="/article/:articleId/update"
             element={<ArticleUpdatePage />}
