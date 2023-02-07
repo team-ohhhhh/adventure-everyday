@@ -842,15 +842,15 @@ public class AdventureService {
     }
 
     // 대표 보물로 선택하기
-    public void createRepresentativeTreasures(Long adventureId, Long userId) {
+    public void createRepresentativeTreasures(Long adventureId, Long userId,Boolean selected) {
         User user= userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
         AdventureSucceed adventureSucceed = adventureSucceedRepository.findByUserAndAdventure(user,adventure).orElseThrow(AdventureSucceedNotFoundException::new);
         adventureSucceedRepository.save(new AdventureSucceed(
                 adventureSucceed.getSucceedId(),
-           user,
-           adventure,
-           true
+                user,
+                adventure,
+                selected
         ));
     }
 
