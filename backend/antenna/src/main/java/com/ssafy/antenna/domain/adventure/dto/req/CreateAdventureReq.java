@@ -10,7 +10,7 @@ public record CreateAdventureReq(
         String feat,
         String title,
         String content,
-        String difficulty,
+        Long difficulty,
         Long exp,
         LocalDateTime startDate,
         LocalDateTime endDate,

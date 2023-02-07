@@ -1,11 +1,8 @@
-package com.ssafy.antenna.domain.adventure.dto.res;
-
-import com.ssafy.antenna.domain.adventure.dto.sub.UserIdPhotoUrl;
-import com.ssafy.antenna.domain.user.dto.UserDetailRes;
+package com.ssafy.antenna.domain.adventure.dto.sub;
 
 import java.util.List;
 
-public record ReadAdventuresRes(
+public record SubReadAdventureSucceedClickRes(
         Long adventureId,
         String adventurePhotoUrl,
         String adventureTitle,
@@ -16,6 +13,5 @@ public record ReadAdventuresRes(
         Long userLevel,
         List<String> userPhotoUrlList,
         Long userCount
-
 ) {
 }

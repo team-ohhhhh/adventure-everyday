@@ -5,6 +5,7 @@ import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.domain.user.dto.LogInUserReq;
 import com.ssafy.antenna.domain.user.dto.LogInUserRes;
 import com.ssafy.antenna.domain.user.dto.PostUserReq;
+import com.ssafy.antenna.exception.conflict.DuplicateEmailException;
 import com.ssafy.antenna.exception.not_found.UserNotFoundException;
 import com.ssafy.antenna.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,10 @@ public class AuthenticationService {
     @Value("${kakao.rest-token}")
     String kakaoToken;
 
-    public LogInUserRes registerUser(PostUserReq postUserReq, MultipartFile photo) throws IOException {
+    public LogInUserRes registerUser(PostUserReq postUserReq, MultipartFile photo) {
+        if(userRepository.findByEmail(postUserReq.email()).isPresent()){
+            throw new DuplicateEmailException();
+        }
         User user = User.builder()
                 .email(postUserReq.email())
                 .nickname(postUserReq.nickname())

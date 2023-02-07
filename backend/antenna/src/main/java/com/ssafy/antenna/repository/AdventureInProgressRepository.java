@@ -21,4 +21,6 @@ public interface AdventureInProgressRepository extends JpaRepository<AdventureIn
 
     Optional<Long> countByAdventure(Adventure adventure);
 
+    Optional<List<AdventureInProgress>> findTop5ByAdventureOrderByCreateTimeDesc(Adventure adventure);
+
 }

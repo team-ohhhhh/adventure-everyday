@@ -12,7 +12,7 @@ public record ReadAdventureRes(
         String adventureContent,
         LocalDateTime adventureStartDate,
         LocalDateTime adventureEndDate,
-        String adventureDifficulty,
+        Long adventureDifficulty,
         String adventureCategory,
         Double adventureAvgReviewRate,
         UserIdPhotoUrl userIdPhotoUrl,
