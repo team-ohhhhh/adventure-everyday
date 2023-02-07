@@ -129,6 +129,7 @@ function AdventureDetailMap(props) {
                           response.data.result.adventurePlaceTitle,
                         adventurePlaceContent:
                           response.data.result.adventurePlaceContent,
+                        subPostList: response.data.result.subPostList,
                       }));
                     });
                   }
