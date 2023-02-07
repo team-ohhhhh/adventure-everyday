@@ -43,13 +43,13 @@ function ProfilePage() {
             <ArticleTab className={styles.tabWrapper} userId={userId}/>
           </Tab>
           <Tab title="탐험 중" className="mr-4">
-            <AdventureOnProgressTab className={styles.tabWrapper} />
+            <AdventureOnProgressTab className={styles.tabWrapper} userId={userId}/>
           </Tab>
           <Tab title="완료한 탐험" className="mr-4">
-            <AdventureCompletedTab className={styles.tabWrapper}/>
+            <AdventureCompletedTab className={styles.tabWrapper} userId={userId}/>
           </Tab>
           <Tab title="만든 탐험" className="mr-4">
-            <AdventureCreatedTab className={styles.tabWrapper}/>
+            <AdventureCreatedTab className={styles.tabWrapper} userId={userId}/>
           </Tab>
         </Tabs>
       </div>

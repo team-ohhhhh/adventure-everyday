@@ -16,6 +16,8 @@ import UserDeletePage from "./pages/UserDeletePage";
 import FollowListPage from "./pages/FollowListPage";
 import ArticleDetailPage from "./pages/ArticleDetailPage";
 import ArticleUpdatePage from "./pages/ArticleUpdatePage";
+import ReviewCreatePage from "./pages/ReviewCreatePage";
+import CommentPage from "./pages/CommentPage";
 
 import AuthLayout from "./AuthLayout";
 import AntiAuthLayout from "./AntiAuthLayout";
@@ -33,8 +35,8 @@ function App() {
             <Route path="/feed" element={<FeedPage />} />
             {/* <Route path={["/map", "/"]} element={<MapPage />} /> */}
 
-            {["/map", "/"].map((path) => (
-              <Route path={path} element={<MapPage />} />
+            {["/map", "/"].map((path, idx) => (
+              <Route key={idx} path={path} element={<MapPage />} />
             ))}
 
             <Route path="/adventure" element={<AdventurePage />} />
@@ -58,10 +60,15 @@ function App() {
             <Route path="/delete" element={<UserDeletePage />} />
             <Route path="/passwordchange" element={<PasswordChangePage />} />
             <Route path="/article/:articleId" element={<ArticleDetailPage />} />
+            <Route path="/article/:articleId/comments" element={<CommentPage />} />
           </Route>
           {/* Navbar가 필요하지 않은 페이지는 이곳에 추가해주세요 */}
           <Route path="/write/*" element={<ArticleCreatePage />} />
           <Route path="/adventure/create/*" element={<AdventureCreatePage />} />
+          <Route
+            path="/adventure/detail/:id/createReview"
+            element={<ReviewCreatePage />}
+          ></Route>
           <Route
             path="/article/:articleId/update"
             element={<ArticleUpdatePage />}

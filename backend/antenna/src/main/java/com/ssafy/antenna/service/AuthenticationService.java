@@ -5,6 +5,7 @@ import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.domain.user.dto.LogInUserReq;
 import com.ssafy.antenna.domain.user.dto.LogInUserRes;
 import com.ssafy.antenna.domain.user.dto.PostUserReq;
+import com.ssafy.antenna.exception.conflict.DuplicateEmailException;
 import com.ssafy.antenna.exception.not_found.UserNotFoundException;
 import com.ssafy.antenna.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 
 @Service
 @RequiredArgsConstructor
@@ -29,17 +28,21 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AwsS3Service awsS3Service;
     private final AuthenticationManager authenticationManager;
+    @Value("${kakao.rest-token}")
+    String kakaoToken;
     @Value("${aws-cloud.aws.s3.bucket.url}")
     private String bucketUrl;
 
-    @Value("${kakao.rest-token}")
-    String kakaoToken;
-
-    public LogInUserRes registerUser(PostUserReq postUserReq, MultipartFile photo) throws IOException {
+    public LogInUserRes registerUser(PostUserReq postUserReq, MultipartFile photo) {
+        if (userRepository.findByEmail(postUserReq.email()).isPresent()) {
+            throw new DuplicateEmailException();
+        }
+        String refreshToken = jwtService.generateRefreshToken();
         User user = User.builder()
                 .email(postUserReq.email())
                 .nickname(postUserReq.nickname())
                 .password(passwordEncoder.encode(postUserReq.password()))
+                .refreshToken(refreshToken)
                 .level(1)
                 .introduce((postUserReq.introduce() != null) ? postUserReq.introduce() : null)
                 .role(Role.USER)
@@ -53,6 +56,7 @@ public class AuthenticationService {
                     .password(passwordEncoder.encode(postUserReq.password()))
                     .photoUrl(photoUrl)
                     .photoName(photoName)
+                    .refreshToken(refreshToken)
                     .level(1)
                     .introduce((postUserReq.introduce() != null) ? postUserReq.introduce() : null)
                     .role(Role.USER)
@@ -62,7 +66,8 @@ public class AuthenticationService {
 
         userRepository.save(user);
         String jwtToken = jwtService.generateToken(user);
-        return new LogInUserRes(jwtToken, user.toResponse());
+        System.out.println();
+        return new LogInUserRes(jwtToken, refreshToken, user.toResponse());
     }
 
     public LogInUserRes authenticate(LogInUserReq logInUserReq) {
@@ -76,7 +81,7 @@ public class AuthenticationService {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwtToken = jwtService.generateToken(user);
-        return new LogInUserRes(jwtToken, user.toResponse());
+        return new LogInUserRes(jwtToken,user.getRefreshToken(), user.toResponse());
     }
 
 }

@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -222,11 +223,11 @@ public class AdventureController {
         return ResultResponse.success(adventureService.readAdventureTreasuresMoreClick(userId,Long.valueOf(authentication.getName())));
     }
 
-    // 대표 보물로 선택하기
-    @PostMapping("/{adventureId}/treasures/representatives")
-    public ResultResponse<String> createRepresentativeTreasures(@PathVariable Long adventureId, Authentication authentication){
-        adventureService.createRepresentativeTreasures(adventureId,Long.valueOf(authentication.getName()));
-        return ResultResponse.success("대표 보물로 선택 성공");
+    // 대표 보물로 선택/취소
+    @PutMapping("/{adventureId}/treasures/representatives")
+    public ResultResponse<String> createRepresentativeTreasures(@PathVariable Long adventureId, Authentication authentication, @RequestBody Map<String, Boolean> selectedMap){
+        adventureService.createRepresentativeTreasures(adventureId,Long.valueOf(authentication.getName()),selectedMap.get("selected"));
+        return ResultResponse.success("대표 보물로 선택/취소 성공");
     }
 
     // '만든 탐험' 탭 눌렀을 때

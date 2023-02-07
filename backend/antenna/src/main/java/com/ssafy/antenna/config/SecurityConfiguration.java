@@ -28,9 +28,9 @@ public class SecurityConfiguration {
                 .cors()
                 .and()
                 .authorizeHttpRequests()
-//                .requestMatchers(prefix + "/users/antenna", prefix + "/test/**", prefix + "/auth/**",
-//                        prefix + "/email/**", prefix + "/users/check-email", prefix + "/users/password/reset", prefix + "/users/check-nickname")
-                .requestMatchers("/**")
+                .requestMatchers(prefix + "/users/antenna", prefix + "/test/**", prefix + "/auth/**",
+                        prefix + "/email/**", prefix + "/users/check-email", prefix + "/users/password/reset", prefix + "/users/check-nickname")
+//                .requestMatchers("/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
