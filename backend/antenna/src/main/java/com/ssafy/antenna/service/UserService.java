@@ -14,7 +14,9 @@ import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.domain.user.dto.*;
 import com.ssafy.antenna.domain.user.mapper.UserFeatsDtoMapper;
 import com.ssafy.antenna.exception.not_found.*;
+import com.ssafy.antenna.exception.unauthorized.ExpiredRefreshTokenException;
 import com.ssafy.antenna.exception.unauthorized.InvalidPasswordException;
+import com.ssafy.antenna.exception.unauthorized.InvalidRefreshTokenException;
 import com.ssafy.antenna.repository.AdventureSucceedRepository;
 import com.ssafy.antenna.repository.AntennaRepository;
 import com.ssafy.antenna.repository.FollowRepository;
@@ -22,6 +24,7 @@ import com.ssafy.antenna.repository.UserRepository;
 import com.ssafy.antenna.util.EmailUtil;
 import com.ssafy.antenna.util.W3WUtil;
 import com.what3words.javawrapper.response.ConvertTo3WA;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -50,6 +53,8 @@ public class UserService {
     private final AdventureSucceedRepository adventureSucceedRepository;
     private final W3WUtil w3WUtil;
     private final UserFeatsDtoMapper userFeatsDtoMapper;
+
+    private final JwtService jwtService;
 
     @Value("${aws-cloud.aws.s3.bucket.url}")
     private String bucketUrl;
@@ -298,12 +303,12 @@ public class UserService {
         return antenna.toResponse();
     }
 
-    public UserDetailRes addExpUser(int exp, Long userId) {
+    public UserDetailRes addExpUser(long exp, Long userId) {
         //유저가 존재하는지 확인
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         //유저가 존재하면, add한 경험치가 다음 레벨로 넘어갈 정도인지 확인
-        int resultLevel = user.getLevel();
-        int resultExp = 0;
+        long resultLevel = user.getLevel();
+        long resultExp = 0;
         switch (user.getLevel()) {
             case 1:
                 if (user.getExp() + exp >= NextLevelExp.ONE.value()){
@@ -347,8 +352,8 @@ public class UserService {
                 .email(user.getEmail())
                 .nickname(user.getNickname())
                 .password(user.getPassword())
-                .level(resultLevel)
-                .exp(resultExp)
+                .level((int) resultLevel)
+                .exp((int) resultExp)
                 .introduce(user.getIntroduce())
                 .role(Role.USER)
                 .photoUrl(user.getPhotoUrl())
@@ -356,5 +361,4 @@ public class UserService {
         userRepository.save(newUser);
         return newUser.toResponse();
     }
-
 }

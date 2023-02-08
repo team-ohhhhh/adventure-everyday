@@ -20,14 +20,11 @@ public class AdventureReview extends Base {
     @Column(columnDefinition = "varchar(255) default null")
     private String content;
     @Column(columnDefinition = "int not null")
-    private Integer rate;
+    private Integer grade;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adventureId")
     private Adventure adventure;
-//    @Lob
-//    @Column(columnDefinition = "blob default null")
-//    private Byte[] photo;
 }

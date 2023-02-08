@@ -82,3 +82,44 @@
 .likes {
   margin-right: 2vw;
 }
+
+
+.wouldYouDelete {
+  display : flex;
+  flex-direction : column;
+  justify-content: center;
+  width: 100%
+}
+
+.buttonHolder {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
+  margin-top : 1vh
+}
+
+
+
+
+.yesDelete {
+  color: white;
+  background-color: red;
+  border-radius: 8px;
+  border:none;
+  padding-left: 2vh;
+  padding-right: 2vh;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+}
+
+.noDelete {
+  color: white;
+  background-color: #1C0B69;
+  border-radius: 8px;
+  border:none;
+  padding-left: 2vh;
+  padding-right: 2vh;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+}
