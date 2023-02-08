@@ -2,84 +2,92 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import AdventureMap from "./AdventureMap";
-import SelectedCheckPoint from "./SelectedCheckPoint";
+import CheckPointItem from "./CheckPointItem";
 import SelectPostModal from "./SelectPostModal";
 
 import styles from "./Step1CheckPoint.module.css";
+import styles2 from "../../pages/ArticleCreatePage.module.css";
+import { AiOutlineClose } from "react-icons/ai";
+import { MdAddLocationAlt } from "react-icons/md";
+import { BsInfoCircle } from "react-icons/bs";
 
 const Step1CheckPoint = ({
-  checkPoints,
-  setCheckPoints,
-  advCheckPoints,
-  setAdvCheckPoints,
-  adv,
-  setAdv,
+  myPosts,
+  setMyPosts,
+  checkpoints,
+  setCheckpoints,
+  adventure,
+  setAdventure,
 }) => {
   const navigate = useNavigate();
 
   const [showModal, setShowModal] = useState(false);
 
-  const count = useMemo(() => {
-    // console.log(setCheckPoints);
-    return checkPoints && checkPoints.length;
-  }, [checkPoints]);
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  const count = useMemo(() => {
+    return checkpoints && checkpoints.length;
+  }, [checkpoints]);
+
   const openModal = () => {
-    if (checkPoints.length === 5) {
+    if (myPosts.length === 5) {
       alert("체크포인트는 최대 5개까지 선택할 수 있습니다.");
     } else {
       setShowModal(true);
       document.body.style.overflow = "hidden";
     }
   };
+
   const closeModal = () => {
     setShowModal(false);
     document.body.style.overflow = "unset";
   };
 
   const selectPost = (post) => {
-    // console.log("닫기!", post);
-    const check = checkPoints.every((point) => {
+    const isDuplicated = !checkpoints.every((point) => {
       return point.postId !== post.postId;
     });
-    if (check) {
-      setCheckPoints((checkPoints) => [...checkPoints, post]);
-      closeModal();
-      const newCheckPoint = {
-        title: "",
-        content: "",
-        coordinate: [post.lat, post.lng],
+    if (!isDuplicated) {
+      const newCheckpoint = {
+        adventurePlaceTitle: "",
+        adventurePlaceContent: "",
+        coordinate: {
+          lat: post.lat,
+          lng: post.lng,
+        },
         postId: post.postId,
+        postDetail: {
+          title: post.title,
+          w3w: post.w3w,
+          date: post.createTime,
+          photo: post.photoUrl,
+        },
       };
-      setAdvCheckPoints((advCheckPoints) => [...advCheckPoints, newCheckPoint]);
+      setCheckpoints((checkpoints) => [...checkpoints, newCheckpoint]);
+      closeModal();
     } else {
-      alert("이미 선택한 게시글입니다.");
+      alert("이미 선택한 게시글입니다. 다른 게시글을 선택해주세요.");
     }
   };
 
-  const unSelectPost = (post) => {
-    const newCheckPoints = checkPoints.filter((point) => {
-      return point.postId !== post.postId;
-    });
-    setCheckPoints(newCheckPoints);
-    const newAdvCheckPoints = advCheckPoints.filter((point) => {
-      return point.postId !== post.postId;
-    });
-    setAdvCheckPoints(newAdvCheckPoints);
+  const deselectPost = (post) => {
+    setCheckpoints((checkpoints) =>
+      checkpoints.filter((point) => {
+        return point.postId !== post.postId;
+      })
+    );
   };
 
   const getDistance = (lat1, lon1, lat2, lon2) => {
     if (lat1 === lat2 && lon1 === lon2) return 0;
 
-    var radLat1 = (Math.PI * lat1) / 180;
-    var radLat2 = (Math.PI * lat2) / 180;
-    var theta = lon1 - lon2;
-    var radTheta = (Math.PI * theta) / 180;
-    var dist =
+    const radLat1 = (Math.PI * lat1) / 180;
+    const radLat2 = (Math.PI * lat2) / 180;
+    const theta = lon1 - lon2;
+    const radTheta = (Math.PI * theta) / 180;
+    let dist =
       Math.sin(radLat1) * Math.sin(radLat2) +
       Math.cos(radLat1) * Math.cos(radLat2) * Math.cos(radTheta);
     if (dist > 1) dist = 1;
@@ -94,21 +102,16 @@ const Step1CheckPoint = ({
   };
 
   const exp = useMemo(() => {
+    const cp = checkpoints;
     let dist = 0;
-    for (let i = 0; i < checkPoints.length; i++) {
-      for (let j = 0; j < checkPoints.length; j++) {
-        dist += getDistance(
-          checkPoints[i].lat,
-          checkPoints[i].lng,
-          checkPoints[j].lat,
-          checkPoints[j].lng
-        );
+    for (let i = 0; i < cp.length; i++) {
+      for (let j = 0; j < cp.length; j++) {
+        dist += getDistance(cp[i].lat, cp[i].lng, cp[j].lat, cp[j].lng);
       }
     }
-    dist /= checkPoints.length * 2;
-    // console.log(dist / 50);
+    dist /= cp.length * 2;
     return dist / 50;
-  }, [checkPoints]);
+  }, [checkpoints]);
 
   const difficulty = useMemo(() => {
     if (exp < 100) {
@@ -124,59 +127,102 @@ const Step1CheckPoint = ({
     }
   }, [exp]);
 
+  const handleQuit = () => {
+    if (checkpoints.length > 0) {
+      const answer = window.confirm(
+        "작성 중인 내용은 저장되지 않습니다. 작성을 취소하고 나가시겠습니까?"
+      );
+      if (answer) {
+        navigate(-1);
+      }
+    } else {
+      navigate(-1);
+    }
+  };
+
+  const handleNext = () => {
+    if (checkpoints.length < 2) {
+      alert("체크포인트를 2개 이상 선택해주세요.");
+    } else if (!adventure.RepresentativePostId) {
+      alert("대표 이미지를 선택해 주세요.");
+    } else {
+      const done = checkpoints.every(
+        (point) => point.adventurePlaceTitle && point.adventurePlaceContent
+      );
+      if (done) {
+        setAdventure((adventure) => ({ ...adventure, difficulty, exp }));
+        navigate("/adventure/create/2");
+      } else {
+        alert("체크포인트 이름과 내용을 빠짐없이 작성해 주세요.");
+      }
+    }
+  };
+
   return (
-    <>
-      <h1>탐험 생성</h1>
+    <div>
+      <div className={styles2.closeContainer}>
+        <AiOutlineClose onClick={handleQuit} size={35} />
+      </div>
 
-      <p>탐험으로 만들 내 글을 선택하세요!</p>
-      <p>게시글은 최대 5개까지 선택할 수 있습니다.</p>
+      <h1 className={styles2.header} style={{ marginTop: "1rem" }}>
+        탐험 생성
+      </h1>
+      <div className={styles.detail}>
+        탐험으로 만들 내 글을 선택하세요!
+        <br />
+        게시글은 <b>최대 5개</b>까지 선택할 수 있습니다.
+      </div>
 
-      <p>현재 체크포인트 개수 {count}/5</p>
-
-      {checkPoints.map((point) => (
-        <SelectedCheckPoint
+      <div className={styles.status}>현재 체크포인트 개수 {count}/5</div>
+      {checkpoints.map((point, idx) => (
+        <CheckPointItem
           key={point.postId}
+          idx={idx + 1}
           point={point}
-          unSelectPost={unSelectPost}
-          advCheckPoints={advCheckPoints}
-          setAdvCheckPoints={setAdvCheckPoints}
-          isRep={adv.photo === point.postUrl}
-          setAdv={setAdv}
+          deselectPost={deselectPost}
+          setCheckpoints={setCheckpoints}
+          isRep={adventure.RepresentativePostId === point.postId}
+          setAdventure={setAdventure}
         />
       ))}
 
       <div className={styles.addBox} onClick={openModal}>
-        체크포인트 추가
+        <div>
+          <MdAddLocationAlt size={40} />
+          <div>체크포인트 추가</div>
+        </div>
       </div>
 
-      <AdventureMap checkPoints={checkPoints} />
-
-      {checkPoints.length > 1 ? (
-        <div>이 탐험의 난이도 {difficulty}</div>
-      ) : (
-        <div></div>
+      <h3 className={styles.subHeader}>탐험 지도 미리보기</h3>
+      <AdventureMap checkpoints={checkpoints} />
+      {checkpoints.length > 1 && (
+        <div className={styles.diffContainer}>
+          <BsInfoCircle size={16} />
+          <div className={styles.diffText}>이 탐험의 난이도</div>
+          <img
+            className={styles.diffImg}
+            src={`/images/diff_${difficulty}.png`}
+            alt={`difficulty_${difficulty}`}
+          />
+        </div>
       )}
 
-      <button onClick={() => navigate(-1)}>취소</button>
-      <button
-        onClick={() => {
-          if (checkPoints.length < 2) {
-            alert("체크포인트를 2개 이상 선택해주세요.");
-          } else if (!adv.photo) {
-            alert("대표 이미지를 선택해 주세요.");
-          } else {
-            setAdv((adv) => ({ ...adv, difficulty: difficulty }));
-            navigate("/adventure/create/2");
-          }
-        }}
-      >
-        다음
-      </button>
+      <div className={styles2.btnContainer}>
+        <div></div>
+        <div className={styles2.blueBtn} onClick={handleNext}>
+          다음
+        </div>
+      </div>
 
       {showModal && (
-        <SelectPostModal closeModal={closeModal} selectPost={selectPost} />
+        <SelectPostModal
+          myPosts={myPosts}
+          setMyPosts={setMyPosts}
+          closeModal={closeModal}
+          selectPost={selectPost}
+        />
       )}
-    </>
+    </div>
   );
 };
 

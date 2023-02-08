@@ -14,7 +14,7 @@
     /* box-shadow: 1px 1px 25px 1px rgb(156, 156, 156); */
     display: flex;
     flex-direction: column;
-    padding-bottom: 2rem;
+    padding-bottom: 1.2rem;
 }
 
 .titleContainer{
@@ -69,7 +69,7 @@
 
 .people{
     height: fit-content;
-    
+    /* width: 100%; */
     
     display: flex;
     flex-direction: row;
@@ -82,6 +82,7 @@
     margin-top: 1rem;
     margin-left: 1rem;
     margin-right: 1rem;
+    /* background-color: #BB0505; */
     
 
 }
@@ -89,6 +90,7 @@
   .maker {
     display: flex;
     flex-direction: row;
+   
    
   }
 
@@ -140,6 +142,8 @@
     display: flex;
     height: fit-content;
     font-weight: 600;
+  
+
   }
     .partImg{
         width: 2rem;
@@ -148,6 +152,8 @@
         background-color: aquamarine;
 
     }
+
+
 
 .etc{
     height: fit-content;
@@ -169,36 +175,123 @@
     justify-content: space-between;
 
     
-    width: fit-content
+    width: 9rem;
   }
 
   .desc{
     display: flex;
     flex-direction: row;
-    width: 45%;
+    width: fit-content;
     justify-content: space-between;
-    background-color:blueviolet;
+  
     align-items: center;
 
 
   }
 
   .normal{
-    background-color: aquamarine;
+ 
     width: fit-content;
     font-size: 0.8rem;
   }
 
   .highlight{
     font-weight: 800;
-    font-size: 1rem;
+    font-size: 1.1rem;
     color:#1C0B69;
-    background-color: aqua;
+ 
     width: fit-content;
   }
 
-  .stars{
+  .button{
+    display: flex;
+    /* background-color: aqua; */
+    width: 9.5rem;
+    justify-content: space-between;
+  
+  }
+
+  .notice{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 0.1rem solid #1C0B69;
+    border-radius: 0.2rem;
+    height: 2rem;
+    width: 2rem;
+    background-color: white;
+   
 
   }
+
+  .share{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 0.1rem solid #1C0B69;
+    border-radius: 0.2rem;
+    height: 2rem;
+    width: 2rem;
+    background-color: white;
+
+  }
+
+  .participate{
+     /*버튼 디자인 */
+     justify-items: center;
+     align-items: center;
+
+     width: fit-content;
+     height: fit-content;
+     padding: 0.4rem;
+     padding-left: 0.8rem;
+     padding-right: 0.8rem;
+
+     background: #1C0B69;
+     border-radius: 2rem;
+     border: none;
+     color: #ffffff;
+     font-weight: bold;
+
+  }
+
+  .giveup{
+    /*버튼 디자인 */
+    justify-items: center;
+    align-items: center;
+
+    width: fit-content;
+    height: fit-content;
+    padding: 0.4rem;
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+
+    background: #ACACAC;
+    border-radius: 2rem;
+    border: none;
+    color: #BB0505;
+    font-weight: bold;
+
+  }
+
+  .review{
+    /*버튼 디자인 */
+    justify-items: center;
+    align-items: center;
+
+    width: fit-content;
+    height: fit-content;
+    padding: 0.4rem;
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+
+    background: #ffc60b;
+    border-radius: 2rem;
+    border: 0.1rem solid #1C0B69;
+    color: #1C0B69;
+    font-weight: bold;
+
+  }
+
 
 

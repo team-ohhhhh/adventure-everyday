@@ -1,0 +1,88 @@
+services:
+  database:
+    container_name: mysql
+    image: mysql:8.0.30
+    environment:
+      MYSQL_DATABASE: antennadb
+      MYSQL_USER: gorilla
+      MYSQL_PASSWORD: gorilla
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: root
+      TZ: "Asia/Seoul"
+    ports:
+      - 3306:3306
+    restart: unless-stopped
+    volumes:
+      - /antenna-data:/var/lib/mysql
+    # networks:
+    # - springboot-mysql-network
+
+  backend:
+    build:
+      context: ./backend/antenna/
+      dockerfile: Dockerfile
+    restart: on-failure
+    ports:
+      - 8080:8080
+    expose:
+      - 8080
+    depends_on:
+      - database
+    container_name: springboot
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/antennadb?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: gorilla
+      SPRING_DATASOURCE_PASSWORD: gorilla
+      TZ: "Asia/Seoul"
+    # networks:
+    #   - springboot-mysql-network
+    #   - react-springboot-network
+  
+  frontend:
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile
+    restart: on-failure
+    container_name: react
+    environment:
+      TZ: "Asia/Seoul"
+    # ports:
+      # - 80:80
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
+    depends_on:
+      - backend
+    # networks:
+    #   - react-springboot-network
+
+  nginx:
+    container_name: nginx
+    image: nginx
+    restart: always
+    volumes:
+      - ./frontend/conf/:/etc/nginx/conf.d
+      - /etc/letsencrypt:/etc/letsencrypt
+      # - /data/certbot/www:/var/www/certbot
+    environment:
+      TZ: "Asia/Seoul"
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - backend
+      - frontend
+    # networks:
+    #   - react-springboot-network
+
+
+networks:
+  springboot-mysql-network:
+  react-springboot-network:
+  
+
+
+
+
+

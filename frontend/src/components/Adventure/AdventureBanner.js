@@ -1,10 +1,11 @@
 import style from "./AdventureBanner.module.css";
 import { Route, Routes, useNavigate } from "react-router";
 import AdventureDetailPage from "../../pages/AdventurePage";
-function AdventureBanner(props) {
-  console.log(props.id);
+import AdventureProgressBar from "./AdventureProgressBar";
+
+
+function AdventureBanner({ adventureItem }) {
   const navigate = useNavigate();
-  const adventureItem = props.articleListItem;
 
   return (
     // TODO: onClick 이벤트로 해당 모험으로 네비게이트 달아주기(모험 id 값을 파라미터로)
@@ -19,15 +20,17 @@ function AdventureBanner(props) {
       }}
     >
       <div className={style.titleAndDifficulty}>
-        <div className={style.title}>{adventureItem.title}</div>
+        <div className={style.title}>{adventureItem.adventureTitle}</div>
         <div className={style.difficulty}>
-          <img src={adventureItem.difficulty}></img>
+          <img src={adventureItem.adventureDifficulty}></img>
         </div>
       </div>
+      {/* 여기가 탐험 진행도 자리 */}
+      <AdventureProgressBar clearRate={adventureItem.clearRate}/>
       <div className={style.makerAndParticipants}>
         <div className={style.maker}>
           <div className={style.makerProfileContainer}>
-            <img className={style.makerProfile} src={adventureItem.photoUrl} />
+            <img className={style.makerProfile} src={adventureItem.userPhotoUrl} />
           </div>
           <div className={style.makerNameAndTierContainer}>
             <span>탐험가</span>
@@ -38,7 +41,7 @@ function AdventureBanner(props) {
                 {adventureItem.userId}{" "}
               </span>{" "}
               <img
-                src={"/images/lv" + adventureItem.advetureMakerTier + ".png"}
+                src={"/images/lv" + adventureItem.userLevel + ".png"}
               />
             </div>
           </div>

@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 import { useSelector } from "react-redux"
-import { useParams, useNavigate } from "react-router";
+import { useParams, useNavigate } from "react-router-dom";
 import ArticleDetail from "./../components/Article/ArticleDetail"
 import axios from "axios"
 import { AiOutlineLeft, AiOutlineRight } from  "react-icons/ai"
