@@ -80,24 +80,32 @@ const UserPostMap = ({ myPosts, selectPost, userHeight }) => {
             images[1]
           } alt="" style="width: 50px; height: 50px; position: absolute; margin-left: 7px; margin-top: 7px; z-index: 2;"/>
           ${
-            images.length > 2 &&
-            `<img src=${images[2]} alt="" style="width: 50px; height: 50px; position: absolute; margin-left: 14px; z-index: 1;"/>`
+            images.length > 2
+              ? `<img src=${images[2]} alt="" style="width: 50px; height: 50px; position: absolute; margin-left: 14px; z-index: 1;"/>`
+              : ``
           }
           <div
             style = "width: 30px; height: 30px; background: rgba(0, 0, 0, 0.7); border-radius: 999px; color: rgb(255, 255, 255); text-align: center; font-weight: 500; line-height: 30px; position: absolute; margin-left: 30px; ${
-              markers.length === 2 ? `margin-top: 25px;` : `margin-top: 42px;`
+              markers.length === 2 ? `margin-top: 42px;` : `margin-top: 42px;`
             } z-index: 4;">
             ${markers.length}
           </div>
         </div>`;
 
-      cluster.getClusterMarker().setContent(content);
+      const dom = document.createElement("div");
+      dom.innerHTML = content;
+
+      dom.addEventListener("click", () => {
+        onClusterclick(cluster);
+      });
+
+      cluster.getClusterMarker().setContent(dom);
       // console.log(cluster.getClusterMarker().getContent());
     });
   };
 
   // 클러스터 클릭 시
-  const onClusterclick = (_target, cluster) => {
+  const onClusterclick = (cluster) => {
     const map = mapRef.current;
     const level = map.getLevel() - 1;
     map.setLevel(level, { anchor: cluster.getCenter() }); // 지도 확대
