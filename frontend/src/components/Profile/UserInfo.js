@@ -106,6 +106,7 @@ function UserInfo(props) {
     })
     .then((res) => {
       setUser(res.data.result)
+      console.log(res.data.result)
     })
     .then((res) => {
       getFollowers(userId)
@@ -212,7 +213,7 @@ function UserInfo(props) {
         }
       </div>
       <div className={style.followInfo}>
-        <div className={style.followInfoNumber}><div style={{fontWeight: "700"}}>20</div>posts</div>
+        <div className={style.followInfoNumber}><div style={{fontWeight: "700"}}>{props.articleListLength}</div>posts</div>
         <div className={style.followInfoNumber} onClick={()=> {navigate(`/profile/${userId}/followers`)}}><div style={{fontWeight: "700"}}>{followers.length}</div>followers</div>
         <div className={style.followInfoNumber} onClick={()=> {navigate(`/profile/${userId}/followings`)}}><div style={{fontWeight: "700"}}>{followings.length}</div>followings</div>
       </div>

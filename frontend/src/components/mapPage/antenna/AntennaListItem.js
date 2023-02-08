@@ -10,7 +10,7 @@ function AntennaListItem(props) {
         lat : antenna.lat,
         lng : antenna.lng
       },
-      isAroundClicked : true,
+      isAround : false,
       isCircle: true,
       isAntenna: props.antenna.antennaId,
       isCur: false,
