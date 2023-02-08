@@ -7,8 +7,10 @@ import static org.springframework.http.HttpStatus.*;
 public enum ErrorCode {
     INVALID_PASSWORD(UNAUTHORIZED, "잘못된 패스워드입니다."),
     INVALID_TOKEN(UNAUTHORIZED, "잘못된 토큰입니다."),
-    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 토큰입니다."),
-    USER_NOT_LOGGED_IN(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다."),
+    INVALID_REFRESH_TOKEN(UNAUTHORIZED, "잘못된 리프레시 토큰입니다."),
+    EXPIRED_REFRESH_TOKEN(UNAUTHORIZED, "리프레시 토큰이 만료되었습니다. 다시 로그인 해주세요."),
+    EXPIRED_TOKEN(UNAUTHORIZED, "만료된 토큰입니다."),
+    USER_NOT_LOGGED_IN(EXPECTATION_FAILED, "로그인이 필요합니다."),
     INVALID_PERMISSION(FORBIDDEN, "권한이 없습니다."),
     USER_NOT_FOUND(NOT_FOUND, "해당하는 유저를 찾을 수 없습니다."),
     POST_NOT_FOUND(NOT_FOUND, "해당하는 글을 찾을 수 없습니다."),

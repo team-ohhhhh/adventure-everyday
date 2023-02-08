@@ -1,13 +1,12 @@
 package com.ssafy.antenna.controller;
 
 import com.ssafy.antenna.domain.ResultResponse;
-import com.ssafy.antenna.domain.user.dto.LogInUserReq;
-import com.ssafy.antenna.domain.user.dto.LogInUserRes;
-import com.ssafy.antenna.domain.user.dto.PostUserReq;
+import com.ssafy.antenna.domain.user.dto.*;
 import com.ssafy.antenna.exception.not_found.EmailEmptyException;
 import com.ssafy.antenna.exception.not_found.NicknameEmptyException;
 import com.ssafy.antenna.exception.not_found.PasswordEmptyException;
 import com.ssafy.antenna.service.AuthenticationService;
+import com.ssafy.antenna.service.JwtService;
 import com.ssafy.antenna.service.KakaoService;
 import com.ssafy.antenna.util.ValidationRegex;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +14,7 @@ import org.apache.el.parser.Token;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +30,7 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
     private final KakaoService kakaoService;
+    private final JwtService jwtService;
     @PostMapping(value = "/register")
     public ResultResponse<LogInUserRes> registerUser(
             @RequestParam String email,
@@ -79,6 +80,12 @@ public class AuthenticationController {
         headers.setLocation(URI.create(kakaoService.kakaoConnect()));
 
         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+    }
+
+    @PostMapping("/check-token")
+    public ResultResponse<CheckTokenRes> checkToken(@RequestBody CheckTokenReq checkTokenReq) {
+        //validation 필요!!!!!!!!!!!!!!
+        return ResultResponse.success(authenticationService.checkToken(checkTokenReq.userId(), checkTokenReq.refreshToken()));
     }
 
 }
