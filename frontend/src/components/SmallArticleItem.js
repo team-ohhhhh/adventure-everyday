@@ -3,7 +3,7 @@ import style from "./SmallArticleItem.module.css";
 import { useNavigate } from 'react-router-dom'
 
 function SmallArticleItem(props) {
-  console.log(props)
+
   //변수 꺼내쓰기
   const postId = props.data.postId
   const title = props.data.title
@@ -26,7 +26,7 @@ function SmallArticleItem(props) {
       }}
     >
       {/* 포토 src 바꿔주기 */}
-      <img src={props.data.photoUrl} className={style.photo} />
+      <img src={props.data.photoUrl ? props.data.photoUrl : 'images/advImg5.png'} className={style.photo} />
       <div className={style.divForInfo}>
         <div>
           <div className={style.title}> {title} </div>
