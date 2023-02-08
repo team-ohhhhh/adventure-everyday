@@ -235,4 +235,11 @@ public class AdventureController {
     public ResultResponse<List<ReadAdventureCreationsClickRes>> readAdventureCreationsClick(@PathVariable Long userId){
         return ResultResponse.success(adventureService.readAdventureCreationsClick(userId));
     }
+
+    // 탐험중인 사람들 보기
+    @GetMapping("/{adventureId}/users")
+    public ResultResponse<List<ReadAdventureInProgressUsersClickRes>> readAdventureInProgressUsersClick(@PathVariable Long adventureId){
+        return ResultResponse.success(adventureService.readAdventureInProgressUsersClick(adventureId));
+    }
+
 }
