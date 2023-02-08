@@ -9,6 +9,7 @@ import com.ssafy.antenna.service.AuthenticationService;
 import com.ssafy.antenna.service.JwtService;
 import com.ssafy.antenna.service.KakaoService;
 import com.ssafy.antenna.util.ValidationRegex;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.el.parser.Token;
 import org.springframework.http.HttpHeaders;
@@ -53,13 +54,13 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResultResponse<LogInUserRes> authenticate(@RequestBody LogInUserReq logInUserReq) {
-        if(logInUserReq.email().length()==0)
-            throw new EmailEmptyException();
-        if(!ValidationRegex.isRegexEmail(logInUserReq.email()))
-
-        if(logInUserReq.password().length()==0)
-            throw new PasswordEmptyException();
+    public ResultResponse<LogInUserRes> authenticate(@RequestBody @Valid LogInUserReq logInUserReq) {
+//        if(logInUserReq.email().length()==0)
+//            throw new EmailEmptyException();
+//        if(!ValidationRegex.isRegexEmail(logInUserReq.email()))
+//
+//        if(logInUserReq.password().length()==0)
+//            throw new PasswordEmptyException();
         return ResultResponse.success(authenticationService.authenticate(logInUserReq));
     }
 
