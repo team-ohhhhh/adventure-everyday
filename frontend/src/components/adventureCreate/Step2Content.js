@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -12,7 +12,14 @@ import styles3 from "./CheckPointItem.module.css";
 import { AiOutlineClose } from "react-icons/ai";
 import "./DatepickerCustom.css";
 
-const Step2Content = ({ checkpoints, adventure, setAdventure }) => {
+const Step2Content = ({
+  checkpoints,
+  adventure,
+  setAdventure,
+  startDate,
+  endDate,
+  setDateRange,
+}) => {
   const navigate = useNavigate();
 
   const categories = [
@@ -23,11 +30,22 @@ const Step2Content = ({ checkpoints, adventure, setAdventure }) => {
     { value: "취미", name: "취미" },
   ];
 
-  const [dateRange, setDateRange] = useState([null, null]);
-  const [startDate, endDate] = dateRange;
+  // const [dateRange, setDateRange] = useState([null, null]);
+  // const [startDate, endDate] = dateRange;
 
   useEffect(() => {
-    // window.scrollTo(0, 0);
+    setAdventure((adventure) => ({
+      ...adventure,
+      startDate: dateToString(startDate),
+      endDate: dateToString(endDate),
+    }));
+  }, [startDate, endDate]);
+
+  const dateRef = useRef();
+  const introRef = useRef();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
   }, []);
 
   const handleInput = (e) => {
@@ -44,7 +62,7 @@ const Step2Content = ({ checkpoints, adventure, setAdventure }) => {
     }));
   };
 
-  const dateFormat = (obj) => {
+  const dateToString = (obj) => {
     // 2023-02-03T07:26:56
     const date = new Date(obj);
     return format(date, "yyyy-MM-dd'T'HH:mm:ss");
@@ -52,11 +70,6 @@ const Step2Content = ({ checkpoints, adventure, setAdventure }) => {
 
   const handleDate = (update) => {
     setDateRange(update);
-    setAdventure((adventure) => ({
-      ...adventure,
-      startDate: dateFormat(startDate),
-      endDate: dateFormat(endDate),
-    }));
   };
 
   const handleQuit = () => {
@@ -65,10 +78,10 @@ const Step2Content = ({ checkpoints, adventure, setAdventure }) => {
         "작성 중인 내용은 저장되지 않습니다. 작성을 취소하고 나가시겠습니까?"
       );
       if (answer) {
-        navigate(-2);
+        navigate("/adventure");
       }
     } else {
-      navigate(-2);
+      navigate("/adventure");
     }
   };
 
@@ -76,20 +89,27 @@ const Step2Content = ({ checkpoints, adventure, setAdventure }) => {
     if (checkpoints.length < 2) {
       alert("체크포인트를 2개 이상 선택해주세요.");
     } else if (!adventure.RepresentativePostId) {
-      alert("대표 이미지를 선택해 주세요.");
+      alert("대표 게시글을 선택해 주세요.");
+    }
+    const done = checkpoints.every(
+      (point) => point.adventurePlaceTitle && point.adventurePlaceContent
+    );
+    if (!done) {
+      alert("체크포인트 이름과 내용을 빠짐없이 작성해 주세요.");
+    } else if (!adventure.startDate || !adventure.endDate) {
+      alert("탐험을 진행할 기간을 설정해 주세요.");
+      dateRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    } else if (!adventure.title || !adventure.title) {
+      alert("탐험 소개를 작성해 주세요.");
+      introRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
     } else {
-      const done = checkpoints.every(
-        (point) => point.adventurePlaceTitle && point.adventurePlaceContent
-      );
-      if (!done) {
-        alert("체크포인트 이름과 내용을 빠짐없이 작성해 주세요.");
-      } else if (!adventure.startDate || !adventure.endDate) {
-        alert("탐험을 진행할 기간을 설정해 주세요.");
-      } else if (!adventure.title || !adventure.title) {
-        alert("탐험 소개를 작성해 주세요.");
-      } else {
-        navigate("/adventure/create/3");
-      }
+      navigate("/adventure/create/3");
     }
   };
 
@@ -136,7 +156,7 @@ const Step2Content = ({ checkpoints, adventure, setAdventure }) => {
 
         <div className={styles.subContainer}>
           <h2 className={styles.subHeader}>탐험 기간</h2>
-          <div className={styles.dateContainer}>
+          <div className={styles.dateContainer} ref={dateRef}>
             <DatePicker
               dateFormat="yyyy/MM/dd"
               selectsRange={true}
@@ -149,7 +169,7 @@ const Step2Content = ({ checkpoints, adventure, setAdventure }) => {
           </div>
         </div>
 
-        <div className={styles.subContainer}>
+        <div className={styles.subContainer} ref={introRef}>
           <h2 className={styles.subHeader}>탐험 소개</h2>
           <input
             className={styles3.titleInput}
@@ -172,7 +192,10 @@ const Step2Content = ({ checkpoints, adventure, setAdventure }) => {
       </div>
 
       <div className={styles2.btnContainer}>
-        <div className={styles2.whiteBtn} onClick={() => navigate(-1)}>
+        <div
+          className={styles2.whiteBtn}
+          onClick={() => navigate("/adventure/create")}
+        >
           이전
         </div>
         <div className={styles2.blueBtn} onClick={handleNext}>
