@@ -4,7 +4,7 @@
   background-size: cover;
   background-position: center;
   color: white;
-  margin-left: 20px;
+  /* margin-left: 20px; */
   border-radius: 20px;
   display: flex;
   flex-direction: column;
@@ -32,6 +32,7 @@
 .makerAndParticipants {
   display: flex;
   flex-direction: row;
+
   justify-content: space-between;
 }
 
@@ -45,7 +46,20 @@
   display: flex;
   flex-direction: column;
   align-items: baseline;
+
   margin-left : 10px;
+}
+
+.makerNameAndTier{
+  display: flex;
+
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.userLevel{
+  width: 1.3rem;
 }
 
 .makerProfileContainer {

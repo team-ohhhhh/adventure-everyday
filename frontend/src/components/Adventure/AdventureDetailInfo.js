@@ -99,7 +99,10 @@ function AdventureDetailInfo(props) {
             {checkPointInfo.subPostList.map((article) => {
               return <SmallArticleItem key={article} data={article} />;
             })}
-            <div className={styles.article}>게시글 2</div>
+            {/* 체크포인트 글 목록이 없으면 보여줄 컴포넌트 */}
+            {!props.info.subAdventurePlaces && (
+              <div className={styles.article}>아직은 글이 없어요!</div>
+            )}
           </div>
         </div>
       </div>
