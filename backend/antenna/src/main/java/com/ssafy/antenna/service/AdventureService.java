@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -721,14 +722,29 @@ public class AdventureService {
     }
 
     // '탐험 중'탭 눌렀을 때
-    public List<ReadAdventureInProgressClickRes> readAdventureInProgressClick(Long userId) {
+    public List<ReadAdventureInProgressClickRes> readAdventureInProgressClick(Long userId,String order) {
         // 현재 프로필의 주인 User
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
         List<ReadAdventureInProgressClickRes> result = new ArrayList<>();
 
+
+        List<AdventureInProgress> adventureInProgressList = adventureInProgressRepository.findAllByUserOrderByCreateTimeDesc(user).orElseThrow(AdventureInProgressNotFoundException::new);
+
         // 프로필 주인이 참여중인 AIP
-        List<AdventureInProgress> adventureInProgressList = adventureInProgressRepository.findAllByUser(user).orElseThrow(AdventureInProgressNotFoundException::new);
+        if(order.equals("createTimeDesc")) { // 최신순
+            adventureInProgressList = adventureInProgressRepository.findAllByUserOrderByCreateTimeDesc(user).orElseThrow(AdventureInProgressNotFoundException::new);
+        }else if(order.equals("userCountDesc")){ // 참여자 많은순
+            adventureInProgressList = adventureInProgressRepository.findAIPOrderByUserCount(user.getUserId()).orElseThrow(AdventureInProgressNotFoundException::new);
+        }else if(order.equals("difficultyAsc")){ // 쉬운순
+            adventureInProgressList = adventureInProgressList.stream()
+                    .sorted((a1,a2)->Long.compare(a1.getAdventure().getDifficulty(), a2.getAdventure().getDifficulty()))
+                    .collect(Collectors.toList());
+        }else if(order.equals("difficultyDesc")){ // 어려운순
+            adventureInProgressList = adventureInProgressList.stream()
+                    .sorted((a1,a2)->Long.compare(a2.getAdventure().getDifficulty(), a1.getAdventure().getDifficulty()))
+                    .collect(Collectors.toList());
+        }
 
         // 참여중인 모험을 돌면서
         for(AdventureInProgress adventureInProgress:adventureInProgressList){
