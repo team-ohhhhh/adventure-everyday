@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import axios from 'axios'
 import InputForm from './InputForm'
 
-function ReplyList({commentId, replyList, getReply}) {
+function ReplyList({commentId, replyList, getReply, replyMoreButtonOpen, setReplyMoreButtonOpen, whichReplyButton, setWhichReplyButton}) {
   let URL = useSelector((state) => state.url)
   let TOKEN = useSelector((state) => state.token)
 
@@ -31,9 +31,16 @@ function ReplyList({commentId, replyList, getReply}) {
 
 
   return(
-    <div style={{width:"80vw", display:"flex", flexDirection:"column", alignItems:"end"}}>
+    <div style={{width:"90vw", display:"flex", flexDirection:"column", alignItems:"end"}}>
       {replyList.map((reply) => {
-        return <Reply reply={reply} />
+        return <Reply 
+        reply={reply} 
+        getReply={getReply}
+        replyMoreButtonOpen={replyMoreButtonOpen}
+        setReplyMoreButtonOpen={setReplyMoreButtonOpen}
+        whichReplyButton={whichReplyButton}
+        setWhichReplyButton={setWhichReplyButton}
+        />
       })}
       {/*TODO: 여기 css 왼쪽으로 맞춰줘야 함.. */}
       <InputForm setCommentInput={setReplyInput} commentInput={replyInput} postComment={postReply}/>
