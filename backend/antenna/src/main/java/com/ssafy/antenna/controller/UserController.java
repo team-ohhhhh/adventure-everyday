@@ -5,12 +5,10 @@ import com.ssafy.antenna.domain.ResultResponse;
 import com.ssafy.antenna.domain.antenna.dto.DetailAntennaRes;
 import com.ssafy.antenna.domain.antenna.dto.PostAntennaReq;
 import com.ssafy.antenna.domain.email.dto.AuthEmailRes;
-import com.ssafy.antenna.domain.email.dto.CheckEmailRes;
 import com.ssafy.antenna.domain.user.dto.*;
 import com.ssafy.antenna.exception.AbstractAppException;
 import com.ssafy.antenna.exception.ErrorCode;
 import com.ssafy.antenna.exception.bad_request.BadConstantException;
-import com.ssafy.antenna.exception.not_found.UserNotFoundException;
 import com.ssafy.antenna.service.UserService;
 import com.ssafy.antenna.util.ValidationRegex;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,7 +33,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public ResultResponse<UserDetailRes> getUser(@PathVariable Long userId) throws AbstractAppException {
-        if(userId < 0) {
+        if (userId < 0) {
             throw new BadConstantException();
         }
         return ResultResponse.success(userService.getUser(userId).toResponse());
@@ -68,7 +66,7 @@ public class UserController {
 
     @GetMapping("/followings/{userId}")
     public ResultResponse<List<GetFollowRes>> getFollowingUser(@PathVariable Long userId) throws Exception {
-        if(userId < 0) {
+        if (userId < 0) {
             throw new BadConstantException();
         }
         return ResultResponse.success(userService.getFollowingUser(userId));
@@ -76,7 +74,7 @@ public class UserController {
 
     @GetMapping("/followers/{userId}")
     public ResultResponse<List<GetFollowRes>> getFollowerUser(@PathVariable Long userId) throws Exception {
-        if(userId < 0) {
+        if (userId < 0) {
             throw new BadConstantException();
         }
         return ResultResponse.success(userService.getFollowerUser(userId));
@@ -84,7 +82,7 @@ public class UserController {
 
     @DeleteMapping("/followers/{followId}")
     public ResultResponse<FollowDetailRes> deleteFollowingUser(Authentication authentication, @PathVariable Long followId) throws Exception {
-        if(followId < 0) {
+        if (followId < 0) {
             throw new BadConstantException();
         }
         return ResultResponse.success(userService.deleteFollowingUser(Long.valueOf(authentication.getName()), followId).toResponse());
@@ -92,7 +90,7 @@ public class UserController {
 
     @GetMapping("/check-email")
     public ResultResponse<?> checkEmailUser(@RequestParam String email) throws Exception {
-        if(!validationRegex.isRegexEmail(email)) {
+        if (!validationRegex.isRegexEmail(email)) {
             return ResultResponse.error(ErrorResponse.of(ErrorCode.EMAIL_INVALID));
         }
         return ResultResponse.success(userService.checkEmailUser(email));
@@ -100,7 +98,7 @@ public class UserController {
 
     @GetMapping("/check-nickname")
     public ResultResponse<?> checkNicknameUser(@RequestParam String nickname) throws Exception {
-        if(nickname.length()<3) {
+        if (nickname.length() < 3) {
             return ResultResponse.error(ErrorResponse.of(ErrorCode.NICKNAME_INVALID));
         }
         return ResultResponse.success(userService.checkNicknameUser(nickname));
@@ -108,7 +106,7 @@ public class UserController {
 
     @GetMapping("/search")
     public ResultResponse<?> likeNicknameUser(@RequestParam String nickname) throws Exception {
-        if(nickname.length()<3) {
+        if (nickname.length() < 3) {
             return ResultResponse.error(ErrorResponse.of(ErrorCode.NICKNAME_INVALID));
         }
         return ResultResponse.success(userService.likeNicknameUser(nickname));
@@ -151,7 +149,7 @@ public class UserController {
 
     @GetMapping("/antennae/{antennaId}")
     public ResultResponse<?> getAntenna(Authentication authentication, @PathVariable Long antennaId) {
-        if(antennaId<0) {
+        if (antennaId < 0) {
             return ResultResponse.error(ErrorResponse.of(ErrorCode.BAD_CONSTANT));
         }
         return ResultResponse.success(userService.getAntenna(antennaId, Long.valueOf(authentication.getName())));

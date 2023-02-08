@@ -18,10 +18,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findAllByNicknameStartingWith(String nickname);
 
-    @Query("select u "+
-            "from User u "+
-            "join AdventureInProgress aip "+
-            "on u.userId=aip.user.userId "+
+    @Query("select u " +
+            "from User u " +
+            "join AdventureInProgress aip " +
+            "on u.userId=aip.user.userId " +
             "order by u.exp desc ")
     Optional<List<User>> findAdventureInProgressUsers();
 }
