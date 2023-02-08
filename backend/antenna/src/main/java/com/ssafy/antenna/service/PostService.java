@@ -39,6 +39,7 @@ import com.ssafy.antenna.util.W3WUtil;
 import com.what3words.javawrapper.response.ConvertTo3WA;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -323,7 +324,7 @@ public class PostService {
 		} else {
 			comment.setContent(postCommentReq.content());
 			return ResultResponse.success(
-					comment.getPost().getComments().stream()
+					commentRepository.save(comment).getPost().getComments().stream()
 							.map(commentDtoMapper)
 							.collect(Collectors.toList())
 			);
@@ -449,17 +450,19 @@ public class PostService {
 			Long userId
 	) throws IllegalAccessException {
 		SubComment subComment = subCommentRepository.findById(subCommentId).orElseThrow(NoSuchElementException::new);
-		if(!userId.equals(subComment.getUser().getUserId())) {
+		if (!userId.equals(subComment.getUser().getUserId())) {
 			throw new IllegalAccessException();
 		} else {
 			subComment.setContent(postSubCommentReq.content());
 			return ResultResponse.success(
-					subComment.getComment().getSubComments().stream()
+					subCommentRepository.save(subComment)
+							.getComment().getSubComments().stream()
 							.map(subCommentDtoMapper)
 							.collect(Collectors.toList())
 			);
 		}
 	}
+
 	public ResultResponse<?> deleteSubComment(Long subCommentId, Long userId)
 			throws IllegalAccessException {
 		SubComment subComment = subCommentRepository.findById(subCommentId)

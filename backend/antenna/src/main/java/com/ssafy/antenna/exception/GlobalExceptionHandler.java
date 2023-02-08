@@ -39,12 +39,12 @@ public class GlobalExceptionHandler {
 				.body(ResultResponse.error(ErrorResponse.of(ErrorCode.valueOf(error.getDefaultMessage()))));
 	}
 
-	@ExceptionHandler(ConstraintViolationException.class)
-	public ResponseEntity<ResultResponse<ErrorResponse>> paramValidationExceptions(
-			ConstraintViolationException ex) {
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body(ResultResponse.error(ErrorResponse.of(ErrorCode.valueOf(ex.getMessage()))));
-	}
+//	@ExceptionHandler(ConstraintViolationException.class)
+//	public ResponseEntity<ResultResponse<ErrorResponse>> paramValidationExceptions(
+//			ConstraintViolationException ex) {
+//		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//				.body(ResultResponse.error(ErrorResponse.of(ErrorCode.valueOf(ex.getMessage()))));
+//	}
 
 	@ExceptionHandler(PersistenceException.class)
 	public ResponseEntity<ResultResponse<ErrorResponse>> persistenceException() {

@@ -7,6 +7,7 @@ import com.ssafy.antenna.domain.post.dto.PostDetailRes;
 import com.ssafy.antenna.domain.post.dto.PostDetailWithCategory;
 import com.ssafy.antenna.domain.post.dto.PostUpdateReq;
 import com.ssafy.antenna.service.PostService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -77,7 +78,7 @@ public class PostController {
     @PutMapping("/{postId}")
     public ResultResponse<PostDetailRes> updatePost(
             @PathVariable Long postId,
-            @RequestBody PostUpdateReq postUpdateReq,
+            @RequestBody @Valid PostUpdateReq postUpdateReq,
             Authentication authentication
     ) throws IllegalAccessException {
         return postService.updatePost(postId, postUpdateReq, authentication);
@@ -86,7 +87,7 @@ public class PostController {
     @PostMapping("{postId}/comments")
     public ResultResponse<?> postComment(
             @PathVariable Long postId,
-            @RequestBody PostCommentReq postCommentReq,
+            @RequestBody @Valid PostCommentReq postCommentReq,
             Authentication authentication
     ) {
         return postService.postComment(
@@ -114,7 +115,7 @@ public class PostController {
     @PutMapping("/comments/{commentId}")
     public ResultResponse<?> updateComment(
             @PathVariable Long commentId,
-            @RequestBody PostCommentReq postCommentReq,
+            @RequestBody @Valid PostCommentReq postCommentReq,
             Authentication authentication
     ) throws IllegalAccessException {
         return postService.updateComment(commentId, postCommentReq, Long.valueOf(authentication.getName()));

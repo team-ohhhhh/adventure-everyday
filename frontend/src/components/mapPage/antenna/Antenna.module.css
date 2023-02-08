@@ -9,5 +9,5 @@
     align-items: flex-end;
     
     /* 클릭이벤트 막는 div 무시하기 */
-    pointer-events:none; 
+    /* pointer-events:none;  */
 }

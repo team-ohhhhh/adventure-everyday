@@ -23,7 +23,6 @@
       }
     })
     .then((res) => {
-      console.log(res.data.result)
       setCommentList(res.data.result)
     })
     .catch((err) => console.log(err))
@@ -74,14 +73,13 @@
 
   useEffect(() => {
     getComments()
-    console.log(moreButtonOpen, whichButton)
   }, [moreButtonOpen, whichButton])
 
   return (
     <div className="pageContainer" onClick={()=>{closeMoreButton(); closeReplyMoreButton();}}>
       <div>댓글 작성</div>
         <InputForm setCommentInput={setCommentInput} commentInput={commentInput} postComment={postComment} />
-      <div>{}개의 댓글</div>
+      <div>{commentList.length}개의 댓글</div>
       <div>
         {commentList.map((comment) => {
           return ( <Comment key={comment.commentId} 

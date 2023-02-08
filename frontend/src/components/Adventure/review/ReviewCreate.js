@@ -1,4 +1,4 @@
-import styles from "./ReviewCreatePage.module.css";
+import styles from "./ReviewCreate.module.css";
 import ReactStars from "react-rating-stars-component";
 import { AiOutlineClose } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
@@ -6,7 +6,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 
-function ReviewCreatePage() {
+function ReviewCreate() {
   const navigate = useNavigate();
   const params = useParams();
   let TOKEN = useSelector((state) => state.token);
@@ -49,6 +49,7 @@ function ReviewCreatePage() {
       .then((response) => {
         console.log("axios 성공");
         console.log(response.data.result);
+        navigate(`/adventure/detail/${params.id}/createReview/complete`); // 후기 작성 완료 페이지로 이동
       })
       .catch((err) => {
         console.log(err);
@@ -98,4 +99,4 @@ function ReviewCreatePage() {
   );
 }
 
-export default ReviewCreatePage;
+export default ReviewCreate;

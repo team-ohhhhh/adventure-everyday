@@ -90,7 +90,7 @@ function Comment({comment, getComments, moreButtonOpen, setMoreButtonOpen, which
   const updateComment = function() {
     axios({
       url : URL + `/posts/comments/${comment.commentId}`,
-      method : 'delete',
+      method : 'put',
       headers: {
         Authorization: `Bearer ${TOKEN}`
       },
@@ -100,6 +100,7 @@ function Comment({comment, getComments, moreButtonOpen, setMoreButtonOpen, which
     })
     .then((res) => {
       getComments()
+      setWouldYouUpdate(false)
     })
     .catch((err) => {console.log(err)})
   }
@@ -136,12 +137,13 @@ function Comment({comment, getComments, moreButtonOpen, setMoreButtonOpen, which
             </div>
             <div className={style.moreButton}>
               <div>
-                {wouldYouUpdate
+                {comment.userDetailRes.userId === USER.userId &&
+                (wouldYouUpdate
                 ? <div><span onClick={()=>{updateComment()}}>수정</span><span onClick={()=>{setWouldYouUpdate(false)}} style={{marginLeft:"2vw"}}>취소</span></div>
                 : moreButtonOpen && whichButton === comment.commentId
                   ? <div><span onClick={()=>{setWouldYouDelete(true)}}> 삭제 </span> <span onClick={()=>{setWouldYouUpdate(true)}}> 수정 </span></div>
                   : <RiMoreFill onClick={() => {setMoreButtonOpen(true); setWhichButton(comment.commentId)}}/>
-                }
+                )}
               </div>
             </div>
           </div>

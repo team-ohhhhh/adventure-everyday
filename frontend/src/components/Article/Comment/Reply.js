@@ -50,7 +50,7 @@ function Reply({reply, getReply, replyMoreButtonOpen, setReplyMoreButtonOpen, wh
   const updateReply = function() {
     axios({
       url : URL + `/posts/comments/subcomments/${reply.subCommentId}`,
-      method : 'update',
+      method : 'put',
       headers: {
         Authorization: `Bearer ${TOKEN}`
       },
@@ -60,6 +60,7 @@ function Reply({reply, getReply, replyMoreButtonOpen, setReplyMoreButtonOpen, wh
     })
     .then((res) => {
       getReply()
+      wouldYouUpdate(false)
     })
     .catch((err) => {console.log(err)})
   }
@@ -109,11 +110,12 @@ function Reply({reply, getReply, replyMoreButtonOpen, setReplyMoreButtonOpen, wh
               </div>
             </div>
             <div className={style.moreButton}>
-              {wouldYouUpdate
+              {reply.userDetailRes.userId === USER.userId &&
+              (wouldYouUpdate
                   ? <div><span onClick={()=>{updateReply()}}>수정</span><span onClick={()=>{setWouldYouUpdate(false)}} style={{marginLeft:"2vw"}}>취소</span></div>
                   : replyMoreButtonOpen && whichReplyButton === reply.subCommentId
                   ? <div><span onClick={()=>{setWouldYouDelete(true)}}> 삭제 </span> <span onClick={()=>{setWouldYouUpdate(true)}}> 수정 </span></div>
-                  : <RiMoreFill onClick={() => {setReplyMoreButtonOpen(true); setWhichReplyButton(reply.subCommentId)}}/>
+                  : <RiMoreFill onClick={() => {setReplyMoreButtonOpen(true); setWhichReplyButton(reply.subCommentId)}}/>)
                 }
             </div>
           </div>

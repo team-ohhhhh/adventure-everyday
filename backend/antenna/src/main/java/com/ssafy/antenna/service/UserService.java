@@ -24,6 +24,7 @@ import com.ssafy.antenna.repository.UserRepository;
 import com.ssafy.antenna.util.EmailUtil;
 import com.ssafy.antenna.util.W3WUtil;
 import com.what3words.javawrapper.response.ConvertTo3WA;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
