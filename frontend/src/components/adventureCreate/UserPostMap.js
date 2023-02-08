@@ -234,7 +234,7 @@ const UserPostMap = ({ myPosts, selectPost, userHeight }) => {
           <img
             className={styles.postImage}
             src={
-              postDetail.postUrl ? postDetail.postUrl : "/images/noImage.png"
+              postDetail.photoUrl ? postDetail.photoUrl : "/images/noImage.png"
             }
             alt={postDetail.title}
           />

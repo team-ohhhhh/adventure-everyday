@@ -44,7 +44,7 @@ const CheckPointItem = ({
       </div>
 
       <div className={styles.articleContainer}>
-        <BigArticleItem data={point} />
+        <BigArticleItem post={point.postDetail} />
         {/* {point.postDetail.photo && ( */}
         <div
           className={isRep ? styles.rep : `${styles.rep} ${styles.notRep}`}
