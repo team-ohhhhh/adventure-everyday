@@ -39,7 +39,8 @@ public enum ErrorCode {
     DUPLICATED_NICKNAME(CONFLICT, "이미 사용중인 닉네임입니다."),
     DUPLICATED_EMAIL(CONFLICT, "이미 사용중인 이메일입니다."),
     DUPLICATED_FOLLOW(CONFLICT, "이미 팔로우 중입니다."),
-    DUPLICATED_ADVENTURE_IN_PROGRESS(CONFLICT, "이미 참가중인 모헙입니다."),
+    DUPLICATED_ADVENTURE_IN_PROGRESS(CONFLICT, "이미 참가중인 모험입니다."),
+    DUPLICATED_ADVENTURE_PLACE(CONFLICT, "이미 참가한 모험 장소입니다."),
     FOLLOW_NOT_ME(BAD_REQUEST, "나를 팔로우 할 수 없습니다."),
     DATABASE_ERROR(INTERNAL_SERVER_ERROR, "데이터베이스 에러"),
     CERTIFICATION_SEND_NOT_FOUND(NOT_FOUND, "인증 번호 전송 내역이 없습니다.");
