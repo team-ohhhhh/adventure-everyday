@@ -173,11 +173,11 @@ public class AdventureController {
     }
 
     // 모험 검색(모든 모험 키워드 조회)
-//    @GetMapping("/search")
-//    public ResultResponse<List<ReadAdventuresRes>> readAdventureSearch(@RequestParam String keyword) {
-//        List<ReadAdventuresRes> result = adventureService.readAdventureSearch(keyword);
-//        return ResultResponse.success(result);
-//    }
+    @GetMapping("/search")
+    public ResultResponse<List<ReadAdventuresRes>> readAdventureSearch(@RequestParam String keyword) {
+        List<ReadAdventuresRes> result = adventureService.readAdventureSearch(keyword);
+        return ResultResponse.success(result);
+    }
 
     // 특정 위치에서 일정 거리 안에 특정 유저가 참가중인 탐험과 탐험 장소 조회하기
     @GetMapping("/adventure-in-progress/check")

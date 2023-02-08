@@ -543,33 +543,45 @@ public class AdventureService {
 
 
     // 모험 검색(모든 모험 키워드 조회)
-//    public List<ReadAdventuresRes> readAdventureSearch(String keyword) {
-//        System.out.println(keyword);
-//        List<Adventure> adventureList = adventureRepository.findByTitleContaining(keyword).orElseThrow(AdventureNotFoundException::new);
-//        System.out.println("==================================================================");
-//
-//        List<ReadAdventuresRes> readAdventureResList = new ArrayList<>();
-//        for (Adventure adventure : adventureList) {
-//            ReadAdventuresRes newReadAdventureRes = new ReadAdventuresRes(
-//                    adventure.getAdventureId(),
-//                    adventure.getUser().getUserId(),
-//                    adventure.getCategory().getCategory(),
-//                    adventure.getFeatTitle(),
-//                    adventure.getFeatContent(),
-//                    adventure.getTitle(),
-//                    adventure.getContent(),
-//                    adventure.getDifficulty(),
-//                    adventure.getPhotoUrl(),
-//                    adventure.getStartDate(),
-//                    adventure.getEndDate(),
-//                    adventure.getAvgReviewRate()
-//            );
-//
-//            readAdventureResList.add(newReadAdventureRes);
-//        }
-//
-//        return readAdventureResList;
-//    }
+    public List<ReadAdventuresRes> readAdventureSearch(String keyword) {
+        // 키워드를 포함하는 모험을 가져옴.
+        List<Adventure> adventureList = adventureRepository.findByTitleContaining(keyword).orElseThrow(AdventureNotFoundException::new);
+
+        List<ReadAdventuresRes> readAdventureResList = new ArrayList<>();
+
+        for (Adventure adventure : adventureList) {
+            // 진행중인 사람들 사진이랑 총 몇 명 참여중인지 구하기
+            // 현재 이 모험에 참여중인 유저들 모험에 참여한 순으로 5명까지.
+            // 그럼 AIP를 ByAdventureOrderByCreatetime을 구해서
+            List<AdventureInProgress> aIPList=adventureInProgressRepository.findTop5ByAdventureOrderByCreateTimeDesc(adventure).orElseThrow(AdventureNotFoundException::new);
+
+            // 그 속의 유저들의 이미지들을 뽑아옴.
+            List<String> userPhotoUrlList = new ArrayList<>();
+
+            for(AdventureInProgress aIP:aIPList){
+                userPhotoUrlList.add(aIP.getUser().getPhotoUrl());
+            }
+            // userCount는 countByAdventure
+            Long userCount = adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureInProgressNotFoundException::new);
+
+            ReadAdventuresRes readAdventuresRes = new ReadAdventuresRes(
+                    adventure.getAdventureId(),
+                    adventure.getPhotoUrl(),
+                    adventure.getTitle(),
+                    adventure.getDifficulty(),
+                    adventure.getUser().getUserId(),
+                    adventure.getUser().getPhotoUrl(),
+                    adventure.getUser().getNickname(),
+                    Long.valueOf(adventure.getUser().getLevel()),
+                    userPhotoUrlList,
+                    userCount
+            );
+
+            readAdventureResList.add(readAdventuresRes);
+        }
+
+        return readAdventureResList;
+    }
 
     // 특정 위치에서 일정 거리 안에 내가 참가중인 탐험과 탐험 장소 조회하기
     public List<ReadAdventureInProgressWithinDistanceRes> readAdventureInProgressWithinDistance(Double lat, Double lng,Double area, Long userId) {
