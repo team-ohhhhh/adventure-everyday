@@ -1,4 +1,9 @@
 package com.ssafy.antenna.domain.user.dto;
 
-public record CreateFollowUserReq(Long followingId) {
+import jakarta.validation.constraints.Positive;
+
+public record CreateFollowUserReq(
+		@Positive(message = "BAD_CONSTANT")
+		Long followingId
+) {
 }
