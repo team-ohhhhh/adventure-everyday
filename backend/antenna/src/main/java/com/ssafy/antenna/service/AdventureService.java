@@ -14,7 +14,6 @@ import com.ssafy.antenna.domain.location.Location;
 import com.ssafy.antenna.domain.post.CheckpointPost;
 import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.user.User;
-import com.ssafy.antenna.domain.user.dto.UserDetailRes;
 import com.ssafy.antenna.exception.conflict.DuplicatedAdventureInProgressException;
 import com.ssafy.antenna.exception.not_found.*;
 import com.ssafy.antenna.repository.*;
@@ -126,7 +125,7 @@ public class AdventureService {
                 adventure.getEndDate(),
                 adventure.getDifficulty(),
                 adventure.getCategory().getCategory(),
-                adventure.getAvgReviewRate(),
+                adventure.getAvgReviewGrade(),
                 new UserIdPhotoUrl(adventure.getUser().getUserId(),adventure.getUser().getPhotoUrl()),
                 adventure.getUser().getNickname(),
                 userIdPhotoUrls,
@@ -444,17 +443,33 @@ public class AdventureService {
 
     // 특정 탐험 달성자의 후기 추가
     public void createAdventureReview(Long adventureId, CreateAdventureReviewReq createAdventureReviewReq, Long userId) {
-        User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
 
-        AdventureReview newAdventureReview = AdventureReview.builder()
+        AdventureReview adventureReview = AdventureReview.builder()
                 .content(createAdventureReviewReq.content())
-                .rate(createAdventureReviewReq.rate())
-                .user(curUser)
-                .adventure(curAdventure)
+                .grade(createAdventureReviewReq.rate())
+                .user(user)
+                .adventure(adventure)
                 .build();
 
-        adventureReviewRepository.save(newAdventureReview);
+        // 모험 평점 업데이트.
+        // 리뷰가 있으면
+        if(adventureReviewRepository.countAdventureReviewByAdventure(adventure).isPresent()){
+            // 해당 모험 별점 개수
+            Double totalCnt = Double.valueOf(adventureReviewRepository.countAdventureReviewByAdventure(adventure).orElseThrow(AdventureReviewNotFoundException::new));
+            // 별점 합
+            Double totalSum = adventureReviewRepository.sumOfAdventureReviews(adventure.getAdventureId()).orElseThrow(AdventureReviewNotFoundException::new);
+            // 평균별점 업데이트
+            adventure.updateAvgReviewGrade( totalSum/totalCnt);
+        }else{
+            adventure.updateAvgReviewGrade(Double.valueOf(0));
+        }
+
+        // 평균별점 저장
+        adventureRepository.save(adventure);
+        // 후기 저장
+        adventureReviewRepository.save(adventureReview);
     }
 
     // 특정 탐험 달성자들의 후기 조회
@@ -470,7 +485,7 @@ public class AdventureService {
                     ar.getAdventureReviewId(),
                     ar.getUser().getUserId(),
                     ar.getUser().getNickname(),
-                    ar.getRate(),
+                    ar.getGrade(),
                     ar.getContent()
             );
 
@@ -482,24 +497,28 @@ public class AdventureService {
 
     // 탐험 후기 수정
     public void updateAdventureReview(Long adventurereviewId, UpdateAdventureReviewReq updateAdventureReviewReq, Long userId) {
-        User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        // 현재 리뷰
+        AdventureReview adventureReview = adventureReviewRepository.findById(adventurereviewId).orElseThrow(AdventureReviewNotFoundException::new);
 
-        // 꺼내와서,
-        AdventureReview curAdvventureReview = adventureReviewRepository.findById(adventurereviewId).orElseThrow(AdventureReviewNotFoundException::new);
+        // 탐험 리뷰를 작성한 유저
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
-        // 내용 갈아끼운 후,
-        AdventureReview updateAdventureReview = AdventureReview.builder()
-                .adventureReviewId(curAdvventureReview.getAdventureReviewId())
-                .content(updateAdventureReviewReq.content())
-                .rate(updateAdventureReviewReq.rate())
-                .user(curUser)
-                .adventure(curAdvventureReview.getAdventure())
-                .build();
+        // 탐험 리뷰를 작성할 모험
+        Adventure adventure = adventureRepository.findById(adventureReview.getAdventure().getAdventureId()).orElseThrow(AdventureNotFoundException::new);
 
-        curAdvventureReview = updateAdventureReview;
+        // 평균별점 업데이트.
+        // 현재 모험의 전체 후기 개수
+        Double totalCnt = Double.valueOf(adventureReviewRepository.countAdventureReviewByAdventure(adventure).orElseThrow(AdventureReviewNotFoundException::new));
+        // 별점 합
+        Double totalSum = adventureReviewRepository.sumOfAdventureReviews(adventure.getAdventureId()).orElseThrow(AdventureReviewNotFoundException::new);
+        // 평균별점
+        Double avgGrade = totalSum/totalCnt;
+
+        adventure.updateAvgReviewGrade(avgGrade);
 
         // 저장.
-        adventureReviewRepository.save(curAdvventureReview);
+        adventureRepository.save(adventure);
+        adventureReviewRepository.save(adventureReview);
     }
 
     // 탐험 후기 삭제
@@ -682,9 +701,10 @@ public class AdventureService {
         List<SubAdventureReview> subAdventureReviews = new ArrayList<>();
         for(AdventureReview adventureReview:adventureReviews){
             SubAdventureReview subAdventureReview = new SubAdventureReview(
+                    adventureReview.getAdventureReviewId(),
                     adventureReview.getUser().getNickname(),
                     Long.valueOf(adventureReview.getUser().getLevel()),
-                    Long.valueOf(adventureReview.getRate()),
+                    Long.valueOf(adventureReview.getGrade()),
                     adventureReview.getContent(),
                     adventureReview.getCreateTime()
             );
