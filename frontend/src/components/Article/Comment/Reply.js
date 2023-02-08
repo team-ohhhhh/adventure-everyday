@@ -60,6 +60,7 @@ function Reply({reply, getReply, replyMoreButtonOpen, setReplyMoreButtonOpen, wh
     })
     .then((res) => {
       getReply()
+      wouldYouUpdate(false)
     })
     .catch((err) => {console.log(err)})
   }
@@ -77,7 +78,6 @@ function Reply({reply, getReply, replyMoreButtonOpen, setReplyMoreButtonOpen, wh
     })
     .then((res) => {
       getReply()
-      wouldYouUpdate(false)
     })
     .catch((err) => {console.log(err)})
   }
