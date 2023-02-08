@@ -17,6 +17,19 @@ function AdventureInfo(props) {
   let TOKEN = useSelector((state) => state.token);
   let URL = useSelector((state) => state.url);
 
+  let photoList = [];
+  // 참가자 컴포넌트 props로 내려주기 위해 id와 url 쌍으로 오는 배열을 url 배열로만 만들어주기
+  if (props.info.userIdPhotoUrlList) {
+    photoList = props.info.userIdPhotoUrlList.map(
+      (IdUrlList) => IdUrlList.photoUrl
+    );
+    console.log("photoList");
+    console.log(photoList);
+    console.log("difficulty");
+    console.log(props.info.adventureDifficulty);
+  }
+
+  // 참가하기 함수
   function Participate() {
     axios({
       url: URL + `/adventures/${params.id}/adventure-in-progress`,
@@ -30,12 +43,29 @@ function AdventureInfo(props) {
     });
   }
 
+  // 포기하기 함수
+  function Giveup() {
+    axios({
+      url: URL + `/adventures/${params.id}/adventure-in-progress`,
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+      },
+      method: "delete",
+    }).then((response) => {
+      console.log("포기되었습니다.");
+      console.log(response.data.result);
+    });
+  }
+
   return (
     <>
       <div className={styles.container}>
         <div className={styles.titleContainer}>
           <div className={styles.title}>{props.info.adventureTitle}</div>
-          <img className={styles.diff} src="/images/diff_easy.png"></img>
+          <img
+            className={styles.diff}
+            src={`/images/diff_${props.info.adventureDifficulty}.png`}
+          ></img>
         </div>
         <div className={styles.period}>
           {props.info.adventureStartDate && (
@@ -72,9 +102,7 @@ function AdventureInfo(props) {
             </div>
           </div>
           <div className={styles.participants}>
-            <ParticipantsCircle
-              photoList={props.info.userIdPhotoUrlList}
-            ></ParticipantsCircle>
+            <ParticipantsCircle photoList={photoList}></ParticipantsCircle>
           </div>
         </div>
         <div className={styles.etc}>
@@ -112,6 +140,7 @@ function AdventureInfo(props) {
                   console.log("참여!");
                   console.log(props.info.participation);
                   Participate();
+                  window.location.replace(`/adventure/detail/${params.id}/`);
                 }}
               >
                 참여하기
@@ -124,6 +153,8 @@ function AdventureInfo(props) {
                 className={styles.giveup}
                 onClick={() => {
                   console.log("포기!");
+                  Giveup();
+                  window.location.replace(`/adventure/detail/${params.id}/`);
                 }}
               >
                 포기하기
