@@ -39,7 +39,8 @@ const Step3Badge = ({ adventure, setAdventure, checkpoints }) => {
   //   document.body.style.overflow = "unset";
   // };
 
-  const url = useSelector((state) => state.url);
+  // const url = useSelector((state) => state.url);
+  const url = "https://i8a305.p.ssafy.io/api/v1";
   const token = useSelector((state) => state.token);
 
   const handleSubmit = (e) => {
@@ -65,24 +66,19 @@ const Step3Badge = ({ adventure, setAdventure, checkpoints }) => {
       });
     }
 
-    const formData = new FormData();
-    formData.append("category", adventure.category);
-    formData.append("feat", adventure.feat);
-    formData.append("title", adventure.title);
-    formData.append("content", adventure.content);
-    formData.append("difficulty", adventure.difficulty);
-    formData.append("exp", adventure.exp);
-    formData.append("startDate", adventure.startDate);
-    formData.append("endDate", adventure.endDate);
-    formData.append("RepresentativePostId", adventure.RepresentativePostId);
-    formData.append("createAdventurePlaceReqs", {
-      createAdventurePlaceReqs: checkpoints,
+    const newCheckpoints = checkpoints.map((point) => {
+      const { postDetail, ...newCheckpoint } = point;
+      return newCheckpoint;
     });
+    setAdventure((adventure) => ({
+      ...adventure,
+      createAdventurePlaceReqs: newCheckpoints,
+    }));
 
     axios
-      .post(url + "/adventures", formData, {
+      .post(url + "/adventures", JSON.stringify(adventure), {
         headers: {
-          "Content-type": "multipart/form-data",
+          "Content-type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       })
