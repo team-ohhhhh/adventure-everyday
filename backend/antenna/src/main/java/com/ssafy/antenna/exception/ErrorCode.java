@@ -26,6 +26,7 @@ public enum ErrorCode {
     ANTENNA_NOT_FOUND(NOT_FOUND, "해당하는 안테나를 찾을 수 없습니다."),
     EMAIL_NOT_FOUND(NOT_FOUND, "해당하는 이메일을 찾을 수 없습니다."),
     EMAIL_EMPTY(NOT_FOUND, "이메일이 입력되지 않았습니다. 이메일 정보를 제공해주세요."),
+    EMAIL_INVALID(BAD_REQUEST, "이메일 양식이 맞지않습니다."),
     NICKNAME_EMPTY(NOT_FOUND, "닉네임이 입력되지 않았습니다. 닉네임 정보를 제공해주세요."),
     PASSWORD_EMPTY(NOT_FOUND, "비밀번호가 입력되지 않았습니다. 비밀번호 정보를 제공해주세요."),
     BAD_CONSTANT(BAD_REQUEST, "잘못된 인자입니다."),

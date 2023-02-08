@@ -3,22 +3,16 @@ package com.ssafy.antenna.exception;
 import com.ssafy.antenna.domain.ErrorResponse;
 import com.ssafy.antenna.domain.ResultResponse;
 import jakarta.persistence.PersistenceException;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import static com.ssafy.antenna.exception.ErrorCode.BAD_CONSTANT;
 import static com.ssafy.antenna.exception.ErrorCode.DATABASE_ERROR;
 
 
@@ -37,20 +31,19 @@ public class GlobalExceptionHandler {
 //        });
 //        return errors;
 //    }
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<ResultResponse<ErrorResponse>> handleValidationExceptions(
+	public ResponseEntity<ResultResponse<ErrorResponse>> dtoValidationExceptions(
 			MethodArgumentNotValidException ex) {
-		Map<String, String> errors = new HashMap<>();
-		ObjectError error = ex.getBindingResult().getAllErrors().get(ex.getBindingResult().getAllErrors().size()-1);
-//		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//				.body(ResultResponse.error(ErrorResponse.of(BAD_CONSTANT)));
-//		return ex.getBindingResult().getAllErrors().stream()
-//				.map(e -> ResponseEntity.status(ex.getStatusCode())
-//						.body(ResultResponse.error(ErrorResponse.of(ErrorCode.valueOf(e.getDefaultMessage())))))
-//				.collect(Collectors.toList());
+		ObjectError error = ex.getBindingResult().getAllErrors().get(ex.getBindingResult().getAllErrors().size() - 1);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(ResultResponse.error(ErrorResponse.of(ErrorCode.valueOf(error.getDefaultMessage()))));
+	}
+
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<ResultResponse<ErrorResponse>> paramValidationExceptions(
+			ConstraintViolationException ex) {
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(ResultResponse.error(ErrorResponse.of(ErrorCode.valueOf(ex.getMessage()))));
 	}
 
 	@ExceptionHandler(PersistenceException.class)
