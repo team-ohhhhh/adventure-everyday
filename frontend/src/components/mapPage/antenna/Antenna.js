@@ -12,11 +12,11 @@ function Antenna(props) {
     setIsOn((prev) => !prev);
   }
   return (
-    <div className={styles.container}>
+    <span className={styles.container}>
       <AntennaBtn onClick={toggle}></AntennaBtn>
 
       {isOn && <AntennaList antennae={antennae} setState={props.setState}></AntennaList>}
-    </div>
+    </span>
   );
 }
 
