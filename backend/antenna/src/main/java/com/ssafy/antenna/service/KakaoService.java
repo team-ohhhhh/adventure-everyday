@@ -128,6 +128,8 @@ public class KakaoService {
             Optional<User> user = userRepository.findByEmail(email);
             if (user.isPresent()) {
                 //로그인 처리
+                user.get().setRefreshToken(jwtService.generateRefreshToken());
+                userRepository.save(user.get());
                 String jwtToken = jwtService.generateToken(user.get());
                 logInUserRes = new LogInUserRes(jwtToken, user.get().getRefreshToken(), user.get().toResponse());
             } else {
