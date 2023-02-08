@@ -38,8 +38,8 @@ public class AuthenticationController {
     private final JwtService jwtService;
     @PostMapping(value = "/register")
     public ResultResponse<LogInUserRes> registerUser(
-            @RequestParam @Email(message = "EMAIL_INVALID") @NotBlank(message = "EMAIL_EMPTY") String email,
-            @RequestParam @NotBlank(message = "BAD_CONSTANT") String nickname,
+            @RequestParam String email,
+            @RequestParam String nickname,
             @RequestParam String password,
             @RequestParam(required = false) String introduce,
             @RequestParam(required = false) MultipartFile photo
