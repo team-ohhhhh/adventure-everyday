@@ -5,6 +5,9 @@ const Step4Done = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const animation = animationRef.current;
+    animation.preserveAspectRatio = "xMidYMid slice";
+
     setTimeout(() => {
       navigate("/adventure"); // 추후 모험 상세 페이지로 수정
     }, 4000);
