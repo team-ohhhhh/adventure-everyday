@@ -133,7 +133,7 @@ public class UserController {
 //    }
 
     @PostMapping("/antennae")
-    public ResultResponse<DetailAntennaRes> createAntenna(@RequestBody @Valid PostAntennaReq postAntennaReq, Authentication authentication) {
+    public ResultResponse<DetailAntennaRes> createAntenna(@RequestBody PostAntennaReq postAntennaReq, Authentication authentication) {
         return ResultResponse.success(userService.createAntenna(postAntennaReq, Long.valueOf(authentication.getName())));
     }
 
