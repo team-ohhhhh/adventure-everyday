@@ -39,6 +39,7 @@ import com.ssafy.antenna.util.W3WUtil;
 import com.what3words.javawrapper.response.ConvertTo3WA;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;

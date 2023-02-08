@@ -11,6 +11,7 @@ import com.ssafy.antenna.exception.not_found.UserNotFoundException;
 import com.ssafy.antenna.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -120,7 +121,7 @@ public class UserController {
 //    }
 
     @PostMapping("/antennae")
-    public ResultResponse<DetailAntennaRes> createAntenna(@RequestBody PostAntennaReq postAntennaReq, Authentication authentication) {
+    public ResultResponse<DetailAntennaRes> createAntenna(@RequestBody @Valid PostAntennaReq postAntennaReq, Authentication authentication) {
         return ResultResponse.success(userService.createAntenna(postAntennaReq, Long.valueOf(authentication.getName())));
     }
 
