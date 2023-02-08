@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import AdventureMap from "./AdventureMap";
@@ -22,6 +22,9 @@ const Step1CheckPoint = ({
   const navigate = useNavigate();
 
   const [showModal, setShowModal] = useState(false);
+
+  const addBoxRef = useRef();
+  const repImgRef = useRef();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -97,7 +100,6 @@ const Step1CheckPoint = ({
     dist = dist * 60 * 1.1515 * 1.609344 * 1000;
     if (dist < 100) dist = Math.round(dist / 10) * 10;
     else dist = Math.round(dist / 100) * 100;
-
     return dist;
   };
 
@@ -106,11 +108,16 @@ const Step1CheckPoint = ({
     let dist = 0;
     for (let i = 0; i < cp.length; i++) {
       for (let j = 0; j < cp.length; j++) {
-        dist += getDistance(cp[i].lat, cp[i].lng, cp[j].lat, cp[j].lng);
+        dist += getDistance(
+          cp[i].coordinate.lat,
+          cp[i].coordinate.lng,
+          cp[j].coordinate.lat,
+          cp[j].coordinate.lng
+        );
       }
     }
     dist /= cp.length * 2;
-    return dist / 50;
+    return dist > 10 ? Math.round(dist / 50) : 10;
   }, [checkpoints]);
 
   const difficulty = useMemo(() => {
@@ -133,28 +140,35 @@ const Step1CheckPoint = ({
         "작성 중인 내용은 저장되지 않습니다. 작성을 취소하고 나가시겠습니까?"
       );
       if (answer) {
-        navigate(-1);
+        navigate("/adventure");
       }
     } else {
-      navigate(-1);
+      navigate("/adventure");
     }
   };
 
   const handleNext = () => {
     if (checkpoints.length < 2) {
       alert("체크포인트를 2개 이상 선택해주세요.");
+      addBoxRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
     } else if (!adventure.RepresentativePostId) {
-      alert("대표 이미지를 선택해 주세요.");
+      alert("대표 게시글을 선택해 주세요.");
+      repImgRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+    const done = checkpoints.every(
+      (point) => point.adventurePlaceTitle && point.adventurePlaceContent
+    );
+    if (done) {
+      setAdventure((adventure) => ({ ...adventure, difficulty, exp }));
+      navigate("/adventure/create/2");
     } else {
-      const done = checkpoints.every(
-        (point) => point.adventurePlaceTitle && point.adventurePlaceContent
-      );
-      if (done) {
-        setAdventure((adventure) => ({ ...adventure, difficulty, exp }));
-        navigate("/adventure/create/2");
-      } else {
-        alert("체크포인트 이름과 내용을 빠짐없이 작성해 주세요.");
-      }
+      alert("체크포인트 이름과 내용을 빠짐없이 작성해 주세요.");
     }
   };
 
@@ -173,7 +187,9 @@ const Step1CheckPoint = ({
         게시글은 <b>최대 5개</b>까지 선택할 수 있습니다.
       </div>
 
-      <div className={styles.status}>현재 체크포인트 개수 {count}/5</div>
+      <div className={styles.status} ref={repImgRef}>
+        현재 체크포인트 개수 {count}/5
+      </div>
       {checkpoints.map((point, idx) => (
         <CheckPointItem
           key={point.postId}
@@ -186,7 +202,7 @@ const Step1CheckPoint = ({
         />
       ))}
 
-      <div className={styles.addBox} onClick={openModal}>
+      <div className={styles.addBox} onClick={openModal} ref={addBoxRef}>
         <div>
           <MdAddLocationAlt size={40} />
           <div>체크포인트 추가</div>

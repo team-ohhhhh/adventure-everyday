@@ -1,16 +1,25 @@
-import React, { useEffect } from "react";
+import React, { forwardRef, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { format } from "date-fns";
 
 import AdventureMap from "./AdventureMap";
 
 import styles from "./Step2Content.module.css";
 import styles2 from "../../pages/ArticleCreatePage.module.css";
-import styles3 from "./Step1CheckPoint.module.css";
+import styles3 from "./CheckPointItem.module.css";
 import { AiOutlineClose } from "react-icons/ai";
+import "./DatepickerCustom.css";
 
-const Step2Content = ({ checkpoints, adventure, setAdventure }) => {
+const Step2Content = ({
+  checkpoints,
+  adventure,
+  setAdventure,
+  startDate,
+  endDate,
+  setDateRange,
+}) => {
   const navigate = useNavigate();
 
   const categories = [
@@ -20,6 +29,20 @@ const Step2Content = ({ checkpoints, adventure, setAdventure }) => {
     { value: "운동", name: "운동" },
     { value: "취미", name: "취미" },
   ];
+
+  // const [dateRange, setDateRange] = useState([null, null]);
+  // const [startDate, endDate] = dateRange;
+
+  useEffect(() => {
+    setAdventure((adventure) => ({
+      ...adventure,
+      startDate: dateToString(startDate),
+      endDate: dateToString(endDate),
+    }));
+  }, [startDate, endDate]);
+
+  const dateRef = useRef();
+  const introRef = useRef();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -39,20 +62,62 @@ const Step2Content = ({ checkpoints, adventure, setAdventure }) => {
     }));
   };
 
+  const dateToString = (obj) => {
+    // 2023-02-03T07:26:56
+    const date = new Date(obj);
+    return format(date, "yyyy-MM-dd'T'HH:mm:ss");
+  };
+
+  const handleDate = (update) => {
+    setDateRange(update);
+  };
+
   const handleQuit = () => {
     if (checkpoints.length > 0) {
       const answer = window.confirm(
         "작성 중인 내용은 저장되지 않습니다. 작성을 취소하고 나가시겠습니까?"
       );
       if (answer) {
-        navigate(-2);
+        navigate("/adventure");
       }
     } else {
-      navigate(-2);
+      navigate("/adventure");
     }
   };
 
-  const handleNext = () => navigate("/adventure/create/3");
+  const handleNext = () => {
+    if (checkpoints.length < 2) {
+      alert("체크포인트를 2개 이상 선택해주세요.");
+    } else if (!adventure.RepresentativePostId) {
+      alert("대표 게시글을 선택해 주세요.");
+    }
+    const done = checkpoints.every(
+      (point) => point.adventurePlaceTitle && point.adventurePlaceContent
+    );
+    if (!done) {
+      alert("체크포인트 이름과 내용을 빠짐없이 작성해 주세요.");
+    } else if (!adventure.startDate || !adventure.endDate) {
+      alert("탐험을 진행할 기간을 설정해 주세요.");
+      dateRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    } else if (!adventure.title || !adventure.title) {
+      alert("탐험 소개를 작성해 주세요.");
+      introRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    } else {
+      navigate("/adventure/create/3");
+    }
+  };
+
+  const CustomInput = forwardRef(({ value, onClick }, ref) => (
+    <button className={styles.dateInput} onClick={onClick} ref={ref}>
+      {value}
+    </button>
+  ));
 
   return (
     <>
@@ -72,55 +137,65 @@ const Step2Content = ({ checkpoints, adventure, setAdventure }) => {
 
         <div className={styles.subContainer}>
           <h2 className={styles.subHeader}>탐험 카테고리</h2>
-          <select onChange={handleSelect}>
-            {categories.map((category) => (
-              <option key={category.value} value={category.value}>
-                {category.name}
-              </option>
-            ))}
-          </select>
+          <div className={styles.selectContainer}>
+            <span style={{ backgroundColor: "white", borderRadius: "6px" }}>
+              <select className={styles.select} onChange={handleSelect}>
+                {categories.map((category) => (
+                  <option
+                    className={styles.option}
+                    key={category.value}
+                    value={category.value}
+                  >
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </span>
+          </div>
         </div>
 
         <div className={styles.subContainer}>
           <h2 className={styles.subHeader}>탐험 기간</h2>
-          <DatePicker
-            selectsRange={true}
-            startDate={adventure.startDate}
-            endDate={adventure.endDate}
-            onChange={(update) => {
-              setAdventure((adventure) => ({
-                ...adventure,
-                startDate: update[0],
-                endDate: update[1],
-              }));
-            }}
-            withPortal
-          />
+          <div className={styles.dateContainer} ref={dateRef}>
+            <DatePicker
+              dateFormat="yyyy/MM/dd"
+              selectsRange={true}
+              startDate={startDate}
+              endDate={endDate}
+              onChange={handleDate}
+              withPortal
+              customInput={<CustomInput />}
+            />
+          </div>
         </div>
 
-        <div className={styles.subContainer}>
+        <div className={styles.subContainer} ref={introRef}>
           <h2 className={styles.subHeader}>탐험 소개</h2>
           <input
+            className={styles3.titleInput}
+            style={{ marginTop: 0 }}
             type="text"
             name="title"
             placeholder="탐험의 제목을 입력하세요"
             value={adventure.title}
             onChange={handleInput}
           />
-          <br />
           <textarea
+            className={styles3.contentInput}
             type="text"
             name="content"
             placeholder="탐험에 대한 설명을 입력하세요"
             value={adventure.content}
             onChange={handleInput}
           />
-          <br />
         </div>
       </div>
 
       <div className={styles2.btnContainer}>
-        <div className={styles2.whiteBtn} onClick={() => navigate(-1)}>
+        <div
+          className={styles2.whiteBtn}
+          onClick={() => navigate("/adventure/create")}
+        >
           이전
         </div>
         <div className={styles2.blueBtn} onClick={handleNext}>

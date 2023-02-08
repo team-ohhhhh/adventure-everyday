@@ -15,14 +15,19 @@ const AdventureMap = ({ checkpoints }) => {
         new kakao.maps.LatLng(point.coordinate.lat, point.coordinate.lng)
       );
     });
+
     return bounds;
   }, [checkpoints]);
 
-  useEffect(() => {
-    const map = mapRef.current;
+  const handleBounds = (map) => {
     if (map && !bounds.isEmpty()) {
       map.setBounds(bounds);
     }
+  };
+
+  useEffect(() => {
+    const map = mapRef.current;
+    handleBounds(map);
   });
 
   return (
@@ -30,6 +35,7 @@ const AdventureMap = ({ checkpoints }) => {
       <Map
         center={temp}
         style={{ width: "100%", height: "200px" }}
+        onCreate={handleBounds}
         ref={mapRef}
       >
         {checkpoints &&
