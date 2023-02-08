@@ -298,12 +298,12 @@ public class UserService {
         return antenna.toResponse();
     }
 
-    public UserDetailRes addExpUser(int exp, Long userId) {
+    public UserDetailRes addExpUser(long exp, Long userId) {
         //유저가 존재하는지 확인
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         //유저가 존재하면, add한 경험치가 다음 레벨로 넘어갈 정도인지 확인
-        int resultLevel = user.getLevel();
-        int resultExp = 0;
+        long resultLevel = user.getLevel();
+        long resultExp = 0;
         switch (user.getLevel()) {
             case 1:
                 if (user.getExp() + exp >= NextLevelExp.ONE.value()){
@@ -347,8 +347,8 @@ public class UserService {
                 .email(user.getEmail())
                 .nickname(user.getNickname())
                 .password(user.getPassword())
-                .level(resultLevel)
-                .exp(resultExp)
+                .level((int) resultLevel)
+                .exp((int) resultExp)
                 .introduce(user.getIntroduce())
                 .role(Role.USER)
                 .photoUrl(user.getPhotoUrl())
