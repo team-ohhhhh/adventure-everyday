@@ -28,7 +28,7 @@ public class TestController {
     @PostMapping("/category")
     public ResponseEntity<String> createCategory() {
         // 카테고리가 만들어졌는지 체크
-        if(categoryRepository.findById(1l).isPresent()){
+        if (categoryRepository.findById(1l).isPresent()) {
             return new ResponseEntity<>("이미 카테고리가 생성되어 있습니다", HttpStatus.OK);
         }
         Category testCategory = Category.builder()

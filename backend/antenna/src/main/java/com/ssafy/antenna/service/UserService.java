@@ -1,7 +1,5 @@
 package com.ssafy.antenna.service;
 
-import com.ssafy.antenna.domain.ResultResponse;
-import com.ssafy.antenna.domain.adventure.AdventureSucceed;
 import com.ssafy.antenna.domain.antenna.Antenna;
 import com.ssafy.antenna.domain.antenna.dto.DetailAntennaRes;
 import com.ssafy.antenna.domain.antenna.dto.PostAntennaReq;
@@ -14,9 +12,7 @@ import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.domain.user.dto.*;
 import com.ssafy.antenna.domain.user.mapper.UserFeatsDtoMapper;
 import com.ssafy.antenna.exception.not_found.*;
-import com.ssafy.antenna.exception.unauthorized.ExpiredRefreshTokenException;
 import com.ssafy.antenna.exception.unauthorized.InvalidPasswordException;
-import com.ssafy.antenna.exception.unauthorized.InvalidRefreshTokenException;
 import com.ssafy.antenna.repository.AdventureSucceedRepository;
 import com.ssafy.antenna.repository.AntennaRepository;
 import com.ssafy.antenna.repository.FollowRepository;
@@ -38,7 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -310,34 +305,34 @@ public class UserService {
         long resultExp = 0;
         switch (user.getLevel()) {
             case 1:
-                if (user.getExp() + exp >= NextLevelExp.ONE.value()){
-                    resultLevel+=1;
+                if (user.getExp() + exp >= NextLevelExp.ONE.value()) {
+                    resultLevel += 1;
                     resultExp = user.getExp() + exp - NextLevelExp.ONE.value();
-                }else{
+                } else {
                     resultExp = user.getExp() + exp;
                 }
-                    break;
+                break;
             case 2:
-                if (user.getExp() + exp >= NextLevelExp.TWO.value()){
-                    resultLevel+=1;
+                if (user.getExp() + exp >= NextLevelExp.TWO.value()) {
+                    resultLevel += 1;
                     resultExp = user.getExp() + exp - NextLevelExp.TWO.value();
-                }else{
+                } else {
                     resultExp = user.getExp() + exp;
                 }
                 break;
             case 3:
-                if (user.getExp() + exp >= NextLevelExp.THREE.value()){
-                    resultLevel+=1;
+                if (user.getExp() + exp >= NextLevelExp.THREE.value()) {
+                    resultLevel += 1;
                     resultExp = user.getExp() + exp - NextLevelExp.THREE.value();
-                }else{
+                } else {
                     resultExp = user.getExp() + exp;
                 }
                 break;
             case 4:
-                if (user.getExp() + exp >= NextLevelExp.FOUR.value()){
-                    resultLevel+=1;
+                if (user.getExp() + exp >= NextLevelExp.FOUR.value()) {
+                    resultLevel += 1;
                     resultExp = user.getExp() + exp - NextLevelExp.FOUR.value();
-                }else{
+                } else {
                     resultExp = user.getExp() + exp;
                 }
                 break;
