@@ -1,20 +1,24 @@
 package com.ssafy.antenna.controller;
 
 import com.ssafy.antenna.domain.ResultResponse;
-import com.ssafy.antenna.domain.user.dto.LogInUserReq;
-import com.ssafy.antenna.domain.user.dto.LogInUserRes;
-import com.ssafy.antenna.domain.user.dto.PostUserReq;
+import com.ssafy.antenna.domain.user.dto.*;
 import com.ssafy.antenna.exception.not_found.EmailEmptyException;
 import com.ssafy.antenna.exception.not_found.NicknameEmptyException;
 import com.ssafy.antenna.exception.not_found.PasswordEmptyException;
 import com.ssafy.antenna.service.AuthenticationService;
+import com.ssafy.antenna.service.JwtService;
 import com.ssafy.antenna.service.KakaoService;
 import com.ssafy.antenna.util.ValidationRegex;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.apache.el.parser.Token;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,14 +30,16 @@ import java.util.Map;
 @RequestMapping("${API}/auth")
 @RequiredArgsConstructor
 @CrossOrigin("*")
+@Validated
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
     private final KakaoService kakaoService;
+    private final JwtService jwtService;
     @PostMapping(value = "/register")
     public ResultResponse<LogInUserRes> registerUser(
-            @RequestParam String email,
-            @RequestParam String nickname,
+            @RequestParam @Email(message = "EMAIL_INVALID") @NotBlank(message = "EMAIL_EMPTY") String email,
+            @RequestParam @NotBlank(message = "BAD_CONSTANT") String nickname,
             @RequestParam String password,
             @RequestParam(required = false) String introduce,
             @RequestParam(required = false) MultipartFile photo
@@ -52,13 +58,13 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResultResponse<LogInUserRes> authenticate(@RequestBody LogInUserReq logInUserReq) {
-        if(logInUserReq.email().length()==0)
-            throw new EmailEmptyException();
-        if(!ValidationRegex.isRegexEmail(logInUserReq.email()))
-
-        if(logInUserReq.password().length()==0)
-            throw new PasswordEmptyException();
+    public ResultResponse<LogInUserRes> authenticate(@RequestBody @Valid LogInUserReq logInUserReq) {
+//        if(logInUserReq.email().length()==0)
+//            throw new EmailEmptyException();
+//        if(!ValidationRegex.isRegexEmail(logInUserReq.email()))
+//
+//        if(logInUserReq.password().length()==0)
+//            throw new PasswordEmptyException();
         return ResultResponse.success(authenticationService.authenticate(logInUserReq));
     }
 
@@ -79,6 +85,12 @@ public class AuthenticationController {
         headers.setLocation(URI.create(kakaoService.kakaoConnect()));
 
         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+    }
+
+    @PostMapping("/check-token")
+    public ResultResponse<CheckTokenRes> checkToken(@RequestBody CheckTokenReq checkTokenReq) {
+        //validation 필요!!!!!!!!!!!!!!
+        return ResultResponse.success(authenticationService.checkToken(checkTokenReq.userId(), checkTokenReq.refreshToken()));
     }
 
 }

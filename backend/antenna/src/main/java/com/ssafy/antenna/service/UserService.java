@@ -14,7 +14,9 @@ import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.domain.user.dto.*;
 import com.ssafy.antenna.domain.user.mapper.UserFeatsDtoMapper;
 import com.ssafy.antenna.exception.not_found.*;
+import com.ssafy.antenna.exception.unauthorized.ExpiredRefreshTokenException;
 import com.ssafy.antenna.exception.unauthorized.InvalidPasswordException;
+import com.ssafy.antenna.exception.unauthorized.InvalidRefreshTokenException;
 import com.ssafy.antenna.repository.AdventureSucceedRepository;
 import com.ssafy.antenna.repository.AntennaRepository;
 import com.ssafy.antenna.repository.FollowRepository;
@@ -50,6 +52,8 @@ public class UserService {
     private final AdventureSucceedRepository adventureSucceedRepository;
     private final W3WUtil w3WUtil;
     private final UserFeatsDtoMapper userFeatsDtoMapper;
+
+    private final JwtService jwtService;
 
     @Value("${aws-cloud.aws.s3.bucket.url}")
     private String bucketUrl;
@@ -356,5 +360,4 @@ public class UserService {
         userRepository.save(newUser);
         return newUser.toResponse();
     }
-
 }

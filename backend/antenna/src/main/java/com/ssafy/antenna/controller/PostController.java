@@ -111,6 +111,15 @@ public class PostController {
         return postService.getCommentsByPostId(postId);
     }
 
+    @PutMapping("/comments/{commentId}")
+    public ResultResponse<?> updateComment(
+            @PathVariable Long commentId,
+            @RequestBody PostCommentReq postCommentReq,
+            Authentication authentication
+    ) throws IllegalAccessException {
+        return postService.updateComment(commentId, postCommentReq, Long.valueOf(authentication.getName()));
+    }
+
     @DeleteMapping("/comments/{commentId}")
     public ResultResponse<?> deleteComment(
             @PathVariable Long commentId,
@@ -179,6 +188,15 @@ public class PostController {
     @GetMapping("/comments/{commentId}")
     public ResultResponse<?> getSubComments(@PathVariable Long commentId) {
         return postService.getSubComments(commentId);
+    }
+
+    @PutMapping("/comments/subcomments/{subCommentId}")
+    public ResultResponse<?> updateSubComment(
+            @PathVariable Long subCommentId,
+            @RequestBody PostSubCommentReq postSubCommentReq,
+            Authentication authentication
+    ) throws IllegalAccessException {
+        return postService.updateSubComment(subCommentId, postSubCommentReq, Long.valueOf(authentication.getName()));
     }
 
     @DeleteMapping("/comments/subcomments/{subCommentId}")
