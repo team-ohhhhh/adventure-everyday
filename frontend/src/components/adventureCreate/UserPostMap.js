@@ -56,58 +56,56 @@ const UserPostMap = ({ myPosts, selectPost, userHeight }) => {
     setOnMapPosts(newOnMapPosts);
   };
 
-  // 지도 클러스터 스타일
-  const clusterStyle = {
-    width: "50px",
-    height: "50px",
-    background: "#00BBE4",
-    borderRadius: "25px",
-    color: "#000",
-    textAlign: "center",
-    fontWeight: "bold",
-    lineHeight: "50px",
+  // 클러스터 생성된 시점에 클러스터 마커 이미지 생성
+  const onClustered = (target, clusters) => {
+    clusters.forEach((cluster) => {
+      const markers = cluster._markers;
+      const images = markers
+        .filter((marker) => {
+          return marker.T.Yj !== "/images/noImage_square.png";
+        })
+        .slice(0, 3)
+        .map((marker) => marker.T.Yj);
+
+      while (images.length < markers.length && images.length < 3) {
+        images.push("/images/noImage_square.png");
+      }
+
+      const content = `
+        <div style = "cursor: pointer; position: relative;">
+          <img src=${
+            images[0]
+          } alt="" style="width: 50px; height: 50px; position: absolute; margin-top: 14px; z-index: 3;"/>
+          <img src=${
+            images[1]
+          } alt="" style="width: 50px; height: 50px; position: absolute; margin-left: 7px; margin-top: 7px; z-index: 2;"/>
+          ${
+            images.length > 2
+              ? `<img src=${images[2]} alt="" style="width: 50px; height: 50px; position: absolute; margin-left: 14px; z-index: 1;"/>`
+              : ``
+          }
+          <div
+            style = "width: 30px; height: 30px; background: rgba(0, 0, 0, 0.7); border-radius: 999px; color: rgb(255, 255, 255); text-align: center; font-weight: 500; line-height: 30px; position: absolute; margin-left: 30px; ${
+              markers.length === 2 ? `margin-top: 42px;` : `margin-top: 42px;`
+            } z-index: 4;">
+            ${markers.length}
+          </div>
+        </div>`;
+
+      const dom = document.createElement("div");
+      dom.innerHTML = content;
+
+      dom.addEventListener("click", () => {
+        onClusterclick(cluster);
+      });
+
+      cluster.getClusterMarker().setContent(dom);
+      // console.log(cluster.getClusterMarker().getContent());
+    });
   };
 
-  // 클러스터 생성된 시점에 클러스터 마커 이미지 생성 (보류)
-  // const onClustered = (target, clusters) => {
-  //   clusters.forEach((cluster) => {
-  //     const markers = cluster._markers;
-  //     const images = markers
-  //       .filter((marker) => {
-  //         return marker.T.Yj !== "null";
-  //       })
-  //       .slice(0, 3)
-  //       .map((marker) => marker.T.Yj);
-
-  //     console.log(images);
-
-  //     // if ((images && images.length) <= 3 && markers.length > 3) {
-  //     // }
-
-  //     const content = `
-  //     <div>
-  //       ${images.map(
-  //         (image) =>
-  //           `<img
-  //           src=${image}
-  //           alt=""
-  //           style="width: 50px; height: 50px;"
-  //         />`
-  //       )}
-  //       <div
-  //         style = "cursor: pointer; width: 50px; height: 50px; background: rgb(0, 187, 228); border-radius: 25px; color: rgb(0, 0, 0); text-align: center; font-weight: bold; line-height: 50px;">
-  //         ${markers.length}
-  //       </div>
-  //     </div>`;
-
-  //     // console.log(cluster.getClusterMarker().getContent());
-  //     cluster.getClusterMarker().setContent(content);
-  //     console.log(cluster.getClusterMarker().getContent());
-  //   });
-  // };
-
   // 클러스터 클릭 시
-  const onClusterclick = (_target, cluster) => {
+  const onClusterclick = (cluster) => {
     const map = mapRef.current;
     const level = map.getLevel() - 1;
     map.setLevel(level, { anchor: cluster.getCenter() }); // 지도 확대
@@ -180,10 +178,9 @@ const UserPostMap = ({ myPosts, selectPost, userHeight }) => {
         <MarkerClusterer
           averageCenter={true}
           minLevel={4}
-          styles={[clusterStyle]}
           disableClickZoom={true}
           onClusterclick={onClusterclick}
-          // onClustered={onClustered}
+          onClustered={onClustered}
         >
           {myPosts &&
             myPosts.map((post) => (
@@ -195,9 +192,12 @@ const UserPostMap = ({ myPosts, selectPost, userHeight }) => {
                 onClick={(marker) => {
                   onMarkerClick(marker, post.postId);
                 }}
+                onMouseOver={() => {
+                  mapRef.current.setCursor("move");
+                }}
                 image={{
-                  src: post.postUrl
-                    ? post.postUrl
+                  src: post.photoUrl
+                    ? post.photoUrl
                     : "/images/noImage_square.png",
                   size: {
                     width: 50,
@@ -234,7 +234,7 @@ const UserPostMap = ({ myPosts, selectPost, userHeight }) => {
           <img
             className={styles.postImage}
             src={
-              postDetail.postUrl ? postDetail.postUrl : "/images/noImage.png"
+              postDetail.photoUrl ? postDetail.photoUrl : "/images/noImage.png"
             }
             alt={postDetail.title}
           />

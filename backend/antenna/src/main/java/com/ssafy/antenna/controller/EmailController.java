@@ -20,7 +20,7 @@ public class EmailController {
 
     @GetMapping("/send")
     public ResultResponse<?> sendMail(@RequestParam String email) {
-        if(!validationRegex.isRegexEmail(email)) {
+        if (!validationRegex.isRegexEmail(email)) {
             return ResultResponse.error(ErrorResponse.of(ErrorCode.EMAIL_INVALID));
         }
         return ResultResponse.success(new AuthEmailRes(emailService.sendMail(email)));
@@ -28,7 +28,7 @@ public class EmailController {
 
     @PostMapping("/auth")
     public ResultResponse<?> checkEmailAuth(@RequestBody AuthEmailReq authEmailReq) throws Exception {
-        if(!validationRegex.isRegexEmail(authEmailReq.email())) {
+        if (!validationRegex.isRegexEmail(authEmailReq.email())) {
             return ResultResponse.error(ErrorResponse.of(ErrorCode.EMAIL_INVALID));
         }
         return ResultResponse.success(new AuthEmailRes(emailService.checkEmailAuth(authEmailReq)));

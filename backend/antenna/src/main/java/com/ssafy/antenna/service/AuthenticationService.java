@@ -86,23 +86,23 @@ public class AuthenticationService {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwtToken = jwtService.generateToken(user);
-        return new LogInUserRes(jwtToken,user.getRefreshToken(), user.toResponse());
+        return new LogInUserRes(jwtToken, user.getRefreshToken(), user.toResponse());
     }
 
     public CheckTokenRes checkToken(Long userId, String refreshToken) {
         //유저가 존재하는지 확인
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         //유저가 존재하면, 리프레시 토큰 비교
-        if(!refreshToken.equals(user.getRefreshToken()))
+        if (!refreshToken.equals(user.getRefreshToken()))
             throw new InvalidRefreshTokenException();
         //리프레시 토큰이 일치하면, 유효기간 남았는지 체크
         //토큰이 만료됐으면
-        if(jwtService.isTokenExpired(refreshToken))
+        if (jwtService.isTokenExpired(refreshToken))
             throw new ExpiredRefreshTokenException();
-        else{
+        else {
             //토큰이 만료되지 않았으면, 토큰을 새로 생성해서 리프레시 토큰이랑 넣어준다.
             String jwtToken = jwtService.generateToken(user);
-            return new CheckTokenRes(jwtToken,refreshToken);
+            return new CheckTokenRes(jwtToken, refreshToken);
         }
     }
 

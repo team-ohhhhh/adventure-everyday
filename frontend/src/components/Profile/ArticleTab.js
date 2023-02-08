@@ -4,7 +4,7 @@ import axios from 'axios'
 import { useSelector } from "react-redux"
 import ProfileArticleMap from "./ProfileArticleMap"
 
-function ArticleTab({ userId }) {
+function ArticleTab({ userId, articleList, setArticleList }) {
   const [state, setState] = useState({
     isSelected: false,
   })
@@ -12,7 +12,7 @@ function ArticleTab({ userId }) {
   const URL = useSelector((state) => state.url)
   const TOKEN = useSelector((state) => state.token)
 
-  const [articleList, setArticleList] = useState([])
+  
 
   useEffect(() => {
     axios({

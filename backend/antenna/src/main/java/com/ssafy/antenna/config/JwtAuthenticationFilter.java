@@ -62,7 +62,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
             filterChain.doFilter(request, response);
-        }catch (UnsupportedJwtException e) {
+        } catch (UnsupportedJwtException e) {
 //            log.error("예상하는 형식과 다른 형식이거나 구성의 JWT일 때");
             request.setAttribute("exception", "INVALID_TOKEN");
             filterChain.doFilter(request, response);

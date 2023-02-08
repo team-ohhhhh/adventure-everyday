@@ -154,6 +154,7 @@ let URL = useSelector((state) => state.url)
             }
           }}
         >
+
           {/* 안테나 리스트를 순회하면서 안테나 아이콘 표시 */}
           {antennae && (
             antennae.map((antenna) => {
@@ -170,7 +171,7 @@ let URL = useSelector((state) => state.url)
                         lat : antenna.lat,
                         lng : antenna.lng
                       },
-                      isAroundClicked : true,
+                      isAround : false,
                       isCircle: true,
                       isAntenna: antenna.antennaId,
                     }))
@@ -196,7 +197,24 @@ let URL = useSelector((state) => state.url)
               )
             })
           )}
-
+          
+          {/* 안테나에 원그려주기 */}
+          {/* TODO: 안테나에서 다른 안테나를 누를 때 원 위치 안바뀜 */}
+          { state.isAntenna && state.isCircle &&
+          <Circle
+                center={{
+                  lat : antennae.filter((antenna) => {return antenna.antennaId = state.isAntenna})[0].lat,
+                  lng : antennae.filter((antenna) => {return antenna.antennaId = state.isAntenna})[0].lng,
+                  }}
+                radius={500}
+                strokeWeight={5} // 선의 두께입니다
+                strokeColor={"#4D3EA3"} // 선의 색깔입니다
+                strokeOpacity={0} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                strokeStyle={"dash"} // 선의 스타일 입니다
+                fillColor={"#4D3EA3"} // 채우기 색깔입니다
+                fillOpacity={0.7} // 채우기 불투명도 입니다
+              />
+          }
 
 
           {/* isCur(현재 위치 버튼을 눌러서 isCur가 true일 때 원과 현재마커 보여주기) */}
@@ -204,7 +222,7 @@ let URL = useSelector((state) => state.url)
             <>
               <Circle
                 center={state.center}
-                radius={100}
+                radius={500}
                 strokeWeight={5} // 선의 두께입니다
                 strokeColor={"#190A55"} // 선의 색깔입니다
                 strokeOpacity={0} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
@@ -234,6 +252,9 @@ let URL = useSelector((state) => state.url)
 
           <Antenna antennae={antennae} setState={setState}></Antenna>
 
+
+
+                
           {/* isCur가 켜져있지 않을 때만 버튼이 보임 */}
           {!state.isCur && (
             <button

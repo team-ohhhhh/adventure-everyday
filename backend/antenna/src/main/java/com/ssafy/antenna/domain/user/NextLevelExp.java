@@ -8,6 +8,12 @@ public enum NextLevelExp {
     FIVE(50000);
 
     private final int value;
-    NextLevelExp(int value) { this.value = value; }
-    public int value() { return value; }
+
+    NextLevelExp(int value) {
+        this.value = value;
+    }
+
+    public int value() {
+        return value;
+    }
 }
