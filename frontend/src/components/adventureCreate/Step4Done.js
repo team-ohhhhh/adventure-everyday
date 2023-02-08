@@ -11,6 +11,7 @@ const Step4Done = () => {
   useEffect(() => {
     const animation = animationRef.current;
     animation.preserveAspectRatio = "xMidYMid slice";
+
     setTimeout(() => {
       navigate("/adventure"); // 추후 모험 상세 페이지로 수정
     }, 2500);
