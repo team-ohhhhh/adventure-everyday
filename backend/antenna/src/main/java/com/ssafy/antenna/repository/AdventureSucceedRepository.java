@@ -10,8 +10,10 @@ import java.util.Optional;
 
 public interface AdventureSucceedRepository extends JpaRepository<AdventureSucceed, Long> {
     Optional<List<AdventureSucceed>> findAllByUser(User user);
+
     Optional<List<AdventureSucceed>> findTop5ByAdventureOrderByCreateTimeDesc(Adventure adventure);
 
     Optional<Long> countByUser(User user);
+
     Optional<AdventureSucceed> findByUserAndAdventure(User user, Adventure adventure);
 }

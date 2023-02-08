@@ -1,4 +1,9 @@
 package com.ssafy.antenna.domain.user.dto;
 
-public record ModifyProfileUserReq(String introduce) {
+import jakarta.validation.constraints.Size;
+
+public record ModifyProfileUserReq(
+        @Size(max = 30, message = "WRONG_INTRODUCE_SIZE")
+        String introduce
+) {
 }

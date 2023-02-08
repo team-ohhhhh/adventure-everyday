@@ -69,7 +69,8 @@ public class Adventure extends Base {
     private List<AdventureReview> adventureReviews = new ArrayList<>();
     @OneToMany(mappedBy = "adventure", cascade = CascadeType.ALL)
     private List<CheckpointPost> checkpointPosts = new ArrayList<>();
-    public void updateAvgReviewGrade(Double avgReviewGrade){
+
+    public void updateAvgReviewGrade(Double avgReviewGrade) {
         this.avgReviewGrade = avgReviewGrade;
     }
 }

@@ -11,10 +11,12 @@ import java.util.Optional;
 
 public interface AdventureReviewRepository extends JpaRepository<AdventureReview, Long> {
     Optional<List<AdventureReview>> findAllByAdventure(Adventure adventure);
+
     Optional<Long> countAdventureReviewByAdventure(Adventure adventure);
+
     @Query(
             "select sum(ar.grade) "
-    +"from AdventureReview ar "
-    +"where ar.adventure.adventureId=:adventureId")
+                    + "from AdventureReview ar "
+                    + "where ar.adventure.adventureId=:adventureId")
     Optional<Double> sumOfAdventureReviews(@Param("adventureId") Long adventureId);
 }

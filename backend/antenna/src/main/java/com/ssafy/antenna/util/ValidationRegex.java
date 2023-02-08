@@ -1,10 +1,13 @@
 package com.ssafy.antenna.util;
 
+import org.springframework.stereotype.Service;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Service
 public class ValidationRegex {
-    public static boolean isRegexEmail(String target) {
+    public boolean isRegexEmail(String target) {
         String regex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(target);
