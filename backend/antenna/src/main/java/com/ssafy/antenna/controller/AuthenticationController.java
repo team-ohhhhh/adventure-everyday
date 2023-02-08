@@ -8,23 +8,17 @@ import com.ssafy.antenna.exception.not_found.PasswordEmptyException;
 import com.ssafy.antenna.service.AuthenticationService;
 import com.ssafy.antenna.service.JwtService;
 import com.ssafy.antenna.service.KakaoService;
-import com.ssafy.antenna.util.ValidationRegex;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.apache.el.parser.Token;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Map;
 
 @RestController
 @RequestMapping("${API}/auth")
@@ -36,6 +30,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final KakaoService kakaoService;
     private final JwtService jwtService;
+
     @PostMapping(value = "/register")
     public ResultResponse<LogInUserRes> registerUser(
             @RequestParam String email,
@@ -45,11 +40,11 @@ public class AuthenticationController {
             @RequestParam(required = false) MultipartFile photo
     ) throws IOException {
         //validation
-        if(email.length()==0)
+        if (email.length() == 0)
             throw new EmailEmptyException();
-        if(nickname.length()==0)
+        if (nickname.length() == 0)
             throw new NicknameEmptyException();
-        if(password.length()==0)
+        if (password.length() == 0)
             throw new PasswordEmptyException();
         return ResultResponse.success(
                 authenticationService.registerUser(
@@ -69,7 +64,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/kakao/callback")
-    public ResultResponse<LogInUserRes>  kakaoCallback(@RequestParam String code) throws IOException {
+    public ResultResponse<LogInUserRes> kakaoCallback(@RequestParam String code) throws IOException {
         System.out.println("callback 시작");
         System.out.println(code);
         String access_token = kakaoService.getToken(code);

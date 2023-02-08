@@ -25,7 +25,7 @@ public class AdventureController {
     // 탐험 추가
     @PostMapping
     public ResultResponse<String> createAdventure(@RequestBody CreateAdventureReq createAdventureReq, Authentication authentication) {
-        adventureService.createAdventure(createAdventureReq,Long.valueOf(authentication.getName()));
+        adventureService.createAdventure(createAdventureReq, Long.valueOf(authentication.getName()));
         //탐험 추가
         return ResultResponse.success("탐험 추가 성공");
     }
@@ -33,7 +33,7 @@ public class AdventureController {
     // 특정 탐험 조회
     @GetMapping("/{adventureId}")
     public ResultResponse<ReadAdventureRes> readAdventure(@PathVariable Long adventureId, Authentication authentication) {
-        ReadAdventureRes result = adventureService.readAdventure(adventureId,Long.valueOf(authentication.getName()));
+        ReadAdventureRes result = adventureService.readAdventure(adventureId, Long.valueOf(authentication.getName()));
         return ResultResponse.success(result);
     }
 
@@ -181,64 +181,64 @@ public class AdventureController {
 
     // 특정 위치에서 일정 거리 안에 특정 유저가 참가중인 탐험과 탐험 장소 조회하기
     @GetMapping("/adventure-in-progress/check")
-    public ResultResponse<List<ReadAdventureInProgressWithinDistanceRes>> readAdventureInProgressWithinDistance(@RequestParam Double lat, @RequestParam Double lng,@RequestParam Double area, Authentication authentication) {
-        List<ReadAdventureInProgressWithinDistanceRes> result = adventureService.readAdventureInProgressWithinDistance(lng, lat,area, Long.valueOf(authentication.getName()));
+    public ResultResponse<List<ReadAdventureInProgressWithinDistanceRes>> readAdventureInProgressWithinDistance(@RequestParam Double lat, @RequestParam Double lng, @RequestParam Double area, Authentication authentication) {
+        List<ReadAdventureInProgressWithinDistanceRes> result = adventureService.readAdventureInProgressWithinDistance(lng, lat, area, Long.valueOf(authentication.getName()));
         return ResultResponse.success(result);
     }
 
     // 탐험 카테고리 조회
     @GetMapping("/categories")
-    public ResultResponse<List<String>> readCategories(){
+    public ResultResponse<List<String>> readCategories() {
         List<String> result = adventureService.readCategories();
         return ResultResponse.success(result);
     }
 
     // 탐험 장소 하나 눌렀을 때
     @GetMapping("/adventure-places/{adventurePlaceId}")
-    public ResultResponse<ReadAdventurePlaceClickRes> readAdventurePlaceClick(@PathVariable Long adventurePlaceId){
+    public ResultResponse<ReadAdventurePlaceClickRes> readAdventurePlaceClick(@PathVariable Long adventurePlaceId) {
         return ResultResponse.success(adventureService.readAdventurePlaceClick(adventurePlaceId));
     }
 
     // '탐험 후기'탭 눌렀을 때
     @GetMapping("/{adventureId}/adventure-review")
-    public ResultResponse<ReadAdventureReviewClickRes> readAdventureReviewClick(@PathVariable Long adventureId){
+    public ResultResponse<ReadAdventureReviewClickRes> readAdventureReviewClick(@PathVariable Long adventureId) {
         return ResultResponse.success(adventureService.readAdventureReviewClick(adventureId));
     }
 
     // '탐험 중'탭 눌렀을 때
     @GetMapping("/clicks/adventure-in-progress/users/{userId}")
-    public ResultResponse<List<ReadAdventureInProgressClickRes>> readAdventureInProgressClick(@PathVariable Long userId,@RequestParam String order){
-        return ResultResponse.success(adventureService.readAdventureInProgressClick(userId,order));
+    public ResultResponse<List<ReadAdventureInProgressClickRes>> readAdventureInProgressClick(@PathVariable Long userId, @RequestParam String order) {
+        return ResultResponse.success(adventureService.readAdventureInProgressClick(userId, order));
     }
 
     // '완료한 탐험' 탭 눌렀을 때
     @GetMapping("/clicks/adventure-succeed/users/{userId}")
-    public ResultResponse<ReadAdventureSucceedClickRes> readAdventureSucceedClick(@PathVariable Long userId){
+    public ResultResponse<ReadAdventureSucceedClickRes> readAdventureSucceedClick(@PathVariable Long userId) {
         return ResultResponse.success(adventureService.readAdventureSucceedClick(userId));
     }
 
     // 보물 '더보기' 눌렀을 때
     @GetMapping("/clicks/treasures/users/{userId}")
-    public ResultResponse<ReadAdventureTreasuresMoreClickRes> readAdventureTreasuresMoreClick(@PathVariable Long userId, Authentication authentication){
-        return ResultResponse.success(adventureService.readAdventureTreasuresMoreClick(userId,Long.valueOf(authentication.getName())));
+    public ResultResponse<ReadAdventureTreasuresMoreClickRes> readAdventureTreasuresMoreClick(@PathVariable Long userId, Authentication authentication) {
+        return ResultResponse.success(adventureService.readAdventureTreasuresMoreClick(userId, Long.valueOf(authentication.getName())));
     }
 
     // 대표 보물로 선택/취소
     @PutMapping("/{adventureId}/treasures/representatives")
-    public ResultResponse<String> createRepresentativeTreasures(@PathVariable Long adventureId, Authentication authentication, @RequestBody Map<String, Boolean> selectedMap){
-        adventureService.createRepresentativeTreasures(adventureId,Long.valueOf(authentication.getName()),selectedMap.get("selected"));
+    public ResultResponse<String> createRepresentativeTreasures(@PathVariable Long adventureId, Authentication authentication, @RequestBody Map<String, Boolean> selectedMap) {
+        adventureService.createRepresentativeTreasures(adventureId, Long.valueOf(authentication.getName()), selectedMap.get("selected"));
         return ResultResponse.success("대표 보물로 선택/취소 성공");
     }
 
     // '만든 탐험' 탭 눌렀을 때
     @GetMapping("/clicks/adventure-creations/users/{userId}")
-    public ResultResponse<List<ReadAdventureCreationsClickRes>> readAdventureCreationsClick(@PathVariable Long userId){
+    public ResultResponse<List<ReadAdventureCreationsClickRes>> readAdventureCreationsClick(@PathVariable Long userId) {
         return ResultResponse.success(adventureService.readAdventureCreationsClick(userId));
     }
 
     // 탐험중인 사람들 보기
     @GetMapping("/{adventureId}/users")
-    public ResultResponse<List<ReadAdventureInProgressUsersClickRes>> readAdventureInProgressUsersClick(@PathVariable Long adventureId){
+    public ResultResponse<List<ReadAdventureInProgressUsersClickRes>> readAdventureInProgressUsersClick(@PathVariable Long adventureId) {
         return ResultResponse.success(adventureService.readAdventureInProgressUsersClick(adventureId));
     }
 
