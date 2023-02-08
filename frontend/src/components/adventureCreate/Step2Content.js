@@ -100,7 +100,7 @@ const Step2Content = ({ checkpoints, adventure, setAdventure }) => {
   ));
 
   return (
-    <div>
+    <>
       <div className={styles2.closeContainer}>
         <AiOutlineClose onClick={handleQuit} size={35} />
       </div>
@@ -179,7 +179,7 @@ const Step2Content = ({ checkpoints, adventure, setAdventure }) => {
           다음
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

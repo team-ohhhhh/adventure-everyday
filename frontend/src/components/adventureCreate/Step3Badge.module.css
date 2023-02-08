@@ -9,3 +9,38 @@
   overflow: auto;
   background-color: rgb(211, 78, 78);
 }
+
+.badgeBox {
+  width: 100px;
+  height: 100px;
+  border-radius: 999px;
+  margin: auto;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #39d8f6;
+  background-color: white;
+  box-shadow: 
+    /* White glow */ 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff,
+    /* Green glow */ 0 0 42px #39d8f6, 0 0 82px #39d8f6, 0 0 92px #39d8f6,
+    0 0 102px;
+  animation: rotate_image 3s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+@keyframes rotate_image {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.badgeInfo {
+  margin: 1.5rem;
+  line-height: 1.5em;
+  font-size: 1rem;
+}
+
+.warningContainer {
+}
