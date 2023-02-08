@@ -1,8 +1,7 @@
 package com.ssafy.antenna.service;
 
 import com.ssafy.antenna.domain.ResultResponse;
-import com.ssafy.antenna.domain.adventure.Adventure;
-import com.ssafy.antenna.domain.adventure.AdventureInProgress;
+import com.ssafy.antenna.domain.adventure.*;
 import com.ssafy.antenna.domain.antenna.Antenna;
 import com.ssafy.antenna.domain.comment.Comment;
 import com.ssafy.antenna.domain.comment.PostCommentReq;
@@ -29,6 +28,8 @@ import com.ssafy.antenna.domain.post.dto.PostUpdateReq;
 import com.ssafy.antenna.domain.post.mapper.PostDtoMapper;
 import com.ssafy.antenna.domain.user.Follow;
 import com.ssafy.antenna.domain.user.User;
+import com.ssafy.antenna.exception.conflict.DuplicateAdventurePlaceException;
+import com.ssafy.antenna.exception.not_found.AdventureInProgressNotFoundException;
 import com.ssafy.antenna.exception.not_found.AdventureNotFoundException;
 import com.ssafy.antenna.exception.not_found.AdventurePlaceNotFoundException;
 import com.ssafy.antenna.exception.not_found.UserNotFoundException;
@@ -74,6 +75,9 @@ public class PostService {
     private final FollowRepository followRepository;
     private final AdventurePlaceRepository adventurePlaceRepository;
     private final AdventureInProgressRepository adventureInProgressRepository;
+    private final CheckpointRepository checkPointRepository;
+    private final AdventureSucceedRepository adventureSucceedRepository;
+    private final UserService userService;
     @Value("${aws-cloud.aws.s3.bucket.url}")
     private String bucketUrl;
 
@@ -220,26 +224,37 @@ public class PostService {
     }
 
     public PostDetailRes createPost(Long userId, String title, String content, String lat, String lng, String isPublic, MultipartFile photo, String isCheckpoint, String adventureId, String adventurePlaceId) throws IOException {
-        ConvertTo3WA w3wWords = w3WUtil.getW3W(Double.parseDouble(lng), Double.parseDouble(lat));
-        Post post = Post.builder()
-                .user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new))
-                .title(title).content(content)
-                .coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLng(), w3wWords.getCoordinates().getLat())))
-                .w3w(w3wWords.getWords())
-                .nearestPlace(w3wWords.getNearestPlace())
-                .isPublic(Boolean.valueOf(isPublic))
-                .build();
-        if (photo != null) {
-            String photoName = awsS3Service.uploadImage(photo);
-            String photoUrl = bucketUrl + photoName;
-            post = Post.builder().user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new)).title(title).content(content).coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLng(), w3wWords.getCoordinates().getLat()))).w3w(w3wWords.getWords()).nearestPlace(w3wWords.getNearestPlace()).isPublic(Boolean.valueOf(isPublic)).photoUrl(photoUrl).photoName(photoName).build();
-
-        }
-
-        Post save = postRepository.save(post);
-
-
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        AdventurePlace adventurePlace = adventurePlaceRepository.findById(Long.valueOf(adventurePlaceId)).orElseThrow(AdventurePlaceNotFoundException::new);
+        Post post = new Post();
+        //모험 글인 경우
         if (Boolean.valueOf(isCheckpoint)) {
+            //이미 달성한 모험인지 체크를 한다.
+            if (checkPointRepository.countByUserAndAdventurePlace(user, adventurePlace).get() == 1) {
+                //달성한 모험인 경우, 익셉션 발생
+                throw new DuplicateAdventurePlaceException();
+            }
+
+
+            // 달성한 모험이 아니라면, 저장을 한다.
+            ConvertTo3WA w3wWords = w3WUtil.getW3W(Double.parseDouble(lng), Double.parseDouble(lat));
+            post = Post.builder()
+                    .user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new))
+                    .title(title).content(content)
+                    .coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLng(), w3wWords.getCoordinates().getLat())))
+                    .w3w(w3wWords.getWords())
+                    .nearestPlace(w3wWords.getNearestPlace())
+                    .isPublic(Boolean.valueOf(isPublic))
+                    .build();
+            if (photo != null) {
+                String photoName = awsS3Service.uploadImage(photo);
+                String photoUrl = bucketUrl + photoName;
+                post = Post.builder().user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new)).title(title).content(content).coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLng(), w3wWords.getCoordinates().getLat()))).w3w(w3wWords.getWords()).nearestPlace(w3wWords.getNearestPlace()).isPublic(Boolean.valueOf(isPublic)).photoUrl(photoUrl).photoName(photoName).build();
+
+            }
+
+            Post save = postRepository.save(post);
+            //체크포인트 게시글 추가
             checkpointPostRepository.save(CheckpointPost.builder()
                     .adventure(adventureRepository.findById(Long.valueOf(adventureId)).orElseThrow(AdventureNotFoundException::new))
                     .adventurePlace(adventurePlaceRepository.findById(Long.valueOf(adventurePlaceId)).orElseThrow(AdventurePlaceNotFoundException::new))
@@ -247,10 +262,58 @@ public class PostService {
                     .build()
             );
 
-            // adventureInProgress에 달성좌표 업데이트해주고
-            // 완료했으면 aIP에서 빼주고, succeed에 넣어준다.
-            // 그리고 경험치 업데이트.
+            //체크포인트 저장
+            checkPointRepository.save(Checkpoint.builder()
+                    .adventurePlace(adventurePlace)
+                    .user(user)
+                    .build()
+            );
+
+
+            //adventureInProgress에 달성한 좌표 +1 해주고, 총 좌표갯수와 비교하는데
+            Adventure adventure = adventureRepository.findById(Long.valueOf(adventureId)).orElseThrow(AdventureNotFoundException::new);
+            AdventureInProgress adventureInProgress = adventureInProgressRepository.findByUserAndAdventure(user, adventure).orElseThrow(AdventureInProgressNotFoundException::new);
+            int currentPoint = adventureInProgress.getCurrentPoint();
+            adventureInProgress.setCurrentPoint(currentPoint + 1);
+            //같으면 -> adventureInProgress에서 삭제, adventureSuccess 에 추가, 유저 경험치 업데이트(메소드 이용)
+            if ((currentPoint + 1) == adventureInProgress.getTotalPoint()) {
+                adventureInProgressRepository.deleteById(adventureInProgress.getProgressId());
+                AdventureSucceed adventureSucceed = AdventureSucceed.builder()
+                        .user(user)
+                        .adventure(adventure)
+                        .selected(false)
+                        .build();
+                adventureSucceedRepository.save(adventureSucceed);
+                userService.addExpUser(adventure.getExp(), user.getUserId());
+            }
+            //안같으면 -> 아무것도 안함(저장만 함)
+            else {
+                adventureInProgressRepository.save(adventureInProgress);
+            }
+
+
         }
+        //모험 글이 아닌경우
+        else {
+            ConvertTo3WA w3wWords = w3WUtil.getW3W(Double.parseDouble(lng), Double.parseDouble(lat));
+            post = Post.builder()
+                    .user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new))
+                    .title(title).content(content)
+                    .coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLng(), w3wWords.getCoordinates().getLat())))
+                    .w3w(w3wWords.getWords())
+                    .nearestPlace(w3wWords.getNearestPlace())
+                    .isPublic(Boolean.valueOf(isPublic))
+                    .build();
+            if (photo != null) {
+                String photoName = awsS3Service.uploadImage(photo);
+                String photoUrl = bucketUrl + photoName;
+                post = Post.builder().user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new)).title(title).content(content).coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLng(), w3wWords.getCoordinates().getLat()))).w3w(w3wWords.getWords()).nearestPlace(w3wWords.getNearestPlace()).isPublic(Boolean.valueOf(isPublic)).photoUrl(photoUrl).photoName(photoName).build();
+
+            }
+
+            Post save = postRepository.save(post);
+        }
+
 
         return post.toResponse();
     }
