@@ -1,6 +1,14 @@
 import styles from "./AdventureDetailReview.module.css";
 import { Hashicon } from "@emeraldpay/hashicon-react";
-function AdventureDetailReview() {
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useMemo, useState, useEffect } from "react";
+import ReviewItem from "./review/ReviewItem";
+function AdventureDetailReview(props) {
+  // 상위 컴포넌트: adventureDetailPage
+  // props.info로 reviews 리스트 가져옴
+
   return (
     <>
       <div className={styles.detail}>
@@ -8,7 +16,7 @@ function AdventureDetailReview() {
           <img className={styles.treasureImg} src="/images/decoIcon.png"></img>
           <div className={styles.treasureInfo}>
             <div className={styles.treasureBorder}>
-              <Hashicon value={991016} size={100} />
+              <Hashicon value={960409} size={100} />
               <div className={styles.chingho}>걷기왕</div>
             </div>
             <div className={styles.treasureDesc}>
@@ -22,7 +30,15 @@ function AdventureDetailReview() {
           <div className={styles.title}>탐험후기</div>
 
           <div className={styles.reviewList}>
-            <div className={styles.reviewItem}>후기 컴포넌트 들어갈 자리</div>
+            <div className={styles.reviewItem}>
+              {props.info.map((review, index) => {
+                return <ReviewItem key={index} data={review} />;
+              })}
+              {/* 후기가 없으면 보여줄 컴포넌트 */}
+              {!props.info && (
+                <div className={styles.article}>아직은 글이 없어요!</div>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -8,14 +8,15 @@ function ParticipantsCircle(props) {
     <div className={styles.container}>
       {/* 참가자 프로필 반복 */}
       {props.photoList ? (
-        props.photoList.slice(0, 4).map((photo, index) => {
+        props.photoList.slice(0, 5).map((photo, index) => {
           // photoList에 유저 id와 사진 리스트가 옴
           return (
             <img
-              className={`${styles.participant} ${
-                styles.participant + { index }
-              }`}
-              src={photo.photoUrl}
+              className={styles.participant}
+              style={{
+                marginLeft: `${1.1 * index}rem`,
+              }}
+              src={photo ? photo : "/defaultProfile.jpg"}
             />
           );
         })
