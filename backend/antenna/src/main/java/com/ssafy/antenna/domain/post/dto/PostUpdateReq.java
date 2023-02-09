@@ -8,7 +8,6 @@ public record PostUpdateReq(
         String title,
         @NotBlank(message = "CONTENT_EMPTY") @Size(max = 254, message = "CONTENT_SIZE_ERROR")
         String content,
-
         String isPublic
 ) {
 }
