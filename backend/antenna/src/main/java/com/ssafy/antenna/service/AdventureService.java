@@ -91,7 +91,7 @@ public class AdventureService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
         // 현재 이 모험id로 AdventureInProgress 가져오기.
-        List<AdventureInProgress> adventureInProgressList = adventureInProgressRepository.findAllByAdventure(adventure).orElseThrow();
+        List<AdventureInProgress> adventureInProgressList = adventureInProgressRepository.findTop5ByAdventureOrderByCreateTimeDesc(adventure).orElseThrow();
 
         // AdventureInProgress 유저들의 id만 골라오기.
         List<Long> userIds = new ArrayList<>();
@@ -102,6 +102,7 @@ public class AdventureService {
 
         // 유저id로 유저id와 사진 가져오기.
         List<UserIdPhotoUrl> userIdPhotoUrls = getUserIdPhotoUrl(userIds);
+
 
         // isParticipating
         Boolean participation = Boolean.FALSE;
