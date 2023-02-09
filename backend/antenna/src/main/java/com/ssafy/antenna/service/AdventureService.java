@@ -806,7 +806,7 @@ public class AdventureService {
     }
 
     // '완료한 탐험' 눌렀을 때
-    public ReadAdventureSucceedClickRes readAdventureSucceedClick(Long userId) {
+    public ReadAdventureSucceedClickRes readAdventureSucceedClick(Long userId,String order) {
         // 현재 프로필의 주인 User
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
@@ -814,6 +814,22 @@ public class AdventureService {
 
         // 프로필 주인이 완료한 탐험 AS
         List<AdventureSucceed> adventureSucceeds = adventureSucceedRepository.findAllByUser(user).orElseThrow(AdventureSucceedNotFoundException::new);
+
+        // 프로필 주인이 참여중인 AIP
+        if (order.equals("createTimeDesc")) { // 최신순
+            adventureSucceeds = adventureSucceedRepository.findAllByUserOrderByCreateTimeDesc(user).orElseThrow(AdventureInProgressNotFoundException::new);
+        } else if (order.equals("userCountDesc")) { // 참여자 많은순
+            adventureSucceeds = adventureSucceedRepository.findAIPOrderByUserCount(user.getUserId()).orElseThrow(AdventureInProgressNotFoundException::new);
+        } else if (order.equals("difficultyAsc")) { // 쉬운순
+            adventureSucceeds = adventureSucceeds.stream()
+                    .sorted((a1, a2) -> Long.compare(a1.getAdventure().getDifficulty(), a2.getAdventure().getDifficulty()))
+                    .collect(Collectors.toList());
+        } else if (order.equals("difficultyDesc")) { // 어려운순
+            adventureSucceeds = adventureSucceeds.stream()
+                    .sorted((a1, a2) -> Long.compare(a2.getAdventure().getDifficulty(), a1.getAdventure().getDifficulty()))
+                    .collect(Collectors.toList());
+        }
+
 
         // 리턴할 보물 List
         List<SubTreasure> treasures = new ArrayList<>();
@@ -915,7 +931,7 @@ public class AdventureService {
     }
 
     // '만든 탐험' 탭 눌렀을 때
-    public List<ReadAdventureCreationsClickRes> readAdventureCreationsClick(Long userId) {
+    public List<ReadAdventureCreationsClickRes> readAdventureCreationsClick(Long userId,String order) {
         // 현재 프로필의 주인 User
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
@@ -923,6 +939,21 @@ public class AdventureService {
 
         // 프로필 주인이 만든 Adventure
         List<Adventure> adventureList = adventureRepository.findAllByUserOrderByCreateTimeDesc(user).orElseThrow();
+
+        // 프로필 주인이 참여중인 AIP
+        if (order.equals("createTimeDesc")) { // 최신순
+            adventureList = adventureRepository.findAllByUserOrderByCreateTimeDesc(user).orElseThrow(AdventureInProgressNotFoundException::new);
+        } else if (order.equals("userCountDesc")) { // 참여자 많은순
+            adventureList = adventureRepository.findAdventuresOrderByUserCount(user.getUserId()).orElseThrow(AdventureInProgressNotFoundException::new);
+        } else if (order.equals("difficultyAsc")) { // 쉬운순
+            adventureList = adventureList.stream()
+                    .sorted((a1, a2) -> Long.compare(a1.getDifficulty(), a2.getDifficulty()))
+                    .collect(Collectors.toList());
+        } else if (order.equals("difficultyDesc")) { // 어려운순
+            adventureList = adventureList.stream()
+                    .sorted((a1, a2) -> Long.compare(a2.getDifficulty(), a1.getDifficulty()))
+                    .collect(Collectors.toList());
+        }
 
         // 만든 모험을 돌면서
         for (Adventure adventure : adventureList) {
