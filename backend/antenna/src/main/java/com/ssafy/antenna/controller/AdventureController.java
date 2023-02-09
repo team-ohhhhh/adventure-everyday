@@ -195,8 +195,8 @@ public class AdventureController {
 
     // 탐험 장소 하나 눌렀을 때
     @GetMapping("/adventure-places/{adventurePlaceId}")
-    public ResultResponse<ReadAdventurePlaceClickRes> readAdventurePlaceClick(@PathVariable Long adventurePlaceId) {
-        return ResultResponse.success(adventureService.readAdventurePlaceClick(adventurePlaceId));
+    public ResultResponse<ReadAdventurePlaceClickRes> readAdventurePlaceClick(@PathVariable Long adventurePlaceId,@RequestParam String order) {
+        return ResultResponse.success(adventureService.readAdventurePlaceClick(adventurePlaceId,order));
     }
 
     // '탐험 후기'탭 눌렀을 때
