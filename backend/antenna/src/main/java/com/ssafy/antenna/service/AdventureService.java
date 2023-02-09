@@ -455,7 +455,7 @@ public class AdventureService {
 
         AdventureReview adventureReview = AdventureReview.builder()
                 .content(createAdventureReviewReq.content())
-                .grade(createAdventureReviewReq.rate())
+                .grade(createAdventureReviewReq.grade())
                 .user(user)
                 .adventure(adventure)
                 .build();
