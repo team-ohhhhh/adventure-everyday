@@ -658,10 +658,16 @@ public class AdventureService {
 
     // 탐험 장소 하나 눌렀을 때
 
-    public ReadAdventurePlaceClickRes readAdventurePlaceClick(Long adventurePlaceId) {
+    public ReadAdventurePlaceClickRes readAdventurePlaceClick(Long adventurePlaceId,String order) {
         AdventurePlace adventurePlace = adventurePlaceRepository.findById(adventurePlaceId).orElseThrow(AdventurePlaceNotFoundException::new);
 
-        List<CheckpointPost> checkpointPosts = checkpointPostRepository.findAllByAdventurePlace(adventurePlace).orElseThrow(CheckpointPostNotFoundException::new);
+        List<CheckpointPost> checkpointPosts = new ArrayList<>();
+
+        if(order.equals("createTimeDesc")) {
+            checkpointPosts = checkpointPostRepository.findAllByAdventurePlaceOrderByCreateTimeDesc(adventurePlace).orElseThrow(CheckpointPostNotFoundException::new);
+        }else if(order.equals("postLikeDesc")){
+            checkpointPosts = checkpointPostRepository.findCheckpointPostByPostLikeDesc(adventurePlaceId).orElseThrow(CheckpointPostNotFoundException::new);
+        }
 
         List<SubPost> subPostList = new ArrayList<>();
 
