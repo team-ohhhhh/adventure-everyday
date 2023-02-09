@@ -253,22 +253,23 @@ public class PostService {
 
             }
 
-            Post save = postRepository.save(post);
-            //체크포인트 게시글 추가
-            checkpointPostRepository.save(CheckpointPost.builder()
-                    .adventure(adventureRepository.findById(Long.valueOf(adventureId)).orElseThrow(AdventureNotFoundException::new))
-                    .adventurePlace(adventurePlaceRepository.findById(Long.valueOf(adventurePlaceId)).orElseThrow(AdventurePlaceNotFoundException::new))
-                    .post(save)
-                    .build()
-            );
+            if(adventureInProgressRepository.findByUserAndAdventure(user,adventureRepository.findById(Long.valueOf(adventureId)).orElseThrow(AdventureNotFoundException::new)).isPresent()) {
+                Post save = postRepository.save(post);
+                //체크포인트 게시글 추가
+                checkpointPostRepository.save(CheckpointPost.builder()
+                        .adventure(adventureRepository.findById(Long.valueOf(adventureId)).orElseThrow(AdventureNotFoundException::new))
+                        .adventurePlace(adventurePlaceRepository.findById(Long.valueOf(adventurePlaceId)).orElseThrow(AdventurePlaceNotFoundException::new))
+                        .post(save)
+                        .build()
+                );
 
-            //체크포인트 저장
-            checkpointRepository.save(Checkpoint.builder()
-                    .adventurePlace(adventurePlace)
-                    .user(user)
-                    .build()
-            );
-
+                //체크포인트 저장
+                checkpointRepository.save(Checkpoint.builder()
+                        .adventurePlace(adventurePlace)
+                        .user(user)
+                        .build()
+                );
+            }
 
             //adventureInProgress에 달성한 좌표 +1 해주고, 총 좌표갯수와 비교하는데
             Adventure adventure = adventureRepository.findById(Long.valueOf(adventureId)).orElseThrow(AdventureNotFoundException::new);
