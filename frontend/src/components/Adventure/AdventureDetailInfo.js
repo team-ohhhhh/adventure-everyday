@@ -29,8 +29,8 @@ function AdventureDetailInfo(props) {
     createTime: "", // 게시글 생성 시간
     photoUrl: "", // 게시글 이미지
 
-    adventurePlaceTitle: "체크포인트 제목",
-    adventurePlaceContent: "체크포인트 내용",
+    adventurePlaceTitle: "지도에 있는 좌표를 눌러보세요!",
+    adventurePlaceContent: "체크포인트 정보가 표시됩니다.",
 
     subPostList: [],
   });
@@ -67,46 +67,44 @@ function AdventureDetailInfo(props) {
   }
 
   return (
-    <>
-      <div className={styles.detail}>
-        <div className={styles.map}>
-          <AdventureDetailMap
-            pos={positions}
-            subAdventurePlaces={props.info.subAdventurePlaces}
-            setCheckPointInfo={setCheckPointInfo}
-          ></AdventureDetailMap>
-        </div>
-        <div className={styles.checkPoint}>
-          <div className={styles.cpInfo}>
-            <div className={styles.cpTitle}>
-              {checkPointInfo.adventurePlaceTitle}
-            </div>
-            <div className={styles.cpDesc}>
-              {checkPointInfo.adventurePlaceContent}
-            </div>
+    <div className={styles.detail}>
+      <div className={styles.map}>
+        <AdventureDetailMap
+          pos={positions}
+          subAdventurePlaces={props.info.subAdventurePlaces}
+          setCheckPointInfo={setCheckPointInfo}
+        ></AdventureDetailMap>
+      </div>
+      <div className={styles.checkPoint}>
+        <div className={styles.cpInfo}>
+          <div className={styles.cpTitle}>
+            {checkPointInfo.adventurePlaceTitle}
           </div>
+          <div className={styles.cpDesc}>
+            {checkPointInfo.adventurePlaceContent}
+          </div>
+        </div>
 
-          <div className={styles.cpArticle}>
-            <BigArticleItem data={checkPointInfo} />
-          </div>
-        </div>
-        <div className={styles.checkPointArticles}>
-          <div className={styles.articleInfo}>
-            <div className={styles.cpSubTitle}>이 포인트에서 작성된 글들</div>
-            <button className={styles.arrangeBtn}>정렬버튼</button>
-          </div>
-          <div className={styles.articles}>
-            {checkPointInfo.subPostList.map((article) => {
-              return <SmallArticleItem key={article} data={article} />;
-            })}
-            {/* 체크포인트 글 목록이 없으면 보여줄 컴포넌트 */}
-            {!props.info.subAdventurePlaces && (
-              <div className={styles.article}>아직은 글이 없어요!</div>
-            )}
-          </div>
+        <div className={styles.cpArticle}>
+          <BigArticleItem data={checkPointInfo} />
         </div>
       </div>
-    </>
+      <div className={styles.checkPointArticles}>
+        <div className={styles.articleInfo}>
+          <div className={styles.cpSubTitle}>이 포인트에서 작성된 글들</div>
+          <button className={styles.arrangeBtn}>정렬버튼</button>
+        </div>
+        <div className={styles.articles}>
+          {checkPointInfo.subPostList.map((article) => {
+            return <SmallArticleItem key={article} data={article} />;
+          })}
+          {/* 체크포인트 글 목록이 없으면 보여줄 컴포넌트 */}
+          {!props.info.subAdventurePlaces && (
+            <div className={styles.article}>아직은 글이 없어요!</div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
 

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import style from "./ReviewItem.module.css";
+import ReactStars from "react-rating-stars-component";
 
 function ReviewItem({ data }) {
   // 상위 컴포넌트: AdventureDetailReview
@@ -14,16 +15,25 @@ function ReviewItem({ data }) {
   console.log(data);
 
   return (
-    <div key={data.adventureReviewId} className={style.articleListItem}>
+    <div key={data.adventureReviewId} className={style.reviewListItem}>
       {/* 포토 src 바꿔주기 */}
-      <img src="/alien.jpg" className={style.photo} />
+      <img src="/images/completed.png" className={style.photo} />
       <div className={style.divForInfo}>
-        <div>
-          <div className={style.title}> {data.comment} </div>
+        <div className={style.mainInfo}>
           <div className={style.nickNameAndTier}>
-            <span className={style.nickName}> {data.nickname} </span>
+            <div className={style.nickName}> {data.nickname}</div>
             <img className={style.tier} src={`/images/lv1.png`} />
           </div>
+          <div className={style.rate}>
+            <ReactStars
+              count={data.rate}
+              size={15}
+              activeColor="#ffd700"
+              value={data.rate}
+              edit={false}
+            />
+          </div>
+          <div className={style.comment}> {data.comment} </div>
         </div>
         <div className={style.date}> {data.createTime} </div>
       </div>

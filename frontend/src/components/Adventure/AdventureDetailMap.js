@@ -48,33 +48,34 @@ function AdventureDetailMap(props) {
       bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
     });
     return bounds;
-  });
+  }, []);
 
-  const SetMapPos = () => {
-    // console.log(bounds.getNorthEast().La, bounds.getNorthEast().Ma);
-    // console.log(bounds.getSouthWest().La, bounds.getSouthWest().Ma);
-    // console.log("--");
-    // console.log(
-    //   bounds.getSouthWest().La +
-    //     (bounds.getNorthEast().La - bounds.getSouthWest().La) / 2
-    // );
-    // console.log(
-    //   bounds.getSouthWest().Ma +
-    //     (bounds.getNorthEast().Ma - bounds.getSouthWest().Ma) / 2
-    // );
-  };
+  // const SetMapPos = () => {
+  //   // console.log(bounds.getNorthEast().La, bounds.getNorthEast().Ma);
+  //   // console.log(bounds.getSouthWest().La, bounds.getSouthWest().Ma);
+  //   // console.log("--");
+  //   // console.log(
+  //   //   bounds.getSouthWest().La +
+  //   //     (bounds.getNorthEast().La - bounds.getSouthWest().La) / 2
+  //   // );
+  //   // console.log(
+  //   //   bounds.getSouthWest().Ma +
+  //   //     (bounds.getNorthEast().Ma - bounds.getSouthWest().Ma) / 2
+  //   // );
+  // };
+
+  function SetMapPos() {
+    const map = mapRef.current;
+    if (map) {
+      map.setBounds(bounds);
+      console.log("정해진 bounds로 맵 세팅");
+    }
+  }
 
   useMemo(() => {
-    function SetMapPos() {
-      const map = mapRef.current;
-      if (map) {
-        map.setBounds(bounds);
-        console.log("정해진 bounds로 맵 세팅");
-      }
-    }
     SetMapPos();
     console.log("setMapPost");
-  }, [bounds]);
+  }, []);
 
   return (
     <div className={styles.mapWrapper}>
@@ -91,6 +92,8 @@ function AdventureDetailMap(props) {
           height: "12rem",
         }}
         level={3} // 지도의 확대 레벨
+        onCreate={SetMapPos}
+        ref={mapRef}
       >
         {subAdventurePlaces &&
           subAdventurePlaces.map((place, index) => {
@@ -108,7 +111,7 @@ function AdventureDetailMap(props) {
                     axios({
                       url:
                         URL +
-                        `/adventures/adventure-places/${place.adventurePlaceId}`,
+                        `/adventures/adventure-places/${place.adventurePlaceId}?order=createTimeDesc`,
                       headers: {
                         Authorization: `Bearer ${TOKEN}`,
                       },
