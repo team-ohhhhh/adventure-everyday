@@ -970,6 +970,7 @@ public class AdventureService {
             Integer clearRate = (int) (((double) adventureInProgress.getCurrentPoint() / (double) adventureInProgress.getTotalPoint()) * 100.0);
 
             ReadAdventureInProgressUsersClickRes readAdventureInProgressUsersClickRes = new ReadAdventureInProgressUsersClickRes(
+                    adventure.getFeat(),
                     clearRate,
                     user.toResponse()
             );
