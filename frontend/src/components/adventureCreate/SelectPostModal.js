@@ -8,7 +8,13 @@ import styles from "./SelectPostModal.module.css";
 import styles2 from "../../pages/ArticleCreatePage.module.css";
 import { AiOutlineClose } from "react-icons/ai";
 
-const SelectPostModal = ({ myPosts, setMyPosts, closeModal, selectPost }) => {
+const SelectPostModal = ({
+  myPosts,
+  setMyPosts,
+  closeModal,
+  selectPost,
+  checkpoints,
+}) => {
   const url = useSelector((state) => state.url);
   const token = useSelector((state) => state.token);
   const user = useSelector((state) => state.user);
@@ -58,6 +64,7 @@ const SelectPostModal = ({ myPosts, setMyPosts, closeModal, selectPost }) => {
           myPosts={myPosts}
           selectPost={selectPost}
           userHeight={userHeight}
+          checkpoints={checkpoints}
         />
       </div>
     </div>

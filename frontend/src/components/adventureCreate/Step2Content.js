@@ -88,29 +88,36 @@ const Step2Content = ({
   const handleNext = () => {
     if (checkpoints.length < 2) {
       alert("체크포인트를 2개 이상 선택해주세요.");
-    } else if (!adventure.RepresentativePostId) {
+      return;
+    }
+    if (!adventure.RepresentativePostId) {
       alert("대표 게시글을 선택해 주세요.");
+      return;
     }
     const done = checkpoints.every(
       (point) => point.adventurePlaceTitle && point.adventurePlaceContent
     );
     if (!done) {
       alert("체크포인트 이름과 내용을 빠짐없이 작성해 주세요.");
-    } else if (!adventure.startDate || !adventure.endDate) {
+      return;
+    }
+    if (!adventure.startDate || !adventure.endDate) {
       alert("탐험을 진행할 기간을 설정해 주세요.");
       dateRef.current.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
-    } else if (!adventure.title || !adventure.title) {
+      return;
+    }
+    if (!adventure.title || !adventure.title) {
       alert("탐험 소개를 작성해 주세요.");
       introRef.current.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
-    } else {
-      navigate("/adventure/create/3");
+      return;
     }
+    navigate("/adventure/create/3");
   };
 
   const CustomInput = forwardRef(({ value, onClick }, ref) => (
