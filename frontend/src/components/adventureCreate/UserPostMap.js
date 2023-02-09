@@ -23,7 +23,7 @@ const UserPostMap = ({ myPosts, selectPost, userHeight, checkpoints }) => {
   // 하단 게시글 목록 출력 여부
   const [show, setShow] = useState(false);
   // 하단에서 보여줄 게시글 목록
-  const [showPosts, setShowPosts] = useState(false);
+  const [showPosts, setShowPosts] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [postDetail, setPostDetail] = useState();
 
@@ -54,6 +54,7 @@ const UserPostMap = ({ myPosts, selectPost, userHeight, checkpoints }) => {
       const postLatLng = new kakao.maps.LatLng(post.lat, post.lng);
       return bounds.contain(postLatLng);
     });
+    // console.log("onIdle", newOnMapPosts);
     setOnMapPosts(newOnMapPosts);
   };
 
@@ -111,6 +112,7 @@ const UserPostMap = ({ myPosts, selectPost, userHeight, checkpoints }) => {
     const level = map.getLevel() - 1;
     map.setLevel(level, { anchor: cluster.getCenter() }); // 지도 확대
     map.panTo(cluster.getCenter()); // 중심 이동
+    // console.log("onClusterClick", onMapPosts);
     setShowPosts(onMapPosts);
     setShow(true);
   };
