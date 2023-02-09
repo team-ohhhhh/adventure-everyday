@@ -1,0 +1,53 @@
+.bigContainer{
+ 
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin : 3vw;
+  color : #1C0B69;
+  font-size: large;
+  font-weight: 800;
+}
+
+.button {
+  background: #1C0B69;
+  border-radius: 999px;
+  color: white
+}
+
+
+.container {
+
+  width: 338px;
+  height: 183px;
+  background-size: cover;
+  background-position: center;
+  color: white;
+  /* margin-left: 20px; */
+  border-radius: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: rgb(247, 247, 247);
+
+}
+
+.noTreasure {
+  width: 338px;
+  height: 183px;
+  background-size: cover;
+  background-position: center;
+  color: white;
+  /* margin-left: 20px; */
+  border-radius: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: rgb(247, 247, 247);
+}

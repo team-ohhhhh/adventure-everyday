@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import BottomSheetContainer from "./../components/BottomSheet/BottomSheet";
 import SmallArticleItem from './../components/SmallArticleItem';
 import { useNavigate } from "react-router-dom";
+import ArticleBannerPin from './../components/mapPage/ArticleBannerPin'
 
 function MainMap() {
   const navigate = useNavigate()
@@ -118,9 +119,9 @@ let URL = useSelector((state) => state.url)
           onDragStart={() => {
             setState((prev) => ({
               ...prev,
-              isCur: false,
-              isAroundClicked: false,
-              isCircle: false,
+              // isCur: false,
+              // isAroundClicked: false,
+              // isCircle: false,
             }));
 
             console.log("dragStart");
@@ -200,11 +201,14 @@ let URL = useSelector((state) => state.url)
           
           {/* 안테나에 원그려주기 */}
           {/* TODO: 안테나에서 다른 안테나를 누를 때 원 위치 안바뀜 */}
-          { state.isAntenna && state.isCircle &&
-          <Circle
+          { state.isCircle &&
+          antennae.map((antenna) => {
+            return (
+              antenna.antennaId === state.isAntenna && 
+              <Circle
                 center={{
-                  lat : antennae.filter((antenna) => {return antenna.antennaId = state.isAntenna})[0].lat,
-                  lng : antennae.filter((antenna) => {return antenna.antennaId = state.isAntenna})[0].lng,
+                  lat : antenna.lat,
+                  lng : antenna.lng
                   }}
                 radius={500}
                 strokeWeight={5} // 선의 두께입니다
@@ -214,6 +218,9 @@ let URL = useSelector((state) => state.url)
                 fillColor={"#4D3EA3"} // 채우기 색깔입니다
                 fillOpacity={0.7} // 채우기 불투명도 입니다
               />
+            )
+          })
+          
           }
 
 
@@ -374,11 +381,7 @@ let URL = useSelector((state) => state.url)
               >
                 {/*TODO: 여기 어떻게 이미지 CSS ㅜㅠ */}
                 {isOpen === article.postId && 
-                <div>
-                  <div onClick={() => {
-                    navigate(`/article/${article.postId}`)}}><img style={{height:"5vh", width:"5vh", objectFit:"true"}} src={article.photoUrl} 
-                  /></div>
-                </div>
+                  <SmallArticleItem data={article} style={{borderRadius:"10px"}}/>
                 }</MapMarker>)
             })
           }
