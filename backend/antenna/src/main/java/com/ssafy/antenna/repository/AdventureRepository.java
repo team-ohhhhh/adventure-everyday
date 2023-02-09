@@ -13,4 +13,6 @@ public interface AdventureRepository extends JpaRepository<Adventure, Long> {
     Optional<List<Adventure>> findByTitleContaining(String title);
 
     Optional<List<Adventure>> findAllByUserOrderByCreateTimeDesc(User user);
+
+    Optional<List<Adventure>> findALlByOrderByAvgReviewGradeDesc();
 }

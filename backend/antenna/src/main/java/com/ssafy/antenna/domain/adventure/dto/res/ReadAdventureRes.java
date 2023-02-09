@@ -20,6 +20,7 @@ public record ReadAdventureRes(
         List<UserIdPhotoUrl> userIdPhotoUrlList,
         Long userCount,
         Boolean participation,
+        Boolean clear,
         List<SubAdventurePlace> subAdventurePlaces
 
 ) {
