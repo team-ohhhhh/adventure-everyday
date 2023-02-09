@@ -23,6 +23,8 @@ const AdventureCreatePage = () => {
   });
   const [checkpoints, setCheckpoints] = useState([]);
   const [myPosts, setMyPosts] = useState([]);
+  const [dateRange, setDateRange] = useState([null, null]);
+  const [startDate, endDate] = dateRange;
 
   return (
     <div className={styles.pageContainer}>
@@ -47,6 +49,9 @@ const AdventureCreatePage = () => {
               checkpoints={checkpoints}
               adventure={adventure}
               setAdventure={setAdventure}
+              startDate={startDate}
+              endDate={endDate}
+              setDateRange={setDateRange}
             />
           }
         />

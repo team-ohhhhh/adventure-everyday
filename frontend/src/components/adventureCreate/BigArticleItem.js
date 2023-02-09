@@ -2,9 +2,7 @@ import React, { useMemo } from "react";
 
 import style from "./BigArticleItem.module.css";
 
-function BigArticleItem({ data }) {
-  const post = data.postDetail;
-
+function BigArticleItem({ post }) {
   const date = useMemo(() => {
     return post.date ? post.date.substr(0, 10) : "";
   }, [post.date]);

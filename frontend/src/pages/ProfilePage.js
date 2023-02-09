@@ -15,6 +15,8 @@ function ProfilePage() {
 
   variables.$noneActiveTextColor = "black";
 
+  const [articleList, setArticleList] = useState([])
+
   // 더보기 버튼 토글 + 페이지 터치시 닫히도록
   const [isOn, setIsOn]  = useState(false)
   function toggle() {
@@ -29,7 +31,7 @@ function ProfilePage() {
   return (
     <div className="pageContainer" onClick={pageTouch}>
       <div>
-        <UserInfo userId={userId} toggle={toggle} isOn={isOn}/>
+        <UserInfo userId={userId} toggle={toggle} isOn={isOn} articleListLength={articleList.length}/>
       </div>
       <div>
         <Tabs
@@ -40,7 +42,7 @@ function ProfilePage() {
           onClick={(event, tab) => console.log(event, tab)}
         >
           <Tab title="게시글" className="mr-4">
-            <ArticleTab className={styles.tabWrapper} userId={userId}/>
+            <ArticleTab className={styles.tabWrapper} userId={userId} articleList={articleList} setArticleList={setArticleList}/>
           </Tab>
           <Tab title="탐험 중" className="mr-4">
             <AdventureOnProgressTab className={styles.tabWrapper} userId={userId}/>

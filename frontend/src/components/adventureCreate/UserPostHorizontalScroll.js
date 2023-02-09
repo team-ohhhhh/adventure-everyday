@@ -9,16 +9,14 @@ function UserPostHorizontalScroll({ posts, onPostClick, onPostSelect }) {
   return (
     <div className={style.articleList}>
       <ScrollMenu>
-        {posts.map((post) => {
-          return (
-            <UserPostHorizontalItem
-              key={post.postId}
-              post={post}
-              onPostClick={onPostClick}
-              onPostSelect={onPostSelect}
-            />
-          );
-        })}
+        {posts.map((post) => (
+          <UserPostHorizontalItem
+            key={post.postId}
+            post={post}
+            onPostClick={onPostClick}
+            onPostSelect={onPostSelect}
+          />
+        ))}
       </ScrollMenu>
     </div>
   );
