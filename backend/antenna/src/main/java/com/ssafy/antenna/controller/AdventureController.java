@@ -319,15 +319,13 @@ public class AdventureController {
         return ResultResponse.success(adventureService.readAdventureTreasuresMoreClick(userId, Long.valueOf(authentication.getName())));
     }
 
-    // 대표 보물로 선택/취소
-    @PutMapping("/{adventureId}/treasures/representatives")
+    // 대표 보물로 선택(덮어쓰기)
+    @PutMapping("/treasures/representatives")
     public ResultResponse<String> createRepresentativeTreasures(
-            @PathVariable Long adventureId,
             Authentication authentication,
-            @RequestBody Map<String, Boolean> selectedMap
+            @RequestBody List<Long> selectedTreasures
     ) {
-        if(adventureId < 1) throw new BadConstantException();
-        adventureService.createRepresentativeTreasures(adventureId, Long.valueOf(authentication.getName()), selectedMap.get("selected"));
+        adventureService.createRepresentativeTreasures(Long.valueOf(authentication.getName()), selectedTreasures);
         return ResultResponse.success("대표 보물로 선택/취소 성공");
     }
 

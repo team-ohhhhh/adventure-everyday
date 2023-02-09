@@ -920,16 +920,23 @@ public class AdventureService {
     }
 
     // 대표 보물로 선택하기
-    public void createRepresentativeTreasures(Long adventureId, Long userId, Boolean selected) {
+    public void createRepresentativeTreasures( Long userId, List<Long> selectedTreasures) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
-        AdventureSucceed adventureSucceed = adventureSucceedRepository.findByUserAndAdventure(user, adventure).orElseThrow(AdventureSucceedNotFoundException::new);
-        adventureSucceedRepository.save(new AdventureSucceed(
-                adventureSucceed.getSucceedId(),
-                user,
-                adventure,
-                selected
-        ));
+
+        // 먼저 전부 false처리
+        List<AdventureSucceed> adventureSucceeds = adventureSucceedRepository.findAllByUser(user).orElseThrow(AdventureSucceedNotFoundException::new);
+        for(AdventureSucceed adventureSucceed:adventureSucceeds){
+            adventureSucceed.updateSelected(false);
+            adventureSucceedRepository.save(adventureSucceed);
+        }
+
+        // 받아온거 true로 밀어버림.
+        for(Long adventureId:selectedTreasures){
+            Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
+            AdventureSucceed adventureSucceed =adventureSucceedRepository.findByUserAndAdventure(user,adventure).orElseThrow(AdventureSucceedNotFoundException::new);
+            adventureSucceed.updateSelected(true);
+            adventureSucceedRepository.save(adventureSucceed);
+        }
     }
 
     // '만든 탐험' 탭 눌렀을 때
