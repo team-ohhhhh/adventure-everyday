@@ -9,6 +9,7 @@ import AdventureCreatePage from "./pages/AdventureCreatePage";
 import ArticleCreatePage from "./pages/ArticleCreatePage";
 import AdventurePage from "./pages/AdventurePage";
 import AdventureDetailPage from "./pages/AdventureDetailPage";
+import AdventureInProgressListPage from "./pages/AdventureInProgressListPage";
 import ProfilePage from "./pages/ProfilePage";
 import SearchPage from "./pages/SearchPage";
 import PasswordChangePage from "./pages/PasswordChangePage";
@@ -44,6 +45,10 @@ function App() {
             <Route
               path="/adventure/detail/:id"
               element={<AdventureDetailPage />}
+            />
+            <Route
+              path="/adventure/detail/:id/adventure-in-progress-list"
+              element={<AdventureInProgressListPage />}
             />
             <Route path="/profile/:userId" element={<ProfilePage />} />
             <Route
