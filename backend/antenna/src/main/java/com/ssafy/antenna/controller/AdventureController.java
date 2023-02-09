@@ -88,6 +88,13 @@ public class AdventureController {
         return ResultResponse.success(result);
     }
 
+    // 특정 탐험의 칭호 조회
+    @GetMapping("/{adventureId}/feat")
+    public ResultResponse<String> getAdventureFeat(@PathVariable Long adventureId) {
+        if(adventureId < 1) throw new BadConstantException();
+        return adventureService.getAdventureFeat(adventureId);
+    }
+
     //
 
     // 특정 유저가 참가중인 탐험 추가(탐험 참가)

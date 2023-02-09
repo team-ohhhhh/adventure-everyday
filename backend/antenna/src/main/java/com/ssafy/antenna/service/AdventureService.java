@@ -1,5 +1,6 @@
 package com.ssafy.antenna.service;
 
+import com.ssafy.antenna.domain.ResultResponse;
 import com.ssafy.antenna.domain.adventure.*;
 import com.ssafy.antenna.domain.adventure.dto.click.*;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventurePlaceReq;
@@ -1052,4 +1053,11 @@ public class AdventureService {
     }
 
 
+    public ResultResponse<String> getAdventureFeat(Long adventureId) {
+        return ResultResponse.success(
+                adventureRepository.findById(adventureId)
+                        .orElseThrow(AdventureNotFoundException::new)
+                        .getFeat()
+        );
+    }
 }
