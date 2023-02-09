@@ -495,7 +495,8 @@ public class AdventureService {
                     ar.getUser().getUserId(),
                     ar.getUser().getNickname(),
                     ar.getGrade(),
-                    ar.getContent()
+                    ar.getContent(),
+                    ar.getCreateTime()
             );
 
             result.add(newReadAdventureReviewRes);
