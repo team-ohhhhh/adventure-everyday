@@ -18,8 +18,8 @@ function HorizontalScroll(props) {
       return (
         <div className={style.articleList}>
           <ScrollMenu>
-            {nearList &&
-              nearList.map((articleListItem) => {
+            {props.nearList &&
+              props.nearList.map((articleListItem) => {
                 return (
                   <AdventureBanner
                     key={articleListItem}
