@@ -14,7 +14,7 @@ function ParticipantsCircle(props) {
             <img
               className={styles.participant}
               style={{
-                marginLeft: `${1.1 * index}rem`,
+                marginLeft: `${1.1 * (4 - index)}rem`,
               }}
               src={photo ? photo : "/defaultProfile.jpg"}
             />
