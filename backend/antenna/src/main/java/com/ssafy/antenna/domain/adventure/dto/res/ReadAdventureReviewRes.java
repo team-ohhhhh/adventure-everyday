@@ -8,7 +8,7 @@ public record ReadAdventureReviewRes(
         String nickname,
         Integer rate,
         String comment,
-        LocalDateTime createTIme
+        LocalDateTime createTime
 
 ) {
 }
