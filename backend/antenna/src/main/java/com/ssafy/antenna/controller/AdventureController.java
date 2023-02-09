@@ -295,10 +295,11 @@ public class AdventureController {
     // '완료한 탐험' 탭 눌렀을 때
     @GetMapping("/clicks/adventure-succeed/users/{userId}")
     public ResultResponse<ReadAdventureSucceedClickRes> readAdventureSucceedClick(
-            @PathVariable Long userId
+            @PathVariable Long userId,
+            @RequestParam String order
     ) {
         if(userId < 1) throw new BadConstantException();
-        return ResultResponse.success(adventureService.readAdventureSucceedClick(userId));
+        return ResultResponse.success(adventureService.readAdventureSucceedClick(userId,order));
     }
 
     // 보물 '더보기' 눌렀을 때
@@ -326,7 +327,8 @@ public class AdventureController {
     // '만든 탐험' 탭 눌렀을 때
     @GetMapping("/clicks/adventure-creations/users/{userId}")
     public ResultResponse<List<ReadAdventureCreationsClickRes>> readAdventureCreationsClick(
-            @PathVariable Long userId
+            @PathVariable Long userId,
+            @RequestParam String order
     ) {
         if(userId < 1) throw new BadConstantException();
         return ResultResponse.success(adventureService.readAdventureCreationsClick(userId));
