@@ -7,5 +7,6 @@ public record PostAntennaReq(
         @Max(value =20, message = "AREA_SIZE_ERROR")
         Long area,
         double lng,
-        double lat) {
+        double lat
+) {
 }

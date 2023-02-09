@@ -136,6 +136,7 @@ public class AdventureService {
                 adventure.getAvgReviewGrade(),
                 new UserIdPhotoUrl(adventure.getUser().getUserId(), adventure.getUser().getPhotoUrl()),
                 adventure.getUser().getNickname(),
+                adventure.getUser().getLevel(),
                 userIdPhotoUrls,
                 adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureNotFoundException::new),
                 participation,
@@ -494,7 +495,8 @@ public class AdventureService {
                     ar.getUser().getUserId(),
                     ar.getUser().getNickname(),
                     ar.getGrade(),
-                    ar.getContent()
+                    ar.getContent(),
+                    ar.getCreateTime()
             );
 
             result.add(newReadAdventureReviewRes);
@@ -963,7 +965,7 @@ public class AdventureService {
         List<ReadAdventureInProgressUsersClickRes> result = new ArrayList<>();
 
         // users
-        List<User> userList = userRepository.findAdventureInProgressUsers().orElseThrow(UserNotFoundException::new);
+        List<User> userList = userRepository.findAdventureInProgressUsers(adventureId).orElseThrow(UserNotFoundException::new);
         for (User user : userList) {
             // clearRate
             AdventureInProgress adventureInProgress = adventureInProgressRepository.findByUserAndAdventure(user, adventure).orElseThrow(AdventureInProgressNotFoundException::new);
