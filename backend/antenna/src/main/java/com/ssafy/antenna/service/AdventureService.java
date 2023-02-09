@@ -136,6 +136,7 @@ public class AdventureService {
                 adventure.getAvgReviewGrade(),
                 new UserIdPhotoUrl(adventure.getUser().getUserId(), adventure.getUser().getPhotoUrl()),
                 adventure.getUser().getNickname(),
+                adventure.getUser().getLevel(),
                 userIdPhotoUrls,
                 adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureNotFoundException::new),
                 participation,

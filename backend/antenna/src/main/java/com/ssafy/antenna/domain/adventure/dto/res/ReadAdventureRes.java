@@ -17,6 +17,7 @@ public record ReadAdventureRes(
         Double adventureAvgReviewRate,
         UserIdPhotoUrl userIdPhotoUrl,
         String userNickname,
+        int userLevel,
         List<UserIdPhotoUrl> userIdPhotoUrlList,
         Long userCount,
         Boolean participation,
