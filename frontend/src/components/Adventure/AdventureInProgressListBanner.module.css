@@ -1,14 +1,22 @@
-.banner {
-  width: 338px;
-  height: 183px;
-  background-size: cover;
-  background-position: center;
-  color: white;
-  /* margin-left: 20px; */
+.main{
   border-radius: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+}
+
+.banner {
+    margin-left: 10%;
+    margin-right: 10%;
+    width: 90%;
+  color: black;
+  font-weight: bold;
+  border-radius: 20px;
+  /* display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; */
   margin: 7px;
 }
 
@@ -26,6 +34,7 @@
   line-height: 24px;
 }
 
+
 .difficulty {
   margin-left: 10px;
 }
@@ -42,21 +51,24 @@
   flex-direction: row;
   margin: 20px;
 }
+.makerName{
+  margin-right: 2%;
+}
 
 .makerNameAndTierContainer {
   display: flex;
   flex-direction: column;
   align-items: baseline;
-
   margin-left : 10px;
+  width: 100%;
 }
 
 .makerNameAndTier{
   display: flex;
-
   width: 100%;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
+  margin-bottom: 3%;
 }
 
 .userLevel{
