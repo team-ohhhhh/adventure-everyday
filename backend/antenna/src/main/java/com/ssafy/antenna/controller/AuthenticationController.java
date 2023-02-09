@@ -1,13 +1,16 @@
 package com.ssafy.antenna.controller;
 
+import com.ssafy.antenna.domain.ErrorResponse;
 import com.ssafy.antenna.domain.ResultResponse;
 import com.ssafy.antenna.domain.user.dto.*;
+import com.ssafy.antenna.exception.ErrorCode;
 import com.ssafy.antenna.exception.not_found.EmailEmptyException;
 import com.ssafy.antenna.exception.not_found.NicknameEmptyException;
 import com.ssafy.antenna.exception.not_found.PasswordEmptyException;
 import com.ssafy.antenna.service.AuthenticationService;
 import com.ssafy.antenna.service.JwtService;
 import com.ssafy.antenna.service.KakaoService;
+import com.ssafy.antenna.util.ValidationRegex;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -30,9 +33,10 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final KakaoService kakaoService;
     private final JwtService jwtService;
+    private final ValidationRegex validationRegex;
 
     @PostMapping(value = "/register")
-    public ResultResponse<LogInUserRes> registerUser(
+    public ResultResponse<?> registerUser(
             @RequestParam String email,
             @RequestParam String nickname,
             @RequestParam String password,
@@ -40,12 +44,18 @@ public class AuthenticationController {
             @RequestParam(required = false) MultipartFile photo
     ) throws IOException {
         //validation
-        if (email.length() == 0)
-            throw new EmailEmptyException();
-        if (nickname.length() == 0)
-            throw new NicknameEmptyException();
-        if (password.length() == 0)
-            throw new PasswordEmptyException();
+        if (!validationRegex.isRegexEmail(email)){
+            return ResultResponse.error(ErrorResponse.of(ErrorCode.EMAIL_INVALID));
+        }
+        if (nickname.length() < 3){
+            return ResultResponse.error(ErrorResponse.of(ErrorCode.NICKNAME_INVALID));
+        }
+        if (!(password.length() >= 6 && password.length()<=12)){
+            return ResultResponse.error(ErrorResponse.of(ErrorCode.WRONG_PASSWORD_SIZE));
+        }
+        if(introduce != null && introduce.length() > 30) {
+            return ResultResponse.error(ErrorResponse.of(ErrorCode.WRONG_INTRODUCE_SIZE));
+        }
         return ResultResponse.success(
                 authenticationService.registerUser(
                         new PostUserReq(email, nickname, password, introduce), photo
