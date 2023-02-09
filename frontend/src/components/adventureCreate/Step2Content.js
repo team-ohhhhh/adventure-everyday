@@ -69,6 +69,14 @@ const Step2Content = ({
   };
 
   const handleDate = (update) => {
+    const today = new Date();
+    today.setHours(0);
+    today.setMinutes(0);
+    today.setSeconds(0);
+    if (update[0].getDate() < today.getDate()) {
+      alert("오늘 이후의 날짜를 선택해주세요.");
+      return;
+    }
     setDateRange(update);
   };
 
