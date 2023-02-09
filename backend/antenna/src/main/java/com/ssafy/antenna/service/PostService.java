@@ -4,7 +4,7 @@ import com.ssafy.antenna.domain.ResultResponse;
 import com.ssafy.antenna.domain.adventure.*;
 import com.ssafy.antenna.domain.antenna.Antenna;
 import com.ssafy.antenna.domain.comment.Comment;
-import com.ssafy.antenna.domain.comment.PostCommentReq;
+import com.ssafy.antenna.domain.comment.dto.PostCommentReq;
 import com.ssafy.antenna.domain.comment.SubComment;
 import com.ssafy.antenna.domain.comment.dto.CommentDto;
 import com.ssafy.antenna.domain.comment.dto.PostSubCommentReq;
