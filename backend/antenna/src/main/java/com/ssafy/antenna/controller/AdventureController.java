@@ -331,7 +331,7 @@ public class AdventureController {
             @RequestParam String order
     ) {
         if(userId < 1) throw new BadConstantException();
-        return ResultResponse.success(adventureService.readAdventureCreationsClick(userId));
+        return ResultResponse.success(adventureService.readAdventureCreationsClick(userId,order));
     }
 
     // 탐험중인 사람들 보기
