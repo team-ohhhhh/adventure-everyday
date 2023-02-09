@@ -1,5 +1,5 @@
 import React from "react";
-import style from './AdventureProgressBar.module.scss'
+import style from "./AdventureProgressBar.module.scss";
 import ProgressBar from "@ramonak/react-progress-bar";
 
 const AdventureProgressBar = ({clearRate}) => {

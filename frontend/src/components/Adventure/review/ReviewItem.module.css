@@ -1,22 +1,28 @@
-.articleListItem {
-    width : 333px;
-    height : 109px;
+.reviewListItem {
+    width : 100%;
+    
     display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: row;
-    background-color: #ffffff;
-    margin-top: 10px;
-    margin-left: auto;
-    margin-right: auto;
+  
+    margin-top: 1rem;
+    height: 6rem;
     
     border-radius: 5px;
-    box-shadow: 5px 5px 5px;
+    background-color: #ffffff;
+
+    padding: 0.5rem;
   
   }
   
   /* 사진인데 사이즈가 문제임... */
   .photo {
-    height : 100%;
+    height : 90%;
+    width: 7rem;
+
     aspect-ratio : 1 / 1;
+
   }
   
   
@@ -25,20 +31,27 @@
   .divForInfo {
     display: flex;
     /* 얘 밀리면 날짜 위치 벗어나게 조정됨 */
-    width : 60%;
-    height : 70%;
-    margin-left : 10px;
-    margin-top: auto;
-    margin-bottom: auto;
+    width : 70%;
+    height : 90%;
+    margin-left : 0.8rem;
+    
     flex-direction: column;
     justify-content: space-between;
-    margin-right: 10px;
+    /* background-color: aquamarine; */
+
   
   }
+
+  .mainInfo{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    /* background-color: tomato; */
+  }
   
-  .title {
+  .comment{
     /* 타이틀 너비 체크 */
-    width: 80%;
+    width: 70%;
     text-align: left;
   
     /* 여기가 글자 넘칠때 잘라주는 코드 */
@@ -47,17 +60,29 @@
     white-space: nowrap;
   
     font-style: normal;
-    font-weight: 600;
+ 
     font-size: 15px;
-    line-height: 17px;
+    height: fit-content;
+    margin-top: 0.5rem;
+
   }
   
   .nickNameAndTier {
     text-align: left;
     float:left;
     display: flex;
+    align-items: center;
     flex-direction: row;
+    height: fit-content;
+   
   
+  }
+
+  .nickName{
+
+    font-size: 800;
+    font-weight: 600;
+    margin-right: 0.2rem;
   }
   
   /* 티어 이미지 인데 크기 어케 바꾸지.. */
@@ -79,13 +104,5 @@
   
   
   }
-  
-  .nickName {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 13px;
-    line-height: 100%;
-  }
-  
+
   

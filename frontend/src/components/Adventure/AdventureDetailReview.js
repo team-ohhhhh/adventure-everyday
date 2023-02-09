@@ -10,39 +10,38 @@ function AdventureDetailReview(props) {
   // props.info로 reviews 리스트 가져옴
 
   return (
-    <>
-      <div className={styles.detail}>
-        <div className={styles.treasure}>
-          <img className={styles.treasureImg} src="/images/decoIcon.png"></img>
-          <div className={styles.treasureInfo}>
-            <div className={styles.treasureBorder}>
-              <Hashicon value={960409} size={100} />
-              <div className={styles.chingho}>걷기왕</div>
-            </div>
-            <div className={styles.treasureDesc}>
-              이 탐험의 보물과 칭호를 받고
-              <br /> 후기를 남겨주세요!
-            </div>
+    <div className={styles.detail}>
+      <div className={styles.treasure}>
+        <img className={styles.treasureImg} src="/images/decoIcon.png"></img>
+        <div className={styles.treasureInfo}>
+          <div className={styles.treasureBorder}>
+            <Hashicon value={960409} size={100} />
+            {/* 이미지는 만든 사람 (닉네임 + 탐험 제목 + 칭호)*/}
+            <div className={styles.chingho}>걷기왕</div>
           </div>
-          <img className={styles.treasureImg} src="/images/decoIcon2.png"></img>
+          <div className={styles.treasureDesc}>
+            이 탐험의 보물과 칭호를 받고
+            <br /> 후기를 남겨주세요!
+          </div>
         </div>
-        <div className={styles.review}>
-          <div className={styles.title}>탐험후기</div>
+        <img className={styles.treasureImg} src="/images/decoIcon2.png"></img>
+      </div>
+      <div className={styles.review}>
+        <div className={styles.title}>탐험후기</div>
 
-          <div className={styles.reviewList}>
-            <div className={styles.reviewItem}>
-              {props.info.map((review, index) => {
-                return <ReviewItem key={index} data={review} />;
-              })}
-              {/* 후기가 없으면 보여줄 컴포넌트 */}
-              {!props.info && (
-                <div className={styles.article}>아직은 글이 없어요!</div>
-              )}
-            </div>
+        <div className={styles.reviewList}>
+          <div className={styles.reviewItem}>
+            {props.info.map((review, index) => {
+              return <ReviewItem key={index} data={review} />;
+            })}
+            {/* 후기가 없으면 보여줄 컴포넌트 */}
+            {!props.info && (
+              <div className={styles.article}>아직은 후기가 없어요!</div>
+            )}
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
