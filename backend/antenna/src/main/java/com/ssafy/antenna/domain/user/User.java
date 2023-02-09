@@ -54,6 +54,8 @@ public class User extends Base implements UserDetails {
     @Column(columnDefinition = "varchar(255) default null")
     private String photoName;
 
+    @Column(columnDefinition = "varchar(255) default null")
+    private String refreshToken;
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

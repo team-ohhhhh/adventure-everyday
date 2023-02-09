@@ -1,14 +1,71 @@
 import styles from "./AdventureInfo.module.css";
 import ProfileCircle from "../ProfileCircle";
+import { FiShare2 } from "react-icons/fi";
+import { HiOutlineBellAlert } from "react-icons/hi2";
+import ParticipantsCircle from "./ParticipantsCircle";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 function AdventureInfo(props) {
-  console.log("photoUrl" + props.info.userIdPhotoUrl); // 이 부분이 부모 컴포넌트 첫 렌더링 땐 undefined이고 리렌더링 될 땐 나옴
+  console.log("ad info");
+  console.log(props.info); // 이 부분이 부모 컴포넌트 첫 렌더링 땐 undefined이고 리렌더링 될 땐 나옴
+
+  const params = useParams(); // 특정 탐험 id가져오기
+  const navigate = useNavigate();
+
+  let TOKEN = useSelector((state) => state.token);
+  let URL = useSelector((state) => state.url);
+
+  let photoList = [];
+  // 참가자 컴포넌트 props로 내려주기 위해 id와 url 쌍으로 오는 배열을 url 배열로만 만들어주기
+  if (props.info.userIdPhotoUrlList) {
+    photoList = props.info.userIdPhotoUrlList.map(
+      (IdUrlList) => IdUrlList.photoUrl
+    );
+    console.log("photoList");
+    console.log(photoList);
+    console.log("difficulty");
+    console.log(props.info.adventureDifficulty);
+  }
+
+  // 참가하기 함수
+  function Participate() {
+    axios({
+      url: URL + `/adventures/${params.id}/adventure-in-progress`,
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+      },
+      method: "post",
+    }).then((response) => {
+      console.log("참가 결과");
+      console.log(response.data.result);
+    });
+  }
+
+  // 포기하기 함수
+  function Giveup() {
+    axios({
+      url: URL + `/adventures/${params.id}/adventure-in-progress`,
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+      },
+      method: "delete",
+    }).then((response) => {
+      console.log("포기되었습니다.");
+      console.log(response.data.result);
+    });
+  }
+
   return (
     <>
       <div className={styles.container}>
         <div className={styles.titleContainer}>
           <div className={styles.title}>{props.info.adventureTitle}</div>
-          <img className={styles.diff} src="/images/diff_easy.png"></img>
+          <img
+            className={styles.diff}
+            src={`/images/diff_${props.info.adventureDifficulty}.png`}
+          ></img>
         </div>
         <div className={styles.period}>
           {props.info.adventureStartDate && (
@@ -45,10 +102,7 @@ function AdventureInfo(props) {
             </div>
           </div>
           <div className={styles.participants}>
-            <ProfileCircle src={"/defaultProfile.jpg"}></ProfileCircle>
-            <ProfileCircle src={"/defaultProfile.jpg"}></ProfileCircle>
-            <ProfileCircle src={"/defaultProfile.jpg"}></ProfileCircle>
-            <ProfileCircle src={"/defaultProfile.jpg"}></ProfileCircle>
+            <ParticipantsCircle photoList={photoList}></ParticipantsCircle>
           </div>
         </div>
         <div className={styles.etc}>
@@ -62,33 +116,62 @@ function AdventureInfo(props) {
             <div className={styles.desc}>
               <div className={styles.normal}>평점:</div>
               <div className={styles.highlight}>
-                {props.info.adventureAvgReviewRate}
+                {props.info.adventureAvgReviewRate ? (
+                  <span>{props.info.adventureAvgReviewRate}</span>
+                ) : (
+                  <span>100점</span>
+                )}
               </div>
             </div>
           </div>
           <div className={styles.button}>
-            <button>알</button>
-            <button>공</button>
-            <button
-              style={{
-                /*버튼 디자인 */
-                justifyItems: "center",
-                alignItems: "center",
-
-                width: "fit-content",
-                height: "fit-content",
-                padding: "0.4rem",
-                paddingLeft: "0.8rem",
-                paddingRight: "0.8rem",
-
-                background: "#1C0B69",
-                borderRadius: "2rem",
-                color: "#ffffff",
-                fontWeight: "bold",
-              }}
-            >
-              참여하기
+            <button className={styles.notice}>
+              <HiOutlineBellAlert size={23} />
             </button>
+            <button className={styles.share}>
+              <FiShare2 size={23} />
+            </button>
+
+            {/* 참여 안한 상태에서 참여하기 버튼 보여주기 */}
+            {!props.info.participation && (
+              <button
+                className={styles.participate}
+                onClick={() => {
+                  console.log("참여!");
+                  console.log(props.info.participation);
+                  Participate();
+                  window.location.replace(`/adventure/detail/${params.id}/`);
+                }}
+              >
+                참여하기
+              </button>
+            )}
+
+            {/* 참여한 상태에서 포기하기 버튼 보여주기 */}
+            {props.info.participation && (
+              <button
+                className={styles.giveup}
+                onClick={() => {
+                  console.log("포기!");
+                  Giveup();
+                  window.location.replace(`/adventure/detail/${params.id}/`);
+                }}
+              >
+                포기하기
+              </button>
+            )}
+
+            {/* 탐험 달성하면 후기 달성 버튼 보이기 */}
+            {props.info.clear && (
+              <button
+                className={styles.review}
+                onClick={() => {
+                  navigate(`/adventure/detail/${params.id}/createReview`);
+                }}
+              >
+                후기작성
+              </button>
+            )}
           </div>
         </div>
       </div>

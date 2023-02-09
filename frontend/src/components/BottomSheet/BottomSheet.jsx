@@ -4,6 +4,7 @@ import { BottomSheet } from "react-spring-bottom-sheet";
 import "react-spring-bottom-sheet/dist/style.css";
 // import "./BottomSheet.css";
 import SmallArticleItem from '../SmallArticleItem';
+import BigArticleItem from '../BigArticleItem';
 import AdventureBanner from './../Adventure/AdventureBanner';
 import { useSelector } from "react-redux"
 import axios from "axios"
@@ -67,7 +68,7 @@ const BottomSheetContainer = (props) => {
         Authorization: `Bearer ${TOKEN}`
       },
       data: {
-        area: 1000, //TODO: 나중에 변수로 안테나 범위 주기
+        area: 1, //TODO: 나중에 변수로 안테나 범위 주기
         lng: props.center.lng,
         lat: props.center.lat,
       }
@@ -134,7 +135,7 @@ const BottomSheetContainer = (props) => {
           {props.articleList.map((data) => {
             if (contentType === 'article') {
                 return(
-                <SmallArticleItem data={data}/>
+                <BigArticleItem data={data}/>
               )}
             else if (contentType === 'adventure') {
               return(

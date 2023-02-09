@@ -15,8 +15,10 @@ function AdventureDetailPage() {
   let TOKEN = useSelector((state) => state.token);
   let URL = useSelector((state) => state.url);
 
+  let [reviews, setReviews] = useState([]);
   let [adventureDetail, setAdventureDetail] = useState({});
 
+  // 탐험 상세 정보 받아오기
   function ReadAdventureDetail() {
     axios({
       url: URL + `/adventures/${params.id}`,
@@ -29,6 +31,24 @@ function AdventureDetailPage() {
       console.log("axios 성공");
       console.log(response.data.result);
     });
+  }
+
+  // 이 탐험의 후기 조회
+  function ReadReview() {
+    axios({
+      url: URL + `/adventures/${params.id}/reviews`,
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+      },
+      method: "get",
+    })
+      .then((response) => {
+        console.log("후기 조회");
+        setReviews(response.data.result);
+
+        console.log(reviews);
+      })
+      .catch((err) => console.log(err));
   }
   // 탐험 상세 정보 받아오기
   useEffect(() => {
@@ -53,7 +73,13 @@ function AdventureDetailPage() {
               className={[styles.tab]} // tabs.rb-tabs
               ulClassName=""
               activityClassName="bg-success"
-              onClick={(event, tab) => console.log(event, tab)}
+              onClick={(event, tab) => {
+                // tab이 2면 (탐험 후기 탭을 누르면 후기 조회하기)
+                console.log(tab);
+                if (tab === 2) {
+                  ReadReview();
+                }
+              }}
             >
               <Tab title="탐험 지도" className="mr-2">
                 <AdventureDetailInfo
@@ -62,7 +88,7 @@ function AdventureDetailPage() {
                 ></AdventureDetailInfo>
               </Tab>
               <Tab title="탐험 후기" className="mr-2">
-                <AdventureDetailReview></AdventureDetailReview>
+                <AdventureDetailReview info={reviews}></AdventureDetailReview>
               </Tab>
             </Tabs>
           </div>

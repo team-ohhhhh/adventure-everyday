@@ -1,0 +1,125 @@
+.photoContainer {
+  display: flex;
+  width: 10vw;
+  height:10vw;
+  border-radius: 70%;
+  overflow: hidden;
+  margin-left: 2vw;
+  margin-right: 2vw;
+  
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+.commentCard {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin: 5vw;
+  padding: 3vw;
+  box-shadow: 5px 2px 2px grey;
+  border-radius: 8px;
+  
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  width: 100%;
+}
+
+
+
+.photoAndNicknameAndTime {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.nicknameAndButton {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.nickname {
+  margin-right : 2vw;
+}
+
+.contentAndFooter {
+  width: 85%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin-left: auto;
+  text-align: left;
+}
+
+.content {
+  word-break:break-all;
+  /* white-space:normal; */
+}
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  margin-top : 2vh
+
+}
+
+.moreButton {
+  margin-right: 1vw;
+}
+
+.likes {
+  margin-right: 2vw;
+}
+
+
+.wouldYouDelete {
+  display : flex;
+  flex-direction : column;
+  justify-content: center;
+  width: 100%
+}
+
+.buttonHolder {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
+  margin-top : 1vh
+}
+
+
+
+
+.yesDelete {
+  color: white;
+  background-color: red;
+  border-radius: 8px;
+  border:none;
+  padding-left: 2vh;
+  padding-right: 2vh;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+}
+
+.noDelete {
+  color: white;
+  background-color: #1C0B69;
+  border-radius: 8px;
+  border:none;
+  padding-left: 2vh;
+  padding-right: 2vh;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+}

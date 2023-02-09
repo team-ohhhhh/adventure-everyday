@@ -1,15 +1,17 @@
 .container
 {
 position: relative;
-width: 250px;
-height: 100%;
-padding: 0px;
+width: 50vw;
+height: auto;
+padding-top: 3px;
 margin-top: 10px;
 margin-right: 10px;
 background: #1C0B69;
 -webkit-border-radius: 6px;
 -moz-border-radius: 6px;
 border-radius: 6px;
+left :9vw;  
+top : -2vh;
 
 z-index: 2;
 }
@@ -24,8 +26,8 @@ border-color: #1C0B69 transparent;
 display: block;
 width: 0;
 z-index: 1;
-top: -15px;
-left: 212px;
+top: -1.5vh;
+left: 38.5vw;
 }
 
 .countInfo{

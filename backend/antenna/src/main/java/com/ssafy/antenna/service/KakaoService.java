@@ -2,40 +2,34 @@ package com.ssafy.antenna.service;
 
 import com.ssafy.antenna.domain.user.Role;
 import com.ssafy.antenna.domain.user.User;
-import com.ssafy.antenna.domain.user.dto.LogInUserReq;
 import com.ssafy.antenna.domain.user.dto.LogInUserRes;
-import com.ssafy.antenna.domain.user.dto.PostUserReq;
 import com.ssafy.antenna.exception.not_found.EmailEmptyException;
 import com.ssafy.antenna.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.json.simple.parser.ParseException;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class KakaoService {
-    @Value("${kakao.rest-token}")
-    String kakaoToken;
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final AuthenticationService authenticationService;
+    @Value("${kakao.rest-token}")
+    String kakaoToken;
+
     public String kakaoConnect() {
         String codeUrl = "https://kauth.kakao.com/oauth/authorize?client_id=" + kakaoToken
-                +"&redirect_uri=http://localhost:8080/api/v1/auth/kakao/callback&response_type=code";
+                + "&redirect_uri=http://localhost:8080/api/v1/auth/kakao/callback&response_type=code";
         return codeUrl;
     }
 
@@ -52,7 +46,7 @@ public class KakaoService {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream()));
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
-            sb.append("&client_id="+kakaoToken);
+            sb.append("&client_id=" + kakaoToken);
             sb.append("&redirect_uri=http://localhost:8080/api/v1/auth/kakao/callback");
             sb.append("&code=" + code);
 
@@ -111,9 +105,8 @@ public class KakaoService {
             BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
             String line = "";
             String res = "";
-            while((line=br.readLine())!=null)
-            {
-                res+=line;
+            while ((line = br.readLine()) != null) {
+                res += line;
             }
 
             System.out.println("res = " + res);
@@ -128,29 +121,33 @@ public class KakaoService {
             String photo = properties.get("profile_image").toString();
             String nickname = properties.get("nickname").toString();
             String email = kakao_account.get("email").toString();
-            if(kakao_account.get("email")==null){
+            if (kakao_account.get("email") == null) {
                 throw new EmailEmptyException();
             }
             //이메일이 이미 있을경우 -> 회원이므로 로그인 처리
             Optional<User> user = userRepository.findByEmail(email);
-            if(user.isPresent()){
+            if (user.isPresent()) {
                 //로그인 처리
+                user.get().setRefreshToken(jwtService.generateRefreshToken());
+                userRepository.save(user.get());
                 String jwtToken = jwtService.generateToken(user.get());
-                logInUserRes = new LogInUserRes(jwtToken, user.get().toResponse());
-            }else{
+                logInUserRes = new LogInUserRes(jwtToken, user.get().getRefreshToken(), user.get().toResponse());
+            } else {
                 //회원가입 후 로그인 처리
+                String refreshToken = jwtService.generateRefreshToken();
                 User newUser = User.builder()
                         .email(email)
-                        .nickname(nickname+id)
+                        .nickname(nickname + id)
                         .password(UUID.randomUUID().toString().concat(email))
                         .level(1)
+                        .refreshToken(refreshToken)
                         .introduce(null)
                         .photoUrl(photo)
                         .role(Role.USER)
                         .build();
                 userRepository.save(newUser);
                 String jwtToken = jwtService.generateToken(newUser);
-                logInUserRes = new LogInUserRes(jwtToken,newUser.toResponse());
+                logInUserRes = new LogInUserRes(jwtToken, refreshToken, newUser.toResponse());
             }
 
 

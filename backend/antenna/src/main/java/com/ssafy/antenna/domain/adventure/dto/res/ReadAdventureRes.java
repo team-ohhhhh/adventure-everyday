@@ -12,14 +12,16 @@ public record ReadAdventureRes(
         String adventureContent,
         LocalDateTime adventureStartDate,
         LocalDateTime adventureEndDate,
-        String adventureDifficulty,
+        Long adventureDifficulty,
         String adventureCategory,
         Double adventureAvgReviewRate,
         UserIdPhotoUrl userIdPhotoUrl,
         String userNickname,
+        int userLevel,
         List<UserIdPhotoUrl> userIdPhotoUrlList,
         Long userCount,
         Boolean participation,
+        Boolean clear,
         List<SubAdventurePlace> subAdventurePlaces
 
 ) {

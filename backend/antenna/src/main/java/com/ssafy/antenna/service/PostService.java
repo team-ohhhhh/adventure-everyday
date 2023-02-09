@@ -1,11 +1,10 @@
 package com.ssafy.antenna.service;
 
 import com.ssafy.antenna.domain.ResultResponse;
-import com.ssafy.antenna.domain.adventure.Adventure;
-import com.ssafy.antenna.domain.adventure.AdventureInProgress;
+import com.ssafy.antenna.domain.adventure.*;
 import com.ssafy.antenna.domain.antenna.Antenna;
 import com.ssafy.antenna.domain.comment.Comment;
-import com.ssafy.antenna.domain.comment.PostCommentReq;
+import com.ssafy.antenna.domain.comment.dto.PostCommentReq;
 import com.ssafy.antenna.domain.comment.SubComment;
 import com.ssafy.antenna.domain.comment.dto.CommentDto;
 import com.ssafy.antenna.domain.comment.dto.PostSubCommentReq;
@@ -29,6 +28,8 @@ import com.ssafy.antenna.domain.post.dto.PostUpdateReq;
 import com.ssafy.antenna.domain.post.mapper.PostDtoMapper;
 import com.ssafy.antenna.domain.user.Follow;
 import com.ssafy.antenna.domain.user.User;
+import com.ssafy.antenna.exception.conflict.DuplicateAdventurePlaceException;
+import com.ssafy.antenna.exception.not_found.AdventureInProgressNotFoundException;
 import com.ssafy.antenna.exception.not_found.AdventureNotFoundException;
 import com.ssafy.antenna.exception.not_found.AdventurePlaceNotFoundException;
 import com.ssafy.antenna.exception.not_found.UserNotFoundException;
@@ -74,6 +75,9 @@ public class PostService {
     private final FollowRepository followRepository;
     private final AdventurePlaceRepository adventurePlaceRepository;
     private final AdventureInProgressRepository adventureInProgressRepository;
+    private final CheckpointRepository checkpointRepository;
+    private final AdventureSucceedRepository adventureSucceedRepository;
+    private final UserService userService;
     @Value("${aws-cloud.aws.s3.bucket.url}")
     private String bucketUrl;
 
@@ -220,33 +224,97 @@ public class PostService {
     }
 
     public PostDetailRes createPost(Long userId, String title, String content, String lat, String lng, String isPublic, MultipartFile photo, String isCheckpoint, String adventureId, String adventurePlaceId) throws IOException {
-        ConvertTo3WA w3wWords = w3WUtil.getW3W(Double.parseDouble(lng), Double.parseDouble(lat));
-        Post post = Post.builder()
-                .user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new))
-                .title(title).content(content)
-                .coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLng(), w3wWords.getCoordinates().getLat())))
-                .w3w(w3wWords.getWords())
-                .nearestPlace(w3wWords.getNearestPlace())
-                .isPublic(Boolean.valueOf(isPublic))
-                .build();
-        if (photo != null) {
-            String photoName = awsS3Service.uploadImage(photo);
-            String photoUrl = bucketUrl + photoName;
-            post = Post.builder().user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new)).title(title).content(content).coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLng(), w3wWords.getCoordinates().getLat()))).w3w(w3wWords.getWords()).nearestPlace(w3wWords.getNearestPlace()).isPublic(Boolean.valueOf(isPublic)).photoUrl(photoUrl).photoName(photoName).build();
-
-        }
-
-        Post save = postRepository.save(post);
-
-
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Post post = new Post();
+        //모험 글인 경우
         if (Boolean.valueOf(isCheckpoint)) {
-            checkpointPostRepository.save(CheckpointPost.builder()
-                    .adventure(adventureRepository.findById(Long.valueOf(adventureId)).orElseThrow(AdventureNotFoundException::new))
-                    .adventurePlace(adventurePlaceRepository.findById(Long.valueOf(adventurePlaceId)).orElseThrow(AdventurePlaceNotFoundException::new))
-                    .post(save)
-                    .build()
-            );
+            AdventurePlace adventurePlace = adventurePlaceRepository.findById(Long.valueOf(adventurePlaceId)).orElseThrow(AdventurePlaceNotFoundException::new);
+            //이미 달성한 모험인지 체크를 한다.
+            if (checkpointRepository.countByUserAndAdventurePlace(user, adventurePlace).get() == 1) {
+                //달성한 모험인 경우, 익셉션 발생
+                throw new DuplicateAdventurePlaceException();
+            }
+
+
+            // 달성한 모험이 아니라면, 저장을 한다.
+            ConvertTo3WA w3wWords = w3WUtil.getW3W(Double.parseDouble(lng), Double.parseDouble(lat));
+            post = Post.builder()
+                    .user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new))
+                    .title(title).content(content)
+                    .coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLng(), w3wWords.getCoordinates().getLat())))
+                    .w3w(w3wWords.getWords())
+                    .nearestPlace(w3wWords.getNearestPlace())
+                    .isPublic(Boolean.valueOf(isPublic))
+                    .build();
+            if (photo != null) {
+                String photoName = awsS3Service.uploadImage(photo);
+                String photoUrl = bucketUrl + photoName;
+                post = Post.builder().user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new)).title(title).content(content).coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLng(), w3wWords.getCoordinates().getLat()))).w3w(w3wWords.getWords()).nearestPlace(w3wWords.getNearestPlace()).isPublic(Boolean.valueOf(isPublic)).photoUrl(photoUrl).photoName(photoName).build();
+
+            }
+
+            if(adventureInProgressRepository.findByUserAndAdventure(user,adventureRepository.findById(Long.valueOf(adventureId)).orElseThrow(AdventureNotFoundException::new)).isPresent()) {
+                Post save = postRepository.save(post);
+                //체크포인트 게시글 추가
+                checkpointPostRepository.save(CheckpointPost.builder()
+                        .adventure(adventureRepository.findById(Long.valueOf(adventureId)).orElseThrow(AdventureNotFoundException::new))
+                        .adventurePlace(adventurePlaceRepository.findById(Long.valueOf(adventurePlaceId)).orElseThrow(AdventurePlaceNotFoundException::new))
+                        .post(save)
+                        .build()
+                );
+
+                //체크포인트 저장
+                checkpointRepository.save(Checkpoint.builder()
+                        .adventurePlace(adventurePlace)
+                        .user(user)
+                        .build()
+                );
+            }
+
+            //adventureInProgress에 달성한 좌표 +1 해주고, 총 좌표갯수와 비교하는데
+            Adventure adventure = adventureRepository.findById(Long.valueOf(adventureId)).orElseThrow(AdventureNotFoundException::new);
+            AdventureInProgress adventureInProgress = adventureInProgressRepository.findByUserAndAdventure(user, adventure).orElseThrow(AdventureInProgressNotFoundException::new);
+            int currentPoint = adventureInProgress.getCurrentPoint();
+            adventureInProgress.setCurrentPoint(currentPoint + 1);
+            //같으면 -> adventureInProgress에서 삭제, adventureSuccess 에 추가, 유저 경험치 업데이트(메소드 이용)
+            if ((currentPoint + 1) == adventureInProgress.getTotalPoint()) {
+                adventureInProgressRepository.deleteById(adventureInProgress.getProgressId());
+                AdventureSucceed adventureSucceed = AdventureSucceed.builder()
+                        .user(user)
+                        .adventure(adventure)
+                        .selected(false)
+                        .build();
+                adventureSucceedRepository.save(adventureSucceed);
+                userService.addExpUser(adventure.getExp(), user.getUserId());
+            }
+            //안같으면 -> 아무것도 안함(저장만 함)
+            else {
+                adventureInProgressRepository.save(adventureInProgress);
+            }
+
+
         }
+        //모험 글이 아닌경우
+        else {
+            ConvertTo3WA w3wWords = w3WUtil.getW3W(Double.parseDouble(lng), Double.parseDouble(lat));
+            post = Post.builder()
+                    .user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new))
+                    .title(title).content(content)
+                    .coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLng(), w3wWords.getCoordinates().getLat())))
+                    .w3w(w3wWords.getWords())
+                    .nearestPlace(w3wWords.getNearestPlace())
+                    .isPublic(Boolean.valueOf(isPublic))
+                    .build();
+            if (photo != null) {
+                String photoName = awsS3Service.uploadImage(photo);
+                String photoUrl = bucketUrl + photoName;
+                post = Post.builder().user(userRepository.findById(userId).orElseThrow(UserNotFoundException::new)).title(title).content(content).coordinate(new GeometryFactory().createPoint(new Coordinate(w3wWords.getCoordinates().getLng(), w3wWords.getCoordinates().getLat()))).w3w(w3wWords.getWords()).nearestPlace(w3wWords.getNearestPlace()).isPublic(Boolean.valueOf(isPublic)).photoUrl(photoUrl).photoName(photoName).build();
+
+            }
+
+            Post save = postRepository.save(post);
+        }
+
 
         return post.toResponse();
     }
@@ -282,11 +350,16 @@ public class PostService {
     ) {
         Post post = postRepository.findById(postId).orElseThrow(NoSuchElementException::new);
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Comment comment = commentRepository.save(Comment.builder().post(post).user(user).content(postCommentReq.content()).build());
+        Comment comment = commentRepository.save(
+                Comment.builder()
+                        .post(post)
+                        .user(user)
+                        .content(postCommentReq.content())
+                        .build()
+        );
         return ResultResponse.success(comment.getPost().getComments().stream()
                 .map(commentDtoMapper)
-                .collect(Collectors.toList()
-                )
+                .collect(Collectors.toList())
         );
     }
 
@@ -305,6 +378,24 @@ public class PostService {
                 .map(commentDtoMapper)
                 .collect(Collectors.toList());
         return ResultResponse.success(commentList);
+    }
+
+    public ResultResponse<?> updateComment(
+            Long commentId,
+            PostCommentReq postCommentReq,
+            Long userId
+    ) throws IllegalAccessException {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(NoSuchElementException::new);
+        if (!comment.getUser().getUserId().equals(userId)) {
+            throw new IllegalAccessException();
+        } else {
+            comment.setContent(postCommentReq.content());
+            return ResultResponse.success(
+                    commentRepository.save(comment).getPost().getComments().stream()
+                            .map(commentDtoMapper)
+                            .collect(Collectors.toList())
+            );
+        }
     }
 
     public ResultResponse<?> deleteComment(Long commentId, Long userId)
@@ -418,6 +509,25 @@ public class PostService {
                 .map(subCommentDtoMapper)
                 .collect(Collectors.toList());
         return ResultResponse.success(subCommentDtos);
+    }
+
+    public ResultResponse<?> updateSubComment(
+            Long subCommentId,
+            PostSubCommentReq postSubCommentReq,
+            Long userId
+    ) throws IllegalAccessException {
+        SubComment subComment = subCommentRepository.findById(subCommentId).orElseThrow(NoSuchElementException::new);
+        if (!userId.equals(subComment.getUser().getUserId())) {
+            throw new IllegalAccessException();
+        } else {
+            subComment.setContent(postSubCommentReq.content());
+            return ResultResponse.success(
+                    subCommentRepository.save(subComment)
+                            .getComment().getSubComments().stream()
+                            .map(subCommentDtoMapper)
+                            .collect(Collectors.toList())
+            );
+        }
     }
 
     public ResultResponse<?> deleteSubComment(Long subCommentId, Long userId)

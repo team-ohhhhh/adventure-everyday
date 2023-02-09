@@ -19,13 +19,16 @@ public class CommentDtoMapper implements Function<Comment, CommentDto> {
         return new CommentDto(
                 comment.getCommentId(),
                 comment.getContent(),
-                comment.getCommentLikes() != null ? comment.getCommentLikes().size() : 0,
+//                comment.getCommentLikes() != null ? comment.getCommentLikes().size() : 0,
+                comment.getCommentLikes() != null ? comment.getCommentLikes().stream()
+                        .map(e -> e.getUser().getUserId())
+                        .collect(Collectors.toList()) : List.of(),
                 comment.getCreateTime(),
                 comment.getUser().toResponse(),
                 comment.getSubComments() != null ?
-                comment.getSubComments().stream()
-                        .map(subCommentDtoMapper)
-                        .collect(Collectors.toList()) : List.of()
+                        comment.getSubComments().stream()
+                                .map(subCommentDtoMapper)
+                                .collect(Collectors.toList()) : List.of()
         );
     }
 }

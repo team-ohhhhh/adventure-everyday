@@ -1,0 +1,26 @@
+.container{
+    position: relative;
+    width: fit-content;
+    height: 1rem;
+    
+}
+
+.participant {
+    position: absolute;
+    width: 2rem;
+    height: 2rem;
+    object-fit: cover;
+    border-radius: 50px;
+    top:-200%;
+    transform: translate(-340%, 50%);
+
+
+  
+  }
+
+  .nullInfo{
+    font-size: small;
+  }
+
+
+ 

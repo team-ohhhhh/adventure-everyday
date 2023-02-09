@@ -32,7 +32,7 @@ public class Adventure extends Base {
     @Column(columnDefinition = "varchar(255) default null")
     private String content;
     @Column(nullable = false)
-    private String difficulty;
+    private Long difficulty;
     @Column(nullable = false)
     private Long exp;
     @Column(columnDefinition = "varchar(255) default null")
@@ -55,7 +55,7 @@ public class Adventure extends Base {
 
     // 나중에 업데이트.
     @Column(columnDefinition = "double default 0")
-    private Double avgReviewRate;
+    private Double avgReviewGrade;
 
 
     // 양방향.
@@ -70,4 +70,7 @@ public class Adventure extends Base {
     @OneToMany(mappedBy = "adventure", cascade = CascadeType.ALL)
     private List<CheckpointPost> checkpointPosts = new ArrayList<>();
 
+    public void updateAvgReviewGrade(Double avgReviewGrade) {
+        this.avgReviewGrade = avgReviewGrade;
+    }
 }
