@@ -27,4 +27,10 @@ public class AdventureReview extends Base {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adventureId")
     private Adventure adventure;
+
+    public void updateContentAndGrade(String content,Integer grade){
+        this.content=content;
+        this.grade=grade;
+    }
+
 }
