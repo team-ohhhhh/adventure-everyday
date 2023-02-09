@@ -27,7 +27,7 @@
 }
 
 .notPhotoWrap {
-  min-height: 35%;
+  min-height: 30%;
 }
 
 .w3wWrap {
@@ -44,6 +44,12 @@
 
 .w3w {
   margin-left: 4px;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
 }
 
 .contentWrap {
@@ -76,16 +82,21 @@
 }
 
 .btnWrap {
+  box-sizing: border-box;
   padding: 0 1.5rem;
-  height: 15%;
+  height: 20%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
 }
 
 .btn {
-  line-height: 2.3rem;
-  background-color: red;
-  width: 30%;
-  height: 50%;
+  width: 50px;
+  height: 50px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 99px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

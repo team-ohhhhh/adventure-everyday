@@ -2,6 +2,8 @@ import React, { useMemo } from "react";
 
 import styles from "./UserPostDetail.module.css";
 import { MdLocationOn } from "react-icons/md";
+import { AiOutlineClose } from "react-icons/ai";
+import { AiOutlineCheck } from "react-icons/ai";
 
 const UserPostDetail = ({ postDetail, closeModal, selectPost }) => {
   const date = useMemo(() => {
@@ -29,6 +31,12 @@ const UserPostDetail = ({ postDetail, closeModal, selectPost }) => {
             <MdLocationOn size={16} />
             <div className={styles.w3w}>{w3w}</div>
           </div>
+
+          <AiOutlineClose
+            className={styles.closeBtn}
+            onClick={closeModal}
+            size={35}
+          />
         </div>
 
         <div className={styles.notPhotoWrap}>
@@ -37,25 +45,13 @@ const UserPostDetail = ({ postDetail, closeModal, selectPost }) => {
               <div className={styles.title}>{postDetail.title}</div>
               <div className={styles.date}>{date}</div>
             </div>
-            {/* <div className={styles.content}>{postDetail.content}</div> */}
-            <div className={styles.content}>
-              배가 좀 고프다 짬뽕 먹어야지 배가 좀 고프다 짬뽕 먹어야지 배가 좀
-              고프다 짬뽕 먹어야지 배가 좀 고프다 짬뽕 먹어야지 배가 좀 고프다
-              짬뽕 먹어야지 배가 좀 고프다 짬뽕 먹어야지 배가 좀 고프다 짬뽕
-              먹어야지 배가 좀 고프다 짬뽕 먹어야지 배가 좀 고프다 짬뽕 먹어야지
-              배가 좀 고프다 짬뽕 먹어야지 배가 좀 고프다 짬뽕 먹어야지 배가 좀
-              고프다 짬뽕 먹어야지 배가 좀 고프다 짬뽕 먹어야지 배가 좀 고프다
-              짬뽕 먹어야지
-            </div>
+            <div className={styles.content}>{postDetail.content}</div>
           </div>
         </div>
 
         <div className={styles.btnWrap}>
-          <div className={styles.btn} onClick={closeModal}>
-            X
-          </div>
           <div className={styles.btn} onClick={() => selectPost(postDetail)}>
-            O
+            <AiOutlineCheck size={23} />
           </div>
         </div>
       </div>
