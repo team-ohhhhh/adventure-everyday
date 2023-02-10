@@ -13,6 +13,7 @@ function ReviewItem({ data, setReviewMoreButton, setWhichReviewButton, reviewMor
   // nickname
   // rate
   // comment
+  console.log(data)
 
   const URL = useSelector((state) => state.url)
   const TOKEN = useSelector((state) => state.token)
@@ -35,7 +36,7 @@ function ReviewItem({ data, setReviewMoreButton, setWhichReviewButton, reviewMor
 
   // 수정 관련
   const [wouldYouUpdate, setWouldYouUpdate] = useState(false)
-  const [newReview, setNewReview] = useState(data.comment)
+  const [newReview, setNewReview] = useState(data.content)
   const [newRate, setNewRate] = useState(data.rate)
   const onChange = function(e) {
     setNewReview(e.target.value)
@@ -99,8 +100,8 @@ function ReviewItem({ data, setReviewMoreButton, setWhichReviewButton, reviewMor
               <div style={{color:"#ffd700"}}>{"★".repeat(data.rate) + "☆".repeat(5-data.rate)}</div>}
             </div>
             {wouldYouUpdate 
-              ? <input onChange={onChange} defaultValue={data.comment}/>
-              :<div className={style.comment}> {data.comment} </div>
+              ? <input onChange={onChange} defaultValue={data.content}/>
+              :<div className={style.comment}> {data.content} </div>
             }
           </div>
           <div className={style.date}> {data.createTime ? data.createTime.substr(0, 10) : null} </div>

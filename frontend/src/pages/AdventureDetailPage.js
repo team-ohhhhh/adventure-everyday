@@ -56,10 +56,10 @@ function AdventureDetailPage() {
       method: "get",
     })
       .then((response) => {
-        console.log("후기 조회");
+        console.log(response.data)
         setReviews(response.data.result.subAdventureReviews);
-        setChingho(response.data.result.adventureFeat);
-        console.log(reviews);
+        setChingho(response.data.result.adventureFeat)
+        return response
       })
       .catch((err) => console.log(err));
   }
