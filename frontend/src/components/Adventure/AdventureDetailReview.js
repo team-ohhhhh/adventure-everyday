@@ -9,6 +9,7 @@ function AdventureDetailReview(props) {
   // 상위 컴포넌트: adventureDetailPage
   // props.info로 reviews 리스트 가져옴
 
+
   return (
     <div className={styles.detail}>
       <div className={styles.treasure}>
@@ -39,7 +40,14 @@ function AdventureDetailReview(props) {
         <div className={styles.reviewList}>
           <div className={styles.reviewItem}>
             {props.info.map((review, index) => {
-              return <ReviewItem key={index} data={review} />;
+              return <ReviewItem key={index} 
+              data={review} 
+              setReviewMoreButton={props.setReviewMoreButton} 
+              reviewMoreButton={props.reviewMoreButton} 
+              setWhichReviewButton={props.setWhichReviewButton}
+              whichReviewButton={props.whichReviewButton}
+              ReadReview={props.ReadReview}
+              />;
             })}
             {/* 후기가 없으면 보여줄 컴포넌트 */}
             {!props.info && (

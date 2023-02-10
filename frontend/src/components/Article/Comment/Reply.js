@@ -72,9 +72,6 @@ function Reply({reply, getReply, replyMoreButtonOpen, setReplyMoreButtonOpen, wh
       headers: {
         Authorization: `Bearer ${TOKEN}`
       },
-      data: {
-        content: newReply
-      }
     })
     .then((res) => {
       getReply()
