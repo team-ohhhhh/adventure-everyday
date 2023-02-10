@@ -208,7 +208,7 @@ public class AdventureController {
             @PathVariable Long adventurereviewId,
             @RequestBody UpdateAdventureReviewReq updateAdventureReviewReq,
             Authentication authentication
-    ) {
+    ) throws IllegalAccessException {
         if(adventurereviewId < 1) throw new BadConstantException();
         adventureService.updateAdventureReview(adventurereviewId, updateAdventureReviewReq, Long.valueOf(authentication.getName()));
         return ResultResponse.success("탐험 후기 수정 성공");
