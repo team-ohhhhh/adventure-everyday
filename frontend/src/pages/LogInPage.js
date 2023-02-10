@@ -3,7 +3,7 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux"
 import { saveToken } from "../store/tokenSlice";
 import { saveUserInfo } from "../store/userSlice";
-import { useNavigate } from "react-router-dom"
+import { useNavigate,Link } from "react-router-dom"
 import style from "./LogInPage.module.css"
 
 
@@ -34,6 +34,16 @@ function LoginPage() {
       console.log(response.data)
       navigate('/')
     }).catch((error) => console.log(error))
+  }
+
+  const KakaoLogIn = function () {
+    axios({
+      url: URL + "/auth/kakao/oauth",
+      method: "get",
+    })
+    .then((response)=>{
+      window.open(response.data, '_blank')
+    })
   }
 
   return (
@@ -69,6 +79,9 @@ function LoginPage() {
         >
           로그인
         </button>
+          <img src={"/images/kakao_login_medium_narrow.png"} className={style.logInKakaoButton} onClick={() => {
+            KakaoLogIn();
+          }}></img>
         <div>
           아직 회원이 아니신가요?{" "}
           <span

@@ -134,7 +134,7 @@ function ArticleDetail({article, isFeed}) {
             <div className={style.w3w}>{article.w3w}</div>
           </div>
         </div>
-        <div calssName={style.iconHolder}>
+        <div className={style.iconHolder}>
           {article.isChallenge !== 0 && <GrFlag size={33} className={style.icon}/>}
           {article.isAntenna !== 0 && <GoRadioTower size={33} className={style.icon}/>}
           {article.isFollowing !== !0 && <MdPersonOutline size={36} className={style.isFollowingicon}/>}

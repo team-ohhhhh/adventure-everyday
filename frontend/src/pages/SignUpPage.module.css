@@ -60,3 +60,18 @@
   position: absolute;
   top: 25%;
 }
+.logInKakaoButton {
+  width: 60%;
+  /* margin-bottom: 20px; */
+}
+
+.logInButton {
+  width: 60%;
+  height: 48px;
+  background-color: #1c0b69;
+  color: white;
+  border-radius: 999px;
+  border: 1px solid #1c0b69;
+  margin-top: 35px;
+  margin-bottom: 20px;
+}
