@@ -309,25 +309,24 @@ public class AdventureController {
         return ResultResponse.success(adventureService.readAdventureSucceedClick(userId,order));
     }
 
-    // 보물 '더보기' 눌렀을 때
-    @GetMapping("/clicks/treasures/users/{userId}")
+    // 특정 유저의 전체 보물 보기.
+    @GetMapping("/treasures/users/{userId}")
     public ResultResponse<ReadAdventureTreasuresMoreClickRes> readAdventureTreasuresMoreClick(
-            @PathVariable Long userId,
-            Authentication authentication
+            @PathVariable Long userId
     ) {
         if(userId < 1) throw new BadConstantException();
-        return ResultResponse.success(adventureService.readAdventureTreasuresMoreClick(userId, Long.valueOf(authentication.getName())));
+        return ResultResponse.success(adventureService.readAdventureTreasuresMoreClick(userId));
     }
 
-    // 대표 보물로 선택(덮어쓰기)
-    @PutMapping("/treasures/representatives")
-    public ResultResponse<String> createRepresentativeTreasures(
-            Authentication authentication,
-            @RequestBody List<Long> selectedTreasures
-    ) {
-        adventureService.createRepresentativeTreasures(Long.valueOf(authentication.getName()), selectedTreasures);
-        return ResultResponse.success("대표 보물로 선택/취소 성공");
-    }
+//    // 대표 보물로 선택(덮어쓰기)
+//    @PutMapping("/treasures/representatives")
+//    public ResultResponse<String> createRepresentativeTreasures(
+//            Authentication authentication,
+//            @RequestBody List<Long> selectedTreasures
+//    ) {
+//        adventureService.createRepresentativeTreasures(Long.valueOf(authentication.getName()), selectedTreasures);
+//        return ResultResponse.success("대표 보물로 선택/취소 성공");
+//    }
 
     // '만든 탐험' 탭 눌렀을 때
     @GetMapping("/clicks/adventure-creations/users/{userId}")
