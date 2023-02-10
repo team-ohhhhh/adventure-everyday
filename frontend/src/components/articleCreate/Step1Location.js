@@ -21,13 +21,13 @@ const Step1Location = ({ article, setArticle, checkPointList, styles }) => {
 
   const handleQuit = () => {
     if (!(article.photo || article.title || article.content)) {
-      navigate(-1);
+      navigate("/map");
     } else {
       const answer = window.confirm(
         "작성 중인 내용은 저장되지 않습니다. 작성을 취소하고 나가시겠습니까?"
       );
       if (answer) {
-        navigate(-1);
+        navigate("/map");
       }
     }
   };
