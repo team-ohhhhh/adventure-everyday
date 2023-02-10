@@ -56,9 +56,9 @@ function TreasurePage() {
             margin : "2vw",
             borderRadius : "10px"
           }} onClick={() => {navigate(`/adventure/detail/${treasure.adventureId}}`)}}>
-            <Hashicon value={960409} size={70} />
-          <div style={{marginTop:"1vh"}}>노는게 제일 좋아</div>
-          <div style={{marginTop:"0.5vh", marginBottom:"1vh", color:"grey"}}>그냥 노는 루트</div>
+            <Hashicon value={treasure.adventureId + treasure.feat + treasure.adventureTitle} size={70} />
+          <div style={{marginTop:"1vh"}}>{treasure.feat}</div>
+          <div style={{marginTop:"0.5vh", marginBottom:"1vh", color:"grey"}}>{treasure.adventureTitle}</div>
         </div>
         ))}
       </div>
