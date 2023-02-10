@@ -105,11 +105,19 @@ public class AdventureService {
         // 유저id로 유저id와 사진 가져오기.
         List<UserIdPhotoUrl> userIdPhotoUrls = getUserIdPhotoUrl(userIds);
 
-
+        //
+        Boolean adventureNotification = false;
+        Long adventureNotificationId=-1l;
         // isParticipating
         Boolean participation = Boolean.FALSE;
         if (isParticipating(adventureId, userId)) {
             participation = Boolean.TRUE;
+
+            // 참여중이라면 알림을 켜놨는지 확인한다.
+            if(adventureLikeRepository.findByAdventureAndUser(adventure,user).isPresent()){
+                adventureNotification=true;
+                adventureNotificationId=adventureLikeRepository.findByAdventureAndUser(adventure,user).orElseThrow(AdventureLikeNotFoundException::new).getAdventureLikeId();
+            }
         }
 
         // 탐험완료한 탐험인지
@@ -143,7 +151,8 @@ public class AdventureService {
                 userIdPhotoUrls,
                 adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureNotFoundException::new),
                 participation,
-                adventureLikeRepository.findByAdventureAndUser(adventure,user).orElseThrow(AdventureLikeNotFoundException::new).getAdventureLikeId(),
+                adventureNotification,
+                adventureNotificationId,
                 clear,
                 subAdventurePlaces
         );
@@ -514,14 +523,16 @@ public class AdventureService {
     }
 
     // 탐험 후기 수정
-    public void updateAdventureReview(Long adventurereviewId, UpdateAdventureReviewReq updateAdventureReviewReq, Long userId) {
+    public void updateAdventureReview(Long adventurereviewId, UpdateAdventureReviewReq updateAdventureReviewReq, Long userId) throws IllegalAccessException {
         // 현재 리뷰
         AdventureReview adventureReview = adventureReviewRepository.findById(adventurereviewId).orElseThrow(AdventureReviewNotFoundException::new);
 
         adventureReview.updateContentAndGrade(updateAdventureReviewReq.content(),updateAdventureReviewReq.grade());
 
         // 탐험 리뷰를 작성한 유저
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        if(!adventureReview.getUser().getUserId().equals(userId)){
+            throw new IllegalAccessException();
+        }
 
         // 탐험 리뷰 저장.
         adventureReviewRepository.save(adventureReview);
@@ -535,8 +546,9 @@ public class AdventureService {
         // 별점 합
         Double totalSum = adventureReviewRepository.sumOfAdventureReviews(adventure.getAdventureId()).orElseThrow(AdventureReviewNotFoundException::new);
         // 평균별점
-        Double avgGrade = totalSum / totalCnt;
+        Double avgReviewGrade = totalSum / totalCnt;
 
+        adventure.updateAvgReviewGrade(avgReviewGrade);
 
         // 저장.
         adventureRepository.save(adventure);
@@ -545,6 +557,24 @@ public class AdventureService {
     // 탐험 후기 삭제
     public void deleteAdventureReview(Long adventureReviewId) {
         adventureReviewRepository.deleteById(adventureReviewId);
+
+        AdventureReview adventureReview = adventureReviewRepository.findById(adventureReviewId).orElseThrow(AdventureReviewNotFoundException::new);
+
+        // 탐험 리뷰를 작성할 모험
+        Adventure adventure = adventureRepository.findById(adventureReview.getAdventure().getAdventureId()).orElseThrow(AdventureNotFoundException::new);
+
+        // 평균별점 업데이트.
+        // 현재 모험의 전체 후기 개수
+        Double totalCnt = Double.valueOf(adventureReviewRepository.countAdventureReviewByAdventure(adventure).orElseThrow(AdventureReviewNotFoundException::new));
+        // 별점 합
+        Double totalSum = adventureReviewRepository.sumOfAdventureReviews(adventure.getAdventureId()).orElseThrow(AdventureReviewNotFoundException::new);
+        // 평균별점
+        Double avgReviewGrade = totalSum / totalCnt;
+
+        adventure.updateAvgReviewGrade(avgReviewGrade);
+
+        // 저장.
+        adventureRepository.save(adventure);
     }
 
     // 특정 모험의 특정 좌표의 게시글 조회
@@ -729,6 +759,7 @@ public class AdventureService {
         for (AdventureReview adventureReview : adventureReviews) {
             SubAdventureReview subAdventureReview = new SubAdventureReview(
                     adventureReview.getAdventureReviewId(),
+                    adventureReview.getUser().getUserId(),
                     adventureReview.getUser().getNickname(),
                     Long.valueOf(adventureReview.getUser().getLevel()),
                     Long.valueOf(adventureReview.getGrade()),

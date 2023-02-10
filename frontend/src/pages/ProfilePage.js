@@ -6,7 +6,6 @@ import variables from "../components/ProfileTab.scss";
 import styles from "./ProfilePage.module.css";
 import ArticleTab from './../components/Profile/ArticleTab'
 import AdventureOnProgressTab from './../components/Profile/AdventureOnProgressTab'
-import AdventureCompletedTab from './../components/Profile/AdventureCompletedTab'
 import AdventureCreatedTab from './../components/Profile/AdventureCreatedTab'
 
 function ProfilePage() {
@@ -43,16 +42,13 @@ function ProfilePage() {
           activityClassName="bg-success"
           onClick={(event, tab) => setTab(tab)}
         >
-          <Tab title="게시글" className="mr-4">
+          <Tab title="게시글" className="mr-3">
             <ArticleTab className={styles.tabWrapper} tab={tab} userId={userId} articleList={articleList} setArticleList={setArticleList}/>
           </Tab>
-          <Tab title="탐험 중" className="mr-4">
+          <Tab title="탐험 중" className="mr-3">
             <AdventureOnProgressTab className={styles.tabWrapper} tab={tab} userId={userId}/>
           </Tab>
-          <Tab title="완료한 탐험" className="mr-4">
-            <AdventureCompletedTab className={styles.tabWrapper} tab={tab}  userId={userId}/>
-          </Tab>
-          <Tab title="만든 탐험" className="mr-4">
+          <Tab title="만든 탐험" className="mr-3">
             <AdventureCreatedTab className={styles.tabWrapper} tab={tab} userId={userId}/>
           </Tab>
         </Tabs>
