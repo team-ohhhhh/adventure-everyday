@@ -1,22 +1,21 @@
+import { useParams } from "react-router";
 import styles from "./AdventureInProgressListPage.module.css";
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdventureInProgressListBanner from './../components/Adventure/AdventureInProgressListBanner';
 import axios from 'axios';
 import { useSelector } from "react-redux"
 
-function AdventureInProgressListPage(adventureId){
+function AdventureInProgressListPage(){
   const [adventureInProgressList, setAdventureInProgressList] = useState([])
   const URL = useSelector((state) => state.url)
   const TOKEN = useSelector((state) => state.token)
-
+  const params = useParams(); // 특정 탐험 id가져오기
   useEffect(() => {
     axios({
-      // url: URL + `/adventures/adventure-in-progress/${adventureId}`,
-      url: URL + `/adventures/2/users`,
+      url: URL + `/adventures/${params.id}/users`,
       method : 'get',
       headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1IiwiaWF0IjoxNjc1OTE4ODE1LCJleHAiOjE2NzYyNzg4MTV9.HuOT2--yduwJm03PAT7ZEvrErnp6h6q59pgoNY_hxDQ`
-        // Authorization: `Bearer ${TOKEN}`
+        Authorization: `Bearer ${TOKEN}`
       },
 
     })
@@ -24,7 +23,6 @@ function AdventureInProgressListPage(adventureId){
       setAdventureInProgressList(res.data.result)
 
     })
-    // .then(console.log(adventureInProgressList[0].adventureFeat))
     .catch((err) => console.log(err))
     
   },[])

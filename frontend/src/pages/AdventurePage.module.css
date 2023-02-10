@@ -1,7 +1,24 @@
+.adPageContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+
+}
+
 .recommendPageHeader {
   display: flex;
   justify-content: space-between;
-  margin: 20px;
+  align-items: center;
+  width: 85%;
+  margin-top: 5%;
+  margin-bottom: 5%;
+}
+
+
+.pageTitle{
+  font-size: 2rem;
+  font-weight: 600;
 }
 
 .searchAndCreate {
@@ -21,6 +38,7 @@
   align-items: center;
   flex-direction: column;
   margin-bottom: 2rem;
+  width: 85%;
 
 }
 
@@ -29,8 +47,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-
-  width: 85%;
+  width: 100%;
   height: fit-content;
   margin-bottom: 0.7rem;
 
@@ -55,7 +72,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  margin-left: 3rem;
+
 }
 
 .more {
