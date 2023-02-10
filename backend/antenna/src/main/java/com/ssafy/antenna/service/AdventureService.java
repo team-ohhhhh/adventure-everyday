@@ -1,5 +1,6 @@
 package com.ssafy.antenna.service;
 
+import com.ssafy.antenna.domain.ResultResponse;
 import com.ssafy.antenna.domain.adventure.*;
 import com.ssafy.antenna.domain.adventure.dto.click.*;
 import com.ssafy.antenna.domain.adventure.dto.req.CreateAdventurePlaceReq;
@@ -885,18 +886,12 @@ public class AdventureService {
     }
 
     // 보물 '더보기' 눌렀을 때
-    public ReadAdventureTreasuresMoreClickRes readAdventureTreasuresMoreClick(Long userId, Long myUserId) {
-        User me = userRepository.findById(myUserId).orElseThrow(UserNotFoundException::new);
-        User you = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+    public ReadAdventureTreasuresMoreClickRes readAdventureTreasuresMoreClick(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
-        Long cnt = adventureSucceedRepository.countByUser(you).orElseThrow(AdventureSucceedNotFoundException::new);
+        Long cnt = adventureSucceedRepository.countByUser(user).orElseThrow(AdventureSucceedNotFoundException::new);
 
-        Boolean possible = false;
-        if (userId.equals(myUserId)) {
-            possible = true;
-        }
-
-        List<AdventureSucceed> adventureSucceeds = adventureSucceedRepository.findAllByUser(you).orElseThrow(AdventureSucceedNotFoundException::new);
+        List<AdventureSucceed> adventureSucceeds = adventureSucceedRepository.findAllByUser(user).orElseThrow(AdventureSucceedNotFoundException::new);
 
         List<SubTreasure> treasures = new ArrayList<>();
         for (AdventureSucceed adventureSucceed : adventureSucceeds) {
@@ -911,25 +906,13 @@ public class AdventureService {
 
         ReadAdventureTreasuresMoreClickRes readAdventureTreasuresMoreClickRes = new ReadAdventureTreasuresMoreClickRes(
                 cnt,
-                possible,
                 treasures
         );
 
         return readAdventureTreasuresMoreClickRes;
     }
 
-    // 대표 보물로 선택하기
-    public void createRepresentativeTreasures(Long adventureId, Long userId, Boolean selected) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
-        AdventureSucceed adventureSucceed = adventureSucceedRepository.findByUserAndAdventure(user, adventure).orElseThrow(AdventureSucceedNotFoundException::new);
-        adventureSucceedRepository.save(new AdventureSucceed(
-                adventureSucceed.getSucceedId(),
-                user,
-                adventure,
-                selected
-        ));
-    }
+
 
     // '만든 탐험' 탭 눌렀을 때
     public List<ReadAdventureCreationsClickRes> readAdventureCreationsClick(Long userId,String order) {
@@ -992,9 +975,10 @@ public class AdventureService {
     }
 
     // 탐험중인 사람들 보기
-    public List<ReadAdventureInProgressUsersClickRes> readAdventureInProgressUsersClick(Long adventureId) {
+    public ReadAdventureInProgressUsersClickRes readAdventureInProgressUsersClick(Long adventureId) {
         Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
-        List<ReadAdventureInProgressUsersClickRes> result = new ArrayList<>();
+
+        List<SubReadAdventureInProgressUsersClickRes> subs = new ArrayList<>();
 
         // users
         List<User> userList = userRepository.findAdventureInProgressUsers(adventureId).orElseThrow(UserNotFoundException::new);
@@ -1003,14 +987,18 @@ public class AdventureService {
             AdventureInProgress adventureInProgress = adventureInProgressRepository.findByUserAndAdventure(user, adventure).orElseThrow(AdventureInProgressNotFoundException::new);
             Integer clearRate = (int) (((double) adventureInProgress.getCurrentPoint() / (double) adventureInProgress.getTotalPoint()) * 100.0);
 
-            ReadAdventureInProgressUsersClickRes readAdventureInProgressUsersClickRes = new ReadAdventureInProgressUsersClickRes(
-                    adventure.getFeat(),
+            SubReadAdventureInProgressUsersClickRes subReadAdventureInProgressUsersClickRes = new SubReadAdventureInProgressUsersClickRes(
                     clearRate,
                     user.toResponse()
             );
 
-            result.add(readAdventureInProgressUsersClickRes);
+            subs.add(subReadAdventureInProgressUsersClickRes);
         }
+
+        ReadAdventureInProgressUsersClickRes result = new ReadAdventureInProgressUsersClickRes(
+                adventure.getFeat(),
+                subs
+        );
 
         return result;
     }
@@ -1052,4 +1040,11 @@ public class AdventureService {
     }
 
 
+    public ResultResponse<String> getAdventureFeat(Long adventureId) {
+        return ResultResponse.success(
+                adventureRepository.findById(adventureId)
+                        .orElseThrow(AdventureNotFoundException::new)
+                        .getFeat()
+        );
+    }
 }
