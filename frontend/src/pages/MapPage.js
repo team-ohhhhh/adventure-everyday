@@ -8,6 +8,8 @@ import SmallArticleItem from "./../components/SmallArticleItem";
 // import { useNavigate } from "react-router-dom";
 // import ArticleBannerPin from './../components/mapPage/ArticleBannerPin'
 
+const { kakao } = window;
+
 function MainMap() {
   // const navigate = useNavigate()
   const mapRef = useRef();
@@ -126,6 +128,13 @@ function MainMap() {
       cluster.getClusterMarker().setContent(dom);
       // console.log(cluster.getClusterMarker().getContent());
     });
+  };
+
+  const onCreate = (target) => {
+    const clusters = target._clusters.filter(
+      (cluster) => cluster._markers.length > 1
+    );
+    onClustered(null, clusters);
   };
 
   // 클러스터 클릭 시
@@ -311,6 +320,13 @@ function MainMap() {
                   // 만약 지금 위치가 안테나 위치면 어떻게 하지...
                   isAntenna: false,
                 }));
+                // 현재 위치로 지도 시점 이동
+                const map = mapRef.current;
+                const moveLatLng = new kakao.maps.LatLng(
+                  state.center.lat,
+                  state.center.lng
+                );
+                map.panTo(moveLatLng);
               }}
               style={{
                 /*버튼 위치*/
@@ -405,7 +421,9 @@ function MainMap() {
               disableClickZoom={true}
               minLevel={0}
               onClusterclick={onClusterclick}
-              onClustered={onClustered}
+              // onClustered 훅이 원하는 대로 동작하지 않아서 onCreate 함수로 대체
+              // onClustered={onClustered}
+              onCreate={onCreate}
             >
               {articleList.map((article) => (
                 <MapMarker
