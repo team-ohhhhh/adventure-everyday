@@ -143,6 +143,7 @@ public class AdventureService {
                 userIdPhotoUrls,
                 adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureNotFoundException::new),
                 participation,
+                adventureLikeRepository.findByAdventureAndUser(adventure,user).orElseThrow(AdventureLikeNotFoundException::new).getAdventureLikeId(),
                 clear,
                 subAdventurePlaces
         );
