@@ -35,7 +35,7 @@ const Step1CheckPoint = ({
   }, [checkpoints]);
 
   const openModal = () => {
-    if (myPosts.length === 5) {
+    if (checkpoints.length === 5) {
       alert("체크포인트는 최대 5개까지 선택할 수 있습니다.");
     } else {
       setShowModal(true);
@@ -154,22 +154,25 @@ const Step1CheckPoint = ({
         behavior: "smooth",
         block: "center",
       });
-    } else if (!adventure.RepresentativePostId) {
+      return;
+    }
+    if (!adventure.RepresentativePostId) {
       alert("대표 게시글을 선택해 주세요.");
       repImgRef.current.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
+      return;
     }
     const done = checkpoints.every(
       (point) => point.adventurePlaceTitle && point.adventurePlaceContent
     );
-    if (done) {
-      setAdventure((adventure) => ({ ...adventure, difficulty, exp }));
-      navigate("/adventure/create/2");
-    } else {
+    if (!done) {
       alert("체크포인트 이름과 내용을 빠짐없이 작성해 주세요.");
+      return;
     }
+    setAdventure((adventure) => ({ ...adventure, difficulty, exp }));
+    navigate("/adventure/create/2");
   };
 
   return (
@@ -236,6 +239,7 @@ const Step1CheckPoint = ({
           setMyPosts={setMyPosts}
           closeModal={closeModal}
           selectPost={selectPost}
+          checkpoints={checkpoints}
         />
       )}
     </div>

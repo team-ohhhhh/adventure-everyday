@@ -46,24 +46,34 @@ const Step3Badge = ({ adventure, setAdventure, checkpoints }) => {
   const handleSubmit = (e) => {
     if (checkpoints.length < 2) {
       alert("체크포인트를 2개 이상 선택해주세요.");
-    } else if (!adventure.RepresentativePostId) {
+      return;
+    }
+    if (!adventure.RepresentativePostId) {
       alert("대표 게시글을 선택해 주세요.");
+      return;
     }
     const done = checkpoints.every(
       (point) => point.adventurePlaceTitle && point.adventurePlaceContent
     );
     if (!done) {
       alert("체크포인트 이름과 내용을 빠짐없이 작성해 주세요.");
-    } else if (!adventure.startDate || !adventure.endDate) {
+      return;
+    }
+    if (!adventure.startDate || !adventure.endDate) {
       alert("탐험을 진행할 기간을 설정해 주세요.");
-    } else if (!adventure.title || !adventure.title) {
+      return;
+    }
+    if (!adventure.title || !adventure.title) {
       alert("탐험 소개를 작성해 주세요.");
-    } else if (!adventure.feat) {
+      return;
+    }
+    if (!adventure.feat) {
       alert("탐험 칭호를 입력해 주세요.");
       featRef.current.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
+      return;
     }
 
     const newCheckpoints = checkpoints.map((point) => {

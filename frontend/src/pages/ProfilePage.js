@@ -11,6 +11,8 @@ import AdventureCreatedTab from './../components/Profile/AdventureCreatedTab'
 
 function ProfilePage() {
   let { userId } = useParams();
+
+  const [tab, setTab] = useState(1);
   
 
   variables.$noneActiveTextColor = "black";
@@ -39,19 +41,19 @@ function ProfilePage() {
           className=""
           ulClassName=""
           activityClassName="bg-success"
-          onClick={(event, tab) => console.log(event, tab)}
+          onClick={(event, tab) => setTab(tab)}
         >
           <Tab title="게시글" className="mr-4">
-            <ArticleTab className={styles.tabWrapper} userId={userId} articleList={articleList} setArticleList={setArticleList}/>
+            <ArticleTab className={styles.tabWrapper} tab={tab} userId={userId} articleList={articleList} setArticleList={setArticleList}/>
           </Tab>
           <Tab title="탐험 중" className="mr-4">
-            <AdventureOnProgressTab className={styles.tabWrapper} userId={userId}/>
+            <AdventureOnProgressTab className={styles.tabWrapper} tab={tab} userId={userId}/>
           </Tab>
           <Tab title="완료한 탐험" className="mr-4">
-            <AdventureCompletedTab className={styles.tabWrapper} userId={userId}/>
+            <AdventureCompletedTab className={styles.tabWrapper} tab={tab}  userId={userId}/>
           </Tab>
           <Tab title="만든 탐험" className="mr-4">
-            <AdventureCreatedTab className={styles.tabWrapper} userId={userId}/>
+            <AdventureCreatedTab className={styles.tabWrapper} tab={tab} userId={userId}/>
           </Tab>
         </Tabs>
       </div>
