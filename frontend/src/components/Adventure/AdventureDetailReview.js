@@ -9,17 +9,18 @@ function AdventureDetailReview(props) {
   // 상위 컴포넌트: adventureDetailPage
   // props.info로 reviews 리스트 가져옴
 
+
   return (
     <div className={styles.detail}>
       <div className={styles.treasure}>
         <img className={styles.treasureImg} src="/images/decoIcon.png"></img>
         <div className={styles.treasureInfo}>
           <div className={styles.treasureBorder}>
-            <Hashicon /* 이미지는 만든 사람 (닉네임 + 탐험 제목 + 칭호)*/
+            <Hashicon /* (탐험 아이디 + 칭호 + 탐험 제목)*/
               value={
-                props.adDetail.userNickname +
-                props.adDetail.adventureTitle +
-                props.chingho
+                props.adDetail.adventureId +
+                props.chingho +
+                props.adDetail.adventureTitle
               }
               size={100}
             />
@@ -39,7 +40,14 @@ function AdventureDetailReview(props) {
         <div className={styles.reviewList}>
           <div className={styles.reviewItem}>
             {props.info.map((review, index) => {
-              return <ReviewItem key={index} data={review} />;
+              return <ReviewItem key={index} 
+              data={review} 
+              setReviewMoreButton={props.setReviewMoreButton} 
+              reviewMoreButton={props.reviewMoreButton} 
+              setWhichReviewButton={props.setWhichReviewButton}
+              whichReviewButton={props.whichReviewButton}
+              ReadReview={props.ReadReview}
+              />;
             })}
             {/* 후기가 없으면 보여줄 컴포넌트 */}
             {!props.info && (
