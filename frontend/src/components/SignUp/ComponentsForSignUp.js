@@ -126,7 +126,7 @@ function PasswordComponent(props) {
         <input className={style.signUpInput} type={ "password" } id="password" onChange={(event) => { props.setPassword(event.target.value) }} placeholder="비밀번호"></input>
         <input className={style.signUpInput} type={ "password" } id="password2" onChange={(event) => { props.setPassword2(event.target.value) }} placeholder="비밀번호 확인"></input>
         <div className={style.buttonBox}>
-          <button onClick={() => { props.setStage(props.stage - 1)}} className={style.signUpButton}>이전</button>
+          <button className={style.hideButton}></button>
           {/* TODO: 여기에 비밀번호 형식 validation!!! */}
           <button className={style.signUpButton} onClick={() => { props.setStage(props.stage + 1)}}>다음</button>
         </div>

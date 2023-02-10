@@ -16,6 +16,7 @@ function AdventureDetailPage() {
   let URL = useSelector((state) => state.url);
 
   let [reviews, setReviews] = useState([]);
+  let [chingho, setChingho] = useState();
   let [adventureDetail, setAdventureDetail] = useState({});
 
 
@@ -49,7 +50,7 @@ function AdventureDetailPage() {
   // 이 탐험의 후기 조회
   function ReadReview() {
     axios({
-      url: URL + `/adventures/${params.id}/reviews`,
+      url: URL + `/adventures/${params.id}/adventure-review`,
       headers: {
         Authorization: `Bearer ${TOKEN}`,
       },
@@ -57,8 +58,8 @@ function AdventureDetailPage() {
     })
       .then((response) => {
         console.log("후기 조회");
-        setReviews(response.data.result);
-
+        setReviews(response.data.result.subAdventureReviews);
+        setChingho(response.data.result.adventureFeat);
         console.log(reviews);
       })
       .catch((err) => console.log(err));

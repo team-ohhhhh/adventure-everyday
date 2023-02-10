@@ -16,9 +16,16 @@ function AdventureDetailReview(props) {
         <img className={styles.treasureImg} src="/images/decoIcon.png"></img>
         <div className={styles.treasureInfo}>
           <div className={styles.treasureBorder}>
-            <Hashicon value={960409} size={100} />
-            {/* 이미지는 만든 사람 (닉네임 + 탐험 제목 + 칭호)*/}
-            <div className={styles.chingho}>걷기왕</div>
+            <Hashicon /* 이미지는 만든 사람 (닉네임 + 탐험 제목 + 칭호)*/
+              value={
+                props.adDetail.userNickname +
+                props.adDetail.adventureTitle +
+                props.chingho
+              }
+              size={100}
+            />
+
+            <div className={styles.chingho}>{props.chingho}</div>
           </div>
           <div className={styles.treasureDesc}>
             이 탐험의 보물과 칭호를 받고
