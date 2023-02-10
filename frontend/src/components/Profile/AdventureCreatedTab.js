@@ -49,7 +49,7 @@ function AdventureOnProgressTab({userId, tab}) {
  
   
   useMemo(() => {
-    if (tab === 4) {
+    if (tab === 3) {
       getAdventures('createTimeDesc')
   }},[tab])
 
