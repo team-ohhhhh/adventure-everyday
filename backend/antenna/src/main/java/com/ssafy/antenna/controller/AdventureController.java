@@ -131,7 +131,7 @@ public class AdventureController {
     ) {
         if(adventureId < 1) throw new BadConstantException();
         adventureService.createAdventureLike(adventureId, Long.valueOf(authentication.getName()));
-        return ResultResponse.success("피드 켜기 성공~~");
+        return ResultResponse.success("알림 켜기 성공~~");
     }
 
     // 탐험 알림 조회
