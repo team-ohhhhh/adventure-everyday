@@ -162,14 +162,16 @@ function AdventureInfo(props) {
             )}
 
             {/* 탐험 달성하면 후기 달성 버튼 보이기 */}
-            <button
-              className={styles.review}
-              onClick={() => {
-                navigate(`/adventure/detail/${params.id}/createReview`);
-              }}
-            >
-              후기작성
-            </button>
+            {props.info.clear && (
+              <button
+                className={styles.review}
+                onClick={() => {
+                  navigate(`/adventure/detail/${params.id}/createReview`);
+                }}
+              >
+                후기작성
+              </button>
+            )}
           </div>
         </div>
       </div>

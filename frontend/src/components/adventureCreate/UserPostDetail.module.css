@@ -1,0 +1,102 @@
+.modalWrap {
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  top: 55%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 60%;
+  overflow: auto;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+.photoWrap {
+  width: 100%;
+  height: 50%;
+  overflow: hidden;
+  margin: 0 auto;
+  position: relative;
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.notPhotoWrap {
+  min-height: 30%;
+}
+
+.w3wWrap {
+  position: absolute;
+  bottom: 11px;
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.8rem;
+  color: white;
+  border-radius: 99px;
+}
+
+.w3w {
+  margin-left: 4px;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.contentWrap {
+  padding: 2rem;
+  text-align: left;
+}
+
+.infoWrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  margin-bottom: 1.5rem;
+}
+
+.date {
+  color: gray;
+  font-size: 0.9rem;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  line-height: 1.4rem;
+}
+
+.content {
+  line-height: 1.4rem;
+  margin-bottom: 0.8rem;
+}
+
+.btnWrap {
+  box-sizing: border-box;
+  padding: 0 1.5rem;
+  height: 20%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.btn {
+  width: 50px;
+  height: 50px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 99px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

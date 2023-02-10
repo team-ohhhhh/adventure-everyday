@@ -2,12 +2,13 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Map, MapMarker, MarkerClusterer } from "react-kakao-maps-sdk";
 
 import UserPostHorizontalScroll from "./UserPostHorizontalScroll";
+import UserPostDetail from "./UserPostDetail";
 
 import styles from "./UserPostMap.module.css";
 
 const { kakao } = window;
 
-const UserPostMap = ({ myPosts, selectPost, userHeight }) => {
+const UserPostMap = ({ myPosts, selectPost, userHeight, checkpoints }) => {
   // 카카오맵 객체
   const mapRef = useRef();
   // 마커 객체
@@ -18,11 +19,11 @@ const UserPostMap = ({ myPosts, selectPost, userHeight }) => {
   const zRef = useRef(1);
 
   // 지도 범위 내에 존재하는 게시글 목록
-  const [onMapPosts, setOnMapPosts] = useState([]);
+  const [onMapPosts, setOnMapPosts] = useState(myPosts);
   // 하단 게시글 목록 출력 여부
   const [show, setShow] = useState(false);
   // 하단에서 보여줄 게시글 목록
-  const [showPosts, setShowPosts] = useState(false);
+  const [showPosts, setShowPosts] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [postDetail, setPostDetail] = useState();
 
@@ -53,6 +54,7 @@ const UserPostMap = ({ myPosts, selectPost, userHeight }) => {
       const postLatLng = new kakao.maps.LatLng(post.lat, post.lng);
       return bounds.contain(postLatLng);
     });
+    // console.log("onIdle", newOnMapPosts);
     setOnMapPosts(newOnMapPosts);
   };
 
@@ -110,6 +112,7 @@ const UserPostMap = ({ myPosts, selectPost, userHeight }) => {
     const level = map.getLevel() - 1;
     map.setLevel(level, { anchor: cluster.getCenter() }); // 지도 확대
     map.panTo(cluster.getCenter()); // 중심 이동
+    // console.log("onClusterClick", onMapPosts);
     setShowPosts(onMapPosts);
     setShow(true);
   };
@@ -142,12 +145,16 @@ const UserPostMap = ({ myPosts, selectPost, userHeight }) => {
     setShow(false);
   };
 
-  // 게시글 선택 시
-  const onPostSelect = (post) => {
-    // console.log("select post", post.postId);
+  // 게시글 더보기 시
+  const onPostMore = (post) => {
     setShow(false);
     openModal();
     setPostDetail(post);
+  };
+
+  // 게시글 선택 시
+  const onPostSelect = (post) => {
+    selectPost(post);
   };
 
   const openModal = () => {
@@ -157,12 +164,14 @@ const UserPostMap = ({ myPosts, selectPost, userHeight }) => {
     map.setDraggable(false);
     map.setZoomable(false);
   };
+
   const closeModal = () => {
     setShowModal(false);
     // document.body.style.overflow = "unset";
     const map = mapRef.current;
     map.setDraggable(true);
     map.setZoomable(true);
+    setShow(true);
   };
 
   return (
@@ -223,27 +232,19 @@ const UserPostMap = ({ myPosts, selectPost, userHeight }) => {
           <UserPostHorizontalScroll
             posts={showPosts}
             onPostClick={onPostClick}
+            onPostMore={onPostMore}
             onPostSelect={onPostSelect}
+            checkpoints={checkpoints}
           />
         </div>
       )}
 
       {showModal && (
-        <div className={styles.modalWrap}>
-          <div>{postDetail.w3w}</div>
-          <img
-            className={styles.postImage}
-            src={
-              postDetail.photoUrl ? postDetail.photoUrl : "/images/noImage.png"
-            }
-            alt={postDetail.title}
-          />
-          <div>{postDetail.createdTime}</div>
-          <div>{postDetail.title}</div>
-          <div>{postDetail.content}</div>
-          <button onClick={closeModal}>취소</button>
-          <button onClick={() => selectPost(postDetail)}>선택</button>
-        </div>
+        <UserPostDetail
+          postDetail={postDetail}
+          closeModal={closeModal}
+          selectPost={selectPost}
+        />
       )}
     </div>
   );

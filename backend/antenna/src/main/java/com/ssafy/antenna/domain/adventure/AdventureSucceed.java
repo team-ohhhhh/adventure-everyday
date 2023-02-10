@@ -25,4 +25,9 @@ public class AdventureSucceed extends Base {
     private Adventure adventure;
     @Column(columnDefinition = "boolean default false")
     private boolean selected;
+
+    public void updateSelected(boolean selected){
+        this.selected=selected;
+    }
+
 }
