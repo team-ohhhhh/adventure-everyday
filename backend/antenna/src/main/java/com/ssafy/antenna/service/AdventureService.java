@@ -15,6 +15,7 @@ import com.ssafy.antenna.domain.location.Location;
 import com.ssafy.antenna.domain.post.CheckpointPost;
 import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.user.User;
+import com.ssafy.antenna.exception.conflict.DuplicateAdventureLikeException;
 import com.ssafy.antenna.exception.conflict.DuplicatedAdventureInProgressException;
 import com.ssafy.antenna.exception.not_found.*;
 import com.ssafy.antenna.repository.*;
@@ -365,17 +366,21 @@ public class AdventureService {
     }
 
 
-    // 특정 유저가 참가중인 모험의 피드 켜기(좋아요 추가)
+    // 특정 유저가 참가중인 모험의 알림 켜기(좋아요 추가)
     public void createAdventureLike(Long adventureId, Long userId) {
-        User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
 
-        AdventureLike newAdventureLike = AdventureLike.builder()
-                .user(curUser)
-                .adventure(curAdventure)
+        if(adventureLikeRepository.findByAdventureAndUser(adventure,user).isPresent()){
+            throw new DuplicateAdventureLikeException();
+        }
+
+        AdventureLike adventureLike = AdventureLike.builder()
+                .user(user)
+                .adventure(adventure)
                 .build();
 
-        adventureLikeRepository.save(newAdventureLike);
+        adventureLikeRepository.save(adventureLike);
     }
 
     // 특정 유저가 참가중인 모험의 알림 조회
