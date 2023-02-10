@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Map, MapMarker, MarkerClusterer, Circle } from "react-kakao-maps-sdk";
-import Antenna from "../components/mapPage/antenna/Antenna";
-import axios from "axios";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { Map, MapMarker, MarkerClusterer, Circle } from "react-kakao-maps-sdk";
+import axios from "axios";
+
+import Antenna from "../components/mapPage/antenna/Antenna";
 import BottomSheetContainer from "./../components/BottomSheet/BottomSheet";
-import SmallArticleItem from "./../components/SmallArticleItem";
 
 const { kakao } = window;
 
@@ -142,15 +142,15 @@ function MainMap() {
 
   // 클러스터 클릭 시 해당 게시글 리스트 출력
   const onClusterclick = (cluster) => {
-    console.log("cluster click", cluster);
-
+    // 열려 있던 infowindow off
+    setIsOpen(0);
     if (clusterInfowindow) clusterInfowindow.close();
 
+    // console.log(Infowindow);
     const map = mapRef.current;
     const infowindow = new kakao.maps.InfoWindow({
-      // map: map,
       position: cluster.getCenter(),
-      content: "i am",
+      // content: Infowindow,
     });
 
     infowindow.open(map);
@@ -200,7 +200,10 @@ function MainMap() {
             // console.log("dragStart");
           }}
           onClick={(_t, mouseEvent) => {
+            // 인포윈도우 off
             setIsOpen(0);
+            if (clusterInfowindow) clusterInfowindow.close();
+
             if (!state.isAroundClicked) {
               // UFO 이미지가 떠 있지 않다면
               // 지도 클릭시 그 곳에 ufo 이미지 뜸
@@ -476,24 +479,19 @@ function MainMap() {
                     },
                   }}
                   // clickable={true}
-                  onClick={() =>
+                  onClick={() => {
+                    if (clusterInfowindow) clusterInfowindow.close();
                     setIsOpen((prev) => {
                       if (prev) {
                         return 0;
                       } else {
                         return article.postId;
                       }
-                    })
-                  }
+                    });
+                  }}
                   position={{ lat: article.lat, lng: article.lng }}
                 >
-                  {/*TODO: 여기 어떻게 이미지 CSS ㅜㅠ */}
-                  {isOpen === article.postId && (
-                    <SmallArticleItem
-                      data={article}
-                      style={{ borderRadius: "10px" }}
-                    />
-                  )}
+                  {isOpen === article.postId && <div>gkgk</div>}
                 </MapMarker>
               ))}
             </MarkerClusterer>
