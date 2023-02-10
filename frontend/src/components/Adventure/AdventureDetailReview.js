@@ -16,11 +16,11 @@ function AdventureDetailReview(props) {
         <img className={styles.treasureImg} src="/images/decoIcon.png"></img>
         <div className={styles.treasureInfo}>
           <div className={styles.treasureBorder}>
-            <Hashicon /* 이미지는 만든 사람 (닉네임 + 탐험 제목 + 칭호)*/
+            <Hashicon /* (탐험 아이디 + 칭호 + 탐험 제목)*/
               value={
-                props.adDetail.userNickname +
-                props.adDetail.adventureTitle +
-                props.chingho
+                props.adDetail.adventureId +
+                props.chingho +
+                props.adDetail.adventureTitle
               }
               size={100}
             />
