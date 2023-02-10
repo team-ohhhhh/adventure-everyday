@@ -133,11 +133,10 @@ function AdventureInfo(props) {
             </button>
 
             {/* 참여 안한 상태에서 참여하기 버튼 보여주기 */}
-            {!props.info.participation && (
+            {!props.info.participation && !props.info.clear && (
               <button
                 className={styles.participate}
                 onClick={() => {
-                  console.log("참여!");
                   console.log(props.info.participation);
                   Participate();
                 }}
@@ -151,7 +150,6 @@ function AdventureInfo(props) {
               <button
                 className={styles.giveup}
                 onClick={() => {
-                  console.log("포기!");
                   Giveup();
                 }}
               >
