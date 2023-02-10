@@ -44,6 +44,7 @@ public class AuthenticationController {
             @RequestParam(required = false) MultipartFile photo
     ) throws IOException {
         //validation
+        System.out.println(email);
         if (!validationRegex.isRegexEmail(email)){
             return ResultResponse.error(ErrorResponse.of(ErrorCode.EMAIL_INVALID));
         }
@@ -74,22 +75,41 @@ public class AuthenticationController {
     }
 
     @GetMapping("/kakao/callback")
-    public ResultResponse<LogInUserRes> kakaoCallback(@RequestParam String code) throws IOException {
+    public ResultResponse<?> kakaoCallback(@RequestParam String code, @RequestParam String action) throws IOException {
         System.out.println("callback 시작");
         System.out.println(code);
-        String access_token = kakaoService.getToken(code);
-        System.out.println(access_token);
-        System.out.println("callback 끝");
-        return ResultResponse.success(kakaoService.getUserInfo(access_token));
 
+        if(action.equals("login")){
+            String access_token = kakaoService.getToken(code);
+            System.out.println(access_token);
+            System.out.println("callback 끝, 로그인 분기 실행.");
+            return ResultResponse.success(kakaoService.getUserInfoForLogin(access_token));
+        }else if(action.equals("signup")){
+            String access_token = kakaoService.getTokenSignUp(code);
+            System.out.println(access_token);
+            System.out.println(access_token);
+            System.out.println("callback 끝, 회원가입 분기 실행.");
+            return ResultResponse.success(kakaoService.getUserInfoForSign(access_token));
+        }
+        return ResultResponse.error(ErrorResponse.of(ErrorCode.BAD_CONSTANT));
     }
 
     @GetMapping("/kakao/oauth")
-    public ResponseEntity<?> kakaoConnect() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create(kakaoService.kakaoConnect()));
+    public String kakaoConnect() {
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setLocation(URI.create(kakaoService.kakaoConnect()));
 
-        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+
+        return kakaoService.kakaoConnect();
+    }
+
+    @GetMapping("/kakao/oauth/signup")
+    public String kakaoSignUpConnect() {
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setLocation(URI.create(kakaoService.kakaoConnect()));
+
+
+        return kakaoService.kakaoSignUpConnect();
     }
 
     @PostMapping("/check-token")
