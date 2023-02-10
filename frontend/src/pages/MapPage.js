@@ -1,5 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Map, MapMarker, MarkerClusterer, Circle } from "react-kakao-maps-sdk";
+import {
+  Map,
+  MapMarker,
+  MarkerClusterer,
+  Circle,
+  MapInfoWindow,
+} from "react-kakao-maps-sdk";
 import Antenna from "../components/mapPage/antenna/Antenna";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -13,6 +19,8 @@ const { kakao } = window;
 function MainMap() {
   // const navigate = useNavigate()
   const mapRef = useRef();
+  const markerRef = useRef({});
+  const [infowindow, setInfowindow] = useState();
   const [state, setState] = useState({
     center: {
       lat: 37.5016117,
@@ -103,26 +111,45 @@ function MainMap() {
 
   // 클러스터 생성된 시점에 클러스터 마커 이미지 생성
   const onClustered = (target, clusters) => {
-    console.log("on clustered", clusters);
     clusters.forEach((cluster) => {
       const markers = cluster._markers;
-      const image = "/images/articlePin3.png";
+      const images = markers
+        .filter((marker) => {
+          return marker.T.Yj !== "/images/noImage_square.png";
+        })
+        .slice(0, 3)
+        .map((marker) => marker.T.Yj);
+
+      while (images.length < markers.length && images.length < 3) {
+        images.push("/images/noImage_square.png");
+      }
 
       const content = `
-      <div style = "cursor: pointer; position: relative;">
-        <img 
-          src=${image} alt="" style="width: 50px; height: 50px; position: absolute; margin-top: 14px; z-index: 3;"/>
-        <div
-          style = "width: 30px; height: 30px; background: rgba(0, 0, 0, 0.7); border-radius: 999px; color: rgb(255, 255, 255); text-align: center; font-weight: 500; line-height: 30px; position: absolute; margin-left: 30px; margin-top: 42px; z-index: 4;">
-          ${markers.length}
-        </div>
-      </div>`;
+        <div style = "cursor: pointer; position: relative;">
+          <img src=${
+            images[0]
+          } alt="" style="width: 50px; height: 50px; position: absolute; margin-top: 14px; z-index: 3;"/>
+          <img src=${
+            images[1]
+          } alt="" style="width: 50px; height: 50px; position: absolute; margin-left: 7px; margin-top: 7px; z-index: 2;"/>
+          ${
+            images.length > 2
+              ? `<img src=${images[2]} alt="" style="width: 50px; height: 50px; position: absolute; margin-left: 14px; z-index: 1;"/>`
+              : ``
+          }
+          <div
+            style = "width: 30px; height: 30px; background: rgba(0, 0, 0, 0.7); border-radius: 999px; color: rgb(255, 255, 255); text-align: center; font-weight: 500; line-height: 30px; position: absolute; margin-left: 30px; ${
+              markers.length === 2 ? `margin-top: 42px;` : `margin-top: 42px;`
+            } z-index: 4;">
+            ${markers.length}
+          </div>
+        </div>`;
 
       const dom = document.createElement("div");
       dom.innerHTML = content;
 
       dom.addEventListener("click", () => {
-        // onClusterclick(cluster);
+        onClusterclick(cluster);
       });
 
       cluster.getClusterMarker().setContent(dom);
@@ -137,9 +164,10 @@ function MainMap() {
     onClustered(null, clusters);
   };
 
-  // 클러스터 클릭 시
+  // 클러스터 클릭 시 해당 게시글 리스트 출력
   const onClusterclick = (cluster) => {
     console.log("cluster click", cluster);
+    console.log(markerRef);
   };
 
   return (
@@ -286,6 +314,11 @@ function MainMap() {
                 strokeStyle={"dash"} // 선의 스타일 입니다
                 fillColor={"#190A55"} // 채우기 색깔입니다
                 fillOpacity={0.7} // 채우기 불투명도 입니다
+                onClick={(target, mouseEvent) => {
+                  kakao.maps.event.preventMap();
+                  setIsOpen(0); // 원 클릭 시 인포윈도우 off
+                }}
+                zIndex={1}
               />
               <MapMarker
                 image={{
@@ -421,23 +454,24 @@ function MainMap() {
               disableClickZoom={true}
               minLevel={0}
               onClusterclick={onClusterclick}
-              // onClustered 훅이 원하는 대로 동작하지 않아서 onCreate 함수로 대체
-              // onClustered={onClustered}
-              onCreate={onCreate}
+              onClustered={onClustered}
+              onCreate={onCreate} // onClustered 훅이 최초 생성 시엔 동작하지 않아서 onCreate 함수도 함께 사용
             >
               {articleList.map((article) => (
                 <MapMarker
+                  ref={(el) => (markerRef.current[article.postId] = el)}
                   image={{
-                    src: "/images/articlePin3.png",
-
+                    src: article.photoUrl
+                      ? article.photoUrl
+                      : "/images/noImage_square.png",
                     size: {
                       width: 50,
                       height: 50,
                     },
                     options: {
                       offset: {
-                        x: 10,
-                        y: 10,
+                        x: 35,
+                        y: 35,
                       },
                     },
                   }}
