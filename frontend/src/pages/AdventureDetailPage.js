@@ -16,6 +16,7 @@ function AdventureDetailPage() {
   let URL = useSelector((state) => state.url);
 
   let [reviews, setReviews] = useState([]);
+  let [chingho, setChingho] = useState();
   let [adventureDetail, setAdventureDetail] = useState({});
 
   // 탐험 상세 정보 받아오기
@@ -36,7 +37,7 @@ function AdventureDetailPage() {
   // 이 탐험의 후기 조회
   function ReadReview() {
     axios({
-      url: URL + `/adventures/${params.id}/reviews`,
+      url: URL + `/adventures/${params.id}/adventure-review`,
       headers: {
         Authorization: `Bearer ${TOKEN}`,
       },
@@ -44,8 +45,8 @@ function AdventureDetailPage() {
     })
       .then((response) => {
         console.log("후기 조회");
-        setReviews(response.data.result);
-
+        setReviews(response.data.result.subAdventureReviews);
+        setChingho(response.data.result.adventureFeat);
         console.log(reviews);
       })
       .catch((err) => console.log(err));
@@ -88,7 +89,11 @@ function AdventureDetailPage() {
                 ></AdventureDetailInfo>
               </Tab>
               <Tab title="탐험 후기" className="mr-2">
-                <AdventureDetailReview info={reviews}></AdventureDetailReview>
+                <AdventureDetailReview
+                  info={reviews}
+                  chingho={chingho}
+                  adDetail={adventureDetail}
+                ></AdventureDetailReview>
               </Tab>
             </Tabs>
           </div>

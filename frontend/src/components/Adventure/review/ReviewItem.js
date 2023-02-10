@@ -29,7 +29,7 @@ function ReviewItem({ data }) {
               count={data.rate}
               size={15}
               activeColor="#ffd700"
-              value={data.rate}
+              value={data.grade}
               edit={false}
             />
           </div>

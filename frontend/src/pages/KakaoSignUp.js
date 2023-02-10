@@ -1,15 +1,44 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import axios from "axios";
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
+import { saveToken } from "../store/tokenSlice";
+import { saveUserInfo } from "../store/userSlice";
+import { useNavigate,Link, useParams } from "react-router-dom"
+import style from "./KakaoSignUp.module.css"
+import queryString from 'query-string';
 import { EmailComponent, PasswordComponent, NicknameComponent, IntroduceComponent, PhotoComponent, SignUpCompletedComponent } from "../components/SignUp/ComponentsForSignUp";
-import style from "./SignUpPage.module.css"
 
-function SignUpPage() {
-  let URL = useSelector((state) => state.url)
+
+// 로그인 페이지
+function KakaoSignUp() {
+
+    console.log(window.location.search)
+  let qs = queryString.parse(window.location.search)
+
+  
+    let URL = useSelector((state) => state.url);
+  
+    // 로그인 버튼에 달린 로그인 axios -> 성공시 메인페이지로 이동
+  
+
+    const KakaoSignUp = function () {
+        axios({
+          url: URL + `/auth/kakao/callback?code=${qs.code}&action=signup`,
+          method: "get"
+        }).then((response) => {
+          //TODO: 여기서 이메일 저장
+          console.log(response.data.result)
+          setEmail(response.data.result.email)
+        }).catch((error) => console.log(error))
+      }
+
+      useEffect(()=>{
+        KakaoSignUp()
+      }, [])
 
   // 로그인 단계 저장용 변수
   // 0 : 메인, 1: 이메일 선택 창, 2: 비밀번호 입력 창, 3: 닉네임 입력창, 4: 소개글 입력 창, 5: 프로필 사진 업로드 창, 6: 완료 창
-  const [stage, setStage] = useState(0)
+  const [stage, setStage] = useState(2)
 
   // 로그인에 필요한 정보들
   const [email, setEmail] = useState("")
@@ -42,54 +71,8 @@ function SignUpPage() {
     .then(setStage(stage + 1))
     .catch((error) => console.log(error))
   }
-
-  //카카오 회원가입 axios
-  const KakaoSignUpAuth = function () {
-    axios({
-      url: URL + "/auth/kakao/oauth/signup",
-      method: "get",
-    })
-    .then((response)=>{
-      window.location.href=response.data
-    })
-  }
   // 스테이지 별 컴포넌트 변경
   switch (stage) {
-    case 0:
-      return (
-        <div className="pageContainer" style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems:"center",
-        }}>
-          <button  className={style.logInButton} onClick={ () => {setStage(stage+1)}} 
-          style={{
-            width:"60%",
-            height:"48px",
-            borderRadius: "999px",
-            background: "#1c0b69",
-            border: "0px",
-            padding:"15px",
-            /* font-family: "Roboto"; */
-            fontStyle: "normal",
-            fontWeight: "700",
-            fontSize: "16px",
-            lineHeight: "100%",
-            color: "#ffffff"
-          }}>이메일로 회원가입</button>
-          <img src={"/images/kakao_start_medium_narrow.png"} className={style.logInKakaoButton} onClick={() => {
-            KakaoSignUpAuth();
-          }}></img>
-        </div>
-
-
-        
-      )
-      case 1:
-        return (
-          <EmailComponent setEmail={setEmail} email={email} setStage={setStage} stage={stage}/>
-        )
       case 2:
         return (
           <PasswordComponent setPassword={setPassword} setPassword2={setPassword2} stage={stage} setStage={setStage} password={password} password2={password2}/>
@@ -111,7 +94,6 @@ function SignUpPage() {
           <SignUpCompletedComponent/>
         )
     }
-
-}
-
-export default SignUpPage
+  }
+  
+  export default KakaoSignUp;
