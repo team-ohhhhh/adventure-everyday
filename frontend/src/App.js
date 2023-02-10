@@ -17,6 +17,7 @@ import UserDeletePage from "./pages/UserDeletePage";
 import FollowListPage from "./pages/FollowListPage";
 import ArticleDetailPage from "./pages/ArticleDetailPage";
 import ArticleUpdatePage from "./pages/ArticleUpdatePage";
+import TreasurePage from "./pages/TreasurePage"
 
 import CommentPage from "./pages/CommentPage";
 
@@ -25,6 +26,8 @@ import AntiAuthLayout from "./AntiAuthLayout";
 import Navigate from "./Navigate";
 import "./App.css";
 import AdventureReviewPage from "./pages/AdventureReviewPage";
+import KakaoLogIn from "./components/SignUp/KakaoLogin";
+import KakaoSignUp from "./pages/KakaoSignUp";
 
 function App() {
   return (
@@ -70,6 +73,7 @@ function App() {
               path="/article/:articleId/comments"
               element={<CommentPage />}
             />
+            <Route path="/profile/:userId/treasure/:nickname" element={<TreasurePage />} />
           </Route>
           {/* Navbar가 필요하지 않은 페이지는 이곳에 추가해주세요 */}
           <Route path="/write/*" element={<ArticleCreatePage />} />
@@ -87,7 +91,16 @@ function App() {
         <Route element={<AntiAuthLayout />}>
           <Route path="/login" element={<LogInPage />} />
           <Route path="/signup" element={<SignUpPage />} />
+          <Route
+              path="/kakao/callback"
+              element={<KakaoLogIn />}
+            />
+            <Route
+              path="/kakao/callback/signup"
+              element={<KakaoSignUp />}
+            />
         </Route>
+        
       </Routes>
     </div>
   );

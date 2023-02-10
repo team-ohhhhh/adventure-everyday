@@ -21,6 +21,8 @@ public record ReadAdventureRes(
         List<UserIdPhotoUrl> userIdPhotoUrlList,
         Long userCount,
         Boolean participation,
+        Boolean adventureNotification,
+        Long adventureNotificationId,
         Boolean clear,
         List<SubAdventurePlace> subAdventurePlaces
 
