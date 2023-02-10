@@ -67,8 +67,8 @@ public class AdventureService {
                 .exp(createAdventureReq.exp())
                 .startDate(createAdventureReq.startDate())
                 .endDate(createAdventureReq.endDate())
-                .photoUrl(postRepository.findById(createAdventureReq.RepresentativePostId()).orElseThrow(PhotoNotFoundException::new).getPhotoUrl())
-                .photoName(postRepository.findById(createAdventureReq.RepresentativePostId()).orElseThrow(PhotoNotFoundException::new).getPhotoName())
+                .photoUrl(postRepository.findById(createAdventureReq.RepresentativePostId()).orElseThrow(PostNotFoundException::new).getPhotoUrl())
+                .photoName(postRepository.findById(createAdventureReq.RepresentativePostId()).orElseThrow(PostNotFoundException::new).getPhotoName())
                 .user(curUser)
                 .build();
         // 탐험 저장
@@ -79,7 +79,7 @@ public class AdventureService {
                     .title(createAdventurePlaceReq.adventurePlaceTitle())
                     .content(createAdventurePlaceReq.adventurePlaceContent())
                     .coordinate(new GeometryFactory().createPoint(new Coordinate(createAdventurePlaceReq.coordinate().lng(), createAdventurePlaceReq.coordinate().lat())))
-                    .post(postRepository.findById(createAdventurePlaceReq.postId()).orElseThrow(PhotoNotFoundException::new))
+                    .post(postRepository.findById(createAdventurePlaceReq.postId()).orElseThrow(PostNotFoundException::new))
                     .adventure(adventure)
                     .build();
             // 탐험 장소 저장
