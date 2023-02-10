@@ -180,7 +180,7 @@ public class AdventureService {
         adventureRepository.deleteById(adventureId);
     }
 
-    // 모든 탐험 조회(생성순,거리순,별점높은순,달성률낮은순)
+    // 모든 탐험 조회(생성순,거리순,별점높은순)
     public List<ReadAdventuresRes> readAdventures(String order, Double lat, Double lng) {
         List<ReadAdventuresRes> result = new ArrayList<>();
         if (lat != null && lng != null) {
@@ -489,7 +489,8 @@ public class AdventureService {
             // 별점 합
             Double totalSum = adventureReviewRepository.sumOfAdventureReviews(adventure.getAdventureId()).orElseThrow(AdventureReviewNotFoundException::new);
             // 평균별점 업데이트
-            adventure.updateAvgReviewGrade(totalSum / totalCnt);
+            Double avgReviewGrade = (double) Math.round((totalSum / totalCnt)*100.0/100.0);
+            adventure.updateAvgReviewGrade(avgReviewGrade);
         } else {
             adventure.updateAvgReviewGrade(Double.valueOf(0));
         }
@@ -546,7 +547,7 @@ public class AdventureService {
         // 별점 합
         Double totalSum = adventureReviewRepository.sumOfAdventureReviews(adventure.getAdventureId()).orElseThrow(AdventureReviewNotFoundException::new);
         // 평균별점
-        Double avgReviewGrade = totalSum / totalCnt;
+        Double avgReviewGrade = (double) Math.round((totalSum / totalCnt)*100.0/100.0);
 
         adventure.updateAvgReviewGrade(avgReviewGrade);
 
@@ -556,12 +557,12 @@ public class AdventureService {
 
     // 탐험 후기 삭제
     public void deleteAdventureReview(Long adventureReviewId) {
-        adventureReviewRepository.deleteById(adventureReviewId);
-
         AdventureReview adventureReview = adventureReviewRepository.findById(adventureReviewId).orElseThrow(AdventureReviewNotFoundException::new);
 
         // 탐험 리뷰를 작성할 모험
         Adventure adventure = adventureRepository.findById(adventureReview.getAdventure().getAdventureId()).orElseThrow(AdventureNotFoundException::new);
+
+        adventureReviewRepository.deleteById(adventureReviewId);
 
         // 평균별점 업데이트.
         // 현재 모험의 전체 후기 개수
@@ -569,7 +570,7 @@ public class AdventureService {
         // 별점 합
         Double totalSum = adventureReviewRepository.sumOfAdventureReviews(adventure.getAdventureId()).orElseThrow(AdventureReviewNotFoundException::new);
         // 평균별점
-        Double avgReviewGrade = totalSum / totalCnt;
+        Double avgReviewGrade = (double) Math.round((totalSum / totalCnt)*100.0/100.0);
 
         adventure.updateAvgReviewGrade(avgReviewGrade);
 
