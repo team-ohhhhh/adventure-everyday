@@ -105,11 +105,19 @@ public class AdventureService {
         // 유저id로 유저id와 사진 가져오기.
         List<UserIdPhotoUrl> userIdPhotoUrls = getUserIdPhotoUrl(userIds);
 
-
+        //
+        Boolean adventureNotification = false;
+        Long adventureNotificationId=-1l;
         // isParticipating
         Boolean participation = Boolean.FALSE;
         if (isParticipating(adventureId, userId)) {
             participation = Boolean.TRUE;
+
+            // 참여중이라면 알림을 켜놨는지 확인한다.
+            if(adventureLikeRepository.findByAdventureAndUser(adventure,user).isPresent()){
+                adventureNotification=true;
+                adventureNotificationId=adventureLikeRepository.findByAdventureAndUser(adventure,user).orElseThrow(AdventureLikeNotFoundException::new).getAdventureLikeId();
+            }
         }
 
         // 탐험완료한 탐험인지
@@ -143,7 +151,8 @@ public class AdventureService {
                 userIdPhotoUrls,
                 adventureInProgressRepository.countByAdventure(adventure).orElseThrow(AdventureNotFoundException::new),
                 participation,
-                adventureLikeRepository.findByAdventureAndUser(adventure,user).orElseThrow(AdventureLikeNotFoundException::new).getAdventureLikeId(),
+                adventureNotification,
+                adventureNotificationId,
                 clear,
                 subAdventurePlaces
         );
@@ -750,6 +759,7 @@ public class AdventureService {
         for (AdventureReview adventureReview : adventureReviews) {
             SubAdventureReview subAdventureReview = new SubAdventureReview(
                     adventureReview.getAdventureReviewId(),
+                    adventureReview.getUser().getUserId(),
                     adventureReview.getUser().getNickname(),
                     Long.valueOf(adventureReview.getUser().getLevel()),
                     Long.valueOf(adventureReview.getGrade()),
