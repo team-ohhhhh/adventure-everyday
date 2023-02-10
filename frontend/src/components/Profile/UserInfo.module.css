@@ -121,3 +121,19 @@
   border-width: 1px;
  
 }
+
+.buttonHolder {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.treasureButton{
+  width: fit-content;
+  height: 25px;
+
+  background: #1C0B69;
+  border-radius: 999px;
+  color: #FFFFFF;
+}
