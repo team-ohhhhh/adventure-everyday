@@ -15,7 +15,11 @@ function AdventureBanner({ adventureItem, isAdTab }) {
         <div
           className={style.banner}
           style={{
-            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${adventureItem.adventurePhotoUrl})`,
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${
+              adventureItem.adventurePhotoUrl
+                ? adventureItem.adventurePhotoUrl
+                : "/images/emptyBanner2.png"
+            })`,
           }}
           onClick={() => {
             navigate(`/adventure/detail/${adventureItem.adventureId}`);
@@ -38,7 +42,11 @@ function AdventureBanner({ adventureItem, isAdTab }) {
               <div className={style.makerProfileContainer}>
                 <img
                   className={style.makerProfile}
-                  src={adventureItem.userPhotoUrl}
+                  src={
+                    adventureItem.userPhotoUrl
+                      ? adventureItem.userPhotoUrl
+                      : "/defaultProfile.jpg"
+                  }
                 />
               </div>
               <div className={style.makerNameAndTierContainer}>
