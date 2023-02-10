@@ -39,7 +39,7 @@ function AdventureInfo(props) {
       method: "post",
     }).then((response) => {
       console.log("참가 결과");
-      console.log(response.data.result);
+      props.getAdventureDetail();
     });
   }
 
@@ -53,7 +53,7 @@ function AdventureInfo(props) {
       method: "delete",
     }).then((response) => {
       console.log("포기되었습니다.");
-      console.log(response.data.result);
+      props.getAdventureDetail();
     });
   }
 
@@ -140,7 +140,6 @@ function AdventureInfo(props) {
                   console.log("참여!");
                   console.log(props.info.participation);
                   Participate();
-                  window.location.replace(`/adventure/detail/${params.id}/`);
                 }}
               >
                 참여하기
@@ -154,7 +153,6 @@ function AdventureInfo(props) {
                 onClick={() => {
                   console.log("포기!");
                   Giveup();
-                  window.location.replace(`/adventure/detail/${params.id}/`);
                 }}
               >
                 포기하기
