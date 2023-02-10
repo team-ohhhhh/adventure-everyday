@@ -9,7 +9,7 @@
 # # COPY /etc/letsencrypt /etc/letsencrypt
 # EXPOSE 80
 # # EXPOSE 443
-# CMD ["nginx", "-g", "daemon off;"]
+# CMD ["nginx", "-g", "daemon off;"] 
 
 FROM node:18-alpine as builder
 WORKDIR /usr/src/app
