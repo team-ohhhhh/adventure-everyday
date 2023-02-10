@@ -19,6 +19,18 @@ function AdventureDetailPage() {
   let [chingho, setChingho] = useState();
   let [adventureDetail, setAdventureDetail] = useState({});
 
+  // 후기 수정 삭제 버튼 조작
+  const [reviewMoreButton, setReviewMoreButton] = useState(false);
+  const [whichReviewButton, setWhichReviewButton] = useState(null);
+
+  // 수정 탭 닫기
+  const close = function () {
+    if (reviewMoreButton) {
+      setReviewMoreButton(false);
+      setWhichReviewButton(null);
+    }
+  };
+
   // 탐험 상세 정보 받아오기
   function ReadAdventureDetail() {
     axios({
@@ -44,10 +56,10 @@ function AdventureDetailPage() {
       method: "get",
     })
       .then((response) => {
-        console.log("후기 조회");
+        console.log(response.data)
         setReviews(response.data.result.subAdventureReviews);
-        setChingho(response.data.result.adventureFeat);
-        console.log(reviews);
+        setChingho(response.data.result.adventureFeat)
+        return response
       })
       .catch((err) => console.log(err));
   }
@@ -57,7 +69,12 @@ function AdventureDetailPage() {
   }, []);
 
   return (
-    <div className="pageContainer">
+    <div
+      className="pageContainer"
+      onClick={() => {
+        close();
+      }}
+    >
       <div className={styles.wrapper}>
         <div className={styles.white}>
           <AdventureInfo
@@ -91,6 +108,11 @@ function AdventureDetailPage() {
               <Tab title="탐험 후기" className="mr-2">
                 <AdventureDetailReview
                   info={reviews}
+                  setReviewMoreButton={setReviewMoreButton}
+                  setWhichReviewButton={setWhichReviewButton}
+                  reviewMoreButton={reviewMoreButton}
+                  whichReviewButton={whichReviewButton}
+                  ReadReview={ReadReview}
                   chingho={chingho}
                   adDetail={adventureDetail}
                 ></AdventureDetailReview>
