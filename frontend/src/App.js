@@ -17,6 +17,7 @@ import UserDeletePage from "./pages/UserDeletePage";
 import FollowListPage from "./pages/FollowListPage";
 import ArticleDetailPage from "./pages/ArticleDetailPage";
 import ArticleUpdatePage from "./pages/ArticleUpdatePage";
+import TreasurePage from "./pages/TreasurePage"
 
 import CommentPage from "./pages/CommentPage";
 
@@ -70,6 +71,7 @@ function App() {
               path="/article/:articleId/comments"
               element={<CommentPage />}
             />
+            <Route path="/profile/:userId/treasure/:nickname" element={<TreasurePage />} />
           </Route>
           {/* Navbar가 필요하지 않은 페이지는 이곳에 추가해주세요 */}
           <Route path="/write/*" element={<ArticleCreatePage />} />

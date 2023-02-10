@@ -162,6 +162,7 @@ function UserInfo(props) {
   }
 
   
+  
 
 
  
@@ -204,19 +205,25 @@ function UserInfo(props) {
           {user.userId === MyId && <label htmlFor='photoChange'><div className={style.changePhotoButton}>+</div></label>}
           <input id='photoChange' type="file" accept={'image/*'} onChange={changePhoto} ref={imgRef} style={{display:"none"}}/>
         </div>
-        {user.userId !== MyId && 
-          <div style={{marginTop : '10px'}}>
-            {followers.find(user => user.userDetailRes.userId === MyId) 
-            ? <button onClick={() => {unfollow()}} className={style.unfollowButton}>unfollow</button> 
-            : <button onClick={() => {follow()}} className={style.followButton}>follow</button>}
-          </div>
-        }
       </div>
       <div className={style.followInfo}>
         <div className={style.followInfoNumber}><div style={{fontWeight: "700"}}>{props.articleListLength}</div>posts</div>
         <div className={style.followInfoNumber} onClick={()=> {navigate(`/profile/${userId}/followers`)}}><div style={{fontWeight: "700"}}>{followers.length}</div>followers</div>
         <div className={style.followInfoNumber} onClick={()=> {navigate(`/profile/${userId}/followings`)}}><div style={{fontWeight: "700"}}>{followings.length}</div>followings</div>
       </div>
+    </div>
+    <div className={style.buttonHolder} style={{marginTop : '10px'}}>
+    {user.userId !== MyId ? 
+          <div style={{marginLeft : '2vw'}}>
+            {followers.find(user => user.userDetailRes.userId === MyId) 
+            ? <button onClick={() => {unfollow()}} className={style.unfollowButton}>unfollow</button> 
+            : <button onClick={() => {follow()}} className={style.followButton}>follow</button>}
+          </div>
+          : <div >
+            <button style={{visibility:"hidden"}}  className={style.followButton}>follow</button>
+          </div>
+        }
+        <button className={style.treasureButton} onClick={()=>{navigate(`/profile/${userId}/treasure/${user.nickname}`)}}>{user.nickname}의 보물함</button>
     </div>
   </div>
   )

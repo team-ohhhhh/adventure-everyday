@@ -14,8 +14,6 @@ services:
     restart: unless-stopped
     volumes:
       - /antenna-data:/var/lib/mysql
-    # networks:
-    # - springboot-mysql-network
 
   backend:
     build:
@@ -34,9 +32,6 @@ services:
       SPRING_DATASOURCE_USERNAME: gorilla
       SPRING_DATASOURCE_PASSWORD: gorilla
       TZ: "Asia/Seoul"
-    # networks:
-    #   - springboot-mysql-network
-    #   - react-springboot-network
   
   frontend:
     build:
@@ -46,16 +41,12 @@ services:
     container_name: react
     environment:
       TZ: "Asia/Seoul"
-    # ports:
-      # - 80:80
     ports:
       - 3000:3000
     expose:
       - 3000
     depends_on:
       - backend
-    # networks:
-    #   - react-springboot-network
 
   nginx:
     container_name: nginx
@@ -64,7 +55,6 @@ services:
     volumes:
       - ./frontend/conf/:/etc/nginx/conf.d
       - /etc/letsencrypt:/etc/letsencrypt
-      # - /data/certbot/www:/var/www/certbot
     environment:
       TZ: "Asia/Seoul"
     ports:
@@ -73,16 +63,3 @@ services:
     depends_on:
       - backend
       - frontend
-    # networks:
-    #   - react-springboot-network
-
-
-networks:
-  springboot-mysql-network:
-  react-springboot-network:
-  
-
-
-
-
-
