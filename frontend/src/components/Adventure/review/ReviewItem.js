@@ -13,6 +13,7 @@ function ReviewItem({ data, setReviewMoreButton, setWhichReviewButton, reviewMor
   // nickname
   // rate
   // comment
+  console.log(data)
 
   const URL = useSelector((state) => state.url)
   const TOKEN = useSelector((state) => state.token)
@@ -35,13 +36,13 @@ function ReviewItem({ data, setReviewMoreButton, setWhichReviewButton, reviewMor
 
   // 수정 관련
   const [wouldYouUpdate, setWouldYouUpdate] = useState(false)
-  const [newReview, setNewReview] = useState(data.comment)
-  const [newRate, setNewRate] = useState(data.rate)
+  const [newReview, setNewReview] = useState(data.content)
+  const [newGrade, setNewGrade] = useState(data.grade)
   const onChange = function(e) {
     setNewReview(e.target.value)
   }
-  const rateUpdate = function(newRating) {
-    setNewRate(newRating)
+  const gradeUpdate = function(newRating) {
+    setNewGrade(newRating)
   }
   const updateReview = function() {
     axios({
@@ -52,7 +53,7 @@ function ReviewItem({ data, setReviewMoreButton, setWhichReviewButton, reviewMor
       },
       data: {
         content : newReview,
-        grade : newRate
+        grade : newGrade
       }
     })
     .then((res) => {
@@ -91,16 +92,16 @@ function ReviewItem({ data, setReviewMoreButton, setWhichReviewButton, reviewMor
                 // count={data.rate}
                 size={15}
                 activeColor="#ffd700"
-                value={data.rate}
-                onChange={rateUpdate}
+                value={data.grade}
+                onChange={gradeUpdate}
                 edit={true}
               />}
               {!wouldYouUpdate && 
-              <div style={{color:"#ffd700"}}>{"★".repeat(data.rate) + "☆".repeat(5-data.rate)}</div>}
+              <div style={{color:"#ffd700"}}>{"★".repeat(data.grade) + "☆".repeat(5-data.grade)}</div>}
             </div>
             {wouldYouUpdate 
-              ? <input onChange={onChange} defaultValue={data.comment}/>
-              :<div className={style.comment}> {data.comment} </div>
+              ? <input onChange={onChange} defaultValue={data.content}/>
+              :<div className={style.comment}> {data.content} </div>
             }
           </div>
           <div className={style.date}> {data.createTime ? data.createTime.substr(0, 10) : null} </div>
