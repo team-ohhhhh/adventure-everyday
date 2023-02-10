@@ -1,26 +1,17 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  Map,
-  MapMarker,
-  MarkerClusterer,
-  Circle,
-  MapInfoWindow,
-} from "react-kakao-maps-sdk";
+import { Map, MapMarker, MarkerClusterer, Circle } from "react-kakao-maps-sdk";
 import Antenna from "../components/mapPage/antenna/Antenna";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import BottomSheetContainer from "./../components/BottomSheet/BottomSheet";
 import SmallArticleItem from "./../components/SmallArticleItem";
-// import { useNavigate } from "react-router-dom";
-// import ArticleBannerPin from './../components/mapPage/ArticleBannerPin'
 
 const { kakao } = window;
 
 function MainMap() {
-  // const navigate = useNavigate()
   const mapRef = useRef();
-  const markerRef = useRef({});
-  const [infowindow, setInfowindow] = useState();
+
+  const [antennae, setAntennae] = useState([]);
   const [state, setState] = useState({
     center: {
       lat: 37.5016117,
@@ -42,11 +33,30 @@ function MainMap() {
     isAntenna: false,
   });
 
+  let TOKEN = useSelector((state) => state.token);
+  let URL = useSelector((state) => state.url);
+
+  // 마운트 시
   useEffect(() => {
+    // 최상단으로 이동
+    window.scrollTo(0, 0);
     // 스크롤 방지
     document.body.style.overflow = "hidden";
 
-    // 초기 렌더링 때 현재 위치로 지도 이동
+    // 지도 렌더링 이전에 안테나 좌표 가져와두기
+    axios({
+      url: URL + "/users/antennae",
+      method: "get",
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+      },
+    })
+      .then((res) => {
+        setAntennae(res.data.result);
+      })
+      .catch((err) => console.log(err));
+
+    // 현재 위치로 지도 이동
     moveCurPos();
     setState((prev) => ({
       ...prev,
@@ -59,50 +69,16 @@ function MainMap() {
     };
   }, []);
 
-  // 지도 렌더링 이전에 안테나 좌표 가져와두기
-  const [antennae, setAntennae] = useState([
-    //   {
-    //   "antennaId": 1,
-    //   "area": 500,
-    //   "lng": 127.0397674,
-    //   "lat": 37.5016117,
-    //   "w3w": "기구.배분.심장",
-    //   "nearestPlace": "부산광역시"
-    // },
-    // {
-    //   "antennaId": 2,
-    //   "area": 500,
-    //   "lng": 127.007896,
-    //   "lat": 37.565138,
-    //   "w3w": "동대문 역사 문화 공원",
-    //   "nearestPlace": "부산광역시"
-    // }
-  ]);
-  let TOKEN = useSelector((state) => state.token);
-  let URL = useSelector((state) => state.url);
-  useEffect(() => {
-    axios({
-      url: URL + "/users/antennae",
-      method: "get",
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-      },
-    })
-      .then((res) => {
-        setAntennae(res.data.result);
-      })
-      .catch((err) => console.log(err));
-  }, []); //TODO: dependancy는 어떻게 기준을 주어야 할까...
-
   // 게시글 리스트 저장 => axios는 바텀시트에서 됨
+  // lat이나 lng 값이 변화했을 때 작동할 함수 -> axios 후에 setArticleList
   const [articleList, setArticleList] = useState([]);
 
-  // 게시글 핀 인포윈도우 제어용 변수
+  // 게시글 마커 인포윈도우 제어용 변수
   const [isOpen, setIsOpen] = useState(false);
+  // 클러스터 마커 인포윈도우 저장용 변수
+  const [clusterInfowindow, setClusterInfowindow] = useState();
 
-  // lat이나 lng 값이 변화했을 때 작동할 함수 -> axios 후에 setArticleList
-
-  // 지도 높이 반응형
+  // 지도 높이 반응형으로 계산
   const userHeight = useMemo(() => {
     const viewHeight = document.documentElement.clientHeight;
     const navHeight = 71; // navbar 박스 높이
@@ -167,7 +143,18 @@ function MainMap() {
   // 클러스터 클릭 시 해당 게시글 리스트 출력
   const onClusterclick = (cluster) => {
     console.log("cluster click", cluster);
-    console.log(markerRef);
+
+    if (clusterInfowindow) clusterInfowindow.close();
+
+    const map = mapRef.current;
+    const infowindow = new kakao.maps.InfoWindow({
+      // map: map,
+      position: cluster.getCenter(),
+      content: "i am",
+    });
+
+    infowindow.open(map);
+    setClusterInfowindow(infowindow);
   };
 
   return (
@@ -297,6 +284,12 @@ function MainMap() {
                     strokeStyle={"dash"} // 선의 스타일 입니다
                     fillColor={"#4D3EA3"} // 채우기 색깔입니다
                     fillOpacity={0.7} // 채우기 불투명도 입니다
+                    onClick={() => {
+                      kakao.maps.event.preventMap();
+                      // 원 클릭 시 인포윈도우 off
+                      setIsOpen(0);
+                      if (clusterInfowindow) clusterInfowindow.close();
+                    }}
                   />
                 )
               );
@@ -314,9 +307,11 @@ function MainMap() {
                 strokeStyle={"dash"} // 선의 스타일 입니다
                 fillColor={"#190A55"} // 채우기 색깔입니다
                 fillOpacity={0.7} // 채우기 불투명도 입니다
-                onClick={(target, mouseEvent) => {
+                onClick={() => {
                   kakao.maps.event.preventMap();
-                  setIsOpen(0); // 원 클릭 시 인포윈도우 off
+                  // 원 클릭 시 인포윈도우 off
+                  setIsOpen(0);
+                  if (clusterInfowindow) clusterInfowindow.close();
                 }}
                 zIndex={1}
               />
@@ -429,6 +424,12 @@ function MainMap() {
               strokeStyle={"dash"} // 선의 스타일 입니다
               fillColor={"#00529E"} // 채우기 색깔입니다
               fillOpacity={0.7} // 채우기 불투명도 입니다
+              onClick={() => {
+                kakao.maps.event.preventMap();
+                // 원 클릭 시 인포윈도우 off
+                setIsOpen(0);
+                if (clusterInfowindow) clusterInfowindow.close();
+              }}
             />
           )}
 
@@ -459,7 +460,6 @@ function MainMap() {
             >
               {articleList.map((article) => (
                 <MapMarker
-                  ref={(el) => (markerRef.current[article.postId] = el)}
                   image={{
                     src: article.photoUrl
                       ? article.photoUrl
