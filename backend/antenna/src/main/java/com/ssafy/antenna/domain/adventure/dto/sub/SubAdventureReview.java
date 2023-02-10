@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public record SubAdventureReview(
         Long adventureReviewId,
+        Long userId,
         String nickname,
         Long level,
         Long grade,

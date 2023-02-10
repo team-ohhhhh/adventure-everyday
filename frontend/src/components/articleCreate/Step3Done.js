@@ -1,36 +1,35 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Step3Done = ({ styles }) => {
+import styles from "../adventureCreate/Step4Done.module.css";
+
+const Step3Done = () => {
   const navigate = useNavigate();
 
+  const animationRef = useRef();
+
   useEffect(() => {
-    const html = window.document.getElementsByTagName("html")[0];
-    html.style.backgroundColor = "#1c0b69";
-    html.style.color = "white";
+    const animation = animationRef.current;
+    animation.preserveAspectRatio = "xMidYMid slice";
 
     setTimeout(() => {
       navigate("/map"); // 추후 게시글 상세 페이지로 수정
     }, 3000);
-
-    return () => {
-      html.style.backgroundColor = "white";
-      html.style.color = "black";
-    };
   }, []);
 
   return (
-    <>
-      <h1 className={styles.header}>작성 완료</h1>
+    <div className={styles.animationContainer}>
       <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
       <lottie-player
-        src="https://assets10.lottiefiles.com/private_files/lf30_bmi15k55.json"
+        src="https://assets3.lottiefiles.com/packages/lf20_zprb9vzj.json"
         background="transparent"
         speed="1"
-        style={{ width: "100%" }}
+        style={{ width: "100vw", height: "100vh" }}
         autoplay
+        ref={animationRef}
       ></lottie-player>
-    </>
+      <h1 className={styles.header}>탐험 생성 완료!</h1>
+    </div>
   );
 };
 
