@@ -340,7 +340,7 @@ public class AdventureController {
 
     // 탐험중인 사람들 보기
     @GetMapping("/{adventureId}/users")
-    public ResultResponse<List<ReadAdventureInProgressUsersClickRes>> readAdventureInProgressUsersClick(
+    public ResultResponse<ReadAdventureInProgressUsersClickRes> readAdventureInProgressUsersClick(
             @PathVariable Long adventureId
     ) {
         if(adventureId < 1) throw new BadConstantException();

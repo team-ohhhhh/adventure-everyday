@@ -975,9 +975,10 @@ public class AdventureService {
     }
 
     // 탐험중인 사람들 보기
-    public List<ReadAdventureInProgressUsersClickRes> readAdventureInProgressUsersClick(Long adventureId) {
+    public ReadAdventureInProgressUsersClickRes readAdventureInProgressUsersClick(Long adventureId) {
         Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
-        List<ReadAdventureInProgressUsersClickRes> result = new ArrayList<>();
+
+        List<SubReadAdventureInProgressUsersClickRes> subs = new ArrayList<>();
 
         // users
         List<User> userList = userRepository.findAdventureInProgressUsers(adventureId).orElseThrow(UserNotFoundException::new);
@@ -986,14 +987,18 @@ public class AdventureService {
             AdventureInProgress adventureInProgress = adventureInProgressRepository.findByUserAndAdventure(user, adventure).orElseThrow(AdventureInProgressNotFoundException::new);
             Integer clearRate = (int) (((double) adventureInProgress.getCurrentPoint() / (double) adventureInProgress.getTotalPoint()) * 100.0);
 
-            ReadAdventureInProgressUsersClickRes readAdventureInProgressUsersClickRes = new ReadAdventureInProgressUsersClickRes(
-                    adventure.getFeat(),
+            SubReadAdventureInProgressUsersClickRes subReadAdventureInProgressUsersClickRes = new SubReadAdventureInProgressUsersClickRes(
                     clearRate,
                     user.toResponse()
             );
 
-            result.add(readAdventureInProgressUsersClickRes);
+            subs.add(subReadAdventureInProgressUsersClickRes);
         }
+
+        ReadAdventureInProgressUsersClickRes result = new ReadAdventureInProgressUsersClickRes(
+                adventure.getFeat(),
+                subs
+        );
 
         return result;
     }
