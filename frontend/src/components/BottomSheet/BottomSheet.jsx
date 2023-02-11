@@ -122,24 +122,29 @@ const BottomSheetContainer = (props) => {
         // onDismiss={() => setOpen(false)}
         blocking={false}
         header={
-          <div>
-            {props.isAntenna ? (
-              <button
-                onClick={() => {
-                  deleteAntenna();
-                }}
-              >
-                안테나 뽑기
-              </button>
-            ) : (
-              <button
-                onClick={() => {
-                  makeAntenna();
-                }}
-              >
-                안테나 심기
-              </button>
-            )}
+          <div style={{display:"flex", flexDirection:"row", justifyContent:"end" }}>
+
+            <div>
+              {props.isAntenna ? (
+                <button
+                style={{background: "white", borderRadius: "8px", color:"#1C0B69", borderColor: "#1C0B69"}}
+                  onClick={() => {
+                    deleteAntenna();
+                  }}
+                >
+                  안테나 뽑기
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    makeAntenna();
+                  }}
+                  style={{background: "#1C0B69", borderRadius: "8px", color:"white"}}
+                >
+                  안테나 설치  
+                </button>
+              )}
+            </div>
           </div>
         }
         // 첫번쨰가 1차 높이, 두번째가 최대 높이
