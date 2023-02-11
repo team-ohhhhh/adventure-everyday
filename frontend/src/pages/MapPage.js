@@ -227,6 +227,12 @@ function MainMap() {
     }
   }, [isAdventureMode]);
 
+  // 안테나 버튼 토글
+  const [isOn, setIsOn] = useState(false);
+  function toggle() {
+    setIsOn((prev) => !prev);
+  }
+
   return (
     <div className="pageContainer">
       <div
@@ -314,7 +320,10 @@ function MainMap() {
                 isCircle: false,
               }));
             };
-            // 
+            // 안테나 버튼 토글용
+            if (isOn) {
+              toggle()
+            }
           }}
         >
           {/* 안테나 리스트를 순회하면서 안테나 아이콘 표시 */}
@@ -424,7 +433,7 @@ function MainMap() {
             </>
           )}
 
-          {!isAdventureMode && <Antenna antennae={antennae} setState={setState}></Antenna>}
+          {!isAdventureMode && <Antenna antennae={antennae} setState={setState} isOn={isOn} toggle={toggle}></Antenna> }
 
           {/* isCur가 켜져있지 않을 때만 버튼이 보임 */}
           {!isAdventureMode && !state.isCur && (
@@ -671,11 +680,6 @@ function MainMap() {
                   fillOpacity={0.7} // 채우기 불투명도 입니다
                         />
               )}))})}
-
-
-
-
-
         </Map>
       </div>
     </div>

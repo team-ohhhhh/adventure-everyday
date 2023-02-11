@@ -19,6 +19,9 @@ const BottomSheetContainer = (props) => {
   let URL = useSelector((state) => state.url);
   let TOKEN = useSelector((state) => state.token);
 
+  // 카카오 맵키를 위함
+  const API_KEY = process.env.REACT_APP_KAKAO_REST_API_KEY;
+
   useEffect(() => {
     axios({
       url: URL + "/posts",
@@ -105,10 +108,50 @@ const BottomSheetContainer = (props) => {
       });
   };
 
+  // w3w 변수 와 도로명 주소
+  const [W3W, setW3W] = useState('')
+  const [address, setAddress] = useState('')
+
+  
+
   useEffect(() => {
     // Setting focus is to aid keyboard and screen reader nav when activating this iframe
     focusRef.current.focus();
-  }, []);
+
+    // w3w
+    axios({
+      url : "https://api.what3words.com/v3/convert-to-3wa",
+      method : "get",
+      params : {
+        key : process.env.REACT_APP_W3W_KEY,
+        coordinates : `${props.center.lat},${props.center.lng}`,
+        language : "ko",
+        format : "json"
+      }
+    })
+    .then((res) => {
+      setW3W(res.data.words)
+    })
+    .catch((err) => console.log(err));
+
+    // 카카오맵 
+    axios
+      .get("https://dapi.kakao.com/v2/local/geo/coord2address.json", {
+        params: {
+          x: String(props.center.lng),
+          y: String(props.center.lat),
+          input_coord: "WGS84",
+        },
+        headers: {
+          Authorization: `KakaoAK ${API_KEY}`,
+        },
+      })
+      .then((res) => {
+        console.log(res)
+        setAddress(res.data.documents[0].address.address_name)
+      })
+      .catch((err) => console.log(err))
+  }, [props.center]);
 
   return (
     <p ref={focusRef}>
@@ -122,8 +165,11 @@ const BottomSheetContainer = (props) => {
         // onDismiss={() => setOpen(false)}
         blocking={false}
         header={
-          <div style={{display:"flex", flexDirection:"row", justifyContent:"end" }}>
-
+          <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center" }}>
+            <div style={{display:"flex", flexDirection:"column", alignItems:"start" }}>
+              <div style={{fontWeight:"600"}}>{W3W}</div>
+              <div style={{fontSize:"small"}}>{address}</div>
+            </div>
             <div>
               {props.isAntenna ? (
                 <button
@@ -148,17 +194,19 @@ const BottomSheetContainer = (props) => {
           </div>
         }
         // 첫번쨰가 1차 높이, 두번째가 최대 높이
-        snapPoints={({ maxHeight }) => [maxHeight / 4, maxHeight]}
+        snapPoints={({ maxHeight }) => [maxHeight / 3.5, maxHeight]}
       >
         <div className="forScrollBar">
           {/* dummy => list로 교체 */}
-          {props.articleList.map((data) => {
+          {props.articleList.length != 0 ? props.articleList.map((data) => {
             if (contentType === "article") {
-              return <BigArticleItem data={data} />;
+              return <SmallArticleItem data={data} />;
             } else if (contentType === "adventure") {
               return <AdventureBanner AdventureListItem={data} />;
             }
-          })}
+          })
+          : <div style={{width:"auto", textAlign:"center", marginTop:"2vh"}}>글이 없어요...</div>
+        }
         </div>
       </BottomSheet>
     </p>
