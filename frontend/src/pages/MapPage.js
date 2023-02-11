@@ -148,6 +148,7 @@ function MainMap() {
     })
     .then((res) => {
       setAdventureList(res.data.result)
+      console.log(res.data.result)
     })
     .catch((err) => console.log(err))
   }
@@ -178,14 +179,15 @@ function MainMap() {
             position:"absolute",
             left: "40%",
             top: "5%",
-            zIndex:"10"
+            zIndex:"2"
           }}
         >
           {isAdventureMode 
-            ?<button onClick={()=>{setIsAdventureMode(false)}}>지도 모드</button>
-            :<button onClick={()=>{setIsAdventureMode(true)}}>탐험 모드</button>
+            ?<button onClick={()=>{setIsAdventureMode(false); console.log(isAdventureMode)}}>지도 모드</button>
+            :<button onClick={()=>{setIsAdventureMode(true); console.log(isAdventureMode)}}>탐험 모드</button>
           }
         </div>
+
         <Map // 지도를 표시할 Container
           ref={mapRef}
           center={state.center}
@@ -243,11 +245,12 @@ function MainMap() {
                 isAroundClicked: false,
                 isCircle: false,
               }));
-            }
+            };
+            // 
           }}
         >
           {/* 안테나 리스트를 순회하면서 안테나 아이콘 표시 */}
-          {antennae &&
+          {!isAdventureMode && antennae &&
             antennae.map((antenna) => {
               return (
                 <MapMarker
@@ -286,7 +289,7 @@ function MainMap() {
 
           {/* 안테나에 원그려주기 */}
           {/* TODO: 안테나에서 다른 안테나를 누를 때 원 위치 안바뀜 */}
-          {state.isCircle &&
+          {!isAdventureMode && state.isCircle &&
             antennae.map((antenna) => {
               return (
                 antenna.antennaId === state.isAntenna && (
@@ -308,7 +311,7 @@ function MainMap() {
             })}
 
           {/* isCur(현재 위치 버튼을 눌러서 isCur가 true일 때 원과 현재마커 보여주기) */}
-          {state.isCur && (
+          {!isAdventureMode && state.isCur && (
             <>
               <Circle
                 center={state.center}
@@ -340,10 +343,10 @@ function MainMap() {
             </>
           )}
 
-          <Antenna antennae={antennae} setState={setState}></Antenna>
+          {!isAdventureMode && <Antenna antennae={antennae} setState={setState}></Antenna>}
 
           {/* isCur가 켜져있지 않을 때만 버튼이 보임 */}
-          {!state.isCur && (
+          {!isAdventureMode && !state.isCur && (
             <button
               onClick={() => {
                 moveCurPos();
@@ -380,7 +383,7 @@ function MainMap() {
           )}
 
           {/*isAround가 켜지면 UFO 이미지 생성*/}
-          {state.isAround && (
+          {!isAdventureMode && state.isAround && (
             <>
               <MapMarker
                 onClick={() => {
@@ -412,7 +415,7 @@ function MainMap() {
           )}
 
           {/*UFO 이미지가 눌리면 파란색 원 등장*/}
-          {state.isAround && state.isAroundClicked && (
+          {!isAdventureMode && state.isAround && state.isAroundClicked && (
             <Circle
               center={state.click}
               radius={1000}
@@ -428,7 +431,7 @@ function MainMap() {
           <p>{state.errMsg}</p>
 
           {/* 주변 검색 상황일때 바텀시트 등장 */}
-          {state.isCircle && (
+          {!isAdventureMode &&  state.isCircle && (
             <BottomSheetContainer
               antennae={antennae}
               center={state.center}
@@ -441,7 +444,7 @@ function MainMap() {
           )}
 
           {/* 맵에 게시글 핀 찍기 */}
-          {state.isCircle && (
+          { !isAdventureMode && state.isCircle && (
             <MarkerClusterer
               averageCenter={true}
               disableClickZoom={true}
@@ -491,7 +494,7 @@ function MainMap() {
 
           {/* 어드벤처 모드 */}
           {adventureList.map((adventure, idx) => {
-            adventure.adventurePlaceList.map((checkpoint) => {
+            return (adventure.adventurePlaceList.map((checkpoint) => {
               return (
                 <MapMarker
                   key = {checkpoint.adventurePlaceId}
@@ -501,11 +504,11 @@ function MainMap() {
                       lng : checkpoint.lng
                     }
                   }
-                  img={{
-                    src:`/images/advMarker${idx}`,
+                  image={{
+                    src:`/images/advMarker${idx+1}.png`,
                     size: {
-                      width: 50,
-                      height: 50,
+                      width: 30,
+                      height: 50, 
                     },
                     options: {
                       offset: {
@@ -519,16 +522,21 @@ function MainMap() {
                   }}
                 >
                   {whichCheckpoint === checkpoint.adventurePlaceId && 
-                    <div onClick ={navigate(`/adventure/detail/${adventure.adventureId}`)}>
-                      {adventure.adventureTitle}
-                      {checkpoint.title}
+                    <div onClick={()=>{navigate(`/adventure/detail/${adventure.adventureId}`)}}>
+                      <div>
+                        탐험 이름 : {adventure.adventureTitle}
+                      </div>
+                      <div>
+                        체크포인트 이름 : {checkpoint.title}
+                      </div>
                     </div>
                   }
                 </MapMarker>
               )
             })
-          })}
-          {adventureList.map((adventure, idx) => {
+          )})}
+          {isAdventureMode && adventureList.map((adventure, idx) => {
+            return(
             adventure.adventurePlaceList.map((checkpoint) => {
               return (
                 whichCheckpoint === checkpoint.adventurePlaceId &&
@@ -544,7 +552,7 @@ function MainMap() {
                   fillColor={"#00529E"} // 채우기 색깔입니다
                   fillOpacity={0.7} // 채우기 불투명도 입니다
                         />
-              )})})}
+              )}))})}
 
 
 
