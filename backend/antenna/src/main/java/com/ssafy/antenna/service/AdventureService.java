@@ -1099,14 +1099,12 @@ public class AdventureService {
                         new ReadAdventuresCheckPointRes(adventureInProgress.getAdventure().getAdventureId(),
                                 adventureInProgress.getAdventure().getTitle(), new ArrayList<>()));
 
-                Optional<List<CheckpointPost>> checkpointPostList = checkpointPostRepository.findAllByAdventure(adventureInProgress.getAdventure());
-                if (checkpointPostList.isPresent()) {
-                    //3. 체크포인트 게시글의 작성자가 나라면, adventuerPlace 정보를 add해준다.
-                    for (CheckpointPost checkpointPost : checkpointPostList.get()) {
-                        if (checkpointPost.getPost().getUser().getUserId() == userId) {
-                            readAdventuresCheckPointResList.get(readAdventuresCheckPointResList.size() - 1)
-                                    .adventurePlaceList().add(checkpointPost.getAdventurePlace().toResponse());
-                        }
+                Optional<List<AdventurePlace>> adventurePlaceList = adventurePlaceRepository.findAllByAdventure(adventureInProgress.getAdventure());
+                if (adventurePlaceList.isPresent()) {
+                    //3. adventuerPlace 정보를 add해준다.
+                    for (AdventurePlace adventurePlace : adventurePlaceList.get()) {
+                        readAdventuresCheckPointResList.get(readAdventuresCheckPointResList.size() - 1)
+                                .adventurePlaceList().add(adventurePlace.toResponse());
                     }
                 }
             }
