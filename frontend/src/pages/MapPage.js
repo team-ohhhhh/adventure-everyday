@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Map, MapMarker, MarkerClusterer, Circle } from "react-kakao-maps-sdk";
 import axios from "axios";
 
@@ -9,6 +10,8 @@ import BottomSheetContainer from "./../components/BottomSheet/BottomSheet";
 const { kakao } = window;
 
 function MainMap() {
+  const navigate = useNavigate();
+
   const mapRef = useRef();
 
   const [antennae, setAntennae] = useState([]);
@@ -41,7 +44,7 @@ function MainMap() {
     // 최상단으로 이동
     window.scrollTo(0, 0);
     // 스크롤 방지
-    document.body.style.overflow = "hidden";
+    // document.body.style.overflow = "hidden";
 
     // 지도 렌더링 이전에 안테나 좌표 가져와두기
     axios({
@@ -65,7 +68,7 @@ function MainMap() {
 
     return () => {
       // 언마운트 시 스크롤 방지 해제
-      document.body.style.overflow = "unset";
+      // document.body.style.overflow = "unset";
     };
   }, []);
 
@@ -146,14 +149,55 @@ function MainMap() {
     setIsOpen(0);
     if (clusterInfowindow) clusterInfowindow.close();
 
-    // console.log(Infowindow);
+    // 클러스터에 해당하는 게시글 필터링
+    const bounds = cluster.getBounds();
+    const clusterArticles = articleList.filter((article) => {
+      const articleLatLng = new kakao.maps.LatLng(article.lat, article.lng);
+      return bounds.contain(articleLatLng);
+    });
+
+    // DOM 형태로 인포윈도우 컨텐츠 생성
+    const content = document.createElement("div");
+    content.setAttribute(
+      "style",
+      "width: 150px; height: 65px; padding: 0.2rem 0.5rem; overflow: auto;"
+    );
+
+    clusterArticles.forEach((clusterArticle, idx) => {
+      const article = document.createElement("div");
+
+      article.setAttribute(
+        "style",
+        `display: flex; justify-content: space-between; ${
+          idx === 0 ? "" : "border-top: 0.5px solid gray;"
+        } padding: 0.3rem 0;`
+      );
+      const title = document.createElement("div");
+      title.setAttribute("style", "line-height: 1.4rem;");
+      title.textContent = `${clusterArticle.title}`;
+      const more = document.createElement("div");
+      more.setAttribute(
+        "style",
+        "width: 1rem; height: 1rem; padding: 0.2rem; line-height: 1rem; color: gray;"
+      );
+      more.textContent = ">";
+      more.onclick = () => {
+        navigate("/article/" + clusterArticle.postId);
+      };
+      article.appendChild(title);
+      article.appendChild(more);
+      content.appendChild(article);
+    });
+
+    // 인포윈도우 생성
     const map = mapRef.current;
     const infowindow = new kakao.maps.InfoWindow({
       position: cluster.getCenter(),
-      // content: Infowindow,
+      content: content,
     });
-
     infowindow.open(map);
+
+    // 다른 인포윈도우 클릭 시 닫을 수 있도록 인포윈도우 객체 저장
     setClusterInfowindow(infowindow);
   };
 
@@ -481,17 +525,45 @@ function MainMap() {
                   // clickable={true}
                   onClick={() => {
                     if (clusterInfowindow) clusterInfowindow.close();
-                    setIsOpen((prev) => {
-                      if (prev) {
-                        return 0;
-                      } else {
-                        return article.postId;
-                      }
-                    });
+                    setIsOpen(article.postId);
                   }}
                   position={{ lat: article.lat, lng: article.lng }}
                 >
-                  {isOpen === article.postId && <div>gkgk</div>}
+                  {isOpen === article.postId && (
+                    <div
+                      style={{
+                        width: "150px",
+                        padding: "0.5rem",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <div
+                          style={{
+                            lineHeight: "1.4rem",
+                          }}
+                        >
+                          {article.title}
+                        </div>
+                        <div
+                          onClick={() => navigate("/article/" + isOpen)}
+                          style={{
+                            width: "1rem",
+                            height: "1rem",
+                            padding: "0.2rem",
+                            lineHeight: "1rem",
+                            color: "gray",
+                          }}
+                        >
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </MapMarker>
               ))}
             </MarkerClusterer>
@@ -532,7 +604,7 @@ function MainMap() {
       // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
       setState((prev) => ({
         ...prev,
-        errMsg: "geolocation을 사용할수 없어요..",
+        errMsg: "위치 정보를 사용할 수 없어요..",
       }));
     }
 
