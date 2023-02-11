@@ -1,16 +1,21 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Map, MapMarker, MarkerClusterer, Circle } from "react-kakao-maps-sdk";
-import Antenna from "../components/mapPage/antenna/Antenna";
-import axios from "axios";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { Map, MapMarker, MarkerClusterer, Circle } from "react-kakao-maps-sdk";
+import axios from "axios";
+
+import Antenna from "../components/mapPage/antenna/Antenna";
 import BottomSheetContainer from "./../components/BottomSheet/BottomSheet";
 import SmallArticleItem from "./../components/SmallArticleItem";
-import { useNavigate } from "react-router-dom";
-// import ArticleBannerPin from './../components/mapPage/ArticleBannerPin'
+
+const { kakao } = window;
 
 function MainMap() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   const mapRef = useRef();
+
+  const [antennae, setAntennae] = useState([]);
   const [state, setState] = useState({
     center: {
       lat: 37.5016117,
@@ -32,45 +37,17 @@ function MainMap() {
     isAntenna: false,
   });
 
-  useEffect(() => {
-    // 스크롤 방지
-    document.body.style.overflow = "hidden";
-
-    // 초기 렌더링 때 현재 위치로 지도 이동
-    moveCurPos();
-    setState((prev) => ({
-      ...prev,
-      isCur: false,
-    }));
-
-    return () => {
-      // 언마운트 시 스크롤 방지 해제
-      document.body.style.overflow = "unset";
-    };
-  }, []);
-
-  // 지도 렌더링 이전에 안테나 좌표 가져와두기
-  const [antennae, setAntennae] = useState([
-    //   {
-    //   "antennaId": 1,
-    //   "area": 500,
-    //   "lng": 127.0397674,
-    //   "lat": 37.5016117,
-    //   "w3w": "기구.배분.심장",
-    //   "nearestPlace": "부산광역시"
-    // },
-    // {
-    //   "antennaId": 2,
-    //   "area": 500,
-    //   "lng": 127.007896,
-    //   "lat": 37.565138,
-    //   "w3w": "동대문 역사 문화 공원",
-    //   "nearestPlace": "부산광역시"
-    // }
-  ]);
   let TOKEN = useSelector((state) => state.token);
   let URL = useSelector((state) => state.url);
+
+  // 마운트 시
   useEffect(() => {
+    // 최상단으로 이동
+    window.scrollTo(0, 0);
+    // 스크롤 방지
+    // document.body.style.overflow = "hidden";
+
+    // 지도 렌더링 이전에 안테나 좌표 가져와두기
     axios({
       url: URL + "/users/antennae",
       method: "get",
@@ -82,17 +59,30 @@ function MainMap() {
         setAntennae(res.data.result);
       })
       .catch((err) => console.log(err));
-  }, []); //TODO: dependancy는 어떻게 기준을 주어야 할까...
+
+    // 현재 위치로 지도 이동
+    moveCurPos();
+    setState((prev) => ({
+      ...prev,
+      isCur: false,
+    }));
+
+    return () => {
+      // 언마운트 시 스크롤 방지 해제
+      // document.body.style.overflow = "unset";
+    };
+  }, []);
 
   // 게시글 리스트 저장 => axios는 바텀시트에서 됨
+  // lat이나 lng 값이 변화했을 때 작동할 함수 -> axios 후에 setArticleList
   const [articleList, setArticleList] = useState([]);
 
-  // 게시글 핀 인포윈도우 제어용 변수
+  // 게시글 마커 인포윈도우 제어용 변수
   const [isOpen, setIsOpen] = useState(false);
+  // 클러스터 마커 인포윈도우 저장용 변수
+  const [clusterInfowindow, setClusterInfowindow] = useState();
 
-  // lat이나 lng 값이 변화했을 때 작동할 함수 -> axios 후에 setArticleList
-
-  // 지도 높이 반응형
+  // 지도 높이 반응형으로 계산
   const userHeight = useMemo(() => {
     const viewHeight = document.documentElement.clientHeight;
     const navHeight = 71; // navbar 박스 높이
@@ -101,26 +91,45 @@ function MainMap() {
 
   // 클러스터 생성된 시점에 클러스터 마커 이미지 생성
   const onClustered = (target, clusters) => {
-    console.log("on clustered", clusters);
     clusters.forEach((cluster) => {
       const markers = cluster._markers;
-      const image = "/images/articlePin3.png";
+      const images = markers
+        .filter((marker) => {
+          return marker.T.Yj !== "/images/noImage_square.png";
+        })
+        .slice(0, 3)
+        .map((marker) => marker.T.Yj);
+
+      while (images.length < markers.length && images.length < 3) {
+        images.push("/images/noImage_square.png");
+      }
 
       const content = `
-      <div style = "cursor: pointer; position: relative;">
-        <img 
-          src=${image} alt="" style="width: 50px; height: 50px; position: absolute; margin-top: 14px; z-index: 3;"/>
-        <div
-          style = "width: 30px; height: 30px; background: rgba(0, 0, 0, 0.7); border-radius: 999px; color: rgb(255, 255, 255); text-align: center; font-weight: 500; line-height: 30px; position: absolute; margin-left: 30px; margin-top: 42px; z-index: 4;">
-          ${markers.length}
-        </div>
-      </div>`;
+        <div style = "cursor: pointer; position: relative;">
+          <img src=${
+            images[0]
+          } alt="" style="width: 50px; height: 50px; position: absolute; margin-top: 14px; z-index: 3;"/>
+          <img src=${
+            images[1]
+          } alt="" style="width: 50px; height: 50px; position: absolute; margin-left: 7px; margin-top: 7px; z-index: 2;"/>
+          ${
+            images.length > 2
+              ? `<img src=${images[2]} alt="" style="width: 50px; height: 50px; position: absolute; margin-left: 14px; z-index: 1;"/>`
+              : ``
+          }
+          <div
+            style = "width: 30px; height: 30px; background: rgba(0, 0, 0, 0.7); border-radius: 999px; color: rgb(255, 255, 255); text-align: center; font-weight: 500; line-height: 30px; position: absolute; margin-left: 30px; ${
+              markers.length === 2 ? `margin-top: 42px;` : `margin-top: 42px;`
+            } z-index: 4;">
+            ${markers.length}
+          </div>
+        </div>`;
 
       const dom = document.createElement("div");
       dom.innerHTML = content;
 
       dom.addEventListener("click", () => {
-        // onClusterclick(cluster);
+        onClusterclick(cluster);
       });
 
       cluster.getClusterMarker().setContent(dom);
@@ -128,38 +137,95 @@ function MainMap() {
     });
   };
 
-  // 클러스터 클릭 시
+  const onCreate = (target) => {
+    const clusters = target._clusters.filter(
+      (cluster) => cluster._markers.length > 1
+    );
+    onClustered(null, clusters);
+  };
+
+  // 클러스터 클릭 시 해당 게시글 리스트 출력
   const onClusterclick = (cluster) => {
-    console.log("cluster click", cluster);
+    // 열려 있던 infowindow off
+    setIsOpen(0);
+    if (clusterInfowindow) clusterInfowindow.close();
+
+    // 클러스터에 해당하는 게시글 필터링
+    const bounds = cluster.getBounds();
+    const clusterArticles = articleList.filter((article) => {
+      const articleLatLng = new kakao.maps.LatLng(article.lat, article.lng);
+      return bounds.contain(articleLatLng);
+    });
+
+    // DOM 형태로 인포윈도우 컨텐츠 생성
+    const content = document.createElement("div");
+    content.setAttribute(
+      "style",
+      "width: 150px; height: 65px; padding: 0.2rem 0.5rem; overflow: auto;"
+    );
+
+    clusterArticles.forEach((clusterArticle, idx) => {
+      const article = document.createElement("div");
+
+      article.setAttribute(
+        "style",
+        `display: flex; justify-content: space-between; ${
+          idx === 0 ? "" : "border-top: 0.5px solid gray;"
+        } padding: 0.3rem 0;`
+      );
+      const title = document.createElement("div");
+      title.setAttribute("style", "line-height: 1.4rem;");
+      title.textContent = `${clusterArticle.title}`;
+      const more = document.createElement("div");
+      more.setAttribute(
+        "style",
+        "width: 1rem; height: 1rem; padding: 0.2rem; line-height: 1rem; color: gray;"
+      );
+      more.textContent = ">";
+      more.onclick = () => {
+        navigate("/article/" + clusterArticle.postId);
+      };
+      article.appendChild(title);
+      article.appendChild(more);
+      content.appendChild(article);
+    });
+
+    // 인포윈도우 생성
+    const map = mapRef.current;
+    const infowindow = new kakao.maps.InfoWindow({
+      position: cluster.getCenter(),
+      content: content,
+    });
+    infowindow.open(map);
+
+    // 다른 인포윈도우 클릭 시 닫을 수 있도록 인포윈도우 객체 저장
+    setClusterInfowindow(infowindow);
   };
 
   // 모험모드 탭
-  const [isAdventureMode, setIsAdventureMode] = useState(false)
-  const [whichCheckpoint, setWhichCheckpoint] = useState(null)
-  const [adventureList, setAdventureList] = useState([])
+  const [isAdventureMode, setIsAdventureMode] = useState(false);
+  const [whichCheckpoint, setWhichCheckpoint] = useState(null);
+  const [adventureList, setAdventureList] = useState([]);
 
-  const getAdventureList = function() {
+  const getAdventureList = function () {
     axios({
-      url: URL + '/adventures/adventure-in-progress/users/checkpoint',
-      method: 'get',
+      url: URL + "/adventures/adventure-in-progress/users/checkpoint",
+      method: "get",
       headers: {
         Authorization: `Bearer ${TOKEN}`,
       },
     })
-    .then((res) => {
-      setAdventureList(res.data.result)
-    })
-    .catch((err) => console.log(err))
-  }
+      .then((res) => {
+        setAdventureList(res.data.result);
+      })
+      .catch((err) => console.log(err));
+  };
 
   useEffect(() => {
     if (isAdventureMode) {
-      getAdventureList()
+      getAdventureList();
     }
-  }, [isAdventureMode])
-
-
-
+  }, [isAdventureMode]);
 
   return (
     <div className="pageContainer">
@@ -175,17 +241,18 @@ function MainMap() {
         {/* 모험모드용 버튼 */}
         <div
           style={{
-            position:"absolute",
+            position: "absolute",
             left: "40%",
             top: "5%",
-            zIndex:"10"
+            zIndex:"2"
           }}
         >
           {isAdventureMode 
-            ?<button onClick={()=>{setIsAdventureMode(false)}}>지도 모드</button>
-            :<button onClick={()=>{setIsAdventureMode(true)}}>탐험 모드</button>
+            ?<button onClick={()=>{setIsAdventureMode(false); console.log(isAdventureMode)}}>지도 모드</button>
+            :<button onClick={()=>{setIsAdventureMode(true); console.log(isAdventureMode)}}>탐험 모드</button>
           }
         </div>
+
         <Map // 지도를 표시할 Container
           ref={mapRef}
           center={state.center}
@@ -218,7 +285,10 @@ function MainMap() {
             // console.log("dragStart");
           }}
           onClick={(_t, mouseEvent) => {
+            // 인포윈도우 off
             setIsOpen(0);
+            if (clusterInfowindow) clusterInfowindow.close();
+
             if (!state.isAroundClicked) {
               // UFO 이미지가 떠 있지 않다면
               // 지도 클릭시 그 곳에 ufo 이미지 뜸
@@ -243,11 +313,12 @@ function MainMap() {
                 isAroundClicked: false,
                 isCircle: false,
               }));
-            }
+            };
+            // 
           }}
         >
           {/* 안테나 리스트를 순회하면서 안테나 아이콘 표시 */}
-          {antennae &&
+          {!isAdventureMode && antennae &&
             antennae.map((antenna) => {
               return (
                 <MapMarker
@@ -286,7 +357,7 @@ function MainMap() {
 
           {/* 안테나에 원그려주기 */}
           {/* TODO: 안테나에서 다른 안테나를 누를 때 원 위치 안바뀜 */}
-          {state.isCircle &&
+          {!isAdventureMode && state.isCircle &&
             antennae.map((antenna) => {
               return (
                 antenna.antennaId === state.isAntenna && (
@@ -302,23 +373,36 @@ function MainMap() {
                     strokeStyle={"dash"} // 선의 스타일 입니다
                     fillColor={"#4D3EA3"} // 채우기 색깔입니다
                     fillOpacity={0.7} // 채우기 불투명도 입니다
+                    onClick={() => {
+                      kakao.maps.event.preventMap();
+                      // 원 클릭 시 인포윈도우 off
+                      setIsOpen(0);
+                      if (clusterInfowindow) clusterInfowindow.close();
+                    }}
                   />
                 )
               );
             })}
 
           {/* isCur(현재 위치 버튼을 눌러서 isCur가 true일 때 원과 현재마커 보여주기) */}
-          {state.isCur && (
+          {!isAdventureMode && state.isCur && (
             <>
               <Circle
                 center={state.center}
-                radius={1000}
+                radius={500}
                 strokeWeight={5} // 선의 두께입니다
                 strokeColor={"#190A55"} // 선의 색깔입니다
                 strokeOpacity={0} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
                 strokeStyle={"dash"} // 선의 스타일 입니다
                 fillColor={"#190A55"} // 채우기 색깔입니다
                 fillOpacity={0.7} // 채우기 불투명도 입니다
+                onClick={() => {
+                  kakao.maps.event.preventMap();
+                  // 원 클릭 시 인포윈도우 off
+                  setIsOpen(0);
+                  if (clusterInfowindow) clusterInfowindow.close();
+                }}
+                zIndex={1}
               />
               <MapMarker
                 image={{
@@ -340,10 +424,10 @@ function MainMap() {
             </>
           )}
 
-          <Antenna antennae={antennae} setState={setState}></Antenna>
+          {!isAdventureMode && <Antenna antennae={antennae} setState={setState}></Antenna>}
 
           {/* isCur가 켜져있지 않을 때만 버튼이 보임 */}
-          {!state.isCur && (
+          {!isAdventureMode && !state.isCur && (
             <button
               onClick={() => {
                 moveCurPos();
@@ -353,6 +437,13 @@ function MainMap() {
                   // 만약 지금 위치가 안테나 위치면 어떻게 하지...
                   isAntenna: false,
                 }));
+                // 현재 위치로 지도 시점 이동
+                const map = mapRef.current;
+                const moveLatLng = new kakao.maps.LatLng(
+                  state.center.lat,
+                  state.center.lng
+                );
+                map.panTo(moveLatLng);
               }}
               style={{
                 /*버튼 위치*/
@@ -380,7 +471,7 @@ function MainMap() {
           )}
 
           {/*isAround가 켜지면 UFO 이미지 생성*/}
-          {state.isAround && (
+          {!isAdventureMode && state.isAround && (
             <>
               <MapMarker
                 onClick={() => {
@@ -412,23 +503,29 @@ function MainMap() {
           )}
 
           {/*UFO 이미지가 눌리면 파란색 원 등장*/}
-          {state.isAround && state.isAroundClicked && (
+          {!isAdventureMode && state.isAround && state.isAroundClicked && (
             <Circle
               center={state.click}
-              radius={1000}
+              radius={500}
               strokeWeight={5} // 선의 두께입니다
               strokeColor={"#00529E"} // 선의 색깔입니다
               strokeOpacity={0} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
               strokeStyle={"dash"} // 선의 스타일 입니다
               fillColor={"#00529E"} // 채우기 색깔입니다
               fillOpacity={0.7} // 채우기 불투명도 입니다
+              onClick={() => {
+                kakao.maps.event.preventMap();
+                // 원 클릭 시 인포윈도우 off
+                setIsOpen(0);
+                if (clusterInfowindow) clusterInfowindow.close();
+              }}
             />
           )}
 
           <p>{state.errMsg}</p>
 
           {/* 주변 검색 상황일때 바텀시트 등장 */}
-          {state.isCircle && (
+          {!isAdventureMode &&  state.isCircle && (
             <BottomSheetContainer
               antennae={antennae}
               center={state.center}
@@ -441,48 +538,72 @@ function MainMap() {
           )}
 
           {/* 맵에 게시글 핀 찍기 */}
-          {state.isCircle && (
+          { !isAdventureMode && state.isCircle && (
             <MarkerClusterer
               averageCenter={true}
               disableClickZoom={true}
               minLevel={0}
               onClusterclick={onClusterclick}
               onClustered={onClustered}
+              onCreate={onCreate} // onClustered 훅이 최초 생성 시엔 동작하지 않아서 onCreate 함수도 함께 사용
             >
               {articleList.map((article) => (
                 <MapMarker
                   image={{
-                    src: "/images/articlePin3.png",
-
+                    src: article.photoUrl
+                      ? article.photoUrl
+                      : "/images/noImage_square.png",
                     size: {
                       width: 50,
                       height: 50,
                     },
                     options: {
                       offset: {
-                        x: 10,
-                        y: 10,
+                        x: 35,
+                        y: 35,
                       },
                     },
                   }}
                   // clickable={true}
-                  onClick={() =>
-                    setIsOpen((prev) => {
-                      if (prev) {
-                        return 0;
-                      } else {
-                        return article.postId;
-                      }
-                    })
-                  }
+                  onClick={() => {
+                    if (clusterInfowindow) clusterInfowindow.close();
+                    setIsOpen(article.postId);
+                  }}
                   position={{ lat: article.lat, lng: article.lng }}
                 >
-                  {/*TODO: 여기 어떻게 이미지 CSS ㅜㅠ */}
                   {isOpen === article.postId && (
-                    <SmallArticleItem
-                      data={article}
-                      style={{ borderRadius: "10px" }}
-                    />
+                    <div
+                      style={{
+                        width: "150px",
+                        padding: "0.5rem",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <div
+                          style={{
+                            lineHeight: "1.4rem",
+                          }}
+                        >
+                          {article.title}
+                        </div>
+                        <div
+                          onClick={() => navigate("/article/" + isOpen)}
+                          style={{
+                            width: "1rem",
+                            height: "1rem",
+                            padding: "0.2rem",
+                            lineHeight: "1rem",
+                            color: "gray",
+                          }}
+                        >
+                        </div>
+                      </div>
+                    </div>
                   )}
                 </MapMarker>
               ))}
@@ -490,8 +611,8 @@ function MainMap() {
           )}
 
           {/* 어드벤처 모드 */}
-          {adventureList.map((adventure, idx) => {
-            adventure.adventurePlaceList.map((checkpoint) => {
+          {isAdventureMode && adventureList.map((adventure, idx) => {
+            return (adventure.adventurePlaceList.map((checkpoint) => {
               return (
                 <MapMarker
                   key = {checkpoint.adventurePlaceId}
@@ -501,11 +622,11 @@ function MainMap() {
                       lng : checkpoint.lng
                     }
                   }
-                  img={{
-                    src:`/images/advMarker${idx}`,
+                  image={{
+                    src:`/images/advMarker${idx+1}.png`,
                     size: {
-                      width: 50,
-                      height: 50,
+                      width: 30,
+                      height: 50, 
                     },
                     options: {
                       offset: {
@@ -515,20 +636,25 @@ function MainMap() {
                     },
                   }}
                   onClick={() => {
-                    setWhichCheckpoint(checkpoint.adventurePlaceId)
+                    setWhichCheckpoint(checkpoint.adventurePlaceId);
                   }}
                 >
                   {whichCheckpoint === checkpoint.adventurePlaceId && 
-                    <div onClick ={navigate(`/adventure/detail/${adventure.adventureId}`)}>
-                      {adventure.adventureTitle}
-                      {checkpoint.title}
+                    <div onClick={()=>{navigate(`/adventure/detail/${adventure.adventureId}`)}}>
+                      <div>
+                        탐험 이름 : {adventure.adventureTitle}
+                      </div>
+                      <div>
+                        체크포인트 이름 : {checkpoint.title}
+                      </div>
                     </div>
                   }
-                </MapMarker>
-              )
+                </MapMarker>)
+              
             })
-          })}
-          {adventureList.map((adventure, idx) => {
+          )})}
+          {isAdventureMode && adventureList.map((adventure, idx) => {
+            return(
             adventure.adventurePlaceList.map((checkpoint) => {
               return (
                 whichCheckpoint === checkpoint.adventurePlaceId &&
@@ -537,14 +663,14 @@ function MainMap() {
                         lat : checkpoint.lat,
                         lng : checkpoint.lng
                         }}
-                  radius={50}
+                  radius={25}
                   strokeColor={"#00529E"} // 선의 색깔입니다
                   strokeOpacity={0} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
                   strokeStyle={"dash"} // 선의 스타일 입니다
                   fillColor={"#00529E"} // 채우기 색깔입니다
                   fillOpacity={0.7} // 채우기 불투명도 입니다
                         />
-              )})})}
+              )}))})}
 
 
 
@@ -586,7 +712,7 @@ function MainMap() {
       // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
       setState((prev) => ({
         ...prev,
-        errMsg: "geolocation을 사용할수 없어요..",
+        errMsg: "위치 정보를 사용할 수 없어요..",
       }));
     }
 
