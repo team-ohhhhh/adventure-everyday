@@ -165,36 +165,39 @@ const BottomSheetContainer = (props) => {
         // onDismiss={() => setOpen(false)}
         blocking={false}
         header={
-          <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center" }}>
-            <div style={{display:"flex", flexDirection:"column", alignItems:"start" }}>
-              <div style={{fontWeight:"600"}}>{W3W}</div>
-              <div style={{fontSize:"small"}}>{address}</div>
+          <div style={{display:"flex", flexDirection:"column", alignItems:"start" }}>
+            <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"100%"}}>
+              <div style={{display:"flex", flexDirection:"column", alignItems:"start" }}>
+                <div style={{fontWeight:"600"}}>{W3W}</div>
+                <div style={{fontSize:"small"}}>{address}</div>
+              </div>
+              <div>
+                {props.isAntenna ? (
+                  <button
+                  style={{background: "white", borderRadius: "8px", color:"#1C0B69", borderColor: "#1C0B69"}}
+                    onClick={() => {
+                      deleteAntenna();
+                    }}
+                  >
+                    안테나 뽑기
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      makeAntenna();
+                    }}
+                    style={{background: "#1C0B69", borderRadius: "8px", color:"white"}}
+                  >
+                    안테나 설치  
+                  </button>
+                )}
+              </div>
             </div>
-            <div>
-              {props.isAntenna ? (
-                <button
-                style={{background: "white", borderRadius: "8px", color:"#1C0B69", borderColor: "#1C0B69"}}
-                  onClick={() => {
-                    deleteAntenna();
-                  }}
-                >
-                  안테나 뽑기
-                </button>
-              ) : (
-                <button
-                  onClick={() => {
-                    makeAntenna();
-                  }}
-                  style={{background: "#1C0B69", borderRadius: "8px", color:"white"}}
-                >
-                  안테나 설치  
-                </button>
-              )}
-            </div>
+            <div style={{marginTop:"10px"}}> {props.articleList.length}개의 글 </div>
           </div>
         }
-        // 첫번쨰가 1차 높이, 두번째가 최대 높이
-        snapPoints={({ maxHeight }) => [maxHeight / 3.5, maxHeight]}
+        // 첫번쨰가 1차 높이, 두번째가 최대 높이  
+        snapPoints={({ maxHeight }) => [maxHeight / 5.8, maxHeight]}
       >
         <div className="forScrollBar">
           {/* dummy => list로 교체 */}
