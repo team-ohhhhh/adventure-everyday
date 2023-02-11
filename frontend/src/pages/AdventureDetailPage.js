@@ -32,7 +32,7 @@ function AdventureDetailPage() {
   };
 
   // 탐험 상세 정보 받아오기
-  function ReadAdventureDetail() {
+  function getAdventureDetail() {
     axios({
       url: URL + `/adventures/${params.id}`,
       headers: {
@@ -65,7 +65,7 @@ function AdventureDetailPage() {
   }
   // 탐험 상세 정보 받아오기
   useEffect(() => {
-    ReadAdventureDetail();
+    getAdventureDetail();
   }, []);
 
   return (
@@ -81,6 +81,7 @@ function AdventureDetailPage() {
             className={styles.info}
             key={adventureDetail.adventureId}
             info={adventureDetail}
+            getAdventureDetail={getAdventureDetail}
           ></AdventureInfo>
         </div>
 
