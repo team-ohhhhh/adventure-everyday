@@ -672,7 +672,7 @@ public class AdventureService {
         String pointFormat = String.format("'LINESTRING(%f %f, %f %f)')", x1, y1, x2, y2);
         Query query = entityManager.createNativeQuery("" +
                                 "SELECT * FROM adventure_place as ap " +
-                                "WHERE ap.adventure_id=" + "(select aip.adventure_id from adventure_in_progress as aip where aip.user_id =" + curUser.getUserId().toString() + ") "
+                                "WHERE ap.adventure_id in " + "(select aip.adventure_id from adventure_in_progress as aip where aip.user_id =" + curUser.getUserId().toString() + ") "
                                 + "and MBRContains(ST_LINESTRINGFROMTEXT(" + pointFormat + ", ap.coordinate)"
                         , AdventurePlace.class)
                 .setMaxResults(100);
