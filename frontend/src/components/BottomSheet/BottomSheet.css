@@ -141,6 +141,13 @@
 
 /* 내가 넣는 css */
 
+/* 게시글 컴포넌트 하단부가 너무 잘림 -> 게시글 컴포넌트의 마진을 줄것 */
+.forScrollBar {
+  height: fit-content;
+
+}
+
+
 .forScrollBar::-webkit-scrollbar {
   display: none;
 }
