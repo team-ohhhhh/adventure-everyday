@@ -20,11 +20,18 @@
 }
 
 .title {
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* 타이틀 너비 체크 */
+  width: 80%;
+  text-align: left;
+
+  /* 여기가 글자 넘칠때 잘라주는 코드 */
+  overflow: hidden;  		
+  text-overflow: ellipsis;  	 
   white-space: nowrap;
+  
   font-size: 24px;
   font-weight: 600;
+  
 }
 
 .photo {

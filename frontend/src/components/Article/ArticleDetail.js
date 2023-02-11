@@ -14,7 +14,7 @@ function ArticleDetail({article, isFeed}) {
   let URL = useSelector((state) => state.url)
   let TOKEN = useSelector((state) => state.token)
   let USER = useSelector((state) => state.user)
-
+  console.log(article)
   const navigate = useNavigate()
 
 
@@ -125,19 +125,19 @@ function ArticleDetail({article, isFeed}) {
       
       
       <div className={style.userInfo}>
-        <div className={style.profileAndNicknameAndw3w} onClick={() => {navigate(`/profile/${article.userDetailRes.userId}`)}}>
-          <div className={style.profileContainer}>
+        <div className={style.profileAndNicknameAndw3w} >
+          <div className={style.profileContainer} onClick={() => {navigate(`/profile/${article.userDetailRes.userId}`)}}>
             <img className={style.profile} src={article.userDetailRes.photoUrl ? article.userDetailRes.photoUrl : 'defaultProfile.jpg'}/>
           </div>
           <div className={style.nicknameAndw3w}>
-            <div className={style.nickname}>{article.userDetailRes.nickname}</div>
-            <div className={style.w3w}>{article.w3w}</div>
+            <div className={style.nickname} onClick={() => {navigate(`/profile/${article.userDetailRes.userId}`)}}>{article.userDetailRes.nickname}</div>
+            <div className={style.w3w} onClick={()=>{navigate('/', {state: {lat:article.lat, lng:article.lng}})}}>{article.w3w}</div>
           </div>
         </div>
         <div className={style.iconHolder}>
-          {article.isChallenge !== 0 && <GrFlag size={33} className={style.icon}/>}
-          {article.isAntenna !== 0 && <GoRadioTower size={33} className={style.icon}/>}
-          {article.isFollowing !== !0 && <MdPersonOutline size={36} className={style.isFollowingicon}/>}
+          {article.isChallenge !== 0 && <GrFlag size={33} className={style.icon} onClick={() => {navigate(`/adventure/detail/${article.isChallenge}`)}}/>}
+          {article.isAntenna !== 0 && <GoRadioTower size={33} className={style.icon} onClick={()=>{navigate('/', {state: {lat:article.lat, lng:article.lng}})}}/>} {/*TODO: 안테나도 범위 원도 켜졌으면 좋겠다... */ }
+          {article.isFollowing !== !0 && <MdPersonOutline size={36} className={style.isFollowingicon} onClick={() => {navigate(`/profile/${article.isFollowing}`)}}/>}
         </div>
         {!isFeed && <div className={style.moreButton}><ArticleMoreButton article={article} toggle={toggle} isOn={isOn} isMe={isMe}/></div>}
       </div>
