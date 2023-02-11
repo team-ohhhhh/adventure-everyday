@@ -5,11 +5,11 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import BottomSheetContainer from "./../components/BottomSheet/BottomSheet";
 import SmallArticleItem from "./../components/SmallArticleItem";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // import ArticleBannerPin from './../components/mapPage/ArticleBannerPin'
 
 function MainMap() {
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
   const mapRef = useRef();
   const [state, setState] = useState({
     center: {
@@ -133,6 +133,34 @@ function MainMap() {
     console.log("cluster click", cluster);
   };
 
+  // 모험모드 탭
+  const [isAdventureMode, setIsAdventureMode] = useState(false)
+  const [whichCheckpoint, setWhichCheckpoint] = useState(null)
+  const [adventureList, setAdventureList] = useState([])
+
+  const getAdventureList = function() {
+    axios({
+      url: URL + '/adventures/adventure-in-progress/users/checkpoint',
+      method: 'get',
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+      },
+    })
+    .then((res) => {
+      setAdventureList(res.data.result)
+    })
+    .catch((err) => console.log(err))
+  }
+
+  useEffect(() => {
+    if (isAdventureMode) {
+      getAdventureList()
+    }
+  }, [isAdventureMode])
+
+
+
+
   return (
     <div className="pageContainer">
       <div
@@ -144,6 +172,20 @@ function MainMap() {
           backgroundColor: "#eeefff",
         }}
       >
+        {/* 모험모드용 버튼 */}
+        <div
+          style={{
+            position:"absolute",
+            left: "40%",
+            top: "5%",
+            zIndex:"10"
+          }}
+        >
+          {isAdventureMode 
+            ?<button onClick={()=>{setIsAdventureMode(false)}}>지도 모드</button>
+            :<button onClick={()=>{setIsAdventureMode(true)}}>탐험 모드</button>
+          }
+        </div>
         <Map // 지도를 표시할 Container
           ref={mapRef}
           center={state.center}
@@ -446,6 +488,68 @@ function MainMap() {
               ))}
             </MarkerClusterer>
           )}
+
+          {/* 어드벤처 모드 */}
+          {adventureList.map((adventure, idx) => {
+            adventure.adventurePlaceList.map((checkpoint) => {
+              return (
+                <MapMarker
+                  key = {checkpoint.adventurePlaceId}
+                  position = {
+                    {
+                      lat : checkpoint.lat,
+                      lng : checkpoint.lng
+                    }
+                  }
+                  img={{
+                    src:`/images/advMarker${idx}`,
+                    size: {
+                      width: 50,
+                      height: 50,
+                    },
+                    options: {
+                      offset: {
+                        x: 25,
+                        y: 25,
+                      },
+                    },
+                  }}
+                  onClick={() => {
+                    setWhichCheckpoint(checkpoint.adventurePlaceId)
+                  }}
+                >
+                  {whichCheckpoint === checkpoint.adventurePlaceId && 
+                    <div onClick ={navigate(`/adventure/detail/${adventure.adventureId}`)}>
+                      {adventure.adventureTitle}
+                      {checkpoint.title}
+                    </div>
+                  }
+                </MapMarker>
+              )
+            })
+          })}
+          {adventureList.map((adventure, idx) => {
+            adventure.adventurePlaceList.map((checkpoint) => {
+              return (
+                whichCheckpoint === checkpoint.adventurePlaceId &&
+                <Circle 
+                  center={{
+                        lat : checkpoint.lat,
+                        lng : checkpoint.lng
+                        }}
+                  radius={50}
+                  strokeColor={"#00529E"} // 선의 색깔입니다
+                  strokeOpacity={0} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                  strokeStyle={"dash"} // 선의 스타일 입니다
+                  fillColor={"#00529E"} // 채우기 색깔입니다
+                  fillOpacity={0.7} // 채우기 불투명도 입니다
+                        />
+              )})})}
+
+
+
+
+
         </Map>
       </div>
     </div>
