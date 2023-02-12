@@ -39,8 +39,8 @@ function SearchComponent(props) {
       })
       .catch((err) => {console.log(err)})
 
-    } // 탐험 검색
-    else if (searchType === 'adventures')
+    } // 탐험 검색 TODO: 검색어 길이 제한 생기면 추가
+    else if (searchType === 'adventures' && search.length > 0)
     {
       axios({
         url: URL + '/adventures/search',
@@ -54,6 +54,7 @@ function SearchComponent(props) {
       })
       .then((res)=> {
         setResult(res.data.result)
+        console.log(res)
       })
       .catch((err) => {console.log(err)})
     }
@@ -63,13 +64,14 @@ function SearchComponent(props) {
   return (
     <div className="pageContainer">
       <input className={style.searchBar} type="text" value={search} onChange={onChange} placeholder={`${searchType === 'users' ? '유저를' : '모험을'} 검색해보세요.`}/> 
-      <div>
+      <div className={style.result}>
+        {result.length > 0 && <div>{result.length}건의 결과</div>}
         {searchType === 'users' 
         ? result.map((user) => {
           return <SimpleUserBanner data={user}/>
         }) 
         : result.map((adventure) => {
-        return <AdventureBanner data={adventure}/>})
+          return <AdventureBanner adventureItem={adventure} isSearch={true}/>})
         }
       </div>
     </div>

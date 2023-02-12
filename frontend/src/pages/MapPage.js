@@ -235,6 +235,52 @@ function MainMap() {
     setIsOn((prev) => !prev);
   }
 
+  // 카카오 키워드 검색용
+  const [info, setInfo] = useState()
+  const [markers, setMarkers] = useState([])
+  const [result, setResult] = useState([])
+  const [keyWord, setKeyWord] = useState()
+  const [resultWindow, setResultWindow] = useState(false)
+
+  const onChange = function(e) {
+    setKeyWord(e.target.value)
+  }
+
+
+  useEffect(() => {
+    if (!keyWord) return
+    const ps = new kakao.maps.services.Places()
+    moveCurPos()
+    const location = new kakao.maps.LatLng(state.center.lat, state.center.lng)
+    setResultWindow(true)
+    ps.keywordSearch(keyWord, (data, status, _pagination) => {
+      if (status === kakao.maps.services.Status.OK) {
+        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+        // LatLngBounds 객체에 좌표를 추가합니다
+        // const bounds = new kakao.maps.LatLngBounds()
+        console.log(data)
+        setResult(data)
+        // for (var i = 0; i < data.length; i++) {
+        //   // @ts-ignore
+        //   markers.push({
+        //     position: {
+        //       lat: data[i].y,
+        //       lng: data[i].x,
+        //     },
+        //     content: data[i].place_name,
+        //   })
+          // @ts-ignore
+          // bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x))
+        }
+        // setMarkers(markers)
+
+        // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+        // map.setBounds(bounds)
+      // }
+    }, {location, sort: kakao.maps.services.SortBy.DISTANCE}) // 옵션은 이런형태로 넣어줄것!
+  }, [keyWord])
+
+
   return (
     <div className="pageContainer">
       <div
@@ -248,18 +294,75 @@ function MainMap() {
       >
         {/* 모험모드용 버튼 */}
         <div
+        // TODO: 위치 하드코딩함...
           style={{
             position: "absolute",
-            left: "40%",
-            top: "5%",
+            left: "81%",
+            top: "35%",
             zIndex:"2"
           }}
         >
           {isAdventureMode 
-            ?<button onClick={()=>{setIsAdventureMode(false); console.log(isAdventureMode)}}>지도 모드</button>
-            :<button onClick={()=>{setIsAdventureMode(true); console.log(isAdventureMode)}}>탐험 모드</button>
+            ?<button style={{background: "white", borderRadius: "8px", color:"#1C0B69", borderColor: "#1C0B69"}} onClick={()=>{setIsAdventureMode(false); console.log(isAdventureMode)}}>지도 모드</button>
+            :<button style={{background: "#1C0B69", borderRadius: "8px", color:"white"}} onClick={()=>{setIsAdventureMode(true); console.log(isAdventureMode)}}>탐험 모드</button>
           }
         </div>
+
+        {/* 카카오맵 검색용 검색창 */}
+        <div className="kakao" style={{width:"100%", marginLeft:"auto", marginRight:"auto", position:"absolute", zIndex:"3", display:"flex", flexDirection:"column", alignItems:"center"}}>
+          <input onChange={(e) => onChange(e)} 
+          placeholder="카카오맵 키워드 검색"
+          style={{
+            width : "80vw",
+            height : "10vw",
+            borderRadius : "8px",
+            marginTop : "20px",
+            border : "none",
+            boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+            paddingLeft : "2vw"
+          }}
+          ></input>
+          {result.length > 0 && resultWindow &&
+            result.slice(0,11).map((place) => {  //TODO: 일단 10개까지만 보여주는걸로 하자...
+              return ( 
+                <div 
+                key={place.id}
+                onClick={()=>{setState((prev) => ({
+                  ...prev,
+                  center: {
+                    lat: place.y,
+                    lng: place.x
+                  },
+                  isAroundClicked : true,
+                  isAround: true,
+                  isCircle: true,
+                }));
+                setResultWindow(false)
+                }}
+                style={{
+                  display:'flex', 
+                  flexDirection:'column', 
+                  alignItems:"start",
+                  width : "80vw",
+                  height : "fit-content",
+                  borderRadius : "8px",
+                  marginTop : "1vh",
+                  border : "none",
+                  boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                  backgroundColor:"white",
+                  padding: "1vw"
+        
+                }}
+                >
+                  <div><span>{place.place_name}</span><span style={{marginLeft:"2vw", fontSize:"small", color:"grey"}}>{place.category_group_name}</span></div>
+                  <div>{place.address_name}</div>
+                </div> 
+              )
+            })
+          }
+        </div>
+
+        
 
         <Map // 지도를 표시할 Container
           ref={mapRef}
@@ -293,6 +396,8 @@ function MainMap() {
             // console.log("dragStart");
           }}
           onClick={(_t, mouseEvent) => {
+            // 카카오 검색 결과 목록 끄기
+            setResultWindow(false)
             // 인포윈도우 off
             setIsOpen(0);
             if (clusterInfowindow) clusterInfowindow.close();
@@ -328,6 +433,9 @@ function MainMap() {
             }
           }}
         >
+          
+
+
           {/* 안테나 리스트를 순회하면서 안테나 아이콘 표시 */}
           {!isAdventureMode && antennae &&
             antennae.map((antenna) => {
@@ -683,6 +791,19 @@ function MainMap() {
                   fillOpacity={0.7} // 채우기 불투명도 입니다
                         />
               )}))})}
+
+          {/* 키워드 검색용 */}
+          {markers.map((marker) => (
+            <MapMarker
+              key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
+              position={marker.position}
+              onClick={() => setInfo(marker)}
+            >
+              {info &&info.content === marker.content && (
+                <div style={{color:"#000"}}>{marker.content}</div>
+              )}
+            </MapMarker>
+          ))}
         </Map>
       </div>
     </div>

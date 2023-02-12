@@ -145,7 +145,7 @@ public class PostService {
                 isChallenge,
                 isFollowing,
                 post.getUser().toResponse()
-        );
+    );
 
         //getPostWithArea
         return postDetailWithCategory;
@@ -166,11 +166,20 @@ public class PostService {
         }
         //내가 팔로우한 유저의 게시글도 가져오자.
         Optional<List<Follow>> followList = followRepository.findAllByFollowerUser(user);
+
         if (followList.isPresent()) {
             for (Follow follow : followList.get()) {
+                System.out.println(follow.toString());
                 Optional<List<Post>> findPostList = postRepository.findAllByUser(follow.getFollowingUser());
+                Optional<List<Post>> findMyPostList = postRepository.findAllByUser(user);
                 if (findPostList.isPresent()) {
                     for (Post post : findPostList.get()) {
+                        if (post.isPublic())
+                            searchResult.add(post.getPostId());
+                    }
+                }
+                if (findMyPostList.isPresent()) {
+                    for (Post post : findMyPostList.get()) {
                         if (post.isPublic())
                             searchResult.add(post.getPostId());
                     }
