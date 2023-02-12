@@ -11,15 +11,15 @@ function HorizontalScroll(props) {
   // 내 주변 탐험 데이터 리스트: props.nearList
 
   const listItem = props.contentType;
-  const nearList = props.nearList;
+  const adventureList = props.adventureList;
   const isAdTab = props.isAdTab;
   switch (listItem) {
     case "adventure":
       return (
         <div className={style.articleList}>
           <ScrollMenu>
-            {props.nearList &&
-              props.nearList.map((articleListItem) => {
+            {adventureList &&
+              adventureList.map((articleListItem) => {
                 return (
                   <AdventureBanner
                     key={articleListItem}
@@ -36,7 +36,15 @@ function HorizontalScroll(props) {
         <div className={style.articleList}>
           <ScrollMenu>
             {props.articleList.map((data) => {
-              return <BigArticleItem postId={data.postId} title={data.title} w3w={data.w3w} date={data.date} photo={data.photo} />;
+              return (
+                <BigArticleItem
+                  postId={data.postId}
+                  title={data.title}
+                  w3w={data.w3w}
+                  date={data.date}
+                  photo={data.photo}
+                />
+              );
             })}
           </ScrollMenu>
         </div>

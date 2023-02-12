@@ -1,9 +1,16 @@
-.adPageContainer{
+.adPageContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  
+}
 
+.line {
+  display: flex;
+  width: 85%;
+  height: 0.2rem;
+  /* background-color: aqua; */
+  border-bottom: 1px solid rgb(220, 220, 220);
+  margin-bottom: 1.5rem;
 }
 
 .recommendPageHeader {
@@ -15,8 +22,7 @@
   margin-bottom: 5%;
 }
 
-
-.pageTitle{
+.pageTitle {
   font-size: 2rem;
   font-weight: 600;
 }
@@ -26,22 +32,19 @@
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
-  
 }
 
 .searchIcon {
   margin-right: 20px;
 }
 
-.section{
+.section {
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   width: 85%;
-
 }
-
 
 .recommendListInfo {
   display: flex;
@@ -50,31 +53,25 @@
   width: 100%;
   height: fit-content;
   margin-bottom: 0.7rem;
-
 }
 
 .adventureTitle {
   text-align: left;
- 
-
 }
 
 .recommendTitle {
   font-size: 1.5rem;
   font-weight: bolder;
   margin-bottom: 0.3rem;
-  color: darkblue
+  color: darkblue;
 }
 
-.scrollContainer{
-  
+.scrollContainer {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-
 }
 
 .more {
-
 }
