@@ -26,6 +26,7 @@ function AdventureBanner({
                 : "/images/emptyBanner2.png"
             })`,
             width: isAdTab ? "338px" : "100%",
+            margin: isAdTab ? "1vh" : "0",
           }}
           onClick={() => {
             navigate(`/adventure/detail/${adventureItem.adventureId}`);
