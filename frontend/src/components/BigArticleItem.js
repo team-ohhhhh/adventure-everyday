@@ -3,19 +3,6 @@ import style from "./BigArticleItem.module.css";
 import { useNavigate } from "react-router-dom";
 
 function BigArticleItem({postId, title, w3w, date, photo}) {
-  // console.log(props.data);
-  //변수 꺼내쓰기
-  
-  // const userDetailRes = props.data.userDetailRes;
-
-  // // dummy data
-  // const postId = 1
-  // const photo = "/images.jpg"
-  // const title = "title"
-  // const nickName = "nickName"
-  // const tier = 1
-  // const date = 'yy.mm.dd'
-  // const w3w = '보라돌이, 뚜비, 나나'
 
   const navigate = useNavigate();
 
