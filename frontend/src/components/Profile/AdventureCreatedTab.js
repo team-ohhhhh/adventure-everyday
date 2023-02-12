@@ -1,18 +1,19 @@
-import React, { useState, useMemo } from 'react';
-import AdventureBanner from './../Adventure/AdventureBanner';
-import axios from 'axios';
-import { useSelector } from "react-redux"
-import style from './AdventureCreatedTab.module.css'
-import AdventureEmpty from './AdventureEmpty';
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useMemo } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
+import AdventureBanner from "../Adventure/AdventureBanner";
+import AdventureEmpty from "./AdventureEmpty";
 
-function AdventureOnProgressTab({userId, tab}) {
-  const [adventureList, setAdventureList] = useState([])
-  const URL = useSelector((state) => state.url)
-  const TOKEN = useSelector((state) => state.token)
+import style from "./AdventureOnProgressTab.module.css";
 
-  const navigate = useNavigate()
+function AdventureCreatedTab({ userId, tab, isMe }) {
+  const [adventureList, setAdventureList] = useState([]);
+  const URL = useSelector((state) => state.url);
+  const TOKEN = useSelector((state) => state.token);
+
+  const navigate = useNavigate();
 
   const orders = [
     { value: "createTimeDesc", name: "최신순" },
@@ -21,67 +22,71 @@ function AdventureOnProgressTab({userId, tab}) {
     { value: "difficultyDesc", name: "어려운순" },
   ];
 
-  const [whichOrder, setWhichOrder] = useState("최신순")
-    
-
   const handleSelect = (e) => {
-    getAdventures(e.target.value)
+    getAdventures(e.target.value);
   };
 
-  const getAdventures = function(order) {
+  const getAdventures = function (order) {
     axios({
       url: URL + `/adventures/clicks/adventure-creations/users/${userId}`,
-      method : 'get',
+      method: "get",
       headers: {
-        Authorization: `Bearer ${TOKEN}`
+        Authorization: `Bearer ${TOKEN}`,
       },
       params: {
         order,
-      }
-
+      },
     })
-    .then((res) => {
-      console.log(res)
-      setAdventureList(res.data.result)
-    })
-    .catch((err) => console.log(err))
-  }
- 
-  
-  useMemo(() => {
-    if (tab === 3) {
-      getAdventures('createTimeDesc')
-  }},[tab])
-
-
-  return(
-    <div className={style.container}>
-      {/* 여기가 드롭박스 */}
-      <div className={style.subContainer}>
-          <div className={style.selectContainer}>
-            <span style={{ backgroundColor: "white", borderRadius: "6px" }}>
-              <select className={style.select} onChange={handleSelect}>
-                {orders.map((order) => (
-                  <option
-                    className={style.option}
-                    key={order.value}
-                    value={order.value}
-                  >
-                    {order.name}
-                  </option>
-                ))}
-              </select>
-            </span>
-          </div>
-        </div>
-        { adventureList.length !== 0 ? adventureList.map((adventureItem) => {
-        return <AdventureBanner adventureItem={adventureItem} isMine={true}/>
+      .then((res) => {
+        // console.log(res);
+        setAdventureList(res.data.result);
       })
-    : <div onClick={() => {navigate("/adventure/create")}}><AdventureEmpty text={'탐험을 만들어보세요!'} /></div>
-    }
-    </div>
-  )
+      .catch((err) => console.log(err));
+  };
 
+  useMemo(() => {
+    if (tab === 2) {
+      getAdventures("createTimeDesc");
+    }
+  }, [tab]);
+
+  return (
+    <div className={style.container}>
+      {/* 드롭박스 */}
+      <div className={style.selectContainer}>
+        <select className={style.select} onChange={handleSelect}>
+          {orders.map((order) => (
+            <option
+              // className={style.option}
+              key={order.value}
+              value={order.value}
+            >
+              {order.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* 모험 목록 */}
+      {adventureList.length > 0 ? (
+        adventureList.map((adventureItem) => (
+          <div
+            className={style.adventureItem}
+            key={`cr-${adventureItem.adventureId}`}
+          >
+            <AdventureBanner
+              adventureItem={adventureItem} /*isInProgress={isInProgress}*/
+              isCreated={true}
+            />
+          </div>
+        ))
+      ) : (
+        <div onClick={() => navigate("/adventure")}>
+          <AdventureEmpty text={"탐험을 만들어 보세요!"} isMe={isMe} />
+        </div>
+      )}
+    </div>
+  );
 }
 
-export default AdventureOnProgressTab
+export default AdventureCreatedTab;

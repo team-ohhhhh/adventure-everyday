@@ -1,12 +1,10 @@
 .photoContainer {
   width: 10vw;
-  height:10vw;
+  height: 10vw;
   border-radius: 70%;
   overflow: hidden;
   margin-left: 2vw;
   margin-right: 2vw;
-  
-  
 }
 
 .photo {
@@ -19,12 +17,11 @@
   display: flex;
   flex-direction: row;
   height: fit-content;
-  width : 90vw;
+  width: 90vw;
   margin-left: auto;
   margin-right: auto;
   align-items: center;
   justify-content: space-evenly;
-  
 }
 
 .infos {
@@ -34,29 +31,27 @@
   box-shadow: 5px 2px 2px grey;
   border-radius: 8px;
   padding-left: 2vw;
-  padding-right: 2vw
+  padding-right: 2vw;
 }
-  
+
 .nicknameAndInput {
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: flex-start;
   height: fit-content;
   min-height: 8vh;
   justify-content: space-evenly;
 }
 
 .comment {
-  border :none
+  border: none;
 }
 
 .postButton {
-  height : 8vh;
-  background: #1C0B69;
+  height: 8vh;
+  background: #1c0b69;
   border-radius: 8px;
-  color : white;
-  width : 14vw;
+  color: white;
+  width: 14vw;
   box-shadow: 5px 2px 2px grey;
 }
-
-
