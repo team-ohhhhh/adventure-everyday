@@ -169,7 +169,6 @@ public class PostService {
 
         if (followList.isPresent()) {
             for (Follow follow : followList.get()) {
-                System.out.println(follow.toString());
                 Optional<List<Post>> findPostList = postRepository.findAllByUser(follow.getFollowingUser());
                 Optional<List<Post>> findMyPostList = postRepository.findAllByUser(user);
                 if (findPostList.isPresent()) {
