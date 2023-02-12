@@ -2,15 +2,10 @@ import React, { useState } from "react";
 import style from "./BigArticleItem.module.css";
 import { useNavigate } from "react-router-dom";
 
-function BigArticleItem(props) {
+function BigArticleItem({postId, title, w3w, date, photo}) {
   // console.log(props.data);
   //변수 꺼내쓰기
-  const postId = props.data.postId;
-  const title = props.data.title;
-  // const content = props.data.content;
-  const w3w = props.data.w3w;
-  const date = props.data.createTime;
-  const photo = props.data.photoUrl;
+  
   // const userDetailRes = props.data.userDetailRes;
 
   // // dummy data
