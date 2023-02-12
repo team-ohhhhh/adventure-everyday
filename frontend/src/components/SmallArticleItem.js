@@ -25,7 +25,9 @@ function SmallArticleItem(props) {
     >
       {/* 포토 src 바꿔주기 */}
       <img
-        src={props.data.photoUrl ? props.data.photoUrl : "images/advImg5.png"}
+        src={
+          props.data.photoUrl ? props.data.photoUrl : "/images/emptyBanner4.png"
+        }
         className={style.photo}
       />
       <div className={style.divForInfo}>
