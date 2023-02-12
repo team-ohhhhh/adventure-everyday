@@ -9,7 +9,6 @@ import style from "./HorizontalScroll.module.css";
 // props로 contentType 지정해서 넘겨줄 것. adventure/article
 function HorizontalScroll(props) {
   // 내 주변 탐험 데이터 리스트: props.nearList
-
   const listItem = props.contentType;
   const adventureList = props.adventureList;
   const isAdTab = props.isAdTab;
@@ -36,15 +35,7 @@ function HorizontalScroll(props) {
         <div className={style.articleList}>
           <ScrollMenu>
             {props.articleList.map((data) => {
-              return (
-                <BigArticleItem
-                  postId={data.postId}
-                  title={data.title}
-                  w3w={data.w3w}
-                  date={data.date}
-                  photo={data.photo}
-                />
-              );
+              return <BigArticleItem postId={data.postId} title={data.title} w3w={data.w3w} date={data.createTime} photo={data.photoUrl} />;
             })}
           </ScrollMenu>
         </div>
