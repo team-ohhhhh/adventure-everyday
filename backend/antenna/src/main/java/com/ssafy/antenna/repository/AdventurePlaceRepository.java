@@ -2,6 +2,7 @@ package com.ssafy.antenna.repository;
 
 import com.ssafy.antenna.domain.adventure.Adventure;
 import com.ssafy.antenna.domain.adventure.AdventurePlace;
+import com.ssafy.antenna.domain.post.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -11,4 +12,5 @@ public interface AdventurePlaceRepository extends JpaRepository<AdventurePlace, 
     Optional<List<AdventurePlace>> findAllByAdventure(Adventure adventure);
 
     Long countByAdventure(Adventure adventure);
+    Optional<AdventurePlace> findByPost(Post post);
 }
