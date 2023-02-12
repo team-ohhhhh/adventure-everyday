@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Map, MapMarker, MarkerClusterer, Circle } from "react-kakao-maps-sdk";
 import axios from "axios";
 
@@ -12,6 +12,8 @@ const { kakao } = window;
 
 function MainMap() {
   const navigate = useNavigate();
+  const location = useLocation();
+   
 
   const mapRef = useRef();
 
@@ -227,6 +229,12 @@ function MainMap() {
     }
   }, [isAdventureMode]);
 
+  // 안테나 버튼 토글
+  const [isOn, setIsOn] = useState(false);
+  function toggle() {
+    setIsOn((prev) => !prev);
+  }
+
   return (
     <div className="pageContainer">
       <div
@@ -314,7 +322,10 @@ function MainMap() {
                 isCircle: false,
               }));
             };
-            // 
+            // 안테나 버튼 토글용
+            if (isOn) {
+              toggle()
+            }
           }}
         >
           {/* 안테나 리스트를 순회하면서 안테나 아이콘 표시 */}
@@ -356,7 +367,7 @@ function MainMap() {
             })}
 
           {/* 안테나에 원그려주기 */}
-          {/* TODO: 안테나에서 다른 안테나를 누를 때 원 위치 안바뀜 */}
+
           {!isAdventureMode && state.isCircle &&
             antennae.map((antenna) => {
               return (
@@ -366,7 +377,7 @@ function MainMap() {
                       lat: antenna.lat,
                       lng: antenna.lng,
                     }}
-                    radius={500}
+                    radius={1000}
                     strokeWeight={5} // 선의 두께입니다
                     strokeColor={"#4D3EA3"} // 선의 색깔입니다
                     strokeOpacity={0} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
@@ -389,7 +400,7 @@ function MainMap() {
             <>
               <Circle
                 center={state.center}
-                radius={500}
+                radius={1000}
                 strokeWeight={5} // 선의 두께입니다
                 strokeColor={"#190A55"} // 선의 색깔입니다
                 strokeOpacity={0} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
@@ -424,7 +435,7 @@ function MainMap() {
             </>
           )}
 
-          {!isAdventureMode && <Antenna antennae={antennae} setState={setState}></Antenna>}
+          {!isAdventureMode && <Antenna antennae={antennae} setState={setState} isOn={isOn} toggle={toggle}></Antenna> }
 
           {/* isCur가 켜져있지 않을 때만 버튼이 보임 */}
           {!isAdventureMode && !state.isCur && (
@@ -439,6 +450,7 @@ function MainMap() {
                 }));
                 // 현재 위치로 지도 시점 이동
                 const map = mapRef.current;
+                moveCurPos('buttonClicked')
                 const moveLatLng = new kakao.maps.LatLng(
                   state.center.lat,
                   state.center.lng
@@ -506,7 +518,7 @@ function MainMap() {
           {!isAdventureMode && state.isAround && state.isAroundClicked && (
             <Circle
               center={state.click}
-              radius={500}
+              radius={1000}
               strokeWeight={5} // 선의 두께입니다
               strokeColor={"#00529E"} // 선의 색깔입니다
               strokeOpacity={0} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
@@ -671,19 +683,29 @@ function MainMap() {
                   fillOpacity={0.7} // 채우기 불투명도 입니다
                         />
               )}))})}
-
-
-
-
-
         </Map>
       </div>
     </div>
   );
 
-  // 현재 위치로 이동시키는 함수
-  function moveCurPos() {
-    if (navigator.geolocation) {
+  // 게시글 눌렀으면 해당 게시글 위치로, 아니라면 현재 위치로 이동시키는 함수
+  function moveCurPos(where) {
+    // 현재위치 버튼을 누른 상황이 아니고 && 게시글에서 location값을 불러온 상황이라면
+    if (where !=='buttonClicked' && location.state && location.state.lat && location.state.lng) {
+      setState((prev) => ({
+        ...prev,
+        center: {
+          lat: location.state.lat, // 위도
+          lng: location.state.lng, // 경도
+        },
+        level: 1,
+        // TODO: 원을 띄우고 싶은데 잘 안됨...
+        isAroundClicked : true,
+        isAround: true,
+        isCircle: true
+      }));
+     }
+    else if (navigator.geolocation) {
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
       navigator.geolocation.getCurrentPosition(
         (position) => {

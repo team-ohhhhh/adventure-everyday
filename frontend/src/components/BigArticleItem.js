@@ -41,7 +41,7 @@ function BigArticleItem(props) {
         <div className={style.title}>{title}</div>
         <div className={style.w3w}>{w3w}</div>
       </div>
-      <div className={style.date}>{date}</div>
+      <div className={style.date}>{date && date.substr(0, 10)}</div>
     </div>
   );
 }
