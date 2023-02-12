@@ -9,6 +9,7 @@ public record ReadAdventurePlaceClickRes(
         Long adventurePlaceId,
         String adventurePlaceTitle,
         String adventurePlaceContent,
+        Long postId,
         String adventurePlacePostPhotoUrl,
         String adventurePlacePostTitle,
         String adventurePlacePostW3w,
