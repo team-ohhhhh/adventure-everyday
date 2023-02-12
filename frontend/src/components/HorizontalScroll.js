@@ -36,7 +36,7 @@ function HorizontalScroll(props) {
         <div className={style.articleList}>
           <ScrollMenu>
             {props.articleList.map((data) => {
-              return <BigArticleItem data={data} />;
+              return <BigArticleItem postId={data.postId} title={data.title} w3w={data.w3w} date={data.date} photo={data.photo} />;
             })}
           </ScrollMenu>
         </div>

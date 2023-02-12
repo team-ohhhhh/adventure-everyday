@@ -4,7 +4,7 @@ import AdventureDetailPage from "../../pages/AdventurePage";
 import AdventureProgressBar from "./AdventureProgressBar";
 import ParticipantsCircle from "./ParticipantsCircle";
 
-function AdventureBanner({ adventureItem, isAdTab }) {
+function AdventureBanner({ adventureItem, isAdTab, isMine }) {
   const navigate = useNavigate();
 
   return (
@@ -34,7 +34,7 @@ function AdventureBanner({ adventureItem, isAdTab }) {
             </div>
           </div>
           {/* 여기가 탐험 진행도 자리 */}
-          {!isAdTab && ( // 탐험 탭 페이지에선 진행바 나오면 안돼서 처리
+          {!isAdTab && !isMine && ( // 탐험 탭 페이지에선 진행바 나오면 안돼서 처리 + 내가 만든 탐험에서도 안나오도록
             <AdventureProgressBar clearRate={adventureItem.clearRate} />
           )}
           <div className={style.makerAndParticipants}>
