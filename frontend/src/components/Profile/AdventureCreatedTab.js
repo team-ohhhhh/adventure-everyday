@@ -75,7 +75,7 @@ function AdventureOnProgressTab({userId, tab}) {
           </div>
         </div>
         { adventureList.length !== 0 ? adventureList.map((adventureItem) => {
-        return <AdventureBanner adventureItem={adventureItem} /*isInProgress={isInProgress}*//>
+        return <AdventureBanner adventureItem={adventureItem} isMine={true}/>
       })
     : <div onClick={() => {navigate("/adventure/create")}}><AdventureEmpty text={'탐험을 만들어보세요!'} /></div>
     }
