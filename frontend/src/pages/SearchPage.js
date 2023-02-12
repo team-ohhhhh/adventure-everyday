@@ -68,7 +68,7 @@ function SearchComponent(props) {
         {result.length > 0 && <div>{result.length}건의 결과</div>}
         {searchType === 'users' 
         ? result.map((user) => {
-          return <SimpleUserBanner data={user}/>
+          return <div style={{width:"90vw"}}><SimpleUserBanner data={user}/></div>
         }) 
         : result.map((adventure) => {
           return <AdventureBanner adventureItem={adventure} isSearch={true}/>})
