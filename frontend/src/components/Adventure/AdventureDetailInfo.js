@@ -65,7 +65,7 @@ function AdventureDetailInfo(props) {
       positions[i] = props.info.subAdventurePlaces[i].subCoordinate;
     }
   }
-
+  console.log(checkPointInfo)
   return (
     <div className={styles.detail}>
       <div className={styles.map}>
@@ -86,7 +86,15 @@ function AdventureDetailInfo(props) {
         </div>
 
         <div className={styles.cpArticle}>
-          <BigArticleItem data={checkPointInfo} />
+          <BigArticleItem
+          // TODO: 여기 포스트 id가 고장남... 해당 게시글의 포스트 아이디가 아님...
+            postId={checkPointInfo.postId}
+            title={checkPointInfo.title}
+            w3w={checkPointInfo.w3w}
+            date={checkPointInfo.createTime}
+            photo={checkPointInfo.photoUrl} 
+            
+            />
         </div>
       </div>
       <div className={styles.checkPointArticles}>

@@ -118,11 +118,13 @@ function AdventureDetailMap(props) {
                       method: "get",
                     }).then((response) => {
                       console.log("checkpoint axios 성공");
-                      console.log(response.data.result);
+                      console.log(response);
 
                       props.setCheckPointInfo((prev) => ({
                         ...prev,
-                        postId: response.data.result.adventurePlaceId,
+                        // TODO: adventurePlaceId 오류의 경우 여기 바꾼 변수명 체크해보기
+                        adventurePlaceId: response.data.result.adventurePlaceId,
+                        postId: response.data.result.postId,
                         title: response.data.result.adventurePlacePostTitle,
                         w3w: response.data.result.adventurePlacePostW3w,
                         createTime: response.data.result.createTime,
