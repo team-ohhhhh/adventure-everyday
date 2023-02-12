@@ -15,7 +15,7 @@ function AdventureBanner({
   return (
     // TODO: onClick 이벤트로 해당 모험으로 네비게이트 달아주기(모험 id 값을 파라미터로)
     // 그래디언트의 끝과 끝 점의 색상을 모두 반투명하게 하고 이미지 파일 위에 그래디언트가 오버랩 되는 방식..?
-    <div style={{ width: "fit-content" }}>
+    <div>
       {adventureItem && (
         <div
           className={style.banner}

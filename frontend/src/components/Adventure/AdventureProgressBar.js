@@ -8,7 +8,7 @@ const AdventureProgressBar = ({ clearRate }) => {
     <div className={style.container}>
       <ProgressBar
         completed={clearRate}
-        height={"10"}
+        height={"10px"}
         labelAlignment="outside"
         labelColor="#39D8F6"
         bgColor="#39D8F6"
