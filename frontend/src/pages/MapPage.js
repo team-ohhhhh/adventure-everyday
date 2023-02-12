@@ -250,6 +250,8 @@ function MainMap() {
   useEffect(() => {
     if (!keyWord) return
     const ps = new kakao.maps.services.Places()
+    moveCurPos()
+    const location = new kakao.maps.LatLng(state.center.lat, state.center.lng)
     setResultWindow(true)
     ps.keywordSearch(keyWord, (data, status, _pagination) => {
       if (status === kakao.maps.services.Status.OK) {
@@ -275,7 +277,7 @@ function MainMap() {
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
         // map.setBounds(bounds)
       // }
-    })
+    }, {location, sort: kakao.maps.services.SortBy.DISTANCE}) // 옵션은 이런형태로 넣어줄것!
   }, [keyWord])
 
 
