@@ -11,7 +11,7 @@ function AntennaList(props) {
       <div className={styles.countInfo}>내 안테나 {props.antennae && props.antennae.length} / 3개</div>
       {props.antennae.map((antenna) => {
         return(
-          <AntennaListItem antenna={antenna} setState={props.setState}></AntennaListItem>
+          <AntennaListItem antenna={antenna} setState={props.setState} toggle={props.toggle}></AntennaListItem>
         )
       })}
       

@@ -202,6 +202,12 @@ public class AdventureController {
         return ResultResponse.success(result);
     }
 
+    // 내가 참가한 탐험들의 체크 포인트 조회
+    @GetMapping("/adventure-in-progress/users/checkpoint")
+    public ResultResponse<List<ReadAdventuresCheckPointRes>> readAdventuresCheckPoint(Authentication authentication) {
+        return ResultResponse.success(adventureService.readAdventuresCheckPoint(Long.valueOf(authentication.getName())));
+    }
+
     // 탐험 후기 수정
     @PutMapping("/reviews/{adventurereviewId}")
     public ResultResponse<String> updateAdventureReview(

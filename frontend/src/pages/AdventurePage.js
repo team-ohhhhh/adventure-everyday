@@ -90,7 +90,7 @@ function AdventurePage() {
           <div className={style.pageTitle}>탐험</div>
           <div className={style.searchAndCreate}>
             {/* 검색 컴포넌트 자리 onClick달아서 모달열기 */}
-            <BiSearchAlt2 className={style.searchIcon} />
+            <BiSearchAlt2 className={style.searchIcon} onClick={() => {navigate('/search/adventure')}}/>
             {/* 생성 컴포넌트 자리 */}
             <h3 onClick={() => navigate("/adventure/create")}>생성</h3>
           </div>

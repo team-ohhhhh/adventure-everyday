@@ -1,6 +1,8 @@
 package com.ssafy.antenna.domain.adventure;
 
 import com.ssafy.antenna.domain.Base;
+import com.ssafy.antenna.domain.adventure.dto.res.CheckPointAdventurePlaceRes;
+import com.ssafy.antenna.domain.adventure.dto.res.ReadAdventurePlaceRes;
 import com.ssafy.antenna.domain.post.CheckpointPost;
 import com.ssafy.antenna.domain.post.Post;
 import jakarta.persistence.*;
@@ -47,4 +49,8 @@ public class AdventurePlace extends Base {
 
     @OneToMany(mappedBy = "adventurePlace", cascade = CascadeType.ALL)
     private List<CheckpointPost> checkpointPosts = new ArrayList<>();
+
+    public CheckPointAdventurePlaceRes toResponse(){
+        return new CheckPointAdventurePlaceRes(this.adventurePlaceId,this.title,this.content,coordinate.getX(), coordinate.getY());
+    }
 }

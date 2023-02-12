@@ -101,12 +101,12 @@ function AdventureInfo(props) {
               </div>
             </div>
           </div>
-          <div className={styles.participants}>
-            <ParticipantsCircle photoList={photoList}></ParticipantsCircle>
+          <div className={styles.participants} onClick={()=>{navigate(`/adventure/detail/${props.info.adventureId}/adventure-in-progress-list`)}}>
+            <ParticipantsCircle photoList={photoList} ></ParticipantsCircle>
           </div>
         </div>
         <div className={styles.etc}>
-          <div className={styles.typeAndStars}>
+          <div className={styles.typeAndStars}> 
             <div className={styles.desc}>
               <div className={styles.normal}>종류: </div>
               <div className={styles.highlight}>
