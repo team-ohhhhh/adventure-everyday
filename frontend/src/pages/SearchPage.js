@@ -21,9 +21,8 @@ function SearchComponent(props) {
   }
 
   useEffect(() => {
-    // 유저 검색 TODO: 쓰고 지우면 ''이 되면서 모든 유저가 다나옴...
-    console.log(searchType)
-    if (searchType === 'users') {
+    // 3자 이상 입력하지 않으면 오류뜸
+    if (searchType === 'users' && search.length >= 3 ) {
       axios({
         url: URL + '/users/search',
         method: 'get',
@@ -35,6 +34,7 @@ function SearchComponent(props) {
         }
       })
       .then((res)=> {
+        console.log(res.data.result)
         setResult(res.data.result)
       })
       .catch((err) => {console.log(err)})

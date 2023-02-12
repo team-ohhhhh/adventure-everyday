@@ -75,10 +75,9 @@ const ArticleCreatePage = () => {
     axios
       .get(url + "/adventures/adventure-in-progress/check", {
         params: {
-          // lat: 37.570437,
-          // lng: 127.084167,
           lat: article.lng,
           lng: article.lat,
+          area: 0.1,
         },
         headers: {
           Authorization: `Bearer ${token}`,

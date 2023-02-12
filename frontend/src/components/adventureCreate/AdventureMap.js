@@ -3,37 +3,49 @@ import { Map, MapMarker } from "react-kakao-maps-sdk";
 
 const { kakao } = window;
 
-const AdventureMap = ({ checkPoints }) => {
+const AdventureMap = ({ checkpoints }) => {
   const mapRef = useRef();
   const temp = { lat: 37.50128745884959, lng: 127.03956225524968 };
 
   const bounds = useMemo(() => {
     const bounds = new kakao.maps.LatLngBounds();
 
-    checkPoints.forEach((point) => {
-      bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
+    checkpoints.forEach((point) => {
+      bounds.extend(
+        new kakao.maps.LatLng(point.coordinate.lat, point.coordinate.lng)
+      );
     });
+
     return bounds;
-  }, [checkPoints]);
+  }, [checkpoints]);
+
+  const handleBounds = (map) => {
+    if (map && !bounds.isEmpty()) {
+      map.setBounds(bounds);
+    }
+  };
 
   useEffect(() => {
-    // console.log("setBounds");
     const map = mapRef.current;
-    if (map) map.setBounds(bounds);
+    handleBounds(map);
   });
 
   return (
     <div>
       <Map
         center={temp}
-        style={{ width: "100%", height: "300px" }}
+        style={{ width: "100%", height: "200px" }}
+        onCreate={handleBounds}
         ref={mapRef}
       >
-        {checkPoints &&
-          checkPoints.map((point) => (
+        {checkpoints &&
+          checkpoints.map((point) => (
             <MapMarker
               key={point.postId}
-              position={{ lat: point.lat, lng: point.lng }}
+              position={{
+                lat: point.coordinate.lat,
+                lng: point.coordinate.lng,
+              }}
               image={{
                 src: "/images/advMarker5.png",
                 size: {

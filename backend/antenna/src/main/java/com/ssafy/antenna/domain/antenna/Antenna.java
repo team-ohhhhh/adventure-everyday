@@ -23,7 +23,7 @@ public class Antenna extends Base {
     @JoinColumn(name = "userId")
     private User user;
     @Column(columnDefinition = "int not null")
-    private int area;
+    private Long area;
     @Column(columnDefinition = "Point not null")
     private Point coordinate;
     @Column(columnDefinition = "varchar(50) not null")

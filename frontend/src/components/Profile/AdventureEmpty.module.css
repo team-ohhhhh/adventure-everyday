@@ -1,0 +1,21 @@
+.banner {
+  /* TODO: 여기 배너 크기도 조심! */
+  width: 338px;
+  height: 183px;
+  background-size: cover;
+  background-position: center;
+  color: white;
+  /* margin-left: 20px; */
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: grey;
+}
+
+.plus {
+  color: white;
+  height: 90px;
+  width: 90px;
+}

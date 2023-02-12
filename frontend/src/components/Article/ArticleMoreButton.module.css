@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  position: relative;
 }
 
 .deleteUserButton {
@@ -42,3 +43,4 @@
   line-height: 100%;
   color: #ffffff;
 }
+

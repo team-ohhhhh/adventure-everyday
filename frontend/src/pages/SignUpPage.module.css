@@ -1,0 +1,77 @@
+.logo {
+  font-family: "Black Ops One", cursive;
+}
+
+.logInInput {
+  width: 60%;
+  height: 48px;
+  border: 1px solid #1c0b69;
+  border-radius: 999px;
+  margin-top: 10px;
+  /* font-family: 'Roboto'; */
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 100%;
+  color: #1c0b69;
+  text-align: center;
+}
+
+.logInInput::placeholder {
+  /* font-family: 'Roboto'; */
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 100%;
+  /* identical to box height, or 14px */
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #1c0b69;
+}
+
+.logInButton {
+  width: 60%;
+  height: 48px;
+  background-color: #1c0b69;
+  color: white;
+  border-radius: 999px;
+  border: 1px solid #1c0b69;
+  margin-top: 35px;
+  margin-bottom: 20px;
+}
+
+.logInKakaoButton {
+  width: 60%;
+  margin-bottom: 20px;
+}
+
+.logInTitleHolder {
+  margin-bottom: 30px;
+}
+
+.logInTitleHolder h1 {
+  margin-bottom: 10px;
+  color: #1c0b69;
+}
+
+/* 이러면 안될거 같음.. */
+.logInContainer {
+  position: absolute;
+  top: 25%;
+}
+.logInKakaoButton {
+  width: 60%;
+  /* margin-bottom: 20px; */
+}
+
+.logInButton {
+  width: 60%;
+  height: 48px;
+  background-color: #1c0b69;
+  color: white;
+  border-radius: 999px;
+  border: 1px solid #1c0b69;
+  margin-top: 35px;
+  margin-bottom: 20px;
+}

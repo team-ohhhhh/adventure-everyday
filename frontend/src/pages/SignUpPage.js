@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux"
 import { EmailComponent, PasswordComponent, NicknameComponent, IntroduceComponent, PhotoComponent, SignUpCompletedComponent } from "../components/SignUp/ComponentsForSignUp";
-
+import style from "./SignUpPage.module.css"
 
 function SignUpPage() {
   let URL = useSelector((state) => state.url)
@@ -42,6 +42,17 @@ function SignUpPage() {
     .then(setStage(stage + 1))
     .catch((error) => console.log(error))
   }
+
+  //카카오 회원가입 axios
+  const KakaoSignUpAuth = function () {
+    axios({
+      url: URL + "/auth/kakao/oauth/signup",
+      method: "get",
+    })
+    .then((response)=>{
+      window.location.href=response.data
+    })
+  }
   // 스테이지 별 컴포넌트 변경
   switch (stage) {
     case 0:
@@ -52,7 +63,7 @@ function SignUpPage() {
           justifyContent: "center",
           alignItems:"center",
         }}>
-          <button className="signUpButton" onClick={ () => {setStage(stage+1)}} 
+          <button  className={style.logInButton} onClick={ () => {setStage(stage+1)}} 
           style={{
             width:"60%",
             height:"48px",
@@ -67,7 +78,13 @@ function SignUpPage() {
             lineHeight: "100%",
             color: "#ffffff"
           }}>이메일로 회원가입</button>
+          <img src={"/images/kakao_start_medium_narrow.png"} className={style.logInKakaoButton} onClick={() => {
+            KakaoSignUpAuth();
+          }}></img>
         </div>
+
+
+        
       )
       case 1:
         return (

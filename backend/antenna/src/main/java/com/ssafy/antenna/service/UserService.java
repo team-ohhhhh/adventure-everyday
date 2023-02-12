@@ -1,7 +1,5 @@
 package com.ssafy.antenna.service;
 
-import com.ssafy.antenna.domain.ResultResponse;
-import com.ssafy.antenna.domain.adventure.AdventureSucceed;
 import com.ssafy.antenna.domain.antenna.Antenna;
 import com.ssafy.antenna.domain.antenna.dto.DetailAntennaRes;
 import com.ssafy.antenna.domain.antenna.dto.PostAntennaReq;
@@ -36,7 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +47,8 @@ public class UserService {
     private final AdventureSucceedRepository adventureSucceedRepository;
     private final W3WUtil w3WUtil;
     private final UserFeatsDtoMapper userFeatsDtoMapper;
+
+    private final JwtService jwtService;
 
     @Value("${aws-cloud.aws.s3.bucket.url}")
     private String bucketUrl;
@@ -298,42 +297,42 @@ public class UserService {
         return antenna.toResponse();
     }
 
-    public UserDetailRes addExpUser(int exp, Long userId) {
+    public UserDetailRes addExpUser(long exp, Long userId) {
         //유저가 존재하는지 확인
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         //유저가 존재하면, add한 경험치가 다음 레벨로 넘어갈 정도인지 확인
-        int resultLevel = user.getLevel();
-        int resultExp = 0;
+        long resultLevel = user.getLevel();
+        long resultExp = 0;
         switch (user.getLevel()) {
             case 1:
-                if (user.getExp() + exp >= NextLevelExp.ONE.value()){
-                    resultLevel+=1;
+                if (user.getExp() + exp >= NextLevelExp.ONE.value()) {
+                    resultLevel += 1;
                     resultExp = user.getExp() + exp - NextLevelExp.ONE.value();
-                }else{
+                } else {
                     resultExp = user.getExp() + exp;
                 }
-                    break;
+                break;
             case 2:
-                if (user.getExp() + exp >= NextLevelExp.TWO.value()){
-                    resultLevel+=1;
+                if (user.getExp() + exp >= NextLevelExp.TWO.value()) {
+                    resultLevel += 1;
                     resultExp = user.getExp() + exp - NextLevelExp.TWO.value();
-                }else{
+                } else {
                     resultExp = user.getExp() + exp;
                 }
                 break;
             case 3:
-                if (user.getExp() + exp >= NextLevelExp.THREE.value()){
-                    resultLevel+=1;
+                if (user.getExp() + exp >= NextLevelExp.THREE.value()) {
+                    resultLevel += 1;
                     resultExp = user.getExp() + exp - NextLevelExp.THREE.value();
-                }else{
+                } else {
                     resultExp = user.getExp() + exp;
                 }
                 break;
             case 4:
-                if (user.getExp() + exp >= NextLevelExp.FOUR.value()){
-                    resultLevel+=1;
+                if (user.getExp() + exp >= NextLevelExp.FOUR.value()) {
+                    resultLevel += 1;
                     resultExp = user.getExp() + exp - NextLevelExp.FOUR.value();
-                }else{
+                } else {
                     resultExp = user.getExp() + exp;
                 }
                 break;
@@ -347,8 +346,8 @@ public class UserService {
                 .email(user.getEmail())
                 .nickname(user.getNickname())
                 .password(user.getPassword())
-                .level(resultLevel)
-                .exp(resultExp)
+                .level((int) resultLevel)
+                .exp((int) resultExp)
                 .introduce(user.getIntroduce())
                 .role(Role.USER)
                 .photoUrl(user.getPhotoUrl())
@@ -356,5 +355,4 @@ public class UserService {
         userRepository.save(newUser);
         return newUser.toResponse();
     }
-
 }

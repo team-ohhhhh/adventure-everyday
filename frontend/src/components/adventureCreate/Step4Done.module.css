@@ -1,0 +1,11 @@
+.animationContainer {
+  margin-left: calc(-50vw + 50%);
+  position: relative;
+}
+
+.header {
+  color: white;
+  position: absolute;
+  top: 3rem;
+  left: 2rem;
+}

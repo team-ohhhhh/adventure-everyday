@@ -17,6 +17,19 @@ function AdventureInfo(props) {
   let TOKEN = useSelector((state) => state.token);
   let URL = useSelector((state) => state.url);
 
+  let photoList = [];
+  // 참가자 컴포넌트 props로 내려주기 위해 id와 url 쌍으로 오는 배열을 url 배열로만 만들어주기
+  if (props.info.userIdPhotoUrlList) {
+    photoList = props.info.userIdPhotoUrlList.map(
+      (IdUrlList) => IdUrlList.photoUrl
+    );
+    console.log("photoList");
+    console.log(photoList);
+    console.log("difficulty");
+    console.log(props.info.adventureDifficulty);
+  }
+
+  // 참가하기 함수
   function Participate() {
     axios({
       url: URL + `/adventures/${params.id}/adventure-in-progress`,
@@ -26,7 +39,21 @@ function AdventureInfo(props) {
       method: "post",
     }).then((response) => {
       console.log("참가 결과");
-      console.log(response.data.result);
+      props.getAdventureDetail();
+    });
+  }
+
+  // 포기하기 함수
+  function Giveup() {
+    axios({
+      url: URL + `/adventures/${params.id}/adventure-in-progress`,
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+      },
+      method: "delete",
+    }).then((response) => {
+      console.log("포기되었습니다.");
+      props.getAdventureDetail();
     });
   }
 
@@ -35,7 +62,10 @@ function AdventureInfo(props) {
       <div className={styles.container}>
         <div className={styles.titleContainer}>
           <div className={styles.title}>{props.info.adventureTitle}</div>
-          <img className={styles.diff} src="/images/diff_easy.png"></img>
+          <img
+            className={styles.diff}
+            src={`/images/diff_${props.info.adventureDifficulty}.png`}
+          ></img>
         </div>
         <div className={styles.period}>
           {props.info.adventureStartDate && (
@@ -66,15 +96,13 @@ function AdventureInfo(props) {
                 </span>
                 <img
                   className={styles.makerTier}
-                  src={props.info.userIdPhotoUrl}
+                  src={`/images/lv${props.info.userLevel}.png`}
                 />
               </div>
             </div>
           </div>
           <div className={styles.participants}>
-            <ParticipantsCircle
-              photoList={props.info.userIdPhotoUrlList}
-            ></ParticipantsCircle>
+            <ParticipantsCircle photoList={photoList}></ParticipantsCircle>
           </div>
         </div>
         <div className={styles.etc}>
@@ -89,7 +117,7 @@ function AdventureInfo(props) {
               <div className={styles.normal}>평점:</div>
               <div className={styles.highlight}>
                 {props.info.adventureAvgReviewRate ? (
-                  <span>{props.info.adventureAvgReviewRate}</span>
+                  <span>{props.info.adventureAvgReviewRate.toFixed(1)}점</span>
                 ) : (
                   <span>100점</span>
                 )}
@@ -105,11 +133,10 @@ function AdventureInfo(props) {
             </button>
 
             {/* 참여 안한 상태에서 참여하기 버튼 보여주기 */}
-            {!props.info.participation && (
+            {!props.info.participation && !props.info.clear && (
               <button
                 className={styles.participate}
                 onClick={() => {
-                  console.log("참여!");
                   console.log(props.info.participation);
                   Participate();
                 }}
@@ -123,7 +150,7 @@ function AdventureInfo(props) {
               <button
                 className={styles.giveup}
                 onClick={() => {
-                  console.log("포기!");
+                  Giveup();
                 }}
               >
                 포기하기
@@ -131,14 +158,16 @@ function AdventureInfo(props) {
             )}
 
             {/* 탐험 달성하면 후기 달성 버튼 보이기 */}
-            <button
-              className={styles.review}
-              onClick={() => {
-                navigate(`/adventure/detail/${params.id}/createReview`);
-              }}
-            >
-              후기작성
-            </button>
+            {props.info.clear && (
+              <button
+                className={styles.review}
+                onClick={() => {
+                  navigate(`/adventure/detail/${params.id}/createReview`);
+                }}
+              >
+                후기작성
+              </button>
+            )}
           </div>
         </div>
       </div>

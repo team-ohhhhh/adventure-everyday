@@ -15,9 +15,24 @@ function AdventureDetailPage() {
   let TOKEN = useSelector((state) => state.token);
   let URL = useSelector((state) => state.url);
 
+  let [reviews, setReviews] = useState([]);
+  let [chingho, setChingho] = useState();
   let [adventureDetail, setAdventureDetail] = useState({});
 
-  function ReadAdventureDetail() {
+  // 후기 수정 삭제 버튼 조작
+  const [reviewMoreButton, setReviewMoreButton] = useState(false);
+  const [whichReviewButton, setWhichReviewButton] = useState(null);
+
+  // 수정 탭 닫기
+  const close = function () {
+    if (reviewMoreButton) {
+      setReviewMoreButton(false);
+      setWhichReviewButton(null);
+    }
+  };
+
+  // 탐험 상세 정보 받아오기
+  function getAdventureDetail() {
     axios({
       url: URL + `/adventures/${params.id}`,
       headers: {
@@ -30,19 +45,43 @@ function AdventureDetailPage() {
       console.log(response.data.result);
     });
   }
+
+  // 이 탐험의 후기 조회
+  function ReadReview() {
+    axios({
+      url: URL + `/adventures/${params.id}/adventure-review`,
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+      },
+      method: "get",
+    })
+      .then((response) => {
+        console.log(response.data)
+        setReviews(response.data.result.subAdventureReviews);
+        setChingho(response.data.result.adventureFeat)
+        return response
+      })
+      .catch((err) => console.log(err));
+  }
   // 탐험 상세 정보 받아오기
   useEffect(() => {
-    ReadAdventureDetail();
+    getAdventureDetail();
   }, []);
 
   return (
-    <div className="pageContainer">
+    <div
+      className="pageContainer"
+      onClick={() => {
+        close();
+      }}
+    >
       <div className={styles.wrapper}>
         <div className={styles.white}>
           <AdventureInfo
             className={styles.info}
             key={adventureDetail.adventureId}
             info={adventureDetail}
+            getAdventureDetail={getAdventureDetail}
           ></AdventureInfo>
         </div>
 
@@ -53,7 +92,13 @@ function AdventureDetailPage() {
               className={[styles.tab]} // tabs.rb-tabs
               ulClassName=""
               activityClassName="bg-success"
-              onClick={(event, tab) => console.log(event, tab)}
+              onClick={(event, tab) => {
+                // tab이 2면 (탐험 후기 탭을 누르면 후기 조회하기)
+                console.log(tab);
+                if (tab === 2) {
+                  ReadReview();
+                }
+              }}
             >
               <Tab title="탐험 지도" className="mr-2">
                 <AdventureDetailInfo
@@ -62,7 +107,16 @@ function AdventureDetailPage() {
                 ></AdventureDetailInfo>
               </Tab>
               <Tab title="탐험 후기" className="mr-2">
-                <AdventureDetailReview></AdventureDetailReview>
+                <AdventureDetailReview
+                  info={reviews}
+                  setReviewMoreButton={setReviewMoreButton}
+                  setWhichReviewButton={setWhichReviewButton}
+                  reviewMoreButton={reviewMoreButton}
+                  whichReviewButton={whichReviewButton}
+                  ReadReview={ReadReview}
+                  chingho={chingho}
+                  adDetail={adventureDetail}
+                ></AdventureDetailReview>
               </Tab>
             </Tabs>
           </div>
