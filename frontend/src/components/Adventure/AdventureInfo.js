@@ -23,10 +23,6 @@ function AdventureInfo(props) {
     photoList = props.info.userIdPhotoUrlList.map(
       (IdUrlList) => IdUrlList.photoUrl
     );
-    console.log("photoList");
-    console.log(photoList);
-    console.log("difficulty");
-    console.log(props.info.adventureDifficulty);
   }
 
   // 참가하기 함수
@@ -101,12 +97,19 @@ function AdventureInfo(props) {
               </div>
             </div>
           </div>
-          <div className={styles.participants} onClick={()=>{navigate(`/adventure/detail/${props.info.adventureId}/adventure-in-progress-list`)}}>
-            <ParticipantsCircle photoList={photoList} ></ParticipantsCircle>
+          <div
+            className={styles.participants}
+            onClick={() => {
+              navigate(
+                `/adventure/detail/${props.info.adventureId}/adventure-in-progress-list`
+              );
+            }}
+          >
+            <ParticipantsCircle photoList={photoList}></ParticipantsCircle>
           </div>
         </div>
         <div className={styles.etc}>
-          <div className={styles.typeAndStars}> 
+          <div className={styles.typeAndStars}>
             <div className={styles.desc}>
               <div className={styles.normal}>종류: </div>
               <div className={styles.highlight}>
@@ -119,7 +122,7 @@ function AdventureInfo(props) {
                 {props.info.adventureAvgReviewRate ? (
                   <span>{props.info.adventureAvgReviewRate.toFixed(1)}점</span>
                 ) : (
-                  <span>100점</span>
+                  <span>정보없음</span>
                 )}
               </div>
             </div>

@@ -1,114 +1,107 @@
-.detail{
-    display: flex;
-    flex-direction: column;
-    /* background-color: aquamarine; */
-    height: auto;
-    
+.detail {
+  display: flex;
+  flex-direction: column;
+  /* background-color: aquamarine; */
+  height: auto;
 }
 
-.treasure{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: fit-content;
-    
-    border-bottom: 1px rgb(209, 209, 209) solid;
-    
+.treasure {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: fit-content;
+
+  border-bottom: 1px rgb(209, 209, 209) solid;
 }
 
-.treasureImg{
-    
-
+.treasureImg {
 }
 
-.treasureInfo{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 13em;
+.treasureInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 13em;
 
-    /* background-color: aqua; */
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-
-    
+  /* background-color: aqua; */
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
-.treasureBorder{
-    display: flex;
-    flex-direction: column;
+.treasureBorder {
+  display: flex;
+  flex-direction: column;
 
-    justify-content: center;
-    align-items: center;
+  justify-content: center;
+  align-items: center;
 
-    border: 2px white solid;
-    border-radius: 0.3rem;
-    width: 7rem;
-    height: 7rem;
+  border: 2px white solid;
+  border-radius: 0.3rem;
+  width: 7rem;
+  height: 7rem;
 
-    color: white;
+  color: white;
 
-    padding: 1rem;
-
+  padding: 1rem;
 }
 
-.chingho{
-    margin-top: 0.3rem;
+.chingho {
+  margin-top: 0.3rem;
 }
 
-.treasureDesc{
-    display: flex;
-    color: white;
+.treasureDesc {
+  display: flex;
+  color: white;
 
-    margin-top: 1.4rem;
-
+  margin-top: 1.4rem;
 }
 
-.review{
-    display: flex;
-    flex-direction: column;
-    height: fit-content;
- 
-    padding: 1.6rem;
+.review {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
 
+  padding: 1.6rem;
 }
 
-.title{
-    display: flex;
-    justify-content: flex-start;
+.item {
+  display: flex;
+  flex-direction: column;
+  width: 85%;
+  background-color: white;
+  border-radius: 0.6rem;
 
-    font-weight: 600;
-    font-size: 1.6rem;
-    color: white;
-
-
+  padding: 1.6rem;
+  margin-top: 1rem;
 }
 
-.reviewList{
-    display: flex;
-    height: fit-content;
-    width: 100%;
+.title {
+  display: flex;
+  justify-content: flex-start;
 
-  
+  font-weight: 600;
+  font-size: 1.6rem;
+  color: white;
 }
 
-.reviewItem{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    /* background-color: white; */
-
-    width: 100%;
-  
-    
-    border-radius: 0.6rem;
-
-    margin-top: 1rem;
-
+.reviewList {
+  display: flex;
+  height: fit-content;
+  width: 100%;
 }
 
+.reviewItem {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* background-color: white; */
 
+  width: 100%;
 
+  border-radius: 0.6rem;
+
+  margin-top: 1rem;
+}
