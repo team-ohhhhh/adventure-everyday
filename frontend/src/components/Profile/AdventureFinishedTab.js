@@ -8,7 +8,7 @@ import AdventureEmpty from "./AdventureEmpty";
 
 import style from "./AdventureOnProgressTab.module.css";
 
-function AdventureOnProgressTab({ userId, tab, isMe }) {
+function AdventureFinishedTab({ userId, tab, isMe }) {
   const [adventureList, setAdventureList] = useState([]);
   const URL = useSelector((state) => state.url);
   const TOKEN = useSelector((state) => state.token);
@@ -28,7 +28,7 @@ function AdventureOnProgressTab({ userId, tab, isMe }) {
 
   const getAdventures = function (order) {
     axios({
-      url: URL + `/adventures/clicks/adventure-in-progress/users/${userId}`,
+      url: URL + `/adventures/clicks/adventure-succeed/users/${userId}`,
       method: "get",
       headers: {
         Authorization: `Bearer ${TOKEN}`,
@@ -72,7 +72,7 @@ function AdventureOnProgressTab({ userId, tab, isMe }) {
         adventureList.map((adventureItem) => (
           <div
             className={style.adventureItem}
-            key={`pr-${adventureItem.adventureId}`}
+            key={`fi-${adventureItem.adventureId}`}
           >
             <AdventureBanner
               adventureItem={adventureItem} /*isInProgress={isInProgress}*/
@@ -81,11 +81,14 @@ function AdventureOnProgressTab({ userId, tab, isMe }) {
         ))
       ) : (
         <div onClick={() => navigate("/adventure")}>
-          <AdventureEmpty text={"탐험을 시작해보세요!"} isMe={isMe} />
+          <AdventureEmpty
+            text={"탐험을 완료하고 보물을 수집하세요!"}
+            isMe={isMe}
+          />
         </div>
       )}
     </div>
   );
 }
 
-export default AdventureOnProgressTab;
+export default AdventureFinishedTab;

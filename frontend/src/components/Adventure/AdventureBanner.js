@@ -4,7 +4,7 @@ import AdventureDetailPage from "../../pages/AdventurePage";
 import AdventureProgressBar from "./AdventureProgressBar";
 import ParticipantsCircle from "./ParticipantsCircle";
 
-function AdventureBanner({ adventureItem, isAdTab, isMine }) {
+function AdventureBanner({ adventureItem, isAdTab, isMine, isCreated }) {
   const navigate = useNavigate();
 
   return (
@@ -20,6 +20,7 @@ function AdventureBanner({ adventureItem, isAdTab, isMine }) {
                 ? adventureItem.adventurePhotoUrl
                 : "/images/emptyBanner2.png"
             })`,
+            width: isAdTab ? "338px" : "100%",
           }}
           onClick={() => {
             navigate(`/adventure/detail/${adventureItem.adventureId}`);
@@ -30,13 +31,16 @@ function AdventureBanner({ adventureItem, isAdTab, isMine }) {
             <div className={style.difficulty}>
               <img
                 src={`images/diff_${adventureItem.adventureDifficulty}.png`}
+                alt={`difficulty_${adventureItem.adventureDifficulty}`}
               ></img>
             </div>
           </div>
           {/* 여기가 탐험 진행도 자리 */}
-          {!isAdTab && !isMine && ( // 탐험 탭 페이지에선 진행바 나오면 안돼서 처리 + 내가 만든 탐험에서도 안나오도록
-            <AdventureProgressBar clearRate={adventureItem.clearRate} />
-          )}
+          {!isAdTab &&
+            !isMine &&
+            !isCreated && ( // 탐험 탭 페이지에선 진행바 나오면 안돼서 처리 + 내가 만든 탐험에서도 안나오도록
+              <AdventureProgressBar clearRate={adventureItem.clearRate} />
+            )}
           <div className={style.makerAndParticipants}>
             <div className={style.maker}>
               <div className={style.makerProfileContainer}>
@@ -47,6 +51,7 @@ function AdventureBanner({ adventureItem, isAdTab, isMine }) {
                       ? adventureItem.userPhotoUrl
                       : "/defaultProfile.jpg"
                   }
+                  alt={"maker_profile"}
                 />
               </div>
               <div className={style.makerNameAndTierContainer}>
@@ -58,6 +63,7 @@ function AdventureBanner({ adventureItem, isAdTab, isMine }) {
                   <img
                     className={style.userLevel}
                     src={"/images/lv" + adventureItem.userLevel + ".png"}
+                    alt={`userlevel_${adventureItem.userLevel}`}
                   />
                 </div>
               </div>

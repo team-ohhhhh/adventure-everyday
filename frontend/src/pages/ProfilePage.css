@@ -1,0 +1,14 @@
+#profile .rb-tabs-item {
+  width: 25%;
+  border-top: 0.5px solid lightgray;
+  border-bottom: 0.5px solid lightgray;
+}
+
+#profile .activeTab {
+  border-bottom: 1px solid #1c0b69;
+}
+
+#profile .active {
+  color: #1c0b69;
+  font-weight: bold;
+}
