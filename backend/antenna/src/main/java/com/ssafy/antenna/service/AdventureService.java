@@ -738,6 +738,7 @@ public class AdventureService {
                 adventurePlaceId,
                 adventurePlace.getTitle(),
                 adventurePlace.getContent(),
+                adventurePlace.getPost().getPostId(),
                 adventurePlace.getPost().getPhotoUrl(),
                 adventurePlace.getPost().getTitle(),
                 adventurePlace.getPost().getW3w(),
