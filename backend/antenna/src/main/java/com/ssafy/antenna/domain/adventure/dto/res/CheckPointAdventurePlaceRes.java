@@ -5,6 +5,7 @@ public record CheckPointAdventurePlaceRes(
         String title,
         String content,
         Double lng,
-        Double lat
+        Double lat,
+        Boolean isClear
 ) {
 }

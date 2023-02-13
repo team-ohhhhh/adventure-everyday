@@ -1120,8 +1120,13 @@ public class AdventureService {
                 if (adventurePlaceList.isPresent()) {
                     //3. adventuerPlace 정보를 add해준다.
                     for (AdventurePlace adventurePlace : adventurePlaceList.get()) {
+                        Boolean isClear = false;
+                        if(checkpointRepository.findByUserAndAdventurePlace(user,adventurePlace).isPresent()) {
+                            isClear=true;
+                        }
                         readAdventuresCheckPointResList.get(readAdventuresCheckPointResList.size() - 1)
-                                .adventurePlaceList().add(adventurePlace.toResponse());
+                            .adventurePlaceList().add(adventurePlace.toResponse(isClear));
+
                     }
                 }
             }
