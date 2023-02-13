@@ -1,18 +1,16 @@
 .topBar {
   position: sticky;
+  top: 0;
+  background-color: white;
+  padding: 1rem;
+  margin-bottom: 0.2rem;
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  height : 5vh;
-  font-size: large;
-  padding-top: 1vh;
+  font-size: 1.1rem;
   font-weight: 600;
-  padding-left: 1vh;
-  padding-right: 1vh;
-
+  border-bottom: 0.5px solid gray;
 }
-
 
 .right {
   visibility: hidden;

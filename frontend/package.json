@@ -37,6 +37,7 @@
     "react-spring-bottom-sheet": "^3.4.1",
     "redux-persist": "^6.0.0",
     "sass": "^1.58.0",
+    "semantic-ui-react": "^2.1.4",
     "use-long-press": "^2.0.3",
     "web-vitals": "^2.1.4",
     "workbox-background-sync": "^6.5.4",

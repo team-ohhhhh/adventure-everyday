@@ -9,24 +9,22 @@
   width: 80px;
   height: 38px;
   border-radius: 999px;
-  background: red;
-  border: 0px;
+  background: white;
+  border: 1px solid #1c0b69;
   margin-top: 18px;
   float: right;
-
-  /* font-family: "Roboto"; */
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
   line-height: 100%;
-  color: #ffffff;
+  color: #1c0b69;
 }
 
 .buttonHolder {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
 }
+
 .cancelButton {
   width: 80px;
   height: 38px;
@@ -35,12 +33,9 @@
   border: 0px;
   margin-top: 18px;
   float: right;
-
-  /* font-family: "Roboto"; */
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
   line-height: 100%;
   color: #ffffff;
 }
-

@@ -5,6 +5,7 @@ import { BiSearchAlt2 } from "react-icons/bi";
 import { useMemo, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import AdventureBanner from "../components/Adventure/AdventureBanner";
 
 function AdventurePage() {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ function AdventurePage() {
   const [nearList, setnearList] = useState([]); // 내 주변 탐험
   const [updateList, setUpdateList] = useState([]); // 업데이트 탐험
   const [popularList, setPopularList] = useState([]); //
+
 
   // 내 주변 탐험 조회
   function getCurrentLocation() {
@@ -77,15 +79,21 @@ function AdventurePage() {
     });
   }
 
+  // 더보기용 컴포넌트 전환
+  const [isMore, setIsMore] = useState(false)
+  const [whichMore, setWhichMore] = useState(1)
+
   useMemo(() => {
     getCurrentLocation();
     getNewAdventure();
     getPopularAdventure();
   }, []);
 
+
   return (
     <div className="pageContainer">
-      <div className={style.adPageContainer}>
+      {!isMore 
+      ? <div className={style.adPageContainer}>
         <div className={style.recommendPageHeader}>
           <div className={style.pageTitle}>탐험</div>
           <div className={style.searchAndCreate}>
@@ -110,7 +118,7 @@ function AdventurePage() {
               </div>
             </div>
             <div className={style.more}>
-              <span>더보기</span>
+              <span onClick={() => {setIsMore(true); setWhichMore(1)}}>더보기</span>
             </div>
           </div>
           <div className={style.scrollContainer}>
@@ -132,7 +140,7 @@ function AdventurePage() {
               </div>
             </div>
             <div className={style.more}>
-              <span>더보기</span>
+              <span onClick={() => {setIsMore(true); setWhichMore(2)}}>더보기</span>
             </div>
           </div>
           <div className={style.scrollContainer}>
@@ -154,7 +162,7 @@ function AdventurePage() {
               </div>
             </div>
             <div className={style.more}>
-              <span>더보기</span>
+              <span onClick={() => {setIsMore(true); setWhichMore(3)}}>더보기</span>
             </div>
           </div>
           <div className={style.scrollContainer}>
@@ -166,6 +174,41 @@ function AdventurePage() {
           </div>
         </section>
       </div>
+      : whichMore === 1 
+      ? <div>
+        {nearList.map((articleListItem) => {
+          return (
+            <AdventureBanner
+                key={articleListItem.postId}
+                adventureItem={articleListItem}
+                isAdTab={true}/>
+          )
+        })
+        }
+      </div>
+      : whichMore === 2
+      ? <div>
+        {updateList.map((articleListItem) => {
+          return (
+            <AdventureBanner
+                key={articleListItem.postId}
+                adventureItem={articleListItem}
+                isAdTab={true}/>
+          )
+        })
+        }
+      </div>
+      : <div>{popularList.map((articleListItem) => {
+        return (
+          <AdventureBanner
+              key={articleListItem.postId}
+              adventureItem={articleListItem}
+              isAdTab={true}/>
+        )
+      })
+      }</div>
+       
+    }
     </div>
   );
 }

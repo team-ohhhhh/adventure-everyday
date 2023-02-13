@@ -64,7 +64,7 @@ const Step2Content = ({ article, setArticle, checkPointList, styles }) => {
       contentRef.current.focus();
       return;
     }
-    console.log()
+    console.log();
     const formData = new FormData();
     formData.append("title", article.title);
     formData.append("content", article.content);
@@ -75,9 +75,6 @@ const Step2Content = ({ article, setArticle, checkPointList, styles }) => {
     formData.append("isCheckPoint", article.isCheckPoint);
     formData.append("adventureId", article.adventureId);
     formData.append("adventurePlaceId", article.adventurePlaceId);
-    
-   
-
 
     axios
       .post(url + "/posts", formData, {

@@ -9,7 +9,7 @@ import AdventureFinishedTab from "../components/profile/AdventureFinishedTab";
 import AdventureCreatedTab from "../components/profile/AdventureCreatedTab";
 
 import "./ProfilePage.css";
-import variables from "../components/ProfileTab.scss";
+import variables from "../components/ProfileTab.scss"; // 필요
 import { useSelector } from "react-redux";
 
 function ProfilePage() {
