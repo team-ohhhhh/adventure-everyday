@@ -22,7 +22,7 @@ public class Antenna extends Base {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
-    @Column(columnDefinition = "int not null")
+    @Column(columnDefinition = "bigint not null")
     private Long area;
     @Column(columnDefinition = "Point not null")
     private Point coordinate;
