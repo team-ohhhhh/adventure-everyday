@@ -17,6 +17,7 @@ import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.exception.conflict.DuplicateAdventureLikeException;
 import com.ssafy.antenna.exception.conflict.DuplicatedAdventureInProgressException;
+import com.ssafy.antenna.exception.forbidden.InvalidPermissionAdventureParticipationException;
 import com.ssafy.antenna.exception.not_found.*;
 import com.ssafy.antenna.repository.*;
 import com.ssafy.antenna.util.CardinalDirection;
@@ -347,6 +348,11 @@ public class AdventureService {
         // 이미 userid와 adventureid로 참가중인 정보가 있다면 예외처리.
         if (adventureInProgressRepository.findByUserAndAdventure(curUser, curAdventure).isPresent()) {
             throw new DuplicatedAdventureInProgressException();
+        }
+
+        // 내가 만든 탐험이면 참가할 수 없다.
+        if(userId==curAdventure.getUser().getUserId()){
+            throw new InvalidPermissionAdventureParticipationException();
         }
 
         Long totalPoint = adventurePlaceRepository.countByAdventure(curAdventure);
