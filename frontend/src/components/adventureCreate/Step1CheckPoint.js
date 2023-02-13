@@ -171,7 +171,17 @@ const Step1CheckPoint = ({
       alert("체크포인트 이름과 내용을 빠짐없이 작성해 주세요.");
       return;
     }
-    setAdventure((adventure) => ({ ...adventure, difficulty, exp }));
+
+    const newCheckpoints = checkpoints.map((point) => {
+      const { postDetail, ...newCheckpoint } = point;
+      return newCheckpoint;
+    });
+    setAdventure((adventure) => ({
+      ...adventure,
+      difficulty,
+      exp,
+      createAdventurePlaceReqs: newCheckpoints,
+    }));
     navigate("/adventure/create/2");
   };
 
