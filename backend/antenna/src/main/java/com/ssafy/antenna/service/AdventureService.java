@@ -50,6 +50,7 @@ public class AdventureService {
     private final PostRepository postRepository;
     private final PostLikeRepository postLikeRepository;
     private final AntennaRepository antennaRepository;
+    private final CheckpointRepository checkpointRepository;
     @Value("${aws-cloud.aws.s3.bucket.url}")
     private String bucketUrl;
 
@@ -662,7 +663,7 @@ public class AdventureService {
 
     // 특정 위치에서 일정 거리 안에 내가 참가중인 탐험과 탐험 장소 조회하기
     public List<ReadAdventureInProgressWithinDistanceRes> readAdventureInProgressWithinDistance(Double lat, Double lng, Double area, Long userId) {
-        User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
 //        Double area = 0.05;
 
@@ -678,7 +679,7 @@ public class AdventureService {
         String pointFormat = String.format("'LINESTRING(%f %f, %f %f)')", x1, y1, x2, y2);
         Query query = entityManager.createNativeQuery("" +
                                 "SELECT * FROM adventure_place as ap " +
-                                "WHERE ap.adventure_id in " + "(select aip.adventure_id from adventure_in_progress as aip where aip.user_id =" + curUser.getUserId().toString() + ") "
+                                "WHERE ap.adventure_id in " + "(select aip.adventure_id from adventure_in_progress as aip where aip.user_id =" + user.getUserId().toString() + ") "
                                 + "and MBRContains(ST_LINESTRINGFROMTEXT(" + pointFormat + ", ap.coordinate)"
                         , AdventurePlace.class)
                 .setMaxResults(100);
@@ -687,13 +688,16 @@ public class AdventureService {
         List<ReadAdventureInProgressWithinDistanceRes> readAdventureInProgressWithinDistanceRes = new ArrayList<>();
         for (AdventurePlace ap :
                 adventurePlaceList) {
-            ReadAdventureInProgressWithinDistanceRes newReadAdventureInProgressWithinDistanceRes = new ReadAdventureInProgressWithinDistanceRes(
-                    ap.getAdventure().getAdventureId(),
-                    ap.getAdventure().getTitle(),
-                    ap.getAdventurePlaceId(),
-                    ap.getTitle()
-            );
-            readAdventureInProgressWithinDistanceRes.add(newReadAdventureInProgressWithinDistanceRes);
+            // 내가 이미 참여한 체크포인트인지 확인
+            if(!checkpointRepository.findByUserAndAdventurePlace(user,ap).isPresent()) {
+                ReadAdventureInProgressWithinDistanceRes newReadAdventureInProgressWithinDistanceRes = new ReadAdventureInProgressWithinDistanceRes(
+                        ap.getAdventure().getAdventureId(),
+                        ap.getAdventure().getTitle(),
+                        ap.getAdventurePlaceId(),
+                        ap.getTitle()
+                );
+                readAdventureInProgressWithinDistanceRes.add(newReadAdventureInProgressWithinDistanceRes);
+            }
         }
 
         return readAdventureInProgressWithinDistanceRes;
