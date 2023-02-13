@@ -812,39 +812,46 @@ function MainMap() {
           )}
 
           {/* 어드벤처 모드 */}
-          {isAdventureMode && adventureList.map((adventure, idx) => {
-            return (adventure.adventurePlaceList.map((checkpoint) => {
-              return (
-                <MapMarker
-                  key = {checkpoint.adventurePlaceId}
-                  position = {
-                    {
-                      lat : checkpoint.lat,
-                      lng : checkpoint.lng
-                    }
-                  }
-                  // advMarker숫자false => 아직 달성 안됨 / true가 이미 달성됨
-                  image={{
-                    src:`/images/advMarker${idx+1}${checkpoint.isClear}.png`,
-                    size: {
-                      // width: 30,
-                      height: 50, 
-                    },
-                    options: {
-                      offset: {
-                        x: 25,
-                        y: 25,
+
+
+          {isAdventureMode &&
+            adventureList.map((adventure, idx) => {
+              return adventure.adventurePlaceList.map((checkpoint) => {
+                return (
+                  <MapMarker
+                    key={checkpoint.adventurePlaceId}
+                    position={{
+                      lat: checkpoint.lat,
+                      lng: checkpoint.lng,
+                    }}
+                    image={{
+                      src:`/images/advMarker${idx+1}${checkpoint.isClear}.png`,
+                      size: {
+                        // width: 30,
+                        height: 50,
+
                       },
-                    },
-                  }}
-                  onClick={() => {
-                    setWhichCheckpoint(checkpoint.adventurePlaceId);
-                  }}
-                >
-                  {whichCheckpoint === checkpoint.adventurePlaceId && 
-                    <div onClick={()=>{navigate(`/adventure/detail/${adventure.adventureId}`)}}>
-                      <div>
-                        탐험 이름 : {adventure.adventureTitle}
+                      options: {
+                        offset: {
+                          x: 25,
+                          y: 25,
+                        },
+                      },
+                    }}
+                    onClick={() => {
+                      setWhichCheckpoint(checkpoint.adventurePlaceId);
+                    }}
+                  >
+                    {whichCheckpoint === checkpoint.adventurePlaceId && (
+                      <div
+                        onClick={() => {
+                          navigate(
+                            `/adventure/detail/${adventure.adventureId}`
+                          );
+                        }}
+                      >
+                        <div>탐험 이름 : {adventure.adventureTitle}</div>
+                        <div>체크포인트 이름 : {checkpoint.title}</div>
                       </div>
                     )}
                   </MapMarker>
