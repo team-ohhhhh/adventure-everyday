@@ -236,6 +236,10 @@ public class PostService {
 	}
 
 	public PostDetailRes createPost(Long userId, String title, String content, String lat, String lng, String isPublic, MultipartFile photo, String isCheckpoint, String adventureId, String adventurePlaceId) throws IOException {
+		System.out.println("===================================================");
+		System.out.println("isPublic:"+isPublic);
+		System.out.println("isCheckPoint:"+isCheckpoint);
+
 		User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 		Post post = new Post();
 		//모험 글인 경우
