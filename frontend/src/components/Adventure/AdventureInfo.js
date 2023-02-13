@@ -6,6 +6,7 @@ import ParticipantsCircle from "./ParticipantsCircle";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { useRef } from 'react'
 
 function AdventureInfo(props) {
   console.log("ad info");
@@ -16,6 +17,7 @@ function AdventureInfo(props) {
 
   let TOKEN = useSelector((state) => state.token);
   let URL = useSelector((state) => state.url);
+
 
   let photoList = [];
   // 참가자 컴포넌트 props로 내려주기 위해 id와 url 쌍으로 오는 배열을 url 배열로만 만들어주기
@@ -52,6 +54,14 @@ function AdventureInfo(props) {
       props.getAdventureDetail();
     });
   }
+
+  // url 복사
+  function copyUrl() {
+    
+    navigator.clipboard.writeText(`https://i8a305.p.ssafy.io/adventure/detail/${props.info.adventureId}`).then(() => {
+        alert("링크를 복사했습니다.");
+    });
+}
 
   return (
     <>
@@ -132,7 +142,7 @@ function AdventureInfo(props) {
               <HiOutlineBellAlert size={23} />
             </button>
             <button className={styles.share}>
-              <FiShare2 size={23} />
+              <FiShare2 size={23} onClick={() => {copyUrl()}} />
             </button>
 
             {/* 참여 안한 상태에서 참여하기 버튼 보여주기 */}
