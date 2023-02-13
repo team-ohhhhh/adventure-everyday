@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Map, MapMarker, MarkerClusterer, Circle } from "react-kakao-maps-sdk";
 import axios from "axios";
-
+import styles from "./MapPage.module.css"; 
 import Antenna from "../components/mapPage/antenna/Antenna";
 import BottomSheetContainer from "./../components/BottomSheet/BottomSheet";
 import SmallArticleItem from "./../components/SmallArticleItem";
@@ -353,14 +353,14 @@ function MainMap() {
         <div
           className="kakao"
           style={{
-            width: "100%",
-            marginLeft: "auto",
-            marginRight: "auto",
-            position: "absolute",
-            zIndex: "3",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            color : "#1C0B69",
+            width : "80vw",
+            height : "10vw",
+            borderRadius : "8px",
+            marginTop : "20px",
+            border : "none",
+            boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+            paddingLeft : "2vw"
           }}
         >
           <input
@@ -376,56 +376,57 @@ function MainMap() {
               paddingLeft: "2vw",
             }}
           ></input>
-          {result.length > 0 &&
-            resultWindow &&
-            result.slice(0, 11).map((place) => {
-              //TODO: 일단 10개까지만 보여주는걸로 하자...
-              return (
-                <div
-                  key={place.id}
-                  onClick={() => {
-                    setState((prev) => ({
-                      ...prev,
-                      center: {
-                        lat: place.y,
-                        lng: place.x,
-                      },
-                      isAroundClicked: true,
-                      isAround: true,
-                      isCircle: true,
-                    }));
-                    setResultWindow(false);
-                  }}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "start",
-                    width: "80vw",
-                    height: "fit-content",
-                    borderRadius: "8px",
-                    marginTop: "1vh",
-                    border: "none",
-                    boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-                    backgroundColor: "white",
-                    padding: "1vw",
-                  }}
+          {result.length > 0 && resultWindow &&
+            result.slice(0,11).map((place) => {  //TODO: 일단 10개까지만 보여주는걸로 하자...
+              return ( 
+                <div 
+                key={place.id}
+                onClick={()=>{setState((prev) => ({
+                  ...prev,
+                  center: {
+                    lat: place.y,
+                    lng: place.x
+                  },
+                  isAroundClicked : true,
+                  isAround: true,
+                  isCircle: true,
+                }));
+                setResultWindow(false)
+                }}
+                style={{
+                  display:'flex', 
+                  flexDirection:'column', 
+                  alignItems:"start",
+                  width : "80vw",
+                  height : "fit-content",
+                  borderRadius : "8px",
+                  marginTop : "1vh",
+                  border : "none",
+                  boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                  backgroundColor:"white",
+                  // padding: "1vw"
+        
+                }}
                 >
-                  <div>
-                    <span>{place.place_name}</span>
-                    <span
-                      style={{
-                        marginLeft: "2vw",
-                        fontSize: "small",
-                        color: "grey",
-                      }}
-                    >
-                      {place.category_group_name}
-                    </span>
+                  <div className={styles.comments_container}>
+                    <div className={styles.comment}>
+                      <div className={styles.comment_content}>
+                        <div className={styles.profile}>
+                          {place.place_name}
+                          <span style={{marginLeft:"2vw", fontSize:"small", color:"purple"}}>
+                            {place.category_group_name}
+                          </span>
+                        </div>
+                        <div className={styles.line}></div>
+                        <div className={styles.text}>{place.address_name}
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div>{place.address_name}</div>
-                </div>
-              );
-            })}
+                </div> 
+              )
+            })
+          }
         </div>
 
         <Map // 지도를 표시할 Container

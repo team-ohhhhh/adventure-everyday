@@ -75,8 +75,8 @@ const ArticleCreatePage = () => {
     axios
       .get(url + "/adventures/adventure-in-progress/check", {
         params: {
-          lat: article.lng,
-          lng: article.lat,
+          lat: article.lat,
+          lng: article.lng,
           area: 0.1,
         },
         headers: {
@@ -84,7 +84,7 @@ const ArticleCreatePage = () => {
         },
       })
       .then((res) => {
-        // console.log(res.data.result);
+        console.log(res);
         setCheckPointList(res.data.result);
       })
       .catch((err) => {

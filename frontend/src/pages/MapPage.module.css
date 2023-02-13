@@ -1,54 +1,43 @@
-
-.postButton {
-  height : 12.8vh;
-  background: #1C0B69;
-  border-radius: 8px;
-  color : white;
-  width : 14vw;
-  border :none;
-  /* display: flex; */
-  /* align-items: flex-end; */
-  margin-left: 0.5rem;
-  /* margin-top: 20px; */
-  position: relative;
-  
-}
-
-
 .comments_container {
   width: 100%;
-  padding: 20px;
   box-sizing: border-box;
   background-color: #f2f2f2;
-  border-radius: 5px;
+  border-radius: 8px;
 }
 
 .comment {
-  border :none;
   display: flex;
   align-items: flex-start;
-  margin-bottom: 10px;
-  margin-top: 10px;
   position: relative;
-  align-items:center;
-  text-align:center;
 }
 
 .comment_content {
-  width: 95%;
+  width: 100%;
   background-color: white;
   padding: 15px;
   border-radius: 10px;
   position: relative;
-  box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.1);
+  /* box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.1); */
+  border-inline: none;
 }
 
+.comment-content:before {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: -20px;
+  border-width: 10px 20px 10px 0;
+  border-style: solid;
+  border-color: white transparent transparent transparent;
+}
 
 .profile {
   display: flex;
-  align-items: right;
+  align-items: end;
   margin-left: 10px;
-  width: 100%;
+  color: #1C0B69;
+  font-size: large;
+  font-weight: bold;
 }
 
 .profile_picture {
@@ -71,11 +60,17 @@
   font-size: 14px;
   color: #333;
   line-height: 1.5;
-  text-align: center;
-  margin-left: 3.8rem;
-  
+  text-align: justify;
+  margin-left: 0.6rem;
 }
 
+.icon {
+  display: inline-block;
+  margin-left: 10px;
+  vertical-align: middle;
+}
 
-
-
+.line{
+  margin-top: 0.6rem;
+  border-bottom: 1px solid lightgray;
+}

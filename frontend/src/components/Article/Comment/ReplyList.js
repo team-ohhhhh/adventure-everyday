@@ -31,7 +31,8 @@ function ReplyList({commentId, replyList, getReply, replyMoreButtonOpen, setRepl
 
 
   return(
-    <div style={{marginTop:"3%",width:"90vw", display:"block", flexDirection:"column", alignItems:"end"}}>
+    <div>
+    <div style={{marginTop:"3%", display:"flex", flexDirection:"column", alignItems:"flex-end", justifyContent:"flex-end"}}>
       {replyList.map((reply) => {
         return <Reply 
         reply={reply} 
@@ -42,18 +43,17 @@ function ReplyList({commentId, replyList, getReply, replyMoreButtonOpen, setRepl
         setWhichReplyButton={setWhichReplyButton}
         />
       })}
-      <div className={style.comment}>
+      
+      {/* <div className={style.comment}>
         <div className={style.comment_content}>
         <div className={style.whiteLine}></div>
         <InputForm  setCommentInput={setReplyInput} commentInput={replyInput} postComment={postReply}/>
         </div>
+        </div> */}
         </div>
-        
-        {/* <InputForm  setCommentInput={setReplyInput} commentInput={replyInput} postComment={postReply}/> */}
-      {/*TODO: 여기 css 왼쪽으로 맞춰줘야 함.. */}
-      {/* <div style={{ width:"94vw",flexDirection:"column", alignItems:"end"}}>
-      <InputForm  setCommentInput={setReplyInput} commentInput={replyInput} postComment={postReply}/>
-      </div> */}
+        <div style={{marginRight:"2rem"}}>
+        <InputForm  setCommentInput={setReplyInput} commentInput={replyInput} postComment={postReply}/>
+        </div>
     </div>
   )
 }

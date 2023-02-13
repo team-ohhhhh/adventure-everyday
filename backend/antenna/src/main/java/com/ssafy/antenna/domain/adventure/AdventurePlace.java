@@ -50,7 +50,7 @@ public class AdventurePlace extends Base {
     @OneToMany(mappedBy = "adventurePlace", cascade = CascadeType.ALL)
     private List<CheckpointPost> checkpointPosts = new ArrayList<>();
 
-    public CheckPointAdventurePlaceRes toResponse(){
-        return new CheckPointAdventurePlaceRes(this.adventurePlaceId,this.title,this.content,coordinate.getX(), coordinate.getY());
+    public CheckPointAdventurePlaceRes toResponse(Boolean isClear){
+        return new CheckPointAdventurePlaceRes(this.adventurePlaceId,this.title,this.content,coordinate.getX(), coordinate.getY(),isClear);
     }
 }

@@ -17,6 +17,7 @@ import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.exception.conflict.DuplicateAdventureLikeException;
 import com.ssafy.antenna.exception.conflict.DuplicatedAdventureInProgressException;
+import com.ssafy.antenna.exception.forbidden.InvalidPermissionAdventureParticipationException;
 import com.ssafy.antenna.exception.not_found.*;
 import com.ssafy.antenna.repository.*;
 import com.ssafy.antenna.util.CardinalDirection;
@@ -50,6 +51,7 @@ public class AdventureService {
     private final PostRepository postRepository;
     private final PostLikeRepository postLikeRepository;
     private final AntennaRepository antennaRepository;
+    private final CheckpointRepository checkpointRepository;
     @Value("${aws-cloud.aws.s3.bucket.url}")
     private String bucketUrl;
 
@@ -73,8 +75,14 @@ public class AdventureService {
                 .build();
         // 탐험 저장
         adventureRepository.save(adventure);
+
         // 탐험 장소를 생성한 후,
         for (CreateAdventurePlaceReq createAdventurePlaceReq : createAdventureReq.createAdventurePlaceReqs()) {
+            System.out.println(createAdventurePlaceReq.adventurePlaceTitle());
+            System.out.println(createAdventurePlaceReq.adventurePlaceContent());
+            System.out.println(createAdventurePlaceReq.coordinate().lat()+" : "+createAdventurePlaceReq.coordinate().lng());
+            System.out.println(createAdventurePlaceReq.postId());
+
             AdventurePlace adventurePlace = AdventurePlace.builder()
                     .title(createAdventurePlaceReq.adventurePlaceTitle())
                     .content(createAdventurePlaceReq.adventurePlaceContent())
@@ -133,7 +141,13 @@ public class AdventureService {
 
         for (AdventurePlace adventurePlace : adventurePlaceList) {
             SubCoordinate subCoordinate = new SubCoordinate(adventurePlace.getCoordinate().getY(), adventurePlace.getCoordinate().getX());
-            subAdventurePlaces.add(new SubAdventurePlace(adventurePlace.getAdventurePlaceId(), subCoordinate));
+
+            Boolean isClear = false;
+            if(checkpointRepository.findByUserAndAdventurePlace(user,adventurePlace).isPresent()){
+                isClear = true;
+            }
+
+            subAdventurePlaces.add(new SubAdventurePlace(adventurePlace.getAdventurePlaceId(), subCoordinate,isClear));
         }
 
         ReadAdventureRes readAdventureRes = new ReadAdventureRes(
@@ -334,6 +348,11 @@ public class AdventureService {
         // 이미 userid와 adventureid로 참가중인 정보가 있다면 예외처리.
         if (adventureInProgressRepository.findByUserAndAdventure(curUser, curAdventure).isPresent()) {
             throw new DuplicatedAdventureInProgressException();
+        }
+
+        // 내가 만든 탐험이면 참가할 수 없다.
+        if(userId==curAdventure.getUser().getUserId()){
+            throw new InvalidPermissionAdventureParticipationException();
         }
 
         Long totalPoint = adventurePlaceRepository.countByAdventure(curAdventure);
@@ -656,7 +675,7 @@ public class AdventureService {
 
     // 특정 위치에서 일정 거리 안에 내가 참가중인 탐험과 탐험 장소 조회하기
     public List<ReadAdventureInProgressWithinDistanceRes> readAdventureInProgressWithinDistance(Double lat, Double lng, Double area, Long userId) {
-        User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
 //        Double area = 0.05;
 
@@ -672,7 +691,7 @@ public class AdventureService {
         String pointFormat = String.format("'LINESTRING(%f %f, %f %f)')", x1, y1, x2, y2);
         Query query = entityManager.createNativeQuery("" +
                                 "SELECT * FROM adventure_place as ap " +
-                                "WHERE ap.adventure_id in " + "(select aip.adventure_id from adventure_in_progress as aip where aip.user_id =" + curUser.getUserId().toString() + ") "
+                                "WHERE ap.adventure_id in " + "(select aip.adventure_id from adventure_in_progress as aip where aip.user_id =" + user.getUserId().toString() + ") "
                                 + "and MBRContains(ST_LINESTRINGFROMTEXT(" + pointFormat + ", ap.coordinate)"
                         , AdventurePlace.class)
                 .setMaxResults(100);
@@ -681,13 +700,16 @@ public class AdventureService {
         List<ReadAdventureInProgressWithinDistanceRes> readAdventureInProgressWithinDistanceRes = new ArrayList<>();
         for (AdventurePlace ap :
                 adventurePlaceList) {
-            ReadAdventureInProgressWithinDistanceRes newReadAdventureInProgressWithinDistanceRes = new ReadAdventureInProgressWithinDistanceRes(
-                    ap.getAdventure().getAdventureId(),
-                    ap.getAdventure().getTitle(),
-                    ap.getAdventurePlaceId(),
-                    ap.getTitle()
-            );
-            readAdventureInProgressWithinDistanceRes.add(newReadAdventureInProgressWithinDistanceRes);
+            // 내가 이미 참여한 체크포인트인지 확인
+            if(!checkpointRepository.findByUserAndAdventurePlace(user,ap).isPresent()) {
+                ReadAdventureInProgressWithinDistanceRes newReadAdventureInProgressWithinDistanceRes = new ReadAdventureInProgressWithinDistanceRes(
+                        ap.getAdventure().getAdventureId(),
+                        ap.getAdventure().getTitle(),
+                        ap.getAdventurePlaceId(),
+                        ap.getTitle()
+                );
+                readAdventureInProgressWithinDistanceRes.add(newReadAdventureInProgressWithinDistanceRes);
+            }
         }
 
         return readAdventureInProgressWithinDistanceRes;
@@ -1104,8 +1126,13 @@ public class AdventureService {
                 if (adventurePlaceList.isPresent()) {
                     //3. adventuerPlace 정보를 add해준다.
                     for (AdventurePlace adventurePlace : adventurePlaceList.get()) {
+                        Boolean isClear = false;
+                        if(checkpointRepository.findByUserAndAdventurePlace(user,adventurePlace).isPresent()) {
+                            isClear=true;
+                        }
                         readAdventuresCheckPointResList.get(readAdventuresCheckPointResList.size() - 1)
-                                .adventurePlaceList().add(adventurePlace.toResponse());
+                            .adventurePlaceList().add(adventurePlace.toResponse(isClear));
+
                     }
                 }
             }
