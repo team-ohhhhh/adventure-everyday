@@ -2,8 +2,8 @@ import styles from "./ParticipantsCircle.module.css";
 
 // props로 이미지 리스트를 받아와 보여주는 컴포넌트
 function ParticipantsCircle(props) {
-  console.log("participants circle");
-  console.log(props);
+  // console.log("participants circle");
+  // console.log(props);
   return (
     <div className={styles.container}>
       {/* 참가자 프로필 반복 */}
@@ -12,11 +12,13 @@ function ParticipantsCircle(props) {
           // photoList에 유저 id와 사진 리스트가 옴
           return (
             <img
+              key={index}
               className={styles.participant}
               style={{
                 marginLeft: `${1.1 * (4 - index)}rem`,
               }}
               src={photo ? photo : "/defaultProfile.jpg"}
+              alt={"participants_profile"}
             />
           );
         })

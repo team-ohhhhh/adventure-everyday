@@ -1,3 +1,4 @@
+/* global kakao*/
 import { useParams } from "react-router";
 import AdventureInfo from "../components/Adventure/AdventureInfo";
 import AdventureDetailInfo from "../components/Adventure/AdventureDetailInfo";
@@ -18,6 +19,9 @@ function AdventureDetailPage() {
   let [reviews, setReviews] = useState([]);
   let [chingho, setChingho] = useState();
   let [adventureDetail, setAdventureDetail] = useState({});
+
+  const bounds = new kakao.maps.LatLngBounds();
+  let checkpoints = []; // 체크포인트들 저장 배열
 
   // 후기 수정 삭제 버튼 조작
   const [reviewMoreButton, setReviewMoreButton] = useState(false);
@@ -41,13 +45,12 @@ function AdventureDetailPage() {
       method: "get",
     }).then((response) => {
       setAdventureDetail(response.data.result);
-      console.log("axios 성공");
-      console.log(response.data.result);
+      setBounds();
     });
   }
 
   // 이 탐험의 후기 조회
-  function ReadReview() {
+  function getReview() {
     axios({
       url: URL + `/adventures/${params.id}/adventure-review`,
       headers: {
@@ -56,17 +59,40 @@ function AdventureDetailPage() {
       method: "get",
     })
       .then((response) => {
-        console.log(response.data)
         setReviews(response.data.result.subAdventureReviews);
-        setChingho(response.data.result.adventureFeat)
-        return response
+        setChingho(response.data.result.adventureFeat);
+        return response;
       })
       .catch((err) => console.log(err));
   }
+
+  // 탐험 체크포인트 bounds 지정
+  function setBounds() {
+    // props로 받아온 체크포인트 좌표들을 positions에 저장
+
+    if (adventureDetail.subAdventurePlaces) {
+      // 체크포인트 좌표들 props에서 받아와 저장
+      for (var i = 0; i < adventureDetail.subAdventurePlaces.length; i++) {
+        checkpoints[i] = adventureDetail.subAdventurePlaces[i].subCoordinate;
+      }
+    }
+
+    // 마커를 돌며 bounds 범위 정해주기
+    checkpoints.forEach((point) => {
+      bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
+    });
+
+    return bounds;
+  }
+
   // 탐험 상세 정보 받아오기
-  useEffect(() => {
+  useMemo(() => {
     getAdventureDetail();
   }, []);
+
+  useMemo(() => {
+    setBounds();
+  }, [checkpoints]);
 
   return (
     <div
@@ -96,7 +122,10 @@ function AdventureDetailPage() {
                 // tab이 2면 (탐험 후기 탭을 누르면 후기 조회하기)
                 console.log(tab);
                 if (tab === 2) {
-                  ReadReview();
+                  getReview();
+                  // 탐험 지도 탭을 누르면 bounds 설정하기
+                } else if (tab === 1) {
+                  // setBounds();
                 }
               }}
             >
@@ -104,6 +133,7 @@ function AdventureDetailPage() {
                 <AdventureDetailInfo
                   key={adventureDetail.adventureId}
                   info={adventureDetail}
+                  bounds={setBounds()}
                 ></AdventureDetailInfo>
               </Tab>
               <Tab title="탐험 후기" className="mr-2">
@@ -113,7 +143,7 @@ function AdventureDetailPage() {
                   setWhichReviewButton={setWhichReviewButton}
                   reviewMoreButton={reviewMoreButton}
                   whichReviewButton={whichReviewButton}
-                  ReadReview={ReadReview}
+                  reviews={reviews}
                   chingho={chingho}
                   adDetail={adventureDetail}
                 ></AdventureDetailReview>

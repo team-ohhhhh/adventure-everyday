@@ -38,8 +38,11 @@ const ImageUploadForm = ({ article, setArticle }) => {
       EXIF.getData(file, function () {
         if (EXIF.pretty(this) && EXIF.getTag(this, "GPSLatitude")) {
           const metadata = EXIF.getAllTags(this);
+          console.log(metadata)
           const url = URL.createObjectURL(file);
           const [lat, lng] = GPSConvert(metadata);
+          console.log(lat)
+          console.log(lng)
           setArticle((article) => ({
             ...article,
             lat,

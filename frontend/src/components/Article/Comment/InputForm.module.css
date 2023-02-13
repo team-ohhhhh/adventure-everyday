@@ -1,62 +1,83 @@
-.photoContainer {
-  width: 10vw;
-  height:10vw;
-  border-radius: 70%;
-  overflow: hidden;
-  margin-left: 2vw;
-  margin-right: 2vw;
-  
-  
-}
-
-.photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.container {
-  display: flex;
-  flex-direction: row;
-  height: fit-content;
-  width : 90vw;
-  margin-left: auto;
-  margin-right: auto;
-  align-items: center;
-  justify-content: space-evenly;
-  
-}
-
-.infos {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  box-shadow: 5px 2px 2px grey;
-  border-radius: 8px;
-  padding-left: 2vw;
-  padding-right: 2vw
-}
-  
-.nicknameAndInput {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  height: fit-content;
-  min-height: 8vh;
-  justify-content: space-evenly;
-}
-
-.comment {
-  border :none
-}
 
 .postButton {
-  height : 8vh;
+  height : 12.8vh;
   background: #1C0B69;
   border-radius: 8px;
   color : white;
   width : 14vw;
-  box-shadow: 5px 2px 2px grey;
+  /* box-shadow: 5px 2px 2px grey; */
+  border :none;
+  /* display: flex; */
+  /* align-items: flex-end; */
+  margin: 13px;
+  /* margin-top: 20px; */
+  position: relative;
+  /* align-items:center; */
+  
 }
+
+
+.comments_container {
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #f2f2f2;
+  border-radius: 5px;
+}
+
+.comment {
+  border :none;
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  position: relative;
+  align-items:center;
+}
+
+.comment_content {
+  width: 95%;
+  background-color: white;
+  padding: 15px;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.1);
+  margin-left: 10px;
+  left: 1%;
+}
+
+
+.profile {
+  display: flex;
+  align-items: right;
+  margin-left: 10px;
+  width: 100%;
+}
+
+.profile_picture {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.username {
+  margin: 0;
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+}
+
+.text {
+  margin: 10px 0 0 0;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.5;
+  text-align: justify;
+  margin-left: 19.5%;
+}
+
+
 
 

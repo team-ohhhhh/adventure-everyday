@@ -249,8 +249,18 @@ function MainMap() {
 
   useEffect(() => {
     if (!keyWord) return
+    // 현재 위치를 받아와서 현재 위치를 기준으로 검색 시도
+    if (navigator.geolocation) {
+      // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setState((prev) => ({
+            ...prev,
+            center: {
+              lat: position.coords.latitude, // 위도
+              lng: position.coords.longitude, // 경도
+            }}))})}
     const ps = new kakao.maps.services.Places()
-    moveCurPos()
     const location = new kakao.maps.LatLng(state.center.lat, state.center.lng)
     setResultWindow(true)
     ps.keywordSearch(keyWord, (data, status, _pagination) => {

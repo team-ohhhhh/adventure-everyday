@@ -73,8 +73,14 @@ public class AdventureService {
                 .build();
         // 탐험 저장
         adventureRepository.save(adventure);
+
         // 탐험 장소를 생성한 후,
         for (CreateAdventurePlaceReq createAdventurePlaceReq : createAdventureReq.createAdventurePlaceReqs()) {
+            System.out.println(createAdventurePlaceReq.adventurePlaceTitle());
+            System.out.println(createAdventurePlaceReq.adventurePlaceContent());
+            System.out.println(createAdventurePlaceReq.coordinate().lat()+" : "+createAdventurePlaceReq.coordinate().lng());
+            System.out.println(createAdventurePlaceReq.postId());
+
             AdventurePlace adventurePlace = AdventurePlace.builder()
                     .title(createAdventurePlaceReq.adventurePlaceTitle())
                     .content(createAdventurePlaceReq.adventurePlaceContent())

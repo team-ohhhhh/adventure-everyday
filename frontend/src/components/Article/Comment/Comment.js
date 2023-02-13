@@ -7,7 +7,8 @@ import { MdOutlineReply } from "react-icons/md"
 import { RiMoreFill } from "react-icons/ri"
 import { useSelector } from 'react-redux'
 import InputForm from './InputForm'
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart, faComment, faEllipsisH, faMessage, faHeartBroken } from "@fortawesome/free-solid-svg-icons";
 
 function Comment({comment, getComments, moreButtonOpen, setMoreButtonOpen, whichButton, setWhichButton, replyMoreButtonOpen, setReplyMoreButtonOpen, whichReplyButton, setWhichReplyButton}) {
   const [isReplyOpen, setIsReplyOpen] = useState(false)
@@ -105,15 +106,33 @@ function Comment({comment, getComments, moreButtonOpen, setMoreButtonOpen, which
     .catch((err) => {console.log(err)})
   }
 
-  
-  
-
+  //시간 계산
+  const detailDate = (a) => {
+		const milliSeconds = new Date() - a;
+		const seconds = milliSeconds / 1000;
+		if (seconds < 60) return `방금 전`;
+		const minutes = seconds / 60;
+		if (minutes < 60) return `${Math.floor(minutes)}분 전`;
+		const hours = minutes / 60;
+		if (hours < 24) return `${Math.floor(hours)}시간 전`;
+		const days = hours / 24;
+		if (days < 7) return `${Math.floor(days)}일 전`;
+		const weeks = days / 7;
+		if (weeks < 5) return `${Math.floor(weeks)}주 전`;
+		const months = days / 30;
+		if (months < 12) return `${Math.floor(months)}개월 전`;
+		const years = days / 365;
+		return `${Math.floor(years)}년 전`;
+	};
+	
+	//api에 있는 detailPost.createdAt를 바꿔주는 것
+	const nowDate = detailDate(new Date(comment.createdTime));
 
 
   return (
-    <div style={{display:"flex", flexDirection:"column", alignItems:"end"}}>
+    <div className={style.comment}>
       {wouldYouDelete 
-      ? <div className={style.commentCard}>
+      ? <div className={style.comment_content}>
           <div className={style.wouldYouDelete}>
             <div>삭제하시겠습니까?</div>
             <div className={style.buttonHolder}>
@@ -122,45 +141,29 @@ function Comment({comment, getComments, moreButtonOpen, setMoreButtonOpen, which
             </div>
           </div>
         </div>
-      : <div className={style.commentCard}>
-          <div className={style.header}>
-            <div className={style.photoAndNicknameAndTime}>
-              <div className={style.photoContainer}>
-                <img className={style.photo} src={comment.userDetailRes.photoUrl ? comment.userDetailRes.photoUrl : '/defaultProfile.jpg'}/>
-              </div>
-              <div className={style.nicknameAndButton}>
-                <div className={style.nicknameAndTime}>
-                  <span className={style.nickname}>{comment.userDetailRes.nickname}</span>
-                  <span classname={style.time}>{comment.createdTime && comment.createdTime.substr(0,10)}</span>
-                </div>
-              </div>
-            </div>
-            <div className={style.moreButton}>
-              <div>
+      : <div className={style.comment_content}>
+            <div className={style.profile}>
+                <img className={style.profile_picture} src={comment.userDetailRes.photoUrl ? comment.userDetailRes.photoUrl : '/defaultProfile.jpg'}/>
+                <h4 className={style.username}>{comment.userDetailRes.nickname}</h4>
+                <span style={{ color: '#626262', fontSize: "12px", marginLeft:"2%", marginTop:"1%"}}>{nowDate}</span>
                 {comment.userDetailRes.userId === USER.userId &&
-                (wouldYouUpdate
-                ? <div><span onClick={()=>{updateComment()}}>수정</span><span onClick={()=>{setWouldYouUpdate(false)}} style={{marginLeft:"2vw"}}>취소</span></div>
-                : moreButtonOpen && whichButton === comment.commentId
-                  ? <div><span onClick={()=>{setWouldYouDelete(true)}}> 삭제 </span> <span onClick={()=>{setWouldYouUpdate(true)}}> 수정 </span></div>
-                  : <RiMoreFill onClick={() => {setMoreButtonOpen(true); setWhichButton(comment.commentId)}}/>
-                )}
-              </div>
+                    (wouldYouUpdate
+                    ? <div style={{ marginLeft: "auto", marginRight:"3%", fontSize:"20" }}><span onClick={()=>{updateComment()}}>수정</span><span onClick={()=>{setWouldYouUpdate(false)}} style={{marginLeft:"2vw"}}>취소</span></div>
+                    : moreButtonOpen && whichButton === comment.commentId
+                      ? <div style={{ marginLeft: "auto", marginRight:"3%", fontSize:"20" }}><span onClick={()=>{setWouldYouDelete(true)}}> 삭제 </span> <span onClick={()=>{setWouldYouUpdate(true)}}> 수정 </span></div>
+                      : <RiMoreFill style={{ marginLeft: "auto", marginRight:"3%", fontSize:"20" }} onClick={() => {setMoreButtonOpen(true); setWhichButton(comment.commentId)}}/>
+                    )}
             </div>
-          </div>
-          <div className={style.contentAndFooter}>
-            {wouldYouUpdate 
+            <div className={style.text}>{wouldYouUpdate 
             ? <input onChange={onChange} defaultValue={comment.commentContent}/>
-            : <div className={style.content}>{comment.commentContent}</div>
-            }
-            <div className={style.footer}>
-              <div className={style.likes}>{comment.userIdxList.length}
-                {comment.userIdxList.find(idx => idx === USER.userId) ? <AiFillHeart onClick={()=>{unlikeComment()}}/> : <AiOutlineHeart onClick={()=>{likeComment()}}/> }
-              </div>
-              <div className={style.reply} onClick={() => {toggle(); getReply();}}>{comment.subCommentDtoList.length}<MdOutlineReply /></div>
+            : <div>{comment.commentContent}</div>
+            }</div>
+            <div style={{ display: "flex", justifyContent: "flex-start",  marginTop: "5%" }}>
+              {comment.userIdxList.find(idx => idx === USER.userId) ? <FontAwesomeIcon icon={faHeart} style={{ marginLeft: "19.5%",marginRight:"2%" }} onClick={()=>{unlikeComment()}}/> : <FontAwesomeIcon icon={faHeartBroken} style={{ marginLeft: "19.5%",marginRight:"2%" }} onClick={()=>{likeComment()}}/> }
+              {comment.userIdxList.length}
+              <FontAwesomeIcon icon={faComment} style={{ marginLeft: "5%", marginRight: "2%" }} onClick={() => {toggle(); getReply();}} /><span>댓글 달기({comment.subCommentDtoList.length})</span>
             </div>
-
-          </div>
-      </div> }
+        </div> }
       { isReplyOpen && 
       <div>
         <ReplyList 

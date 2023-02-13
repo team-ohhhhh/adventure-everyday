@@ -9,6 +9,12 @@
   height: -webkit-fill-available; 
 }
 
+.commentPageContainer {
+  min-height: 100vh; /* 지원 안 하는 브라우저를 위한 복귀점 */
+  height: -webkit-fill-available;
+  background-color: #f2f2f2;
+}
+
 /* 가로 스크롤 방지 -> 안됨 */
 .react-horizontal-scrolling-menu--scroll-container::-webkit-scrollbar {
   display: none;
