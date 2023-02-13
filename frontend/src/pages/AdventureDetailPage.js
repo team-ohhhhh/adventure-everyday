@@ -44,6 +44,7 @@ function AdventureDetailPage() {
       },
       method: "get",
     }).then((response) => {
+      console.log(response)
       setAdventureDetail(response.data.result);
       setBounds();
     });
