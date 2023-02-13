@@ -8,7 +8,7 @@ import { RiMoreFill } from "react-icons/ri"
 import { useSelector } from 'react-redux'
 import InputForm from './InputForm'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faComment, faEllipsisH, faMessage, faHeartBroken } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faComment, faEllipsisH, faMessage, faHeartBroken, faHeartCirclePlus } from "@fortawesome/free-solid-svg-icons";
 
 function Comment({comment, getComments, moreButtonOpen, setMoreButtonOpen, whichButton, setWhichButton, replyMoreButtonOpen, setReplyMoreButtonOpen, whichReplyButton, setWhichReplyButton}) {
   const [isReplyOpen, setIsReplyOpen] = useState(false)
@@ -159,7 +159,7 @@ function Comment({comment, getComments, moreButtonOpen, setMoreButtonOpen, which
             : <div>{comment.commentContent}</div>
             }</div>
             <div style={{ display: "flex", justifyContent: "flex-start",  marginTop: "5%" }}>
-              {comment.userIdxList.find(idx => idx === USER.userId) ? <FontAwesomeIcon icon={faHeart} style={{ marginLeft: "19.5%",marginRight:"2%" }} onClick={()=>{unlikeComment()}}/> : <FontAwesomeIcon icon={faHeartBroken} style={{ marginLeft: "19.5%",marginRight:"2%" }} onClick={()=>{likeComment()}}/> }
+              {comment.userIdxList.find(idx => idx === USER.userId) ? <FontAwesomeIcon icon={faHeart} style={{ marginLeft: "3.8rem",marginRight:"2%" }} onClick={()=>{unlikeComment()}}/> : <FontAwesomeIcon icon={faHeartCirclePlus} style={{ marginLeft: "3.8rem",marginRight:"2%" }} onClick={()=>{likeComment()}}/> }
               {comment.userIdxList.length}
               <FontAwesomeIcon icon={faComment} style={{ marginLeft: "5%", marginRight: "2%" }} onClick={() => {toggle(); getReply();}} /><span>댓글 달기({comment.subCommentDtoList.length})</span>
             </div>
