@@ -110,7 +110,7 @@ function AdventureDetailMap(props) {
                 image={{
                   src: `/images/advMarker1${place.isClear}.png`, // 마커이미지의 주소입니다
                   size: {
-                    width: 24,
+                    // width: 24,
                     height: 35,
                   }, // 마커이미지의 크기입니다
                 }}

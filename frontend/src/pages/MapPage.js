@@ -757,7 +757,7 @@ function MainMap() {
                   image={{
                     src:`/images/advMarker${idx+1}${checkpoint.isClear}.png`,
                     size: {
-                      width: 30,
+                      // width: 30,
                       height: 50, 
                     },
                     options: {
