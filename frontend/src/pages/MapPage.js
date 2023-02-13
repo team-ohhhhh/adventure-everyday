@@ -3,17 +3,18 @@ import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Map, MapMarker, MarkerClusterer, Circle } from "react-kakao-maps-sdk";
 import axios from "axios";
-import styles from "./MapPage.module.css"; 
+import styles from "./MapPage.module.css";
 import Antenna from "../components/mapPage/antenna/Antenna";
 import BottomSheetContainer from "./../components/BottomSheet/BottomSheet";
 import SmallArticleItem from "./../components/SmallArticleItem";
+
+// import { ReactComponent as MarkerTest } from "./../components/mapPage/marker_Test.svg";
 
 const { kakao } = window;
 
 function MainMap() {
   const navigate = useNavigate();
   const location = useLocation();
-   
 
   const mapRef = useRef();
 
@@ -236,49 +237,52 @@ function MainMap() {
   }
 
   // 카카오 키워드 검색용
-  const [info, setInfo] = useState()
-  const [markers, setMarkers] = useState([])
-  const [result, setResult] = useState([])
-  const [keyWord, setKeyWord] = useState()
-  const [resultWindow, setResultWindow] = useState(false)
-  console.log(adventureList)
-  const onChange = function(e) {
-    setKeyWord(e.target.value)
-  }
+  const [info, setInfo] = useState();
+  const [markers, setMarkers] = useState([]);
+  const [result, setResult] = useState([]);
+  const [keyWord, setKeyWord] = useState();
+  const [resultWindow, setResultWindow] = useState(false);
 
+  const onChange = function (e) {
+    setKeyWord(e.target.value);
+  };
 
   useEffect(() => {
-    if (!keyWord) return
+    if (!keyWord) return;
     // 현재 위치를 받아와서 현재 위치를 기준으로 검색 시도
     if (navigator.geolocation) {
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setState((prev) => ({
-            ...prev,
-            center: {
-              lat: position.coords.latitude, // 위도
-              lng: position.coords.longitude, // 경도
-            }}))})}
-    const ps = new kakao.maps.services.Places()
-    const location = new kakao.maps.LatLng(state.center.lat, state.center.lng)
-    setResultWindow(true)
-    ps.keywordSearch(keyWord, (data, status, _pagination) => {
-      if (status === kakao.maps.services.Status.OK) {
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-        // LatLngBounds 객체에 좌표를 추가합니다
-        // const bounds = new kakao.maps.LatLngBounds()
-        console.log(data)
-        setResult(data)
-        // for (var i = 0; i < data.length; i++) {
-        //   // @ts-ignore
-        //   markers.push({
-        //     position: {
-        //       lat: data[i].y,
-        //       lng: data[i].x,
-        //     },
-        //     content: data[i].place_name,
-        //   })
+      navigator.geolocation.getCurrentPosition((position) => {
+        setState((prev) => ({
+          ...prev,
+          center: {
+            lat: position.coords.latitude, // 위도
+            lng: position.coords.longitude, // 경도
+          },
+        }));
+      });
+    }
+    const ps = new kakao.maps.services.Places();
+    const location = new kakao.maps.LatLng(state.center.lat, state.center.lng);
+    setResultWindow(true);
+    ps.keywordSearch(
+      keyWord,
+      (data, status, _pagination) => {
+        if (status === kakao.maps.services.Status.OK) {
+          // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+          // LatLngBounds 객체에 좌표를 추가합니다
+          // const bounds = new kakao.maps.LatLngBounds()
+          console.log(data);
+          setResult(data);
+          // for (var i = 0; i < data.length; i++) {
+          //   // @ts-ignore
+          //   markers.push({
+          //     position: {
+          //       lat: data[i].y,
+          //       lng: data[i].x,
+          //     },
+          //     content: data[i].place_name,
+          //   })
           // @ts-ignore
           // bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x))
         }
@@ -286,10 +290,11 @@ function MainMap() {
 
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
         // map.setBounds(bounds)
-      // }
-    }, {location, sort: kakao.maps.services.SortBy.DISTANCE}) // 옵션은 이런형태로 넣어줄것!
-  }, [keyWord])
-
+        // }
+      },
+      { location, sort: kakao.maps.services.SortBy.DISTANCE }
+    ); // 옵션은 이런형태로 넣어줄것!
+  }, [keyWord]);
 
   return (
     <div className="pageContainer">
@@ -304,89 +309,132 @@ function MainMap() {
       >
         {/* 모험모드용 버튼 */}
         <div
-        // TODO: 위치 하드코딩함...
+          // TODO: 위치 하드코딩함...
           style={{
             position: "absolute",
             left: "81%",
             top: "35%",
-            zIndex:"2"
+            zIndex: "2",
           }}
         >
-          {isAdventureMode 
-            ?<button style={{background: "white", borderRadius: "8px", color:"#1C0B69", borderColor: "#1C0B69"}} onClick={()=>{setIsAdventureMode(false); console.log(isAdventureMode)}}>지도 모드</button>
-            :<button style={{background: "#1C0B69", borderRadius: "8px", color:"white"}} onClick={()=>{setIsAdventureMode(true); console.log(isAdventureMode)}}>탐험 모드</button>
-          }
+          {isAdventureMode ? (
+            <button
+              style={{
+                background: "white",
+                borderRadius: "8px",
+                color: "#1C0B69",
+                borderColor: "#1C0B69",
+              }}
+              onClick={() => {
+                setIsAdventureMode(false);
+                console.log(isAdventureMode);
+              }}
+            >
+              지도 모드
+            </button>
+          ) : (
+            <button
+              style={{
+                background: "#1C0B69",
+                borderRadius: "8px",
+                color: "white",
+              }}
+              onClick={() => {
+                setIsAdventureMode(true);
+                console.log(isAdventureMode);
+              }}
+            >
+              탐험 모드
+            </button>
+          )}
         </div>
 
         {/* 카카오맵 검색용 검색창 */}
-        <div className="kakao" style={{width:"100%", marginLeft:"auto", marginRight:"auto", position:"absolute", zIndex:"3", display:"flex", flexDirection:"column", alignItems:"center"}}>
-          <input onChange={(e) => onChange(e)} 
-          placeholder="카카오맵 키워드 검색"
+        <div
+          className="kakao"
           style={{
-            color : "#1C0B69",
-            width : "80vw",
-            height : "10vw",
-            borderRadius : "8px",
-            marginTop : "20px",
-            border : "none",
-            boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-            paddingLeft : "2vw"
+            width: "100%",
+            marginLeft: "auto",
+            marginRight: "auto",
+            position: "absolute",
+            zIndex: "3",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
+        >
+          <input
+            onChange={(e) => onChange(e)}
+            placeholder="카카오맵 키워드 검색"
+            style={{
+              color: "#1C0B69",
+              width: "80vw",
+              height: "10vw",
+              borderRadius: "8px",
+              marginTop: "20px",
+              border: "none",
+              boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+              paddingLeft: "2vw",
+            }}
           ></input>
-          {result.length > 0 && resultWindow &&
-            result.slice(0,11).map((place) => {  //TODO: 일단 10개까지만 보여주는걸로 하자...
-              return ( 
-                <div 
-                key={place.id}
-                onClick={()=>{setState((prev) => ({
-                  ...prev,
-                  center: {
-                    lat: place.y,
-                    lng: place.x
-                  },
-                  isAroundClicked : true,
-                  isAround: true,
-                  isCircle: true,
-                }));
-                setResultWindow(false)
-                }}
-                style={{
-                  display:'flex', 
-                  flexDirection:'column', 
-                  alignItems:"start",
-                  width : "80vw",
-                  height : "fit-content",
-                  borderRadius : "8px",
-                  marginTop : "1vh",
-                  border : "none",
-                  boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-                  backgroundColor:"white",
-                  // padding: "1vw"
-        
-                }}
+          {result.length > 0 &&
+            resultWindow &&
+            result.slice(0, 11).map((place) => {
+              //TODO: 일단 10개까지만 보여주는걸로 하자...
+              return (
+                <div
+                  key={place.id}
+                  onClick={() => {
+                    setState((prev) => ({
+                      ...prev,
+                      center: {
+                        lat: place.y,
+                        lng: place.x,
+                      },
+                      isAroundClicked: true,
+                      isAround: true,
+                      isCircle: true,
+                    }));
+                    setResultWindow(false);
+                  }}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "start",
+                    width: "80vw",
+                    height: "fit-content",
+                    borderRadius: "8px",
+                    marginTop: "1vh",
+                    border: "none",
+                    boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                    backgroundColor: "white",
+                    // padding: "1vw"
+                  }}
                 >
                   <div className={styles.comments_container}>
                     <div className={styles.comment}>
                       <div className={styles.comment_content}>
                         <div className={styles.profile}>
                           {place.place_name}
-                          <span style={{marginLeft:"2vw", fontSize:"small", color:"purple"}}>
+                          <span
+                            style={{
+                              marginLeft: "2vw",
+                              fontSize: "small",
+                              color: "purple",
+                            }}
+                          >
                             {place.category_group_name}
                           </span>
                         </div>
                         <div className={styles.line}></div>
-                        <div className={styles.text}>{place.address_name}
-                        </div>
+                        <div className={styles.text}>{place.address_name}</div>
                       </div>
                     </div>
                   </div>
-                </div> 
-              )
-            })
-          }
+                </div>
+              );
+            })}
         </div>
-
-        
 
         <Map // 지도를 표시할 Container
           ref={mapRef}
@@ -421,7 +469,7 @@ function MainMap() {
           }}
           onClick={(_t, mouseEvent) => {
             // 카카오 검색 결과 목록 끄기
-            setResultWindow(false)
+            setResultWindow(false);
             // 인포윈도우 off
             setIsOpen(0);
             if (clusterInfowindow) clusterInfowindow.close();
@@ -450,18 +498,16 @@ function MainMap() {
                 isAroundClicked: false,
                 isCircle: false,
               }));
-            };
+            }
             // 안테나 버튼 토글용
             if (isOn) {
-              toggle()
+              toggle();
             }
           }}
         >
-          
-
-
           {/* 안테나 리스트를 순회하면서 안테나 아이콘 표시 */}
-          {!isAdventureMode && antennae &&
+          {!isAdventureMode &&
+            antennae &&
             antennae.map((antenna) => {
               return (
                 <MapMarker
@@ -500,7 +546,8 @@ function MainMap() {
 
           {/* 안테나에 원그려주기 */}
 
-          {!isAdventureMode && state.isCircle &&
+          {!isAdventureMode &&
+            state.isCircle &&
             antennae.map((antenna) => {
               return (
                 antenna.antennaId === state.isAntenna && (
@@ -567,7 +614,14 @@ function MainMap() {
             </>
           )}
 
-          {!isAdventureMode && <Antenna antennae={antennae} setState={setState} isOn={isOn} toggle={toggle}></Antenna> }
+          {!isAdventureMode && (
+            <Antenna
+              antennae={antennae}
+              setState={setState}
+              isOn={isOn}
+              toggle={toggle}
+            ></Antenna>
+          )}
 
           {/* isCur가 켜져있지 않을 때만 버튼이 보임 */}
           {!isAdventureMode && !state.isCur && (
@@ -582,7 +636,7 @@ function MainMap() {
                 }));
                 // 현재 위치로 지도 시점 이동
                 const map = mapRef.current;
-                moveCurPos('buttonClicked')
+                moveCurPos("buttonClicked");
                 const moveLatLng = new kakao.maps.LatLng(
                   state.center.lat,
                   state.center.lng
@@ -628,12 +682,15 @@ function MainMap() {
                   }));
                 }}
                 image={{
-                  src: "/images/alien.jpg",
+                  src: "/images/advMarker2true.png",
                   size: {
-                    width: 30,
+                    // width: 30,
                     height: 30,
                   },
-                  style: { filter: "drop-shadow(5px 5px 5px #000)" },
+                  style: {
+                    filter: "drop-shadow(5px 5px 5px #000)",
+                    fill: "red",
+                  },
                   options: {
                     offset: {
                       x: 12,
@@ -669,7 +726,7 @@ function MainMap() {
           <p>{state.errMsg}</p>
 
           {/* 주변 검색 상황일때 바텀시트 등장 */}
-          {!isAdventureMode &&  state.isCircle && (
+          {!isAdventureMode && state.isCircle && (
             <BottomSheetContainer
               antennae={antennae}
               center={state.center}
@@ -682,7 +739,7 @@ function MainMap() {
           )}
 
           {/* 맵에 게시글 핀 찍기 */}
-          { !isAdventureMode && state.isCircle && (
+          {!isAdventureMode && state.isCircle && (
             <MarkerClusterer
               averageCenter={true}
               disableClickZoom={true}
@@ -744,8 +801,7 @@ function MainMap() {
                             lineHeight: "1rem",
                             color: "gray",
                           }}
-                        >
-                        </div>
+                        ></div>
                       </div>
                     </div>
                   )}
@@ -755,66 +811,70 @@ function MainMap() {
           )}
 
           {/* 어드벤처 모드 */}
-          {isAdventureMode && adventureList.map((adventure, idx) => {
-            return (adventure.adventurePlaceList.map((checkpoint) => {
-              return (
-                <MapMarker
-                  key = {checkpoint.adventurePlaceId}
-                  position = {
-                    {
-                      lat : checkpoint.lat,
-                      lng : checkpoint.lng
-                    }
-                  }
-                  image={{
-                    src:`/images/advMarker${idx+1}.png`,
-                    size: {
-                      width: 30,
-                      height: 50, 
-                    },
-                    options: {
-                      offset: {
-                        x: 25,
-                        y: 25,
+          {isAdventureMode &&
+            adventureList.map((adventure, idx) => {
+              return adventure.adventurePlaceList.map((checkpoint) => {
+                return (
+                  <MapMarker
+                    key={checkpoint.adventurePlaceId}
+                    position={{
+                      lat: checkpoint.lat,
+                      lng: checkpoint.lng,
+                    }}
+                    image={{
+                      src: `/images/advMarker${idx + 1}.png`,
+                      size: {
+                        width: 30,
+                        height: 50,
                       },
-                    },
-                  }}
-                  onClick={() => {
-                    setWhichCheckpoint(checkpoint.adventurePlaceId);
-                  }}
-                >
-                  {whichCheckpoint === checkpoint.adventurePlaceId && 
-                    <div onClick={()=>{navigate(`/adventure/detail/${adventure.adventureId}`)}}>
-                      <div>
-                        탐험 이름 : {adventure.adventureTitle}
-                      </div>
-                      <div>
-                        체크포인트 이름 : {checkpoint.title}
-                      </div>
-                    </div>
-                  }
-                </MapMarker>)
-              
-            })
-          )})}
-          {isAdventureMode && adventureList.map((adventure, idx) => {
-            return(
-            adventure.adventurePlaceList.map((checkpoint) => {
-              return (
-                whichCheckpoint === checkpoint.adventurePlaceId &&
-                <Circle 
-                  center={{
-                        lat : checkpoint.lat,
-                        lng : checkpoint.lng
+                      options: {
+                        offset: {
+                          x: 25,
+                          y: 25,
+                        },
+                      },
+                    }}
+                    onClick={() => {
+                      setWhichCheckpoint(checkpoint.adventurePlaceId);
+                    }}
+                  >
+                    {whichCheckpoint === checkpoint.adventurePlaceId && (
+                      <div
+                        onClick={() => {
+                          navigate(
+                            `/adventure/detail/${adventure.adventureId}`
+                          );
                         }}
-                  radius={25}
-                  strokeColor={"#00529E"} // 선의 색깔입니다
-                  strokeOpacity={0} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-                  strokeStyle={"dash"} // 선의 스타일 입니다
-                  fillColor={"#00529E"} // 채우기 색깔입니다
-                  fillOpacity={0.7} // 채우기 불투명도 입니다
-                        />
-              )}))})}
+                      >
+                        <div>탐험 이름 : {adventure.adventureTitle}</div>
+                        <div>체크포인트 이름 : {checkpoint.title}</div>
+                      </div>
+                    )}
+                  </MapMarker>
+                );
+              });
+            })}
+          {isAdventureMode &&
+            adventureList.map((adventure, idx) => {
+              return adventure.adventurePlaceList.map((checkpoint) => {
+                return (
+                  whichCheckpoint === checkpoint.adventurePlaceId && (
+                    <Circle
+                      center={{
+                        lat: checkpoint.lat,
+                        lng: checkpoint.lng,
+                      }}
+                      radius={25}
+                      strokeColor={"#00529E"} // 선의 색깔입니다
+                      strokeOpacity={0} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                      strokeStyle={"dash"} // 선의 스타일 입니다
+                      fillColor={"#00529E"} // 채우기 색깔입니다
+                      fillOpacity={0.7} // 채우기 불투명도 입니다
+                    />
+                  )
+                );
+              });
+            })}
 
           {/* 키워드 검색용 */}
           {markers.map((marker) => (
@@ -823,8 +883,8 @@ function MainMap() {
               position={marker.position}
               onClick={() => setInfo(marker)}
             >
-              {info &&info.content === marker.content && (
-                <div style={{color:"#000"}}>{marker.content}</div>
+              {info && info.content === marker.content && (
+                <div style={{ color: "#000" }}>{marker.content}</div>
               )}
             </MapMarker>
           ))}
@@ -836,7 +896,12 @@ function MainMap() {
   // 게시글 눌렀으면 해당 게시글 위치로, 아니라면 현재 위치로 이동시키는 함수
   function moveCurPos(where) {
     // 현재위치 버튼을 누른 상황이 아니고 && 게시글에서 location값을 불러온 상황이라면
-    if (where !=='buttonClicked' && location.state && location.state.lat && location.state.lng) {
+    if (
+      where !== "buttonClicked" &&
+      location.state &&
+      location.state.lat &&
+      location.state.lng
+    ) {
       setState((prev) => ({
         ...prev,
         center: {
@@ -845,12 +910,11 @@ function MainMap() {
         },
         level: 1,
         // TODO: 원을 띄우고 싶은데 잘 안됨...
-        isAroundClicked : true,
+        isAroundClicked: true,
         isAround: true,
-        isCircle: true
+        isCircle: true,
       }));
-     }
-    else if (navigator.geolocation) {
+    } else if (navigator.geolocation) {
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
       navigator.geolocation.getCurrentPosition(
         (position) => {
