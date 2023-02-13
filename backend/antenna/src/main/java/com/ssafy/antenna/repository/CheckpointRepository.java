@@ -9,4 +9,5 @@ import java.util.Optional;
 
 public interface CheckpointRepository extends JpaRepository<Checkpoint, Long> {
     Optional<Integer> countByUserAndAdventurePlace(User user, AdventurePlace adventurePlace);
+    Optional<Checkpoint> findByUserAndAdventurePlace(User user, AdventurePlace adventurePlace);
 }
