@@ -17,6 +17,8 @@ import com.ssafy.antenna.domain.post.Post;
 import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.exception.conflict.DuplicateAdventureLikeException;
 import com.ssafy.antenna.exception.conflict.DuplicatedAdventureInProgressException;
+import com.ssafy.antenna.exception.forbidden.InvalidPermissionAdventureParticipationException;
+import com.ssafy.antenna.exception.forbidden.InvalidPermissionException;
 import com.ssafy.antenna.exception.not_found.*;
 import com.ssafy.antenna.repository.*;
 import com.ssafy.antenna.util.CardinalDirection;
@@ -334,20 +336,25 @@ public class AdventureService {
 
     // 특정 유저가 참가중인 탐험 추가(탐험 참가하기)
     public void createAdventureInProgress(Long adventureId, Long userId) {
-        User curUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
 
         // 이미 userid와 adventureid로 참가중인 정보가 있다면 예외처리.
-        if (adventureInProgressRepository.findByUserAndAdventure(curUser, curAdventure).isPresent()) {
+        if (adventureInProgressRepository.findByUserAndAdventure(user, adventure).isPresent()) {
             throw new DuplicatedAdventureInProgressException();
         }
 
-        Long totalPoint = adventurePlaceRepository.countByAdventure(curAdventure);
+        // 탐험을 만든 사람이라면 본인 탐험에 참가할 수 없음.
+        if(adventure.getUser().getUserId()==userId){
+            throw new InvalidPermissionAdventureParticipationException();
+        }
+
+        Long totalPoint = adventurePlaceRepository.countByAdventure(adventure);
 
         AdventureInProgress newAdventureInProgress = AdventureInProgress.builder()
                 .totalPoint(totalPoint.intValue())
-                .user(curUser)
-                .adventure(curAdventure)
+                .user(user)
+                .adventure(adventure)
                 .build();
 
         adventureInProgressRepository.save(newAdventureInProgress);

@@ -12,6 +12,7 @@ public enum ErrorCode {
     EXPIRED_TOKEN(UNAUTHORIZED, "만료된 토큰입니다."),
     USER_NOT_LOGGED_IN(EXPECTATION_FAILED, "로그인이 필요합니다."),
     INVALID_PERMISSION(FORBIDDEN, "권한이 없습니다."),
+    INVALID_PERMISSION_ADVENTURE_PARTICIPATION(FORBIDDEN, "탐험을 만든 사람은 해당 탐험에 참가할 수 없습니다."),
     USER_NOT_FOUND(NOT_FOUND, "해당하는 유저를 찾을 수 없습니다."),
     POST_NOT_FOUND(NOT_FOUND, "해당하는 글을 찾을 수 없습니다."),
     ADVENTURE_NOT_FOUND(NOT_FOUND, "해당하는 탐험을 찾을 수 없습니다."),
