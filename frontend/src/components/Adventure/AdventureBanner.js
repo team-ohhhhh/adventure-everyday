@@ -36,7 +36,7 @@ function AdventureBanner({
             <div className={style.title}>{adventureItem.adventureTitle}</div>
             <div className={style.difficulty}>
               <img
-                src={`images/diff_${adventureItem.adventureDifficulty}.png`}
+                src={`/images/diff_${adventureItem.adventureDifficulty}.png`}
                 alt={`difficulty_${adventureItem.adventureDifficulty}`}
               ></img>
             </div>

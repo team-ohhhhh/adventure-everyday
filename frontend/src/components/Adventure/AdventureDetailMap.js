@@ -10,40 +10,43 @@ function AdventureDetailMap(props) {
   let TOKEN = useSelector((state) => state.token);
   let URL = useSelector((state) => state.url);
 
-  // 아래 주석부분 과정을
-  // 부모(AdventureDetailPage -> AdventureDetailInfo-> 현재 컴포넌트)에서
-  // 내려주는 것으로 변경한 상태
+  console.log(props.subAdventurePlaces);
 
-  // // props로 받아온 체크포인트 좌표들을 positions에 저장
-  // let checkpoints = [];
-  // if (props.subAdventurePlaces) {
-  //   // 체크포인트 좌표들 props에서 받아와 저장
-  //   for (var i = 0; i < props.subAdventurePlaces.length; i++) {
-  //     checkpoints[i] = props.subAdventurePlaces[i].subCoordinate;
-  //   }
-  // }
+  const bounds = useMemo(() => {
+    // bounds에 북동쪽 좌표 정보와 남서쪽 좌표정보 저장
+    const bounds = new kakao.maps.LatLngBounds();
 
-  // const bounds = useMemo(() => {
-  //   // bounds에 북동쪽 좌표 정보와 남서쪽 좌표정보 저장
-  //   const bounds = new kakao.maps.LatLngBounds();
+    // 마커를 돌며 bounds 범위 정해주기
+    if (props.subAdventurePlaces) {
+      props.subAdventurePlaces.forEach((point) => {
+        bounds.extend(
+          new kakao.maps.LatLng(
+            point.subCoordinate.lat,
+            point.subCoordinate.lng
+          )
+        );
+      });
+    }
 
-  //   // 마커를 돌며 bounds 범위 정해주기
-  //   checkpoints.forEach((point) => {
-  //     bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
-  //   });
-
-  //   return bounds;
-  // }, [checkpoints]);
+    return bounds;
+  }, [props.subAdventurePlaces]);
 
   const handleBounds = (map) => {
-    if (map) {
-      map.setBounds(props.bounds);
+    console.log(bounds);
+    if (map && !bounds.isEmpty()) {
+      map.setBounds(bounds);
     }
   };
 
-  useMemo(() => {
+  useEffect(() => {
     const map = mapRef.current;
     handleBounds(map);
+  });
+
+  useEffect(() => {
+    setTimeout(() => {
+      handleBounds(mapRef.current);
+    }, 0);
   }, []);
 
   // 체크포인트(맵 마커를 눌렀을 때 받아오는 정보)
@@ -81,8 +84,12 @@ function AdventureDetailMap(props) {
         center={{
           // 지도의 중심좌표
 
-          lat: 37.503587,
-          lng: 127.039018,
+          lat: props.subAdventurePlaces
+            ? props.subAdventurePlaces[0].subCoordinate.lat
+            : 37.503587,
+          lng: props.subAdventurePlaces
+            ? props.subAdventurePlaces[0].subCoordinate.lng
+            : 127.039018,
         }}
         style={{
           // 지도의 크기
