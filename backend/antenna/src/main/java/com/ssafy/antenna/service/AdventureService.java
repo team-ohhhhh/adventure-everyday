@@ -73,7 +73,7 @@ public class AdventureService {
                 .build();
         // 탐험 저장
         adventureRepository.save(adventure);
-
+        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------SIZE : " + createAdventureReq.createAdventurePlaceReqs().size());
         // 탐험 장소를 생성한 후,
         for (CreateAdventurePlaceReq createAdventurePlaceReq : createAdventureReq.createAdventurePlaceReqs()) {
             System.out.println(createAdventurePlaceReq.adventurePlaceTitle());
