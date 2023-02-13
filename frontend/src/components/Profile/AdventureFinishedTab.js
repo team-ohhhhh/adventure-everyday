@@ -38,8 +38,8 @@ function AdventureFinishedTab({ userId, tab, isMe }) {
       },
     })
       .then((res) => {
-        // console.log(res);
-        setAdventureList(res.data.result);
+        console.log(res);
+        setAdventureList(res.data.result.adventureSucceeds);
       })
       .catch((err) => console.log(err));
   };

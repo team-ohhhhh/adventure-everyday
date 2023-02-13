@@ -16,9 +16,11 @@ function AdventureDetailReview(props) {
         <div className={styles.treasureInfo}>
           <div className={styles.treasureBorder}>
             <Hashicon /* (탐험 아이디 + 칭호 + 탐험 제목)*/
-              value={`${props.adDetail.adventureId} +
-                ${props.chingho} +
-                ${props.adDetail.adventureTitle}`}
+              value={
+                props.adDetail.adventureId +
+                props.chingho +
+                props.adDetail.adventureTitle
+              }
               size={100}
             />
 

@@ -128,3 +128,12 @@
     margin-bottom: 0.4rem;
 
 }
+
+.emptyInfo{
+    display: flex;
+    background-color: white;
+    height: fit-content;
+    width: fit-content;
+    border-radius: 0.6rem;
+    margin-top: 1rem;
+}

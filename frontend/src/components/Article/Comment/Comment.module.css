@@ -62,6 +62,7 @@
 .content {
   word-break: break-all;
   /* white-space:normal; */
+ 
 }
 
 .footer {
@@ -125,11 +126,13 @@
 
 .comment {
   display: flex;
+  
   /* align-items: flex-start; */
   margin-bottom: 20px;
   position: relative;
   flex-direction:column; 
   align-items:end;
+
 }
 
 .comment_content {
@@ -139,7 +142,7 @@
   border-radius: 10px;
   position: relative;
   box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.1);
-  margin-left: 10px;
+  /* margin-left: 10px; */
 }
 
 

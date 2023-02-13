@@ -8,7 +8,8 @@ import Tabs, { Tab } from "react-best-tabs";
 import tabs from "./AdventureDetailTab.module.scss";
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { saveBound } from "../store/boundSlice";
 
 function AdventureDetailPage() {
   const params = useParams(); // 특정 탐험 id가져오기
@@ -20,8 +21,7 @@ function AdventureDetailPage() {
   let [chingho, setChingho] = useState();
   let [adventureDetail, setAdventureDetail] = useState({});
 
-  const bounds = new kakao.maps.LatLngBounds();
-  let checkpoints = []; // 체크포인트들 저장 배열
+  // const dispatch = useDispatch();
 
   // 후기 수정 삭제 버튼 조작
   const [reviewMoreButton, setReviewMoreButton] = useState(false);
@@ -43,10 +43,12 @@ function AdventureDetailPage() {
         Authorization: `Bearer ${TOKEN}`,
       },
       method: "get",
-    }).then((response) => {
-      setAdventureDetail(response.data.result);
-      setBounds();
-    });
+    })
+      .then((response) => {
+        setAdventureDetail(response.data.result);
+        console.log(response.data.result);
+      })
+      .then((response) => {});
   }
 
   // 이 탐험의 후기 조회
@@ -66,33 +68,29 @@ function AdventureDetailPage() {
       .catch((err) => console.log(err));
   }
 
-  // 탐험 체크포인트 bounds 지정
-  function setBounds() {
-    // props로 받아온 체크포인트 좌표들을 positions에 저장
+  // // 탐험 체크포인트 bounds 지정
+  // function setBounds() {
+  //   // props로 받아온 체크포인트 좌표들을 positions에 저장
 
-    if (adventureDetail.subAdventurePlaces) {
-      // 체크포인트 좌표들 props에서 받아와 저장
-      for (var i = 0; i < adventureDetail.subAdventurePlaces.length; i++) {
-        checkpoints[i] = adventureDetail.subAdventurePlaces[i].subCoordinate;
-      }
-    }
+  //   if (adventureDetail.subAdventurePlaces) {
+  //     // 체크포인트 좌표들 props에서 받아와 저장
+  //     for (var i = 0; i < adventureDetail.subAdventurePlaces.length; i++) {
+  //       checkpoints[i] = adventureDetail.subAdventurePlaces[i].subCoordinate;
+  //     }
+  //   }
 
-    // 마커를 돌며 bounds 범위 정해주기
-    checkpoints.forEach((point) => {
-      bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
-    });
+  //   // 마커를 돌며 bounds 범위 정해주기
+  //   checkpoints.forEach((point) => {
+  //     bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
+  //   });
 
-    return bounds;
-  }
+  //   dispatch(saveBound(bounds)); // bounds가 a로 들어가서 저장됨
+  // }
 
   // 탐험 상세 정보 받아오기
-  useMemo(() => {
+  useEffect(() => {
     getAdventureDetail();
   }, []);
-
-  useMemo(() => {
-    setBounds();
-  }, [checkpoints]);
 
   return (
     <div
@@ -125,7 +123,6 @@ function AdventureDetailPage() {
                   getReview();
                   // 탐험 지도 탭을 누르면 bounds 설정하기
                 } else if (tab === 1) {
-                  // setBounds();
                 }
               }}
             >
@@ -133,7 +130,6 @@ function AdventureDetailPage() {
                 <AdventureDetailInfo
                   key={adventureDetail.adventureId}
                   info={adventureDetail}
-                  bounds={setBounds()}
                 ></AdventureDetailInfo>
               </Tab>
               <Tab title="탐험 후기" className="mr-2">
