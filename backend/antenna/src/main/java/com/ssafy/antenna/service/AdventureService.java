@@ -140,7 +140,13 @@ public class AdventureService {
 
         for (AdventurePlace adventurePlace : adventurePlaceList) {
             SubCoordinate subCoordinate = new SubCoordinate(adventurePlace.getCoordinate().getY(), adventurePlace.getCoordinate().getX());
-            subAdventurePlaces.add(new SubAdventurePlace(adventurePlace.getAdventurePlaceId(), subCoordinate));
+
+            Boolean isClear = false;
+            if(checkpointRepository.findByUserAndAdventurePlace(user,adventurePlace).isPresent()){
+                isClear = true;
+            }
+
+            subAdventurePlaces.add(new SubAdventurePlace(adventurePlace.getAdventurePlaceId(), subCoordinate,isClear));
         }
 
         ReadAdventureRes readAdventureRes = new ReadAdventureRes(
