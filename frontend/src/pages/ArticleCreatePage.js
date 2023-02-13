@@ -84,7 +84,7 @@ const ArticleCreatePage = () => {
         },
       })
       .then((res) => {
-        // console.log(res.data.result);
+        console.log(res);
         setCheckPointList(res.data.result);
       })
       .catch((err) => {

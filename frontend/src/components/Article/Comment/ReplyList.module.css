@@ -132,7 +132,7 @@
   }
   
   .comment {
-    display: flex;
+    /* display: flex; */
     /* align-items: flex-start; */
     /* margin-bottom: 20px; */
     position: relative;
@@ -144,7 +144,7 @@
     /* background-color: white; */
     /* padding: 15px; */
     border-radius: 10px;
-    position: relative;
+    /* position: relative; */
     /* box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.1); */
     margin-left: 10px;
     /* left: 1%; */
