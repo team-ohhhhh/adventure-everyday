@@ -31,8 +31,8 @@ function SearchComponent(props) {
         },
       })
         .then((res) => {
-          console.log(res.data.result);
           setResult(res.data.result);
+          console.log(result);
         })
         .catch((err) => {
           console.log(err);
@@ -82,7 +82,9 @@ function SearchComponent(props) {
             })
           : result.map((adventure) => {
               return (
-                <AdventureBanner adventureItem={adventure} isSearch={true} />
+                <div style={{ width: "90vw", marginTop: "1rem" }}>
+                  <AdventureBanner adventureItem={adventure} isSearch={true} />
+                </div>
               );
             })}
       </div>

@@ -45,10 +45,8 @@ function AdventureDetailInfo(props) {
     <div className={styles.detail}>
       <div className={styles.map}>
         <AdventureDetailMap
-          // pos={positions}
           subAdventurePlaces={props.info.subAdventurePlaces}
           setCheckPointInfo={setCheckPointInfo}
-          bounds={props.bounds}
         ></AdventureDetailMap>
       </div>
       <div className={styles.checkPoint}>
@@ -60,6 +58,15 @@ function AdventureDetailInfo(props) {
             {checkPointInfo.adventurePlaceContent}
           </div>
         </div>
+        {/* 체크포인트 누르기 전 보여줄 부분들 */}
+        {!checkPointInfo.title && (
+          <div className={styles.emptyInfo}>
+            <img
+              src="/images/emptyBanner.png"
+              style={{ borderRadius: "0.6rem" }}
+            ></img>
+          </div>
+        )}
 
         {/* 체크포인트 누르고 나서 보여줄 부분들 */}
         {checkPointInfo.title && (
