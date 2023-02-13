@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Map, MapMarker, MarkerClusterer, Circle } from "react-kakao-maps-sdk";
 import axios from "axios";
-
+import styles from "./MapPage.module.css"; 
 import Antenna from "../components/mapPage/antenna/Antenna";
 import BottomSheetContainer from "./../components/BottomSheet/BottomSheet";
 import SmallArticleItem from "./../components/SmallArticleItem";
@@ -323,6 +323,7 @@ function MainMap() {
           <input onChange={(e) => onChange(e)} 
           placeholder="카카오맵 키워드 검색"
           style={{
+            color : "#1C0B69",
             width : "80vw",
             height : "10vw",
             borderRadius : "8px",
@@ -360,12 +361,25 @@ function MainMap() {
                   border : "none",
                   boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
                   backgroundColor:"white",
-                  padding: "1vw"
+                  // padding: "1vw"
         
                 }}
                 >
-                  <div><span>{place.place_name}</span><span style={{marginLeft:"2vw", fontSize:"small", color:"grey"}}>{place.category_group_name}</span></div>
-                  <div>{place.address_name}</div>
+                  <div className={styles.comments_container}>
+                    <div className={styles.comment}>
+                      <div className={styles.comment_content}>
+                        <div className={styles.profile}>
+                          {place.place_name}
+                          <span style={{marginLeft:"2vw", fontSize:"small", color:"purple"}}>
+                            {place.category_group_name}
+                          </span>
+                        </div>
+                        <div className={styles.line}></div>
+                        <div className={styles.text}>{place.address_name}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div> 
               )
             })
