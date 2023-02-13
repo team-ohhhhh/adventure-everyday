@@ -137,7 +137,7 @@ function ArticleDetail({article, isFeed}) {
         <div className={style.iconHolder}>
           {article.isChallenge !== 0 && <GrFlag size={33} className={style.icon} onClick={() => {navigate(`/adventure/detail/${article.isChallenge}`)}}/>}
           {article.isAntenna !== 0 && <GoRadioTower size={33} className={style.icon} onClick={()=>{navigate('/', {state: {lat:article.lat, lng:article.lng}})}}/>} {/*TODO: 안테나도 범위 원도 켜졌으면 좋겠다... */ }
-          {article.isFollowing !== !0 && <MdPersonOutline size={36} className={style.isFollowingicon} onClick={() => {navigate(`/profile/${article.isFollowing}`)}}/>}
+          {article.isFollowing !== !0 && <MdPersonOutline size={36} className={style.isFollowingicon} onClick={() => {navigate(`/profile/${article.userDetailRes.userId}`)}}/>}
         </div>
         {!isFeed && <div className={style.moreButton}><ArticleMoreButton article={article} toggle={toggle} isOn={isOn} isMe={isMe}/></div>}
       </div>
