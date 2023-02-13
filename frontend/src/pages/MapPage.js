@@ -241,7 +241,7 @@ function MainMap() {
   const [result, setResult] = useState([])
   const [keyWord, setKeyWord] = useState()
   const [resultWindow, setResultWindow] = useState(false)
-
+  console.log(adventureList)
   const onChange = function(e) {
     setKeyWord(e.target.value)
   }
