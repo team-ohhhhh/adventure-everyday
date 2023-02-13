@@ -5,7 +5,7 @@ import axios from 'axios'
 import { useState } from 'react'
 import { RiMoreFill } from "react-icons/ri"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faComment, faEllipsisH, faMessage, faHeartBroken } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faComment, faEllipsisH, faMessage, faHeartBroken, faHeartCirclePlus } from "@fortawesome/free-solid-svg-icons";
 
 
 function Reply({reply, getReply, replyMoreButtonOpen, setReplyMoreButtonOpen, whichReplyButton, setWhichReplyButton}) {
@@ -131,7 +131,7 @@ function Reply({reply, getReply, replyMoreButtonOpen, setReplyMoreButtonOpen, wh
       : <div className={style.content}>{reply.subCommentContent}</div>
       }</div>
       <div style={{ display: "flex", justifyContent: "flex-start",  marginTop: "5%" }}>
-        {reply.userIdxList.find(idx => idx === USER.userId) ? <FontAwesomeIcon icon={faHeart} style={{ marginLeft: "19.5%",marginRight:"2%" }} onClick={()=>{unlikeReply()}}/> : <FontAwesomeIcon icon={faHeartBroken} style={{ marginLeft: "19.5%",marginRight:"2%" }} onClick={()=>{likeReply()}}/> }
+        {reply.userIdxList.find(idx => idx === USER.userId) ? <FontAwesomeIcon icon={faHeart} style={{ marginLeft: "3.8rem",marginRight:"2%" }} onClick={()=>{unlikeReply()}}/> : <FontAwesomeIcon icon={faHeartCirclePlus} style={{ marginLeft: "3.8rem",marginRight:"2%" }} onClick={()=>{likeReply()}}/> }
         {reply.userIdxList.length}
         {/* <FontAwesomeIcon icon={faComment} style={{ marginLeft: "5%", marginRight: "2%" }} onClick={() => {toggle(); getReply();}} /><span>댓글 달기({comment.subCommentDtoList.length})</span> */}
       </div>         

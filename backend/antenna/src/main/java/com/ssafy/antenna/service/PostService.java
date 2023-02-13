@@ -235,11 +235,15 @@ public class PostService {
 		}
 	}
 
-	public PostDetailRes createPost(Long userId, String title, String content, String lat, String lng, String isPublic, MultipartFile photo, String isCheckpoint, String adventureId, String adventurePlaceId) throws IOException {
+	public PostDetailRes createPost(Long userId, String title, String content, String lat, String lng, String isPublic, MultipartFile photo, String isCheckPoint, String adventureId, String adventurePlaceId) throws IOException {
+		System.out.println("===================================================");
+		System.out.println("isPublic:"+isPublic);
+		System.out.println("isCheckPoint:"+isCheckPoint);
+
 		User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 		Post post = new Post();
 		//모험 글인 경우
-		if (Boolean.valueOf(isCheckpoint)) {
+		if (Boolean.valueOf(isCheckPoint)) {
 			AdventurePlace adventurePlace = adventurePlaceRepository.findById(Long.valueOf(adventurePlaceId)).orElseThrow(AdventurePlaceNotFoundException::new);
 			//이미 달성한 모험인지 체크를 한다.
 			if (checkpointRepository.countByUserAndAdventurePlace(user, adventurePlace).get() == 1) {

@@ -8,10 +8,10 @@
 
 .comment {
   display: flex;
-  align-items: flex-start;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   position: relative;
   align-items:center;
+  width: 100%;
 }
 
 .comment_content {
@@ -21,7 +21,7 @@
   border-radius: 10px;
   position: relative;
   box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.1);
-  margin-left: 10px;
+  margin-left: 2rem;
   /* left: 1%; */
 }
 
@@ -29,7 +29,8 @@
 .profile {
   display: flex;
   align-items: center;
-  margin-left: 10px;
+  margin-left: 0.7rem;
+  width: 100%;
 }
 
 .profile_picture {
@@ -53,33 +54,12 @@
   color: #333;
   line-height: 1.5;
   text-align: justify;
-  margin-left: 19.5%;
+  /* margin-left: 22%; */
+  margin-left: 3.8rem;
 }
 
 .icon {
   display: inline-block;
   margin-left: 10px;
   vertical-align: middle;
-}
-
-.heart-icon {
-  width: 20px;
-  height: 20px;
-  fill: #333;
-}
-
-.commentIcon {
-  width: 20px;
-  height: 20px;
-  fill: #333;
-}
-
-.commentCounter {
-  display: inline-block;
-  marginLeft: 5px;
-  fontSize: 14px;
-  color: #333;
-  backgroundColor: white;
-  padding: 3px 5px;
-  borderRadius: 5px
 }

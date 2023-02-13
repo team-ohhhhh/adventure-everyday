@@ -1,29 +1,5 @@
-.photoContainer {
-  display: flex;
-  width: 10vw;
-  height: 10vw;
-  border-radius: 70%;
-  overflow: hidden;
-  margin-left: 2vw;
-  margin-right: 2vw;
-}
 
-.photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
 
-.commentCard {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-right: 5vw;
-  padding: 3vw;
-  box-shadow: 5px 2px 2px grey;
-  border-radius: 8px;
-  width: 80vw;
-}
 
 .header {
   display: flex;
@@ -115,38 +91,31 @@
   padding-bottom: 1vh;
 }
 
-.comments_container {
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-  background-color: #f2f2f2;
-  border-radius: 5px;
-}
 
 .comment {
-  display: flex;
+  /* display: flex; */
   /* align-items: flex-start; */
   margin-bottom: 20px;
   position: relative;
   flex-direction:column; 
-  align-items:end;
+  align-items:center;
 }
 
 .comment_content {
-  width: 95%;
+
   background-color: white;
   padding: 15px;
   border-radius: 10px;
   position: relative;
   box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.1);
-  margin-left: 10px;
+
 }
 
 
 .profile {
   display: flex;
   align-items: right;
-  margin-left: 10px;
+  margin-left: 0.7rem;
   width: 100%;
 }
 
@@ -170,7 +139,7 @@
   color: #333;
   line-height: 1.5;
   text-align: justify;
-  margin-left: 19.5%;
+  margin-left: 3.8rem;
 }
 
 .icon {
