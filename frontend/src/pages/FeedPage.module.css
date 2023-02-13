@@ -1,0 +1,13 @@
+.pageContainer {
+}
+
+.header {
+  padding: 2rem 2rem 1rem 2rem;
+  font-size: 2rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.articleContainer {
+  margin-bottom: 0.5rem;
+}

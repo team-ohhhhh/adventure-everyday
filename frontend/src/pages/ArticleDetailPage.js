@@ -1,43 +1,54 @@
-import {useEffect, useState} from 'react'
-import { useSelector } from "react-redux"
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
-import ArticleDetail from "./../components/Article/ArticleDetail"
-import axios from "axios"
-import { AiOutlineLeft, AiOutlineRight } from  "react-icons/ai"
-import style from './ArticleDetailPage.module.css'
+import axios from "axios";
+
+import ArticleDetail from "./../components/Article/ArticleDetail";
+import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
+
+import style from "./ArticleDetailPage.module.css";
 
 function ArticleDetailPage() {
-  let URL = useSelector((state) => state.url)
-  let TOKEN = useSelector((state) => state.token)
-  let USER = useSelector((state) => state.user)
-  let { articleId } = useParams();
-  const navigate = useNavigate()
+  let URL = useSelector((state) => state.url);
+  let TOKEN = useSelector((state) => state.token);
 
-  const [article, setArticle] = useState([])
+  let { articleId } = useParams();
+
+  const navigate = useNavigate();
+
+  const [article, setArticle] = useState([]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     axios({
       url: URL + `/posts/${articleId}`,
-      method: 'get',
+      method: "get",
       headers: {
-        Authorization: `Bearer ${TOKEN}`
-      }
+        Authorization: `Bearer ${TOKEN}`,
+      },
     })
-    .then((res) => {
-      setArticle([res.data.result])
-    })
-    .catch((err) => {console.log(err)})
-  }, [])
+      .then((res) => {
+        setArticle([res.data.result]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div className="pageContainer">
-      <div className={style.topBar}><AiOutlineLeft className={style.left} onClick={() => {navigate(-1)}}/><div >게시글</div><AiOutlineRight className={style.right}/></div>
-      <hr/>
-      {article.map((articleItem) => {
-        return(<ArticleDetail article={articleItem}/>)
-    })}
+      <div className={style.topBar}>
+        <AiOutlineLeft className={style.left} onClick={() => navigate(-1)} />
+        <div>게시글</div>
+        <AiOutlineRight className={style.right} />
+      </div>
+
+      {article.map((articleItem) => (
+        <ArticleDetail article={articleItem} />
+      ))}
     </div>
-  )
+  );
 }
 
-export default ArticleDetailPage
+export default ArticleDetailPage;

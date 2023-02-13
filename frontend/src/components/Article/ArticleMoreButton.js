@@ -1,19 +1,20 @@
-import { RiMoreFill } from  "react-icons/ri"
-import ArticleMoreList from "./ArticleMoreList"
-import style from './ArticleMoreButton.module.css'
-import Modal from 'react-modal'
-import { useState } from 'react'
-import axios from 'axios'
-import { useSelector } from "react-redux"
-import { useNavigate } from 'react-router-dom'
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Modal from "react-modal";
 
+import ArticleMoreList from "./ArticleMoreList";
+
+import style from "./ArticleMoreButton.module.css";
+import { RiMoreFill } from "react-icons/ri";
 
 function ArticleMoreButton(props) {
-  let URL = useSelector((state) => state.url)
-  let TOKEN = useSelector((state) => state.token)
-  const navigate = useNavigate() 
+  let URL = useSelector((state) => state.url);
+  let TOKEN = useSelector((state) => state.token);
+  const navigate = useNavigate();
   // 모달 스타일 주기
-   const modalStyle = {
+  const modalStyle = {
     overlay: {
       position: "fixed",
       top: 0,
@@ -24,8 +25,8 @@ function ArticleMoreButton(props) {
       zIndex: 10,
     },
     content: {
-      height: "25vw",
-      width: "50vw",
+      height: "30vw",
+      width: "60vw",
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
@@ -33,51 +34,64 @@ function ArticleMoreButton(props) {
       WebkitOverflowScrolling: "touch",
       outline: "none",
       zIndex: 10,
-      margin:"auto",
+      margin: "auto",
       background: "#FFFFFF",
       boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-      borderRadius: "8px"
+      borderRadius: "8px",
+      lineHeight: "1.5rem",
     },
   };
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const deleteArticle = function() {
+  const deleteArticle = function () {
     axios({
       url: URL + `/posts/${props.article.postId}`,
-      method:'delete',
+      method: "delete",
       headers: {
-        Authorization: `Bearer ${TOKEN}`
-      }
+        Authorization: `Bearer ${TOKEN}`,
+      },
     })
-    .then((res) => {
-      navigate('/') //TODO: 삭제 후 어디로 보낼지 고민
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-
-  }
-
+      .then(() => {
+        navigate("/"); //TODO: 삭제 후 어디로 보낼지 고민
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <div className={style.buttonContainer}>
-      <RiMoreFill onClick={props.toggle}/>
-      <Modal 
-          isOpen={modalIsOpen}
-          style={modalStyle}
+      <RiMoreFill size={20} onClick={props.toggle} />
+      <Modal isOpen={modalIsOpen} style={modalStyle}>
+        <div style={{ textAlign: "center" }}>
+          삭제 후에는 복구가 어렵습니다.
+          <br />
+          정말로 삭제하시겠습니까?
+        </div>
+        <div className={style.buttonHolder}>
+          <button
+            className={style.cancelButton}
+            onClick={() => setModalIsOpen(false)}
           >
-          <div style={{textAlign:"center"}}>
-          진짜 삭제하실건가요???
-          </div>
-          <div className={style.buttonHolder}>
-            <button className={style.cancelButton} onClick={() => setModalIsOpen(false)}>취소</button>
-            <button className={style.deleteUserButton} onClick={() => deleteArticle()}>삭제</button>
+            취소
+          </button>
+          <button
+            className={style.deleteUserButton}
+            onClick={() => deleteArticle()}
+          >
+            삭제
+          </button>
         </div>
       </Modal>
-      {props.isOn && <ArticleMoreList isMe={props.isMe} article={props.article} setModalIsOpen={setModalIsOpen}/>} 
+      {props.isOn && (
+        <ArticleMoreList
+          isMe={props.isMe}
+          article={props.article}
+          setModalIsOpen={setModalIsOpen}
+        />
+      )}
     </div>
-    )
-
+  );
 }
 
-export default ArticleMoreButton
+export default ArticleMoreButton;
