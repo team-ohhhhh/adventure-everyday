@@ -219,6 +219,7 @@ function MainMap() {
     })
       .then((res) => {
         setAdventureList(res.data.result);
+        console.log(res.data.result)
       })
       .catch((err) => console.log(err));
   };
@@ -752,8 +753,9 @@ function MainMap() {
                       lng : checkpoint.lng
                     }
                   }
+                  // advMarker숫자false => 아직 달성 안됨 / true가 이미 달성됨
                   image={{
-                    src:`/images/advMarker${idx+1}.png`,
+                    src:`/images/advMarker${idx+1}${checkpoint.isClear}.png`,
                     size: {
                       width: 30,
                       height: 50, 
