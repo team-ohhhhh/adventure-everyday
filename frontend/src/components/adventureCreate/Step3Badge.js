@@ -76,15 +76,6 @@ const Step3Badge = ({ adventure, setAdventure, checkpoints }) => {
       return;
     }
 
-    const newCheckpoints = checkpoints.map((point) => {
-      const { postDetail, ...newCheckpoint } = point;
-      return newCheckpoint;
-    });
-    setAdventure((adventure) => ({
-      ...adventure,
-      createAdventurePlaceReqs: newCheckpoints,
-    }));
-
     axios
       .post(url + "/adventures", JSON.stringify(adventure), {
         headers: {
