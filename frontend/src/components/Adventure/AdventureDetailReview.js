@@ -9,7 +9,6 @@ function AdventureDetailReview(props) {
   // 상위 컴포넌트: adventureDetailPage
   // props.info로 reviews 리스트 가져옴
 
-
   return (
     <div className={styles.detail}>
       <div className={styles.treasure}>
@@ -17,11 +16,9 @@ function AdventureDetailReview(props) {
         <div className={styles.treasureInfo}>
           <div className={styles.treasureBorder}>
             <Hashicon /* (탐험 아이디 + 칭호 + 탐험 제목)*/
-              value={
-                props.adDetail.adventureId +
-                props.chingho +
-                props.adDetail.adventureTitle
-              }
+              value={`${props.adDetail.adventureId} +
+                ${props.chingho} +
+                ${props.adDetail.adventureTitle}`}
               size={100}
             />
 
@@ -36,24 +33,30 @@ function AdventureDetailReview(props) {
       </div>
       <div className={styles.review}>
         <div className={styles.title}>탐험후기</div>
-
         <div className={styles.reviewList}>
-          <div className={styles.reviewItem}>
-            {props.info.map((review, index) => {
-              return <ReviewItem key={index} 
-              data={review} 
-              setReviewMoreButton={props.setReviewMoreButton} 
-              reviewMoreButton={props.reviewMoreButton} 
-              setWhichReviewButton={props.setWhichReviewButton}
-              whichReviewButton={props.whichReviewButton}
-              ReadReview={props.ReadReview}
-              />;
-            })}
-            {/* 후기가 없으면 보여줄 컴포넌트 */}
-            {!props.info && (
-              <div className={styles.article}>아직은 후기가 없어요!</div>
-            )}
-          </div>
+          {/* 후기가 있으면 보여줄 컴포넌트 */}
+          {props.reviews.length > 0 && (
+            <div className={styles.reviewItem}>
+              {props.info.map((review, index) => {
+                return (
+                  <ReviewItem
+                    key={index}
+                    data={review}
+                    setReviewMoreButton={props.setReviewMoreButton}
+                    reviewMoreButton={props.reviewMoreButton}
+                    setWhichReviewButton={props.setWhichReviewButton}
+                    whichReviewButton={props.whichReviewButton}
+                    getReview={props.getReview}
+                  />
+                );
+              })}
+            </div>
+          )}
+
+          {/* 후기가 없으면 보여줄 컴포넌트 */}
+          {props.reviews.length == 0 && (
+            <div className={styles.item}>아직은 후기가 없어요!</div>
+          )}
         </div>
       </div>
     </div>

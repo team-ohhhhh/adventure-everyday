@@ -11,20 +11,27 @@
   align-items: flex-start;
   margin-bottom: 20px;
   position: relative;
-  align-items:center;
 }
 
 .comment_content {
-  width: 95%;
+  width: 100%;
   background-color: white;
   padding: 15px;
   border-radius: 10px;
   position: relative;
   box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.1);
   margin-left: 10px;
-  /* left: 1%; */
 }
 
+.comment-content:before {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: -20px;
+  border-width: 10px 20px 10px 0;
+  border-style: solid;
+  border-color: white transparent transparent transparent;
+}
 
 .profile {
   display: flex;

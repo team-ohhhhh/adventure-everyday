@@ -28,6 +28,7 @@ import "./App.css";
 import AdventureReviewPage from "./pages/AdventureReviewPage";
 import KakaoLogIn from "./components/SignUp/KakaoLogin";
 import KakaoSignUp from "./pages/KakaoSignUp";
+import CommentPageTest from "./pages/CommentPageTest";
 
 function App() {
   return (
@@ -85,6 +86,11 @@ function App() {
           <Route
             path="/article/:articleId/update"
             element={<ArticleUpdatePage />}
+          />
+
+          <Route
+            path="/article/comment-test"
+            element={<CommentPageTest />}
           />
         </Route>
         {/* 로그인 상태에서 가면 안되는 페이지는 이곳에 추가해주세요 */}

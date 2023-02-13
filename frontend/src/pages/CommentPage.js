@@ -4,7 +4,9 @@
  import { useParams } from 'react-router-dom'
  import Comment from '../components/Article/Comment/Comment'
  import InputForm from '../components/Article/Comment/InputForm'
- 
+ import styles from "./CommentPage.module.css"; 
+ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faMessage } from "@fortawesome/free-solid-svg-icons";
  
  function CommentPage() {
   let URL = useSelector((state) => state.url)
@@ -76,10 +78,12 @@
   }, [moreButtonOpen, whichButton])
 
   return (
-    <div className="pageContainer" onClick={()=>{closeMoreButton(); closeReplyMoreButton();}}>
-      <div>댓글 작성</div>
-        <InputForm setCommentInput={setCommentInput} commentInput={commentInput} postComment={postComment} />
-      <div>{commentList.length}개의 댓글</div>
+    <div className="commentPageContainer" onClick={()=>{closeMoreButton(); closeReplyMoreButton();}} >
+      <div className={styles.comments_container}>
+      <div style={{ display: "flex", justifyContent: "flex-start", marginTop: "5%" }}>
+            <FontAwesomeIcon icon={faMessage} style={{ marginLeft: "10px"}} />
+            <span style={{marginLeft:"2%", marginBottom:"5%" }}>{commentList.length}개의 댓글</span>
+          </div>
       <div>
         {commentList.map((comment) => {
           return ( <Comment key={comment.commentId} 
@@ -99,6 +103,10 @@
             />)
         })}
       </div>
+      <div className={styles.whiteLine}></div>
+        <InputForm setCommentInput={setCommentInput} commentInput={commentInput} postComment={postComment} />
+        
+        </div>
     </div>
   )
 

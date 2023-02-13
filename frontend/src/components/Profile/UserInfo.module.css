@@ -1,63 +1,63 @@
 .userInfo {
-  height: 25vh;
-  padding: 30px
+  /* height: 25vh; */
+  padding: 45px 30px 30px 30px;
 }
 
-.nicknameAndSearchAndMore {
-  display : flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: baseline;
-  
-  height: 45%;
-}
-
-.nicknameAndIntroduce {
+.nicknameAndSearch {
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: baseline;
   justify-content: space-between;
-  height : 8vh;
+  align-items: center;
+  margin-bottom: 0.5rem;
 }
 
-.searchAndMore {
+.nicknameAndTier {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  font-size : 30px;
-  width: 20%;
+  align-items: center;
 }
 
-.photoAndFollowInfo {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items:flex-start
-}
-
-.photoAndFollowButton {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  
-}
-
-.followInfo {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.nickName {
-  font-size : 40px;
+.nickname {
+  font-size: 1.8rem;
   font-weight: 700;
   font-style: bold;
 }
 
+.tier {
+  margin-left: 0.5rem;
+  height: 1.7rem;
+}
+
+.searchAndMore {
+  display: flex;
+  font-size: 30px;
+}
+
+.searchBtn {
+  margin-right: 0.5rem;
+}
+
+.introduceAndModify {
+  display: flex;
+  align-items: center;
+  height: 2rem;
+  margin-bottom: 1.3rem;
+}
+
+.modifyBtn {
+  margin-left: 0.3rem;
+}
+
+.modifyInput {
+  border: none;
+  font-size: 1rem;
+  color: rgb(56, 56, 56);
+  padding: 0.3rem 0.7rem;
+  background-color: rgb(232, 232, 232);
+  border-radius: 5px;
+  width: 100%;
+}
+
 .photoAndChangeButton {
-  width: 80px;
-  height: 80px;
   position: relative;
 }
 
@@ -66,9 +66,7 @@
   height: 80px;
   border-radius: 70%;
   overflow: hidden;
-  
 }
-
 
 .photo {
   width: 100%;
@@ -79,61 +77,55 @@
 .changePhotoButton {
   position: absolute;
   border-radius: 70%;
-  background: #1C0B69;
-  color: #FFFFFF;
-  font-weight: 700;
+  background: #1c0b69;
+  color: #ffffff;
+  font-weight: 600;
   top: 70%;
-  left : 70%;
-  width: 18px;
-  height: 18px;
-  border-color: #FFFFFF;
+  left: 70%;
+  width: 20px;
+  height: 20px;
+  border: 1px solid white;
+  line-height: 18px;
+}
+
+.photoAndFollowInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.3rem;
 }
 
 .followInfo {
+  display: flex;
   width: 70%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.followInfoNumber {
-  margin-top: auto;
-  margin-bottom: auto;
-  width: 33%
-}
-
-.followButton {
-  width: 62px;
-  height: 25px;
-
-  background: #1C0B69;
-  border-radius: 999px;
-  color: #FFFFFF;
-}
-
-.unfollowButton {
-  width: 62px;
-  height: 25px;
-
-  background: #FFFFFF;
-  border-radius: 999px;
-  color: #1C0B69;
-  border-width: 1px;
- 
-}
-
-.buttonHolder {
-  display: flex;
-  flex-direction: row;
   justify-content: space-between;
-  align-items: center;
 }
 
-.treasureButton{
-  width: fit-content;
-  height: 25px;
+.followInfoPart {
+  width: 33%;
+}
 
-  background: #1C0B69;
-  border-radius: 999px;
-  color: #FFFFFF;
+.followName {
+  font-weight: 700;
+  margin-bottom: 0.1rem;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.blueBtn {
+  width: 49%;
+  box-sizing: border-box;
+  border-radius: 5px;
+  padding: 0.3rem;
+  background: #1c0b69;
+  border: 1px solid #1c0b69;
+  color: #ffffff;
+}
+
+.whiteBtn {
+  background: #ffffff;
+  color: #1c0b69;
 }

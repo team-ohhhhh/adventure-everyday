@@ -1,4 +1,4 @@
-import style from './InputForm.module.css'
+import styles from './InputForm.module.css'
 import { useSelector } from 'react-redux'
 
 function InputForm({ commentInput, setCommentInput, postComment}) {
@@ -9,19 +9,15 @@ function InputForm({ commentInput, setCommentInput, postComment}) {
   }
 
   return (
-    <div className={style.container}>
-      <div className={style.infos}>
-        <div className={style.photoContainer}>
-          <img className={style.photo} src={USER.photoUrl ? USER.photoUrl : '/defaultProfile.jpg'}></img>
+    <div className={styles.comment}>
+        <div className={styles.comment_content}>
+          <div className={styles.profile}>
+          <img className={styles.profile_picture} src={USER.photoUrl ? USER.photoUrl : '/defaultProfile.jpg'}></img>
+          <h4 className={styles.username}>{USER.nickname}</h4>
         </div>
-        <div className={style.nicknameAndInput}>
-          <div className={style.nickname}>{USER.nickname}</div>
-          <input onChange={onChange} className={style.comment} placeholder="댓글을 작성하세요"></input>
-        </div>
+        <input onChange={onChange} className={styles.comment} placeholder="댓글을 작성하세요"></input>
       </div>
-      <button className={style.postButton} onClick={() => {postComment()}}>작성</button>
-    
-
+      <button className={styles.postButton} onClick={() => {postComment()}}>작성</button>
     </div>
   )
 }
