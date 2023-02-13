@@ -1,36 +1,29 @@
+.infoContainer {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.userContainer {
+  display: flex;
+  align-items: center;
+}
+
 .profileContainer {
-  width: 40px;
-  height: 40px;
+  width: 37px;
+  height: 37px;
   border-radius: 70%;
   overflow: hidden;
 }
 
-.profile {
+.profileImg {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.articleContainer {
-  display: flex;
-  flex-direction: column;
-}
-
-.userInfo {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.profileAndNicknameAndw3w {
-  display: flex;
-  flex-direction: row;
-  margin: 3vw;
-  align-items: center;
-}
-
-.nicknameAndw3w {
+.nicknameContainer {
   display: flex;
   flex-direction: column;
   align-items: baseline;
@@ -38,61 +31,71 @@
 }
 
 .nickname {
-  font-size: large;
-  font-style: normal;
+  font-size: 1rem;
   font-weight: 600;
+  margin-bottom: 0.2rem;
 }
 
 .w3w {
-  font-size: small;
-  font-weight: 400;
+  font-size: 0.8rem;
   color: #626262;
 }
 
-.moreButton {
-  margin-right: 4vw;
-  font-size: x-large;
+.iconContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
-.articleInfo {
+.icon {
+  margin-left: 0.3rem;
+}
+
+.photo {
+  width: 100%;
+}
+
+.contentContainer {
   display: flex;
   flex-direction: column;
   align-items: baseline;
-  padding: 5vw;
-}
-
-.likeAndComment {
-  display: flex;
-  flex-direction: row;
-  margin-top: 2vh;
-  font-size: large;
+  padding: 1rem;
 }
 
 .title {
-  font-size: large;
-  font-style: normal;
+  font-size: 1rem;
   font-weight: 600;
+  margin-bottom: 0.6rem;
 }
 
 .content {
-  margin-top: 1vh;
+  font-size: 1rem;
+  margin-bottom: 1rem;
 }
 
-.time {
-  margin-top: 1vh;
-  font-size: x-small;
+.date {
+  font-size: 0.8rem;
+  color: #626262;
+}
+
+.actionContainer {
+  padding: 0.5rem 1rem 1rem 1rem;
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
 }
 
 .like {
   display: flex;
-  flex-direction: row;
   align-items: center;
+  margin-right: 0.7rem;
 }
 
 .comment {
-  margin-left: 2vw;
   display: flex;
-  flex-direction: row;
   align-items: center;
 }
 
+.num {
+  margin-left: 0.2rem;
+}

@@ -1,15 +1,17 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
+
 import ArticleDetail from "./../components/Article/ArticleDetail";
-import { useNavigate } from "react-router-dom";
+
+import styles from "./FeedPage.module.css";
 
 const FeedPage = () => {
   let URL = useSelector((state) => state.url);
   let TOKEN = useSelector((state) => state.token);
-  const navigate = useNavigate();
 
   const [feed, setFeed] = useState([]);
+
   const getFeed = function () {
     axios({
       url: URL + "/posts/all",
@@ -19,11 +21,9 @@ const FeedPage = () => {
       },
     })
       .then((res) => {
+        // console.log(res.data);
         setFeed(res.data.result);
-        console.log(res.data);
-        console.log(feed);
       })
-
       .catch((err) => {
         console.log(err);
       });
@@ -32,16 +32,19 @@ const FeedPage = () => {
   useEffect(() => {
     getFeed();
   }, []);
+
   return (
-    <div className="pageContainer">
-      <h1>FEED</h1>
-      {feed.map((article) => {
-        return (
-          <div style={{ borderTop: "1px solid grey" }}>
+    <div className={`pageContainer ${styles.pageContainer}`}>
+      <div className={styles.header}>피드</div>
+      {feed.length > 0 ? (
+        feed.map((article) => (
+          <div className={styles.articleContainer} key={article.postId}>
             <ArticleDetail article={article} isFeed={true} />
           </div>
-        );
-      })}
+        ))
+      ) : (
+        <div>피드 내용이 없어요!</div>
+      )}
     </div>
   );
 };

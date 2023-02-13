@@ -33,9 +33,9 @@
 
 .profile {
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   margin-left: 10px;
-  color: #1C0B69;
+  color: #1c0b69;
   font-size: large;
   font-weight: bold;
 }
@@ -70,7 +70,7 @@
   vertical-align: middle;
 }
 
-.line{
+.line {
   margin-top: 0.6rem;
   border-bottom: 1px solid lightgray;
 }

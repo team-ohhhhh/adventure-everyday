@@ -6,7 +6,7 @@
   border-radius: 5px;
 }
 
-#root > div > div > nav{
+#root > div > div > nav {
   background-color: #f2f2f2;
 }
 
@@ -15,8 +15,8 @@
   /* align-items: flex-start; */
   /* margin-bottom: 20px; */
   position: relative;
-  flex-direction:column; 
-  align-items:end;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .comment_content {
@@ -76,7 +76,6 @@
   vertical-align: middle;
 }
 
-
-.whiteLine{
+.whiteLine {
   border-bottom: 1px solid white;
 }
