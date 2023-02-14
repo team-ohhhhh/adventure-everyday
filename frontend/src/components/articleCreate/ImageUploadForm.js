@@ -35,14 +35,21 @@ const ImageUploadForm = ({ article, setArticle }) => {
     if (fileList && fileList[0]) {
       const file = fileList[0];
 
+      const extension = file.name.toLowerCase().split(".").pop();
+
+      if (!(extension === "jpg" || extension === "jpeg")) {
+        alert("jpg, jpeg 파일만 업로드할 수 있습니다.");
+        return;
+      }
+
       EXIF.getData(file, function () {
         if (EXIF.pretty(this) && EXIF.getTag(this, "GPSLatitude")) {
           const metadata = EXIF.getAllTags(this);
-          console.log(metadata)
+          console.log(metadata);
           const url = URL.createObjectURL(file);
           const [lat, lng] = GPSConvert(metadata);
-          console.log(lat)
-          console.log(lng)
+          console.log(lat);
+          console.log(lng);
           setArticle((article) => ({
             ...article,
             lat,
@@ -71,7 +78,7 @@ const ImageUploadForm = ({ article, setArticle }) => {
       <input
         className={styles.fileInput}
         type="file"
-        accept="image/*"
+        accept="image/jpeg, image/jpg"
         ref={fileInputRef}
         onChange={uploadPhoto}
       />
