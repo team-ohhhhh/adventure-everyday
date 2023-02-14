@@ -10,6 +10,7 @@
   font-size: 1.1rem;
   font-weight: 600;
   border-bottom: 0.5px solid gray;
+  z-index: 2;
 }
 
 .right {

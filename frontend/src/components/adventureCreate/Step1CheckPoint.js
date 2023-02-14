@@ -157,7 +157,7 @@ const Step1CheckPoint = ({
       return;
     }
     if (!adventure.RepresentativePostId) {
-      alert("대표 게시글을 선택해 주세요.");
+      alert("대표 게시글을 선택해주세요.");
       repImgRef.current.scrollIntoView({
         behavior: "smooth",
         block: "center",
@@ -168,7 +168,7 @@ const Step1CheckPoint = ({
       (point) => point.adventurePlaceTitle && point.adventurePlaceContent
     );
     if (!done) {
-      alert("체크포인트 이름과 내용을 빠짐없이 작성해 주세요.");
+      alert("체크포인트 이름과 내용을 빠짐없이 작성해주세요.");
       return;
     }
 
