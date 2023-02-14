@@ -1,7 +1,7 @@
 services:
   database:
     container_name: mysql
-    image: mysql:8.0.30-oracle
+    image: mysql:8.0.30
     environment:
       MYSQL_DATABASE: antennadb
       MYSQL_USER: gorilla
@@ -14,6 +14,7 @@ services:
     restart: unless-stopped
     volumes:
       - /antenna-data:/var/lib/mysql
+      # - /antenna-data-2:/var/lib/mysql
 
   backend:
     build:
@@ -50,7 +51,7 @@ services:
 
   nginx:
     container_name: nginx
-    image: nginx:1.22.1-alpine
+    image: nginx:1.22.1
     restart: always
     volumes:
       - ./frontend/conf/:/etc/nginx/conf.d
