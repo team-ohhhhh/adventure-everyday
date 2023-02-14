@@ -19,14 +19,14 @@ const CheckPointItem = ({
       e.target.value &&
       e.target.value.length > 10
     ) {
-      alert("체크포인트 이름은 10글자 이내로 작성해 주세요.");
+      alert("체크포인트 이름은 10글자 이내로 작성해주세요.");
       return;
     } else if (
       e.target.name === "adventurePlaceContent" &&
       e.target.value &&
       e.target.value.length > 254
     ) {
-      alert("체크포인트 내용은 254글자 이내로 작성해 주세요.");
+      alert("체크포인트 내용은 254글자 이내로 작성해주세요.");
       return;
     }
 

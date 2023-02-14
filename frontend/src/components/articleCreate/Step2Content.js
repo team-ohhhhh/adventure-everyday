@@ -38,14 +38,14 @@ const Step2Content = ({ article, setArticle, checkPointList, styles }) => {
       e.target.value &&
       e.target.value.length > 10
     ) {
-      alert("제목은 10글자 이내로 작성해 주세요.");
+      alert("제목은 10글자 이내로 작성해주세요.");
       return;
     } else if (
       e.target.name === "content" &&
       e.target.value &&
       e.target.value.length > 254
     ) {
-      alert("내용은 254글자 이내로 작성해 주세요.");
+      alert("내용은 254글자 이내로 작성해주세요.");
       return;
     }
 
