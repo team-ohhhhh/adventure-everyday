@@ -220,7 +220,7 @@ function MainMap() {
     })
       .then((res) => {
         setAdventureList(res.data.result);
-        console.log(res.data.result)
+        console.log(res.data.result);
       })
       .catch((err) => console.log(err));
   };
@@ -754,7 +754,7 @@ function MainMap() {
                   image={{
                     src: article.photoUrl
                       ? article.photoUrl
-                      : "/images/noImage_square.png",
+                      : "/images/emptyBanner4.png",
                     size: {
                       width: 50,
                       height: 50,
@@ -813,7 +813,6 @@ function MainMap() {
 
           {/* 어드벤처 모드 */}
 
-
           {isAdventureMode &&
             adventureList.map((adventure, idx) => {
               return adventure.adventurePlaceList.map((checkpoint) => {
@@ -825,11 +824,12 @@ function MainMap() {
                       lng: checkpoint.lng,
                     }}
                     image={{
-                      src:`/images/advMarker${idx+1}${checkpoint.isClear}.png`,
+                      src: `/images/advMarker${idx + 1}${
+                        checkpoint.isClear
+                      }.png`,
                       size: {
                         // width: 30,
                         height: 50,
-
                       },
                       options: {
                         offset: {
