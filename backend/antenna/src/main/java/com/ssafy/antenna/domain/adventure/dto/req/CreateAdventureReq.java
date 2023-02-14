@@ -1,9 +1,7 @@
 package com.ssafy.antenna.domain.adventure.dto.req;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 
@@ -23,6 +21,7 @@ public record CreateAdventureReq(
         LocalDateTime startDate,
         LocalDateTime endDate,
         Long RepresentativePostId,
+		@Valid
         CreateAdventurePlaceReq[] createAdventurePlaceReqs
 
 ) {
