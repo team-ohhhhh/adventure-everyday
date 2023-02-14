@@ -48,7 +48,7 @@ public class AuthenticationController {
         if (!validationRegex.isRegexEmail(email)){
             return ResultResponse.error(ErrorResponse.of(ErrorCode.EMAIL_INVALID));
         }
-        if (nickname.length() < 3){
+        if (nickname.length() < 1 || nickname.length() > 8){
             return ResultResponse.error(ErrorResponse.of(ErrorCode.NICKNAME_INVALID));
         }
         if (!(password.length() >= 6 && password.length()<=12)){
