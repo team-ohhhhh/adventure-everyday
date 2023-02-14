@@ -220,7 +220,7 @@ function MainMap() {
     })
       .then((res) => {
         setAdventureList(res.data.result);
-        console.log(res.data.result)
+        console.log(res.data.result);
       })
       .catch((err) => console.log(err));
   };
@@ -447,27 +447,6 @@ function MainMap() {
             height: "100%",
           }}
           level={state.level} // 지도의 확대 레벨
-          // onCenterChanged={(map) =>
-          //   setState((prev) => ({
-          //     ...prev,
-          //     center: {
-          //       lat: map.getCenter().getLat(),
-          //       lng: map.getCenter().getLng(),
-          //     },
-          //   }))
-          // }
-          onCreate={() => {
-            // console.log("create");
-          }}
-          onDragStart={() => {
-            // setState((prev) => ({
-            //   ...prev,
-            //   // isCur: false,
-            //   // isAroundClicked: false,
-            //   // isCircle: false,
-            // }));
-            // console.log("dragStart");
-          }}
           onClick={(_t, mouseEvent) => {
             // 카카오 검색 결과 목록 끄기
             setResultWindow(false);
@@ -754,7 +733,7 @@ function MainMap() {
                   image={{
                     src: article.photoUrl
                       ? article.photoUrl
-                      : "/images/noImage_square.png",
+                      : "/images/emptyBanner4.png",
                     size: {
                       width: 50,
                       height: 50,
@@ -802,7 +781,9 @@ function MainMap() {
                             lineHeight: "1rem",
                             color: "gray",
                           }}
-                        ></div>
+                        >
+                          >
+                        </div>
                       </div>
                     </div>
                   )}
@@ -812,7 +793,6 @@ function MainMap() {
           )}
 
           {/* 어드벤처 모드 */}
-
 
           {isAdventureMode &&
             adventureList.map((adventure, idx) => {
@@ -825,11 +805,12 @@ function MainMap() {
                       lng: checkpoint.lng,
                     }}
                     image={{
-                      src:`/images/advMarker${idx+1}${checkpoint.isClear}.png`,
+                      src: `/images/advMarker${idx + 1}${
+                        checkpoint.isClear
+                      }.png`,
                       size: {
                         // width: 30,
                         height: 50,
-
                       },
                       options: {
                         offset: {

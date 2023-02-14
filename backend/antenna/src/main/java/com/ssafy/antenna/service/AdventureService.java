@@ -502,7 +502,7 @@ public class AdventureService {
 
         // 모험 평점 업데이트.
         // 리뷰가 있으면
-        if (adventureReviewRepository.countAdventureReviewByAdventure(adventure).isPresent()) {
+        if (adventureReviewRepository.countAdventureReviewByAdventure(adventure).orElseThrow(AdventurePlaceNotFoundException::new)!=0) {
             // 해당 모험 별점 개수
             Double totalCnt = Double.valueOf(adventureReviewRepository.countAdventureReviewByAdventure(adventure).orElseThrow(AdventureReviewNotFoundException::new));
             // 별점 합
@@ -562,7 +562,7 @@ public class AdventureService {
 
         /// 모험 평점 업데이트.
         // 리뷰가 있으면
-        if (adventureReviewRepository.countAdventureReviewByAdventure(adventure).isPresent()) {
+        if (adventureReviewRepository.countAdventureReviewByAdventure(adventure).orElseThrow(AdventurePlaceNotFoundException::new)!=0) {
             // 해당 모험 별점 개수
             Double totalCnt = Double.valueOf(adventureReviewRepository.countAdventureReviewByAdventure(adventure).orElseThrow(AdventureReviewNotFoundException::new));
             // 별점 합
@@ -581,19 +581,23 @@ public class AdventureService {
     // 탐험 후기 삭제
     public void deleteAdventureReview(Long adventureReviewId) {
         AdventureReview adventureReview = adventureReviewRepository.findById(adventureReviewId).orElseThrow(AdventureReviewNotFoundException::new);
-
+        System.out.println("1111111111111111111111111111111111111111111111111111");
         // 탐험 리뷰를 작성할 모험
         Adventure adventure = adventureRepository.findById(adventureReview.getAdventure().getAdventureId()).orElseThrow(AdventureNotFoundException::new);
 
         adventureReviewRepository.deleteById(adventureReviewId);
+        adventureReviewRepository.flush();
 
         // 모험 평점 업데이트.
         // 리뷰가 있으면
-        if (adventureReviewRepository.countAdventureReviewByAdventure(adventure).isPresent()) {
+        if (adventureReviewRepository.countAdventureReviewByAdventure(adventure).orElseThrow(AdventurePlaceNotFoundException::new)!=0) {
+            System.out.println("*******************************************************");
             // 해당 모험 별점 개수
             Double totalCnt = Double.valueOf(adventureReviewRepository.countAdventureReviewByAdventure(adventure).orElseThrow(AdventureReviewNotFoundException::new));
+            System.out.println("22222222222222222222222222222222222222222222222222222");
             // 별점 합
             Double totalSum = adventureReviewRepository.sumOfAdventureReviews(adventure.getAdventureId()).orElseThrow(AdventureReviewNotFoundException::new);
+            System.out.println("33333333333333333333333333333333333333333333333333");
             // 평균별점 업데이트
             Double avgReviewGrade = (double) Math.round((totalSum / totalCnt) * 100.0 / 100.0);
             adventure.updateAvgReviewGrade(avgReviewGrade);

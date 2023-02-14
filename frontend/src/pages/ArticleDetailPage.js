@@ -37,7 +37,7 @@ function ArticleDetailPage() {
   }, []);
 
   return (
-    <div className="pageContainer">
+    <div className="pageContainer" style={{ marginBottom: "3rem" }}>
       <div className={style.topBar}>
         <AiOutlineLeft className={style.left} onClick={() => navigate(-1)} />
         <div>게시글</div>
