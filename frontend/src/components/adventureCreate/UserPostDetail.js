@@ -23,7 +23,7 @@ const UserPostDetail = ({ postDetail, closeModal, selectPost }) => {
             src={
               postDetail.photoUrl
                 ? postDetail.photoUrl
-                : "/images/noImage_rect.png"
+                : "/images/emptyBanner2.png"
             }
             alt={postDetail.title}
           />

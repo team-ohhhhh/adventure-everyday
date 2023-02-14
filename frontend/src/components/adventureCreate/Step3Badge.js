@@ -23,6 +23,15 @@ const Step3Badge = ({ adventure, setAdventure, checkpoints }) => {
   }, []);
 
   const handleInput = (e) => {
+    if (
+      e.target.name === "feat" &&
+      e.target.value &&
+      e.target.value.length > 10
+    ) {
+      alert("칭호는 10글자 이내로 작성해주세요.");
+      return;
+    }
+
     setAdventure((adventure) => ({
       ...adventure,
       [e.target.name]: e.target.value,
@@ -49,26 +58,26 @@ const Step3Badge = ({ adventure, setAdventure, checkpoints }) => {
       return;
     }
     if (!adventure.RepresentativePostId) {
-      alert("대표 게시글을 선택해 주세요.");
+      alert("대표 게시글을 선택해주세요.");
       return;
     }
     const done = checkpoints.every(
       (point) => point.adventurePlaceTitle && point.adventurePlaceContent
     );
     if (!done) {
-      alert("체크포인트 이름과 내용을 빠짐없이 작성해 주세요.");
+      alert("체크포인트 이름과 내용을 빠짐없이 작성해주세요.");
       return;
     }
     if (!adventure.startDate || !adventure.endDate) {
-      alert("탐험을 진행할 기간을 설정해 주세요.");
+      alert("탐험을 진행할 기간을 설정해주세요.");
       return;
     }
     if (!adventure.title || !adventure.title) {
-      alert("탐험 소개를 작성해 주세요.");
+      alert("탐험 소개를 작성해주세요.");
       return;
     }
     if (!adventure.feat) {
-      alert("탐험 칭호를 입력해 주세요.");
+      alert("탐험 칭호를 입력해주세요.");
       featRef.current.scrollIntoView({
         behavior: "smooth",
         block: "center",

@@ -66,13 +66,13 @@ const UserPostMap = ({ myPosts, userHeight }) => {
       const markers = cluster._markers;
       const images = markers
         .filter((marker) => {
-          return marker.T.Yj !== "/images/noImage_square.png";
+          return marker.T.Yj !== "/images/emptyBanner4.png";
         })
         .slice(0, 3)
         .map((marker) => marker.T.Yj);
 
       while (images.length < markers.length && images.length < 3) {
-        images.push("/images/noImage_square.png");
+        images.push("/images/emptyBanner4.png");
       }
 
       const content = `
@@ -165,7 +165,7 @@ const UserPostMap = ({ myPosts, userHeight }) => {
       >
         <MarkerClusterer
           averageCenter={true}
-          minLevel={4}
+          minLevel={1}
           disableClickZoom={true}
           onClusterclick={onClusterclick}
           onClustered={onClustered}
@@ -186,7 +186,7 @@ const UserPostMap = ({ myPosts, userHeight }) => {
                 image={{
                   src: post.photoUrl
                     ? post.photoUrl
-                    : "/images/noImage_square.png",
+                    : "/images/emptyBanner4.png",
                   size: {
                     width: 50,
                     height: 50,
