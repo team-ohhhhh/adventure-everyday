@@ -7,10 +7,10 @@ services:
       MYSQL_USER: gorilla
       MYSQL_PASSWORD: gorilla
       MYSQL_ROOT_HOST: '%'
-      MYSQL_ROOT_PASSWORD: a305!
+      MYSQL_ROOT_PASSWORD: a305
       TZ: "Asia/Seoul"
     ports:
-      - 4444:3306
+      - 3307:3306
     restart: unless-stopped
     volumes:
       - /antenna-data:/var/lib/mysql
@@ -28,7 +28,7 @@ services:
       - database
     container_name: springboot
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:4444/antennadb?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3307/antennadb?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: gorilla
       SPRING_DATASOURCE_PASSWORD: gorilla
       TZ: "Asia/Seoul"
