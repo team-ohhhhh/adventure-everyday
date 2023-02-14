@@ -33,6 +33,9 @@ function ReviewCreate() {
   };
 
   function CreateReview() {
+    if (grade < 1) {
+      alert('별점을 입력해 주세요!')
+    } else {
     axios({
       url: URL + `/adventures/${params.id}/reviews`,
       headers: {
@@ -56,7 +59,7 @@ function ReviewCreate() {
         console.log(content);
         console.log(grade);
       });
-  }
+    }}
 
   return (
     <div className="pageContainer">

@@ -35,8 +35,11 @@ function ReviewItem({
         Authorization: `Bearer ${TOKEN}`,
       },
     }).then((res) => {
-      getReview();
-    });
+      console.log(res)
+      getReview()
+      setWouldYouDelete(false)
+    })
+    .catch((err) => {console.log(err)})
   };
 
   // 수정 관련

@@ -136,7 +136,7 @@ function PasswordComponent(props) {
         <div className={style.buttonBox}>
           <button className={style.hideButton}></button>
           {/* TODO: 여기에 비밀번호 형식 validation!!! */}
-          {props.password.length < 6 ? <div>비밀번호는 6자리 이상!</div> : props.password === props.password2 ? <button className={style.signUpButton} onClick={() => { props.setStage(props.stage + 1)}}>다음</button> : <div>비밀번호를 확인해주세요</div>}
+          {(props.password.length < 6 || props.password.length > 12) ? <div>비밀번호는 6~12자리!</div> : props.password === props.password2 ? <button className={style.signUpButton} onClick={() => { props.setStage(props.stage + 1)}}>다음</button> : <div>비밀번호를 확인해주세요</div>}
         </div>
       </div>
     </div>
@@ -163,10 +163,8 @@ function NicknameComponent(props) {
       setIsNicknameChecked(true)
       if (res.data.result.result) {
         setNicknameCheckResult(false)
-  
       } else if (!res.data.result.result) {
         setNicknameCheckResult(true)
-
       }
     })
     .catch((err) => console.log(err))
@@ -200,7 +198,7 @@ function NicknameComponent(props) {
         <h1>입력해주세요</h1>
       </div>
       <div className={style.inputAndButton}>
-        {props.nickname.length < 3 ? <div>닉네임은 3자 이상</div> :  isNicknameChecked && !nicknameCheckResult ? <div>이미 있는 닉네임입니다.</div> : isNicknameChecked && nicknameCheckResult ? <div>사용 가능한 닉네임입니다.</div> : null}
+        {(props.nickname.length < 3 || props.nickname.length > 8) ? <div>닉네임은 1~8자!</div> :  isNicknameChecked && !nicknameCheckResult ? <div>이미 있는 닉네임입니다.</div> : isNicknameChecked && nicknameCheckResult ? <div>사용 가능한 닉네임입니다.</div> : null}
         <input className={style.signUpInput} onChange={(event) => { props.setNickname(event.target.value) }} placeholder="닉네임" defaultValue={props.nickname}></input>
         <div className={style.buttonBox}>
           <button className={style.signUpButton} onClick={() => { props.setStage(props.stage - 1)}}>이전</button>

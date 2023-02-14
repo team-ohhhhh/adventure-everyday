@@ -294,5 +294,23 @@
 
   }
 
+  .reviewComplete{
+    /*버튼 디자인 */
+    justify-items: center;
+    align-items: center;
+
+    width: fit-content;
+    height: fit-content;
+    padding: 0.4rem;
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+
+    background: white;
+    border-radius: 2rem;
+    border: 0.1rem solid #1C0B69;
+    color: #1C0B69;
+    font-weight: bold;
+
+  }
 
 

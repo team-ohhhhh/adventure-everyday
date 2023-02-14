@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import AdventureInProgressListBanner from './../components/Adventure/AdventureInProgressListBanner';
 import axios from 'axios';
 import { useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 
 function AdventureInProgressListPage(){
   const [adventureInProgressList, setAdventureInProgressList] = useState([])
@@ -11,6 +12,8 @@ function AdventureInProgressListPage(){
   const URL = useSelector((state) => state.url)
   const TOKEN = useSelector((state) => state.token)
   const params = useParams(); // 특정 탐험 id가져오기
+  const navigate = useNavigate() 
+
   useEffect(() => {
     axios({
       url: URL + `/adventures/${params.id}/users`,
@@ -45,7 +48,7 @@ function AdventureInProgressListPage(){
         </div>
         <div>
           {subReadAdventureInProgressUsersClickResList.length>0 && subReadAdventureInProgressUsersClickResList.map((adventureInProgressItem,index) => {
-            return <AdventureInProgressListBanner key={index} adventureInProgressItem={adventureInProgressItem} /*isInProgress={isInProgress}*//>
+            return <div onClick={() => navigate(`/profile/${adventureInProgressItem.userDetailRes.userId}`)}><AdventureInProgressListBanner key={index} adventureInProgressItem={adventureInProgressItem} /*isInProgress={isInProgress}*//></div>
          })}
         </div>
     </div>
