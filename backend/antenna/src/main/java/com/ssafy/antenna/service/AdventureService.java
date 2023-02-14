@@ -560,17 +560,21 @@ public class AdventureService {
         // 탐험 리뷰를 작성할 모험
         Adventure adventure = adventureRepository.findById(adventureReview.getAdventure().getAdventureId()).orElseThrow(AdventureNotFoundException::new);
 
-        // 평균별점 업데이트.
-        // 현재 모험의 전체 후기 개수
-        Double totalCnt = Double.valueOf(adventureReviewRepository.countAdventureReviewByAdventure(adventure).orElseThrow(AdventureReviewNotFoundException::new));
-        // 별점 합
-        Double totalSum = adventureReviewRepository.sumOfAdventureReviews(adventure.getAdventureId()).orElseThrow(AdventureReviewNotFoundException::new);
-        // 평균별점
-        Double avgReviewGrade = (double) Math.round((totalSum / totalCnt) * 100.0 / 100.0);
+        /// 모험 평점 업데이트.
+        // 리뷰가 있으면
+        if (adventureReviewRepository.countAdventureReviewByAdventure(adventure).isPresent()) {
+            // 해당 모험 별점 개수
+            Double totalCnt = Double.valueOf(adventureReviewRepository.countAdventureReviewByAdventure(adventure).orElseThrow(AdventureReviewNotFoundException::new));
+            // 별점 합
+            Double totalSum = adventureReviewRepository.sumOfAdventureReviews(adventure.getAdventureId()).orElseThrow(AdventureReviewNotFoundException::new);
+            // 평균별점 업데이트
+            Double avgReviewGrade = (double) Math.round((totalSum / totalCnt) * 100.0 / 100.0);
+            adventure.updateAvgReviewGrade(avgReviewGrade);
+        } else {
+            adventure.updateAvgReviewGrade(Double.valueOf(0));
+        }
 
-        adventure.updateAvgReviewGrade(avgReviewGrade);
-
-        // 저장.
+        // 평균별점 저장
         adventureRepository.save(adventure);
     }
 
@@ -583,17 +587,21 @@ public class AdventureService {
 
         adventureReviewRepository.deleteById(adventureReviewId);
 
-        // 평균별점 업데이트.
-        // 현재 모험의 전체 후기 개수
-        Double totalCnt = Double.valueOf(adventureReviewRepository.countAdventureReviewByAdventure(adventure).orElseThrow(AdventureReviewNotFoundException::new));
-        // 별점 합
-        Double totalSum = adventureReviewRepository.sumOfAdventureReviews(adventure.getAdventureId()).orElseThrow(AdventureReviewNotFoundException::new);
-        // 평균별점
-        Double avgReviewGrade = (double) Math.round((totalSum / totalCnt) * 100.0 / 100.0);
+        // 모험 평점 업데이트.
+        // 리뷰가 있으면
+        if (adventureReviewRepository.countAdventureReviewByAdventure(adventure).isPresent()) {
+            // 해당 모험 별점 개수
+            Double totalCnt = Double.valueOf(adventureReviewRepository.countAdventureReviewByAdventure(adventure).orElseThrow(AdventureReviewNotFoundException::new));
+            // 별점 합
+            Double totalSum = adventureReviewRepository.sumOfAdventureReviews(adventure.getAdventureId()).orElseThrow(AdventureReviewNotFoundException::new);
+            // 평균별점 업데이트
+            Double avgReviewGrade = (double) Math.round((totalSum / totalCnt) * 100.0 / 100.0);
+            adventure.updateAvgReviewGrade(avgReviewGrade);
+        } else {
+            adventure.updateAvgReviewGrade(Double.valueOf(0));
+        }
 
-        adventure.updateAvgReviewGrade(avgReviewGrade);
-
-        // 저장.
+        // 평균별점 저장
         adventureRepository.save(adventure);
     }
 
