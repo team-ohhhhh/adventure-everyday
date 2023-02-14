@@ -47,9 +47,13 @@ function LoginPage() {
     axios({
       url: URL + "/auth/kakao/oauth",
       method: "get",
-    }).then((response) => {
-      window.open(response.data, "_blank");
-    });
+    })
+      .then((response) => {
+        window.open(response.data, "_blank");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
