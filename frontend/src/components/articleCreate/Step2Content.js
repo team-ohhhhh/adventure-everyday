@@ -33,6 +33,22 @@ const Step2Content = ({ article, setArticle, checkPointList, styles }) => {
   };
 
   const handleInput = (e) => {
+    if (
+      e.target.name === "title" &&
+      e.target.value &&
+      e.target.value.length > 10
+    ) {
+      alert("제목은 10글자 이내로 작성해주세요.");
+      return;
+    } else if (
+      e.target.name === "content" &&
+      e.target.value &&
+      e.target.value.length > 254
+    ) {
+      alert("내용은 254글자 이내로 작성해주세요.");
+      return;
+    }
+
     setArticle((article) => ({
       ...article,
       [e.target.name]: e.target.value,
@@ -59,12 +75,12 @@ const Step2Content = ({ article, setArticle, checkPointList, styles }) => {
       alert("제목을 입력해주세요.");
       titleRef.current.focus();
       return;
-    } else if (article.content.length < 5) {
-      alert("내용을 5글자 이상 입력해주세요.");
+    } else if (article.content.length < 1) {
+      alert("내용을 입력해주세요.");
       contentRef.current.focus();
       return;
     }
-    console.log();
+
     const formData = new FormData();
     formData.append("title", article.title);
     formData.append("content", article.content);

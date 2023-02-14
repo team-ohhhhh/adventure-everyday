@@ -38,7 +38,7 @@ function ArticleDetailPage() {
   }, []);
 
   return (
-    <div className="pageContainer">
+    <div className="pageContainer" style={{ marginBottom: "3rem" }}>
       <div className={style.topBar}>
         <AiOutlineLeft className={style.left} onClick={() => navigate(-1, {
                   state: { lat: article[0].lat, lng: article[0].lng },

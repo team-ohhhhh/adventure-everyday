@@ -49,6 +49,22 @@ const Step2Content = ({
   }, []);
 
   const handleInput = (e) => {
+    if (
+      e.target.name === "title" &&
+      e.target.value &&
+      e.target.value.length > 10
+    ) {
+      alert("탐험의 제목은 10글자 이내로 작성해주세요.");
+      return;
+    } else if (
+      e.target.name === "content" &&
+      e.target.value &&
+      e.target.value.length > 254
+    ) {
+      alert("탐험의 설명은 254글자 이내로 작성해주세요.");
+      return;
+    }
+
     setAdventure((adventure) => ({
       ...adventure,
       [e.target.name]: e.target.value,
@@ -99,18 +115,18 @@ const Step2Content = ({
       return;
     }
     if (!adventure.RepresentativePostId) {
-      alert("대표 게시글을 선택해 주세요.");
+      alert("대표 게시글을 선택해주세요.");
       return;
     }
     const done = checkpoints.every(
       (point) => point.adventurePlaceTitle && point.adventurePlaceContent
     );
     if (!done) {
-      alert("체크포인트 이름과 내용을 빠짐없이 작성해 주세요.");
+      alert("체크포인트 이름과 내용을 빠짐없이 작성해주세요.");
       return;
     }
     if (!adventure.startDate || !adventure.endDate) {
-      alert("탐험을 진행할 기간을 설정해 주세요.");
+      alert("탐험을 진행할 기간을 설정해주세요.");
       dateRef.current.scrollIntoView({
         behavior: "smooth",
         block: "center",
@@ -118,7 +134,7 @@ const Step2Content = ({
       return;
     }
     if (!adventure.title || !adventure.title) {
-      alert("탐험 소개를 작성해 주세요.");
+      alert("탐험 소개를 작성해주세요.");
       introRef.current.scrollIntoView({
         behavior: "smooth",
         block: "center",

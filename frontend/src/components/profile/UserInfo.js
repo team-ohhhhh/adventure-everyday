@@ -138,7 +138,7 @@ function UserInfo(props) {
   const [introduceModify, setIntroduceModify] = useState(false);
   const [newIntroduce, setNewIntroduce] = useState(user.introduce);
   const onChange = (e) => {
-    if (e.target.value && e.target.value.length > 29) {
+    if (e.target.value && e.target.value.length > 30) {
       alert("소개글은 30자 이내로 작성해주세요.");
     } else {
       setNewIntroduce(e.target.value);

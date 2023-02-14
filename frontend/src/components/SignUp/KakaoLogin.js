@@ -31,7 +31,7 @@ function KakaoLogIn() {
       })
       .catch((error) => {
         // console.log(error);
-        alert("카카오로 회원가입을 먼저 진행해 주세요.");
+        alert("카카오로 회원가입을 먼저 진행해주세요.");
         navigate("/signup");
       });
   };

@@ -5,8 +5,10 @@ import { BiSearchAlt2 } from "react-icons/bi";
 import { useMemo, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import AdventureBannerMore from "../components/Adventure/AdventureBannerMore";
 import AdventureBanner from "../components/Adventure/AdventureBanner";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faMessage, faXmark, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 function AdventurePage() {
   const navigate = useNavigate();
 
@@ -176,37 +178,71 @@ function AdventurePage() {
       </div>
       : whichMore === 1 
       ? <div>
-        {nearList.map((articleListItem) => {
-          return (
-            <AdventureBanner
-                key={articleListItem.postId}
-                adventureItem={articleListItem}
-                isAdTab={true}/>
-          )
-        })
-        }
-      </div>
+        <div className={style.title}>
+          <div>
+          <span className={style.titleFont}>내 주변의 탐험  </span>
+          <span><FontAwesomeIcon icon={faXmark} style={{fontSize:"1.5rem",float:"right" }} onClick={()=>{setIsMore(false)}}/></span>
+          </div>
+          <div className={style.titleInfo}>
+          지금 바로 시작할 수 있어요
+          </div>
+          </div>
+          <div>
+            {nearList.map((articleListItem) => {
+              return (
+                <AdventureBannerMore
+                    key={articleListItem.postId}
+                    adventureItem={articleListItem}
+                    isAdTab={true}
+                    setIsMore={setIsMore}/>
+                )
+                })
+            }
+          </div>
+        </div>
       : whichMore === 2
       ? <div>
-        {updateList.map((articleListItem) => {
-          return (
-            <AdventureBanner
-                key={articleListItem.postId}
-                adventureItem={articleListItem}
-                isAdTab={true}/>
-          )
-        })
-        }
+        <div className={style.title}>
+        <div>
+          <span className={style.titleFont}>최근에 만들어진 탐험  </span>
+          <span><FontAwesomeIcon icon={faXmark} style={{fontSize:"1.5rem",float:"right" }} onClick={()=>{setIsMore(false)}}/></span>
+          </div>
+          <div className={style.titleInfo}>
+            별점이 높은 탐험들만 모았어요
+          </div>
+          </div>
+          <div>
+            {updateList.map((articleListItem) => {
+              return (
+                <AdventureBannerMore
+                    key={articleListItem.postId}
+                    adventureItem={articleListItem}
+                    isAdTab={true}
+                    setIsMore={setIsMore}/>
+              )
+            })
+            }
+          </div>
       </div>
-      : <div>{popularList.map((articleListItem) => {
+      : <div>
+        <div className={style.title}>
+        <div>
+          <span className={style.titleFont}>인기 많은 탐험 </span>
+          <span><FontAwesomeIcon icon={faXmark} style={{fontSize:"1.5rem",float:"right" }} onClick={()=>{setIsMore(false)}}/></span>
+          </div>
+          <div className={style.titleInfo}>
+            따끈따끈한 신규 탐험들이에요
+          </div></div>
+      <div>{popularList.map((articleListItem) => {
         return (
-          <AdventureBanner
+          <AdventureBannerMore
               key={articleListItem.postId}
               adventureItem={articleListItem}
-              isAdTab={true}/>
+              isAdTab={true}
+              setIsMore={setIsMore}/>
         )
       })
-      }</div>
+      }</div></div>
        
     }
     </div>

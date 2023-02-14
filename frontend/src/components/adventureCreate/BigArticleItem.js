@@ -17,7 +17,7 @@ function BigArticleItem({ post }) {
         className={style.photo}
         style={{
           backgroundImage: `url(${
-            post.photo ? post.photo : "/images/noImage_rect.png"
+            post.photo ? post.photo : "/images/emptyBanner3.png"
           })`,
         }}
       ></div>
