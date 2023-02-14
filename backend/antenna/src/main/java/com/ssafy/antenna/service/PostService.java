@@ -379,10 +379,11 @@ public class PostService {
 		);
 	}
 
-	public ResultResponse<?> getPostByUserId(Long userId) {
+	public ResultResponse<?> getPostByUserId(Long userId, Long authId) {
 		User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+		User auth = userRepository.findById(authId).orElseThrow(UserNotFoundException::new);
 		List<PostDto> postDtoList = postRepository.findAllByUser(user).get().stream()
-				.filter(Post::isPublic)
+				.filter(post -> post.getUser().equals(auth) || post.isPublic())
 				.map(postDtoMapper)
 				.collect(Collectors.toList());
 		return ResultResponse.success(postDtoList);
