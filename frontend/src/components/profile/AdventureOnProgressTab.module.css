@@ -1,0 +1,31 @@
+.container {
+  padding: 1rem;
+}
+
+.selectContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.select {
+  appearance: none;
+  -webkit-appearance: none; /* for chrome */
+  -moz-appearance: none; /*for firefox*/
+  background: url("../../../public/images/selectArrow.png") no-repeat 95% 50%/15px
+    auto;
+  width: 6rem;
+  padding: 0 2rem 0 1rem;
+  border: none;
+  font-size: 0.8rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.select::-ms-expand {
+  display: none; /*for IE10,11*/
+}
+
+.adventureItem {
+  width: 100%;
+  margin-bottom: 1rem;
+}
