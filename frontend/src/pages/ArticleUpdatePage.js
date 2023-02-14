@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -21,14 +21,25 @@ function ArticleUpdatePage() {
   const [content, setContent] = useState(article.content);
   const [isPublic, setIsPublic] = useState(!article.isPublic);
 
+  const titleRef = useRef();
+  const contentRef = useRef();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   const onChangeTitle = (e) => {
+    if (e.target.value && e.target.value.length > 10) {
+      alert("제목은 10글자 이내로 작성해주세요.");
+      return;
+    }
     setTitle(e.target.value);
   };
   const onChangeContent = (e) => {
+    if (e.target.value && e.target.value.length > 254) {
+      alert("내용은 254글자 이내로 작성해주세요.");
+      return;
+    }
     setContent(e.target.value);
   };
 
@@ -38,6 +49,16 @@ function ArticleUpdatePage() {
 
   // 수정 요청
   const updateArticle = function () {
+    if (title.length < 1) {
+      alert("제목을 입력해주세요.");
+      titleRef.current.focus();
+      return;
+    } else if (content.length < 1) {
+      alert("내용을 입력해주세요.");
+      contentRef.current.focus();
+      return;
+    }
+
     axios({
       url: URL + `/posts/${article.postId}`,
       method: "put",
@@ -85,15 +106,19 @@ function ArticleUpdatePage() {
         <div className={style.subheader}>게시글 수정</div>
         <div className={style.inputHolder}>
           <input
+            ref={titleRef}
             onChange={onChangeTitle}
             className={style2.titleInput}
             style={{ marginTop: 0 }}
             defaultValue={title}
+            value={title}
           ></input>
           <textarea
+            ref={contentRef}
             onChange={onChangeContent}
             className={style2.contentInput}
             defaultValue={content}
+            value={content}
           ></textarea>
         </div>
         <div className={style.checkBoxContainer}>
