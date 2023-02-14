@@ -16,6 +16,7 @@ function AdventureDetailPage() {
 
   let TOKEN = useSelector((state) => state.token);
   let URL = useSelector((state) => state.url);
+  let USER = useSelector((state) => state.user);
 
   let [reviews, setReviews] = useState([]);
   let [chingho, setChingho] = useState();
@@ -63,7 +64,8 @@ function AdventureDetailPage() {
       .then((response) => {
         setReviews(response.data.result.subAdventureReviews);
         setChingho(response.data.result.adventureFeat);
-        return response;
+        console.log(response)
+
       })
       .catch((err) => console.log(err));
   }
@@ -90,6 +92,7 @@ function AdventureDetailPage() {
   // 탐험 상세 정보 받아오기
   useEffect(() => {
     getAdventureDetail();
+    getReview()
   }, []);
 
   return (
@@ -106,6 +109,7 @@ function AdventureDetailPage() {
             key={adventureDetail.adventureId}
             info={adventureDetail}
             getAdventureDetail={getAdventureDetail}
+            isReview={reviews.filter((review) => {return review.userId === USER.userId }).length > 0}
           ></AdventureInfo>
         </div>
 
@@ -119,11 +123,6 @@ function AdventureDetailPage() {
               onClick={(event, tab) => {
                 // tab이 2면 (탐험 후기 탭을 누르면 후기 조회하기)
                 console.log(tab);
-                if (tab === 2) {
-                  getReview();
-                  // 탐험 지도 탭을 누르면 bounds 설정하기
-                } else if (tab === 1) {
-                }
               }}
             >
               <Tab title="탐험 지도" className="mr-2">
@@ -142,6 +141,7 @@ function AdventureDetailPage() {
                   reviews={reviews}
                   chingho={chingho}
                   adDetail={adventureDetail}
+                  getReview={getReview}
                 ></AdventureDetailReview>
               </Tab>
             </Tabs>

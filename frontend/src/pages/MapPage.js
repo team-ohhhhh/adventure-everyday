@@ -16,6 +16,8 @@ function MainMap() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  console.log(location.state)
+
   const mapRef = useRef();
 
   const [antennae, setAntennae] = useState([]);
@@ -363,6 +365,7 @@ function MainMap() {
             flexDirection: "column",
             alignItems: "center",
           }}
+          onClick={() => {setResultWindow(false)}}
         >
           <input
             onChange={(e) => onChange(e)}
@@ -449,7 +452,7 @@ function MainMap() {
           level={state.level} // 지도의 확대 레벨
           onClick={(_t, mouseEvent) => {
             // 카카오 검색 결과 목록 끄기
-            setResultWindow(false);
+            setResultWindow(false)
             // 인포윈도우 off
             setIsOpen(0);
             if (clusterInfowindow) clusterInfowindow.close();

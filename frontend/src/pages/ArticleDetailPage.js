@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useHistory } from "react-router-dom";
 import axios from "axios";
 
 import ArticleDetail from "./../components/Article/ArticleDetail";
@@ -11,6 +11,7 @@ import style from "./ArticleDetailPage.module.css";
 function ArticleDetailPage() {
   let URL = useSelector((state) => state.url);
   let TOKEN = useSelector((state) => state.token);
+  
 
   let { articleId } = useParams();
 
@@ -39,7 +40,9 @@ function ArticleDetailPage() {
   return (
     <div className="pageContainer" style={{ marginBottom: "3rem" }}>
       <div className={style.topBar}>
-        <AiOutlineLeft className={style.left} onClick={() => navigate(-1)} />
+        <AiOutlineLeft className={style.left} onClick={() => navigate(-1, {
+                  state: { lat: article[0].lat, lng: article[0].lng },
+                } )} />
         <div>게시글</div>
         <AiOutlineRight className={style.right} />
       </div>

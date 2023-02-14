@@ -90,7 +90,7 @@ function AdventurePage() {
     getNewAdventure();
     getPopularAdventure();
   }, []);
-
+  
 
   return (
     <div className="pageContainer">

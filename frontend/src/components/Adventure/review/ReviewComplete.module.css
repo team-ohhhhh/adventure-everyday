@@ -196,3 +196,21 @@
     background-color: #1c0b69;
   }
   
+  
+
+  .pageBackground {
+    background-color: #1C0B69;
+    width : 100vw;
+    height : 100vh;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: center;
+
+  }
+
+  .header {
+    color: white;
+    margin-top: 0;
+
+  }

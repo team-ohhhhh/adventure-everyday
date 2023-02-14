@@ -171,7 +171,7 @@ function AdventureInfo(props) {
             )}
 
             {/* 탐험 달성하면 후기 달성 버튼 보이기 */}
-            {props.info.clear && (
+            {props.info.clear && !props.isReview && (
               <button
                 className={styles.review}
                 onClick={() => {
@@ -180,6 +180,13 @@ function AdventureInfo(props) {
               >
                 후기작성
               </button>
+            )}
+            {props.isReview && (
+              <button
+              className={styles.reviewComplete}
+            >
+              달성완료
+            </button>
             )}
           </div>
         </div>
