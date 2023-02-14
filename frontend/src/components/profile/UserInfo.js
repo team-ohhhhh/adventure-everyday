@@ -232,7 +232,7 @@ function UserInfo(props) {
           <div className={style.photoContainer}>
             <img
               className={style.photo}
-              src={user.photoUrl ? user.photoUrl : "/defaultProfile.jpg"}
+              src={user.photoUrl ? user.photoUrl : "/images/defaultProfile.jpg"}
               alt="profileImage"
             />
           </div>

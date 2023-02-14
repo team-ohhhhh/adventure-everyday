@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public record CreateAdventureReq(
 		@NotBlank(message = "CATEGORY_EMPTY")
@@ -21,10 +20,10 @@ public record CreateAdventureReq(
         Long difficulty,
 		@Positive(message = "EXP_POSITIVE")
         Long exp,
-		LocalDateTime startDate,
-		LocalDateTime endDate,
-		Long RepresentativePostId,
-		List<CreateAdventurePlaceReq> createAdventurePlaceReqs
+        LocalDateTime startDate,
+        LocalDateTime endDate,
+        Long RepresentativePostId,
+        CreateAdventurePlaceReq[] createAdventurePlaceReqs
 
 ) {
 }

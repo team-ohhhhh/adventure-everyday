@@ -39,7 +39,7 @@ function AdventureFinishedTab({ userId, tab, isMe }) {
     })
       .then((res) => {
         // console.log(res);
-        setAdventureList(res.data.result);
+        setAdventureList(res.data.result.adventureSucceeds);
       })
       .catch((err) => console.log(err));
   };
