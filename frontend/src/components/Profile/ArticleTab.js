@@ -21,7 +21,7 @@ function ArticleTab({ userId, articleList, setArticleList, userHeight }) {
         setArticleList(res.data.result);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [userId]);
 
   return (
     <>

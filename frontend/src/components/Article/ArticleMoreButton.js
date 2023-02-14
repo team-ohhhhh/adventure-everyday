@@ -56,6 +56,8 @@ function ArticleMoreButton(props) {
       })
       .catch((err) => {
         console.log(err);
+        alert(err.response.data.result.message)
+        setModalIsOpen(false)
       });
   };
 

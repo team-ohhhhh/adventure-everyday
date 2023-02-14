@@ -221,11 +221,11 @@ function ArticleDetail({ article, isFeed }) {
           goToDetail();
         }}
       >
-        <img
+        {article.photoUrl && <img
           className={style.photo}
           src={article.photoUrl}
           alt={article.title}
-        />
+        />}
         <div className={style.contentContainer}>
           <div className={style.title}>{article.title}</div>
           <div className={style.content}>{article.content}</div>

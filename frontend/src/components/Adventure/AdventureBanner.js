@@ -45,7 +45,8 @@ function AdventureBanner({
           {!isAdTab &&
             !isMine &&
             !isSearch &&
-            !isCreated && ( // 탐험 탭 페이지에선 진행바 나오면 안돼서 처리 + 내가 만든 탐험에서도 안나오도록
+            !isCreated &&
+            adventureItem.clearRate !== undefined && ( // 탐험 탭 페이지에선 진행바 나오면 안돼서 처리 + 내가 만든 탐험에서도 안나오도록 + 0%면 보이되 undefined면 안나오게
               <AdventureProgressBar clearRate={adventureItem.clearRate} />
             )}
           <div className={style.makerAndParticipants}>

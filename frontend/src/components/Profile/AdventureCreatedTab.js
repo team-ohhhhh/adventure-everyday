@@ -45,7 +45,7 @@ function AdventureCreatedTab({ userId, tab, isMe }) {
   };
 
   useMemo(() => {
-    if (tab === 2) {
+    if (tab === 4) {
       getAdventures("createTimeDesc");
     }
   }, [tab]);
