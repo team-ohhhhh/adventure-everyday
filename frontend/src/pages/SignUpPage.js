@@ -1,117 +1,163 @@
 import React, { useState, useRef } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useSelector } from "react-redux"
-import { EmailComponent, PasswordComponent, NicknameComponent, IntroduceComponent, PhotoComponent, SignUpCompletedComponent } from "../components/SignUp/ComponentsForSignUp";
-import style from "./SignUpPage.module.css"
+
+import {
+  EmailComponent,
+  PasswordComponent,
+  NicknameComponent,
+  IntroduceComponent,
+  PhotoComponent,
+  SignUpCompletedComponent,
+} from "../components/SignUp/ComponentsForSignUp";
+
+import style from "./LogInPage.module.css";
 
 function SignUpPage() {
-  let URL = useSelector((state) => state.url)
+  const navigate = useNavigate();
+
+  let URL = useSelector((state) => state.url);
 
   // 로그인 단계 저장용 변수
   // 0 : 메인, 1: 이메일 선택 창, 2: 비밀번호 입력 창, 3: 닉네임 입력창, 4: 소개글 입력 창, 5: 프로필 사진 업로드 창, 6: 완료 창
-  const [stage, setStage] = useState(0)
+  const [stage, setStage] = useState(0);
 
   // 로그인에 필요한 정보들
-  const [email, setEmail] = useState("")
-  const [nickname, setNickname] = useState("")
-  const [password, setPassword] = useState("")
-  const [password2, setPassword2] = useState("")
-  const [introduce, setIntroduce] = useState("")
-  const [photo, setPhoto] = useState("")
-  const [file, setFile] = useState("")
+  const [email, setEmail] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
+  const [introduce, setIntroduce] = useState("");
+  const [photo, setPhoto] = useState("");
+  const [file, setFile] = useState("");
 
-  const imgRef = useRef()
-  
+  const imgRef = useRef();
 
   // 회원가입 axios
   const signUp = function () {
-    const formData = new FormData()
-    formData.append("email", email)
-    formData.append("nickname", nickname)
-    formData.append("password", password)
-    formData.append("introduce", introduce)
-    formData.append("file", file)
-    axios.post(URL + "/auth/register", formData, {
-      headers: {
-      "Content-type": "multipart/form-data",// date로 되어있는데 왜 됐지...
-    },
-    })
-    .then(function (response) {
-      console.log(response)
-    })
-    .then(setStage(stage + 1))
-    .catch((error) => console.log(error))
-  }
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("nickname", nickname);
+    formData.append("password", password);
+    formData.append("introduce", introduce);
+    formData.append("file", file);
+    axios
+      .post(URL + "/auth/register", formData, {
+        headers: {
+          "Content-type": "multipart/form-data",
+        },
+      })
+      // .then(function (response) {
+      //   console.log(response);
+      // })
+      .then(setStage(stage + 1))
+      .catch((error) => console.log(error));
+  };
 
   //카카오 회원가입 axios
   const KakaoSignUpAuth = function () {
     axios({
       url: URL + "/auth/kakao/oauth/signup",
       method: "get",
-    })
-    .then((response)=>{
-      window.location.href=response.data
-    })
-  }
+    }).then((response) => {
+      window.location.href = response.data;
+    });
+  };
+
   // 스테이지 별 컴포넌트 변경
   switch (stage) {
     case 0:
       return (
-        <div className="pageContainer" style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems:"center",
-        }}>
-          <button  className={style.logInButton} onClick={ () => {setStage(stage+1)}} 
-          style={{
-            width:"60%",
-            height:"48px",
-            borderRadius: "999px",
-            background: "#1c0b69",
-            border: "0px",
-            padding:"15px",
-            /* font-family: "Roboto"; */
-            fontStyle: "normal",
-            fontWeight: "700",
-            fontSize: "16px",
-            lineHeight: "100%",
-            color: "#ffffff"
-          }}>이메일로 회원가입</button>
-          <img src={"/images/kakao_start_medium_narrow.png"} className={style.logInKakaoButton} onClick={() => {
-            KakaoSignUpAuth();
-          }}></img>
+        <div className="pageContainer">
+          <div className={style.imgContainer}>
+            <img
+              className={style.img}
+              src="images/loginBackground.gif"
+              alt="login_background_image"
+            />
+            <div className={style.logo}>
+              adventure
+              <br />
+              everyday
+            </div>
+          </div>
+
+          <div className={style.outsideContainer}>
+            <div className={style.loginContainer}>
+              <button
+                className={style.logInButton}
+                onClick={() => setStage(stage + 1)}
+              >
+                이메일으로 회원가입
+              </button>
+              <button
+                className={`${style.logInButton} ${style.logInKakaoButton}`}
+                onClick={() => KakaoSignUpAuth()}
+              >
+                카카오로 회원가입
+              </button>
+              <div className={style.move} onClick={() => navigate("/login")}>
+                로그인 화면으로 이동
+              </div>
+            </div>
+          </div>
         </div>
-
-
-        
-      )
-      case 1:
-        return (
-          <EmailComponent setEmail={setEmail} email={email} setStage={setStage} stage={stage}/>
-        )
-      case 2:
-        return (
-          <PasswordComponent setPassword={setPassword} setPassword2={setPassword2} stage={stage} setStage={setStage} password={password} password2={password2}/>
-        )
-      case 3:
-        return (
-          <NicknameComponent setNickname={setNickname} setStage={setStage} stage={stage} nickname={nickname}/>
-        )
-      case 4:
-        return (
-          <IntroduceComponent setStage={setStage} stage={stage} setIntroduce={setIntroduce}/>
-        )
-      case 5:
-        return (
-          <PhotoComponent setFile={setFile} signUp={signUp} imgRef={imgRef} setStage={setStage} stage={stage} setPhoto={setPhoto} photo={photo}/>
-        )
-      case 6:
-        return (
-          <SignUpCompletedComponent/>
-        )
-    }
-
+      );
+    case 1:
+      return (
+        <EmailComponent
+          setEmail={setEmail}
+          email={email}
+          setStage={setStage}
+          stage={stage}
+        />
+      );
+    case 2:
+      return (
+        <PasswordComponent
+          setPassword={setPassword}
+          setPassword2={setPassword2}
+          stage={stage}
+          setStage={setStage}
+          password={password}
+          password2={password2}
+        />
+      );
+    case 3:
+      return (
+        <NicknameComponent
+          setNickname={setNickname}
+          setStage={setStage}
+          stage={stage}
+          nickname={nickname}
+        />
+      );
+    case 4:
+      return (
+        <IntroduceComponent
+          setStage={setStage}
+          stage={stage}
+          setIntroduce={setIntroduce}
+        />
+      );
+    case 5:
+      return (
+        <PhotoComponent
+          setFile={setFile}
+          signUp={signUp}
+          imgRef={imgRef}
+          setStage={setStage}
+          stage={stage}
+          setPhoto={setPhoto}
+          photo={photo}
+        />
+      );
+    case 6:
+      return <SignUpCompletedComponent />;
+    default:
+      return <></>;
+  }
 }
 
-export default SignUpPage
+export default SignUpPage;

@@ -1,7 +1,3 @@
-.bgColor {
-  /* background-color: rgb(245, 238, 255); */
-}
-
 .imgContainer {
   position: relative;
   overflow: hidden;
@@ -72,4 +68,9 @@
 .signup {
   color: "#1C0B69";
   font-weight: bold;
+}
+
+.move {
+  margin-top: 0.7rem;
+  font-size: 0.9rem;
 }

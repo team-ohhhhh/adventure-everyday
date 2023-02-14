@@ -57,7 +57,7 @@ function LoginPage() {
   };
 
   return (
-    <div className={`pageContainer ${style.bgColor}`}>
+    <div className="pageContainer">
       <div className={style.imgContainer}>
         <img
           className={style.img}
@@ -87,7 +87,7 @@ function LoginPage() {
               >
                 카카오로 로그인
               </button>
-              <div>
+              <div className={style.move}>
                 아직 회원이 아니신가요?{" "}
                 <span
                   onClick={() => navigate("/signup")}
@@ -118,7 +118,9 @@ function LoginPage() {
               <button className={style.logInButton} onClick={() => LogIn()}>
                 로그인
               </button>
-              <span onClick={() => setIsLogin(false)}>이전으로</span>
+              <div className={style.move} onClick={() => setIsLogin(false)}>
+                이전으로
+              </div>
             </>
           )}
         </div>
