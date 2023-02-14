@@ -29,6 +29,7 @@ import AdventureReviewPage from "./pages/AdventureReviewPage";
 import KakaoLogIn from "./components/SignUp/KakaoLogin";
 import KakaoSignUp from "./pages/KakaoSignUp";
 import CommentPageTest from "./pages/CommentPageTest";
+import PageNotFound from "./pages/PageNotFound";
 
 function App() {
   return (
@@ -106,10 +107,11 @@ function App() {
               element={<KakaoSignUp />}
             />
         </Route>
-        
+        <Route path="*" element={<PageNotFound />}></Route>
       </Routes>
     </div>
   );
 }
+
 
 export default App;

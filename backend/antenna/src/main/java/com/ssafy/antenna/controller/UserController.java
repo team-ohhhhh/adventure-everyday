@@ -98,7 +98,7 @@ public class UserController {
 
     @GetMapping("/check-nickname")
     public ResultResponse<?> checkNicknameUser(@RequestParam String nickname) throws Exception {
-        if (nickname.length() < 3) {
+        if (nickname.length() < 1 || nickname.length() > 8) {
             return ResultResponse.error(ErrorResponse.of(ErrorCode.NICKNAME_INVALID));
         }
         return ResultResponse.success(userService.checkNicknameUser(nickname));

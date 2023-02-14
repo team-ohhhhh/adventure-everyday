@@ -126,7 +126,7 @@ function AdventurePage() {
           <div className={style.scrollContainer}>
             <HorizontalScroll
               contentType={"adventure"}
-              adventureList={nearList}
+              adventureList={nearList.slice(0,5)}
               isAdTab={true}
             />
           </div>
@@ -148,7 +148,7 @@ function AdventurePage() {
           <div className={style.scrollContainer}>
             <HorizontalScroll
               contentType={"adventure"}
-              adventureList={updateList}
+              adventureList={updateList.slice(0,5)}
               isAdTab={true}
             />
           </div>
@@ -170,7 +170,7 @@ function AdventurePage() {
           <div className={style.scrollContainer}>
             <HorizontalScroll
               contentType={"adventure"}
-              adventureList={popularList}
+              adventureList={popularList.slice(0,5)}
               isAdTab={true}
             />
           </div>

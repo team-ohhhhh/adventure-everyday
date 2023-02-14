@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom";
 import style from "./ComponentsForSignUp.module.css"
-
+import lottie from "lottie-web";
 
 
 // 1. 이메일 인증 화면
@@ -21,6 +21,8 @@ function EmailComponent(props) {
 
   // 로딩 중
   const [isLoading, setIsLoading] = useState(false)
+
+  
 
   // 이메일 중복확인 먼저 => 통과되면 이메일 보내기 위한 axios -> 전송 성공시 isSent를 True로 
   // 실패시 문구 띄우기
@@ -53,6 +55,7 @@ function EmailComponent(props) {
         })
       } else {
         setIsChecked(false)
+        setIsLoading(false)
       }
 
     })
@@ -111,8 +114,8 @@ function EmailComponent(props) {
           <input className={style.signUpInput} onChange={(event) => { setCode(event.target.value) }} placeholder="인증 코드"></input>
           <button onClick={ () => {validate()}} className={style.signUpButton}>확인</button>
         </div>
-      </div> : isLoading ? <div>전송중</div> : null
-      }
+      </div> : null}
+      {isLoading ? <div>전송중</div> : null}
     </div>
   )
 }
@@ -133,7 +136,7 @@ function PasswordComponent(props) {
         <div className={style.buttonBox}>
           <button className={style.hideButton}></button>
           {/* TODO: 여기에 비밀번호 형식 validation!!! */}
-          {props.password.length < 6 ? <div>비밀번호는 6자리 이상!</div> : props.password === props.password2 ? <button className={style.signUpButton} onClick={() => { props.setStage(props.stage + 1)}}>다음</button> : null}
+          {props.password.length < 6 ? <div>비밀번호는 6자리 이상!</div> : props.password === props.password2 ? <button className={style.signUpButton} onClick={() => { props.setStage(props.stage + 1)}}>다음</button> : <div>비밀번호를 확인해주세요</div>}
         </div>
       </div>
     </div>
@@ -197,7 +200,7 @@ function NicknameComponent(props) {
         <h1>입력해주세요</h1>
       </div>
       <div className={style.inputAndButton}>
-        {props.nickname.length < 3 ? <div>닉네임은 3자 이상</div> :  isNicknameChecked && !nicknameCheckResult ? <div>이미 있는 닉네임입니다.</div> : <div>사용 가능한 닉네임입니다.</div>}
+        {props.nickname.length < 3 ? <div>닉네임은 3자 이상</div> :  isNicknameChecked && !nicknameCheckResult ? <div>이미 있는 닉네임입니다.</div> : isNicknameChecked && nicknameCheckResult ? <div>사용 가능한 닉네임입니다.</div> : null}
         <input className={style.signUpInput} onChange={(event) => { props.setNickname(event.target.value) }} placeholder="닉네임" defaultValue={props.nickname}></input>
         <div className={style.buttonBox}>
           <button className={style.signUpButton} onClick={() => { props.setStage(props.stage - 1)}}>이전</button>
@@ -250,7 +253,7 @@ function PhotoComponent(props) {
         <label htmlFor="photo" className={style.signUpPhotoLabel}>
           <div className={style.signUpPhotoContiner}>
             <img
-            src={props.photo ? props.photo : `defaultProfile.jpg`}
+            src={props.photo ? props.photo : `images/defaultProfile.jpg`}
             className={style.signUpPhoto}
             ></img>
           </div>
@@ -275,10 +278,22 @@ function PhotoComponent(props) {
 
   function SignUpCompletedComponent() {
     const navigate = useNavigate()
+    const animationContainerRef = useRef()
         useEffect(() => {
+          lottie.loadAnimation({
+            container: animationContainerRef.current,
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: "https://assets3.lottiefiles.com/packages/lf20_zprb9vzj.json",
+            rendererSettings: {
+              preserveAspectRatio: 'xMidYMid slice'
+            }
+            
+          });
           setTimeout(() => {
           navigate('/login')
-          }, 3000)
+          }, 2000)
         }, [])
         // 여기 자꾸 워닝 뜸.. React Hook useEffect has a missing dependency: 'navigate'. Either include it or remove the dependency array
     return (
