@@ -447,27 +447,6 @@ function MainMap() {
             height: "100%",
           }}
           level={state.level} // 지도의 확대 레벨
-          // onCenterChanged={(map) =>
-          //   setState((prev) => ({
-          //     ...prev,
-          //     center: {
-          //       lat: map.getCenter().getLat(),
-          //       lng: map.getCenter().getLng(),
-          //     },
-          //   }))
-          // }
-          onCreate={() => {
-            // console.log("create");
-          }}
-          onDragStart={() => {
-            // setState((prev) => ({
-            //   ...prev,
-            //   // isCur: false,
-            //   // isAroundClicked: false,
-            //   // isCircle: false,
-            // }));
-            // console.log("dragStart");
-          }}
           onClick={(_t, mouseEvent) => {
             // 카카오 검색 결과 목록 끄기
             setResultWindow(false);
@@ -802,7 +781,9 @@ function MainMap() {
                             lineHeight: "1rem",
                             color: "gray",
                           }}
-                        ></div>
+                        >
+                          >
+                        </div>
                       </div>
                     </div>
                   )}
