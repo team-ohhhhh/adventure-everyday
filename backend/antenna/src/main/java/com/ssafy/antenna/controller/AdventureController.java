@@ -29,7 +29,7 @@ public class AdventureController {
     // 탐험 추가
     @PostMapping
     public ResultResponse<String> createAdventure(
-            @RequestBody CreateAdventureReq createAdventureReq,
+            @RequestBody @Valid CreateAdventureReq createAdventureReq,
             Authentication authentication
     ) {
         adventureService.createAdventure(createAdventureReq, Long.valueOf(authentication.getName()));
