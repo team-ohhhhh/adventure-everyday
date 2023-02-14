@@ -13,6 +13,28 @@
   margin-bottom: 1.5rem;
 }
 
+.titleFont{
+  color:#1C0B69;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.titleInfo{
+  margin-top: 1%;
+  margin-bottom: 2%;
+  font-size: 1rem;
+}
+
+.title{
+    
+  margin-top: 7%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 3%;
+    text-align: left;
+    border-bottom: 1px solid #1C0B69;
+}
+
 .recommendPageHeader {
   display: flex;
   justify-content: space-between;
