@@ -47,7 +47,7 @@ const AdventureMap = ({ checkpoints }) => {
                 lng: point.coordinate.lng,
               }}
               image={{
-                src: "/images/advMarker5.png",
+                src: "/images/advMarker5False.png",
                 size: {
                   width: 30,
                 },

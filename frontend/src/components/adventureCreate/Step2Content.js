@@ -49,6 +49,22 @@ const Step2Content = ({
   }, []);
 
   const handleInput = (e) => {
+    if (
+      e.target.name === "title" &&
+      e.target.value &&
+      e.target.value.length > 10
+    ) {
+      alert("탐험의 제목은 10글자 이내로 작성해 주세요.");
+      return;
+    } else if (
+      e.target.name === "content" &&
+      e.target.value &&
+      e.target.value.length > 254
+    ) {
+      alert("탐험의 설명은 254글자 이내로 작성해 주세요.");
+      return;
+    }
+
     setAdventure((adventure) => ({
       ...adventure,
       [e.target.name]: e.target.value,

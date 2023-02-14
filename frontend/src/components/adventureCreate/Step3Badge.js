@@ -23,6 +23,15 @@ const Step3Badge = ({ adventure, setAdventure, checkpoints }) => {
   }, []);
 
   const handleInput = (e) => {
+    if (
+      e.target.name === "feat" &&
+      e.target.value &&
+      e.target.value.length > 10
+    ) {
+      alert("칭호는 10글자 이내로 작성해 주세요.");
+      return;
+    }
+
     setAdventure((adventure) => ({
       ...adventure,
       [e.target.name]: e.target.value,
