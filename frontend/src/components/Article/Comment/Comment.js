@@ -37,6 +37,7 @@ function Comment({
   let TOKEN = useSelector((state) => state.token);
 
   useEffect(() => {
+    console.log(comment)
     window.scrollTo(0, 0);
   }, []);
 
@@ -307,7 +308,7 @@ function Comment({
                 getReply();
               }}
             />
-            <span>댓글 달기({comment.subCommentDtoList.length})</span>
+            <span>{`댓글 달기(${comment.subCommentDtoList.length})`}</span>
           </div>
         </div>
       )}
