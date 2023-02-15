@@ -3,7 +3,7 @@ services:
     container_name: mysql
     image: mysql:8.0.30
     ports:
-      - 3306:3306
+      - 3306:4444
     environment:
       MYSQL_ROOT_PASSWORD: gorillantenna305
 #      MYSQL_ROOT_HOST: '%'
@@ -28,7 +28,7 @@ services:
       - database
     container_name: springboot
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/antennadb?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:4444/antennadb?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: gorillantenna305
       TZ: "Asia/Seoul"
