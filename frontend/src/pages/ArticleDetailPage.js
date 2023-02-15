@@ -11,7 +11,6 @@ import style from "./ArticleDetailPage.module.css";
 function ArticleDetailPage() {
   let URL = useSelector((state) => state.url);
   let TOKEN = useSelector((state) => state.token);
-  
 
   let { articleId } = useParams();
 
@@ -30,6 +29,7 @@ function ArticleDetailPage() {
       },
     })
       .then((res) => {
+        // console.log(res.data.result);
         setArticle([res.data.result]);
       })
       .catch((err) => {
@@ -38,17 +38,22 @@ function ArticleDetailPage() {
   }, []);
 
   return (
-    <div className="pageContainer" style={{ marginBottom: "3rem" }}>
+    <div className="pageContainer" style={{ marginBottom: "5rem" }}>
       <div className={style.topBar}>
-        <AiOutlineLeft className={style.left} onClick={() => navigate(-1, {
-                  state: { lat: article[0].lat, lng: article[0].lng },
-                } )} />
+        <AiOutlineLeft
+          className={style.left}
+          onClick={() =>
+            navigate(-1, {
+              state: { lat: article[0].lat, lng: article[0].lng },
+            })
+          }
+        />
         <div>게시글</div>
         <AiOutlineRight className={style.right} />
       </div>
 
       {article.map((articleItem) => (
-        <ArticleDetail article={articleItem} />
+        <ArticleDetail key={article.postId} article={articleItem} />
       ))}
     </div>
   );
