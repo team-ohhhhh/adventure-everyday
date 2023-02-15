@@ -1,16 +1,16 @@
 .articleListItem {
-  width: 333px;
+  width: 90%;
   height: 109px;
   display: flex;
   flex-direction: row;
   background-color: #ffffff;
-  margin-top: 6px;
+  margin-top: 0.8rem;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 10px;
 
   border-radius: 5px;
-  box-shadow: 5px 5px 10px rgb(38, 38, 38);
+  box-shadow: 1px 1px 5px #eee;
 }
 
 /* 사진인데 사이즈가 문제임... */

@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 5rem;
 }
 
 .line {
@@ -13,26 +14,25 @@
   margin-bottom: 1.5rem;
 }
 
-.titleFont{
-  color:#1C0B69;
+.titleFont {
+  color: #1c0b69;
   font-size: 1.6rem;
   font-weight: bold;
 }
 
-.titleInfo{
+.titleInfo {
   margin-top: 1%;
   margin-bottom: 2%;
   font-size: 1rem;
 }
 
-.title{
-    
+.title {
   margin-top: 7%;
-    margin-left: 10%;
-    margin-right: 10%;
-    margin-bottom: 3%;
-    text-align: left;
-    border-bottom: 1px solid #1C0B69;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 3%;
+  text-align: left;
+  border-bottom: 1px solid #1c0b69;
 }
 
 .recommendPageHeader {
