@@ -201,7 +201,7 @@ const BottomSheetContainer = (props) => {
           </div>
         }
         // 첫번쨰가 1차 높이, 두번째가 최대 높이  
-        snapPoints={({ maxHeight }) => [maxHeight / 5.8, maxHeight]}
+        snapPoints={({ maxHeight }) => [0.22 * maxHeight, maxHeight]}
       >
         <div className="forScrollBar" style={{marginTop:"1.2rem"}}>
           {/* dummy => list로 교체 */}
