@@ -9,7 +9,7 @@ services:
       MYSQL_DATABASE: antennadb
 #      MYSQL_USER: gorilla305
 #      MYSQL_PASSWORD: gorilla305
-#      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_HOST: '%'
       TZ: "Asia/Seoul"
     restart: unless-stopped
     volumes:
