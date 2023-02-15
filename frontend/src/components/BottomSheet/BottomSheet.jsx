@@ -174,7 +174,7 @@ const BottomSheetContainer = (props) => {
               <div  style={{alignItems:"flex-start"}}>
                 {props.isAntenna ? (
                   <button
-                  style={{background: "white", borderRadius: "8px", color:"#1C0B69", borderColor: "#1C0B69", height:"3.5rem"}}
+                  style={{background: "white", borderRadius: "8px", color:"#1C0B69", borderColor: "#1C0B69", height:"4vh", width:"11vh"}}
                     onClick={() => {
                       deleteAntenna();
                     }}
@@ -186,7 +186,7 @@ const BottomSheetContainer = (props) => {
                     onClick={() => {
                       makeAntenna();
                     }}
-                    style={{background: "#1C0B69", borderRadius: "8px", color:"white", height:"3.5rem"}}
+                    style={{background: "#1C0B69", borderRadius: "8px", color:"white", height:"4vh", width:"11vh"}}
                   >
                     안테나 설치  
                   </button>
