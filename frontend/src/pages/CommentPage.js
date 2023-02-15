@@ -50,6 +50,7 @@ import {faMessage } from "@fortawesome/free-solid-svg-icons";
       getComments()
       setCommentInput('')
     })
+    .then(() => console.log('빈칸 되어라'))
     .catch((err) => console.log(err))
   }
   
