@@ -14,8 +14,6 @@ services:
     restart: unless-stopped
     volumes:
       - antenna-data:/var/lib/mysql
-    networks:
-      - backend
 
   backend:
     build:
@@ -34,8 +32,6 @@ services:
       SPRING_DATASOURCE_USERNAME: gorilla305
       SPRING_DATASOURCE_PASSWORD: gorilla305
       TZ: "Asia/Seoul"
-    networks:
-      - backend
   
   frontend:
     build:
@@ -67,10 +63,3 @@ services:
     depends_on:
       - backend
       - frontend
-
-networks:
-  backend:
-    driver: bridge
-
-volumes:
-  antenna-data:
