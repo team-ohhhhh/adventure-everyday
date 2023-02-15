@@ -106,9 +106,6 @@ public class UserController {
 
     @GetMapping("/search")
     public ResultResponse<?> likeNicknameUser(@RequestParam String nickname) throws Exception {
-        if (nickname.length() < 3) {
-            return ResultResponse.error(ErrorResponse.of(ErrorCode.NICKNAME_INVALID));
-        }
         return ResultResponse.success(userService.likeNicknameUser(nickname));
     }
 
