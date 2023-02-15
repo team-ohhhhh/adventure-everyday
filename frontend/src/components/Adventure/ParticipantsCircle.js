@@ -17,7 +17,7 @@ function ParticipantsCircle(props) {
               style={{
                 marginLeft: `${1.1 * (4 - index)}rem`,
               }}
-              src={photo ? photo : "/defaultProfile.jpg"}
+              src={photo ? photo : "/images/defaultProfile.jpg"}
               alt={"participants_profile"}
             />
           );
