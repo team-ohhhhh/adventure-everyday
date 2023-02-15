@@ -57,7 +57,7 @@ function AdventureBanner({
                   src={
                     adventureItem.userPhotoUrl
                       ? adventureItem.userPhotoUrl
-                      : "/defaultProfile.jpg"
+                      : "/images/defaultProfile.jpg"
                   }
                   alt={"maker_profile"}
                 />

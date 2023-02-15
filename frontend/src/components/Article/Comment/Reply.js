@@ -115,7 +115,7 @@ function Reply({reply, getReply, replyMoreButtonOpen, setReplyMoreButtonOpen, wh
         </div>
       :<div className={style.comment_content}>
       <div className={style.profile}>
-          <img className={style.profile_picture}src={reply.userDetailRes.photoUrl ? reply.userDetailRes.photoUrl : '/defaultProfile.jpg'}/>
+          <img className={style.profile_picture}src={reply.userDetailRes.photoUrl ? reply.userDetailRes.photoUrl : '/images/defaultProfile.jpg'}/>
           <h4 className={style.username}>{reply.userDetailRes.nickname}</h4>
           <span style={{ color: '#626262', fontSize: "12px", marginLeft:"2%", marginTop:"1%"}}>{nowDate}</span>
           {reply.userDetailRes.userId === USER.userId &&

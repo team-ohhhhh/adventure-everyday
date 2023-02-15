@@ -143,7 +143,7 @@ function ArticleDetail({ article, isFeed }) {
               src={
                 article.userDetailRes.photoUrl
                   ? article.userDetailRes.photoUrl
-                  : "images/defaultProfile.jpg"
+                  : "/images/defaultProfile.jpg"
               }
               alt={"profile"}
             />
