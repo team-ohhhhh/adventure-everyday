@@ -212,7 +212,7 @@ const BottomSheetContainer = (props) => {
       >
         <div className="forScrollBar" style={{marginTop:"1.2rem", marginBottom: "5rem"}}>
           {/* dummy => list로 교체 */}
-          {props.articleList.length != 0 ? props.articleList.map((data) => {
+          {props.articleList.length != 0 ? props.articleList.reverse().map((data) => {
             if (contentType === "article") {
               return <SmallArticleItem data={data} />;
             } else if (contentType === "adventure") {
