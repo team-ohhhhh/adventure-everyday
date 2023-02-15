@@ -1,13 +1,20 @@
 .comments_container {
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-  background-color: #f2f2f2;
-  border-radius: 5px;
+  padding: 1rem;
 }
 
-#root > div > div > nav {
-  background-color: #f2f2f2;
+.comments_count {
+  display: flex;
+}
+
+.count {
+  color: gray;
+  font-weight: normal;
+  margin-left: 0.3rem;
+}
+
+.whiteLine {
+  border-bottom: 2px solid white;
+  margin-bottom: 1rem;
 }
 
 .comment {
@@ -74,8 +81,4 @@
   display: inline-block;
   margin-left: 10px;
   vertical-align: middle;
-}
-
-.whiteLine {
-  border-bottom: 1px solid white;
 }
