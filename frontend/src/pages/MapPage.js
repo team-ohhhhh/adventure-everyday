@@ -395,6 +395,10 @@ function MainMap() {
                         lat: place.y,
                         lng: place.x,
                       },
+                      click: {
+                        lat: place.y,
+                        lng: place.x,
+                      },
                       isAroundClicked: true,
                       isAround: true,
                       isCircle: true,
