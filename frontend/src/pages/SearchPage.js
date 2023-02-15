@@ -18,8 +18,8 @@ function SearchComponent(props) {
   };
 
   useEffect(() => {
-    // 3자 이상 입력하지 않으면 오류뜸
-    if (searchType === "users" && search.length >= 3) {
+    // 1자 이상 입력하지 않으면 오류뜸
+    if (searchType === "users" && search.length >= 1) {
       axios({
         url: URL + "/users/search",
         method: "get",
