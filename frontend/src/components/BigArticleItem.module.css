@@ -12,6 +12,20 @@
   color: black;
 }
 
+.articleListAdventureItem {
+  height: 60vw;
+  width: 90vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  border-radius: 7px;
+  /* box-shadow: 1px 1px 3px; */
+  background-color: white;
+  margin: 7px;
+  color: black;
+}
+
 .titleAndW3w {
   display: flex;
   flex-direction: column;

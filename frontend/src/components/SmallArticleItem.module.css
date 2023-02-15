@@ -13,6 +13,21 @@
   box-shadow: 1px 1px 5px #eee;
 }
 
+.articleListAdventureItem {
+  width: 90%;
+  height: 109px;
+  display: flex;
+  flex-direction: row;
+  background-color: #ffffff;
+  margin-top: 0.8rem;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+
+  border-radius: 5px;
+  /* box-shadow: 1px 1px 5px #eee; */
+}
+
 /* 사진인데 사이즈가 문제임... */
 .photo {
   height: 100%;
