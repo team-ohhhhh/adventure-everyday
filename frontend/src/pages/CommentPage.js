@@ -82,8 +82,11 @@ function CommentPage({ isDetailPage }) {
 
   return (
     <div
-      className={!isDetailPage ? "pageContainer" : ""}
-      style={{ backgroundColor: "#f2f2f2", paddingBottom: "5rem" }}
+      className="pageContainer"
+      style={{
+        backgroundColor: "#f2f2f2",
+        paddingBottom: "5rem",
+      }}
       onClick={() => {
         closeMoreButton();
         closeReplyMoreButton();
@@ -103,7 +106,7 @@ function CommentPage({ isDetailPage }) {
         </div>
       )}
 
-      <div className={styles.comments_container}>
+      <div id="comment" className={styles.comments_container}>
         <div>
           {commentList.map((comment) => {
             return (

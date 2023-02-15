@@ -29,8 +29,8 @@ const ArticleCreatePage = () => {
     adventurePlaceId: null,
     adventurePlaceIdTitle: "",
   });
-
   const [checkPointList, setCheckPointList] = useState([]);
+  const [postType, setPostType] = useState(1);
 
   // 현재 위치 또는 게시글 타입 변화 시 위경도 데이터 업데이트
   const geolocation = useGeolocation();
@@ -102,6 +102,7 @@ const ArticleCreatePage = () => {
               article={article}
               setArticle={setArticle}
               checkPointList={checkPointList}
+              setPostType={setPostType}
               styles={styles}
             />
           }
@@ -113,11 +114,15 @@ const ArticleCreatePage = () => {
               article={article}
               setArticle={setArticle}
               checkPointList={checkPointList}
+              setPostType={setPostType}
               styles={styles}
             />
           }
         />
-        <Route path="3" element={<Step3Done styles={styles} />} />
+        <Route
+          path="3"
+          element={<Step3Done postType={postType} styles={styles} />}
+        />
       </Routes>
     </div>
   );
