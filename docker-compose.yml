@@ -2,15 +2,15 @@ services:
   database:
     container_name: mysql
     image: mysql:8.0.30
+    ports:
+      - 3306:3306
     environment:
+      MYSQL_ROOT_PASSWORD: gorillantenna305
       MYSQL_DATABASE: antennadb
 #      MYSQL_USER: gorilla305
 #      MYSQL_PASSWORD: gorilla305
 #      MYSQL_ROOT_HOST: '%'
-      MYSQL_ROOT_PASSWORD: gorillantenna305
       TZ: "Asia/Seoul"
-    ports:
-      - 3306:3306
     restart: unless-stopped
     volumes:
       - /antenna-data:/var/lib/mysql
