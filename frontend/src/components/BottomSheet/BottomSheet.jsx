@@ -172,7 +172,7 @@ const BottomSheetContainer = (props) => {
         // onDismiss={() => setOpen(false)}
         blocking={false}
         header={
-          <div ref={headerRef} style={{display:"flex", flexDirection:"column", alignItems:"start",width:"100%" ,marginTop:"4%"}}>
+          <div ref={headerRef} style={{display:"flex", flexDirection:"column", alignItems:"start",width:"100%" ,marginTop:"4%", }}>
             <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"95%", margin:"auto"}}>
               <div style={{display:"flex", flexDirection:"column", alignItems:"start" }}>
                 <div style={{fontWeight:"600" }}>{W3W}</div>
@@ -202,7 +202,7 @@ const BottomSheetContainer = (props) => {
             </div>
             <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"95%", marginLeft:"auto",marginRight:"auto"}}>
             <div style={{display:"flex", flexDirection:"column", alignItems:"start" }}>
-              <div style={{marginTop:"15%"}}> {props.articleList.length}개의 글 </div>
+              <div style={{marginTop:"15%", marginBottom:"15%"}}> {props.articleList.length}개의 글 </div>
               </div>
             </div>
           </div>
@@ -210,7 +210,7 @@ const BottomSheetContainer = (props) => {
         // 첫번쨰가 1차 높이, 두번째가 최대 높이  
         snapPoints={({ maxHeight }) => [myHeight(), maxHeight]}
       >
-        <div className="forScrollBar" style={{marginTop:"1.2rem"}}>
+        <div className="forScrollBar" style={{marginTop:"1.2rem", marginBottom: "5rem"}}>
           {/* dummy => list로 교체 */}
           {props.articleList.length != 0 ? props.articleList.map((data) => {
             if (contentType === "article") {
