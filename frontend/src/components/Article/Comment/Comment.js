@@ -186,7 +186,7 @@ function Comment({
               src={
                 comment.userDetailRes.photoUrl
                   ? comment.userDetailRes.photoUrl
-                  : "/defaultProfile.jpg"
+                  : "/images/defaultProfile.jpg"
               }
             />
             <h4 className={style.username}>{comment.userDetailRes.nickname}</h4>

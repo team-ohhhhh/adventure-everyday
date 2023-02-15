@@ -789,7 +789,7 @@ function MainMap() {
                             color: "gray",
                           }}
                         >
-                          >
+                          
                         </div>
                       </div>
                     </div>

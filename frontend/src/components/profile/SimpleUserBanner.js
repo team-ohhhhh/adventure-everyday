@@ -7,7 +7,7 @@ function SimpleUserBanner(props) {
   return(
     <div className={style.userBanner} onClick={() => {navigate(`/profile/${props.data.userId}`)}}>
       <div className={style.photoContainer}>
-        <img className={style.photo} src={props.data.photoUrl ? props.data.photoUrl : '/defaultProfile.jpg'}/>
+        <img className={style.photo} src={props.data.photoUrl ? props.data.photoUrl : '/images/defaultProfile.jpg'}/>
       </div>
       <div className={style.nicknameAndTierAndIntroduce}>
 

@@ -12,10 +12,10 @@ function InputForm({ commentInput, setCommentInput, postComment}) {
     <div className={styles.comment}>
         <div className={styles.comment_content}>
           <div className={styles.profile}>
-          <img className={styles.profile_picture} src={USER.photoUrl ? USER.photoUrl : '/defaultProfile.jpg'}></img>
+          <img className={styles.profile_picture} src={USER.photoUrl ? USER.photoUrl : '/images/defaultProfile.jpg'}></img>
           <h4 className={styles.username}>{USER.nickname}</h4>
         </div>
-        <input onChange={onChange} className={styles.comment} placeholder="댓글을 작성하세요"></input>
+        <input value={commentInput} onChange={onChange} className={styles.comment} placeholder="댓글을 작성하세요"></input>
       </div>
       <button className={styles.postButton} onClick={() => {postComment()}}>작성</button>
     </div>

@@ -252,7 +252,7 @@ function PhotoComponent(props) {
         <label htmlFor="photo" className={style.signUpPhotoLabel}>
           <div className={style.signUpPhotoContiner}>
             <img
-            src={props.photo ? props.photo : `images/defaultProfile.jpg`}
+            src={props.photo ? props.photo : `/images/defaultProfile.jpg`}
             className={style.signUpPhoto}
             ></img>
           </div>
