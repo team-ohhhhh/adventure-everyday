@@ -96,11 +96,13 @@ function ArticleUpdatePage() {
           <span style={{ fontWeight: "400" }}>에서 작성된 글</span>
         </div>
         <div className={style.photoHolder}>
-          <img
-            className={style.photo}
-            src={article.photoUrl}
-            alt={article.title}
-          ></img>
+          {article.photoUrl && (
+            <img
+              className={style.photo}
+              src={article.photoUrl}
+              alt={article.title}
+            ></img>
+          )}
         </div>
 
         <div className={style.subheader}>게시글 수정</div>

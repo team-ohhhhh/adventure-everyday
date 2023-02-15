@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -16,11 +16,25 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const emailRef = useRef();
+  const passwordRef = useRef();
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // 로그인 버튼에 달린 로그인 axios -> 성공시 메인페이지로 이동
   const LogIn = function () {
+    if (email < 1) {
+      alert("이메일을 입력해주세요.");
+      emailRef.current.focus();
+      return;
+    }
+    if (password < 1) {
+      alert("비밀번호를 입력해주세요.");
+      passwordRef.current.focus();
+      return;
+    }
+
     axios({
       url: URL + "/auth/authenticate",
       method: "post",
@@ -34,7 +48,11 @@ function LoginPage() {
         dispatch(saveUserInfo(response.data.result.userDetailRes));
         navigate("/");
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        // console.log(error.response.data.result.message);
+        const msg = error.response.data.result.message;
+        alert(msg);
+      });
   };
 
   const onKeyDown = (e) => {
@@ -106,6 +124,7 @@ function LoginPage() {
                 id="email"
                 placeholder="이메일을 입력하세요"
                 onChange={(event) => setEmail(event.target.value)}
+                ref={emailRef}
               ></input>
               <input
                 className={style.logInInput}
@@ -114,6 +133,7 @@ function LoginPage() {
                 id="password"
                 onChange={(event) => setPassword(event.target.value)}
                 onKeyDown={onKeyDown}
+                ref={passwordRef}
               ></input>
               <button className={style.logInButton} onClick={() => LogIn()}>
                 로그인

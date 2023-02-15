@@ -8,7 +8,13 @@ import ArticleMap from "./ArticleMap";
 
 import { AiOutlineClose } from "react-icons/ai";
 
-const Step2Content = ({ article, setArticle, checkPointList, styles }) => {
+const Step2Content = ({
+  article,
+  setArticle,
+  checkPointList,
+  setPostType,
+  styles,
+}) => {
   const navigate = useNavigate();
   const geolocation = useGeolocation();
 
@@ -100,6 +106,13 @@ const Step2Content = ({ article, setArticle, checkPointList, styles }) => {
         },
       })
       .then((res) => {
+        console.log(res);
+        const isAdventureClear = res.data.result.isAdventureClear;
+        if (isAdventureClear) {
+          setPostType(3);
+        }
+      })
+      .then(() => {
         navigate("/write/3");
       })
       .catch((err) => {

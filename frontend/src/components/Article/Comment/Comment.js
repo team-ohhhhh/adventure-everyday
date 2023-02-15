@@ -1,21 +1,13 @@
-import axios from "axios";
-import style from "./Comment.module.css";
-import ReplyList from "./ReplyList";
 import { useEffect, useState } from "react";
-import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import { MdOutlineReply } from "react-icons/md";
-import { RiMoreFill } from "react-icons/ri";
 import { useSelector } from "react-redux";
-import InputForm from "./InputForm";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faHeart,
-  faComment,
-  faEllipsisH,
-  faMessage,
-  faHeartBroken,
-  faHeartCirclePlus,
-} from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+
+import ReplyList from "./ReplyList";
+
+import style from "./Comment.module.css";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { FaRegComment } from "react-icons/fa";
+import { RiMoreFill } from "react-icons/ri";
 
 function Comment({
   comment,
@@ -162,17 +154,13 @@ function Comment({
             <div className={style.buttonHolder}>
               <button
                 className={style.yesDelete}
-                onClick={() => {
-                  deleteComment();
-                }}
+                onClick={() => deleteComment()}
               >
                 삭제
               </button>
               <button
                 className={style.noDelete}
-                onClick={() => {
-                  setWouldYouDelete(false);
-                }}
+                onClick={() => setWouldYouDelete(false)}
               >
                 취소
               </button>
@@ -180,135 +168,110 @@ function Comment({
           </div>
         </div>
       ) : (
-        <div className={style.comment_content}>
-          <div className={style.profile}>
-            <img
-              className={style.profile_picture}
-              src={
-                comment.userDetailRes.photoUrl
-                  ? comment.userDetailRes.photoUrl
-                  : "/images/defaultProfile.jpg"
-              }
-            />
-            <h4 className={style.username}>{comment.userDetailRes.nickname}</h4>
-            <span
-              style={{
-                color: "#626262",
-                fontSize: "12px",
-                marginLeft: "2%",
-                marginTop: "1%",
-              }}
-            >
-              {nowDate}
-            </span>
-            {comment.userDetailRes.userId === USER.userId &&
-              (wouldYouUpdate ? (
-                <div
-                  style={{
-                    marginLeft: "auto",
-                    marginRight: "3%",
-                    fontSize: "20",
-                  }}
-                >
-                  <span
-                    onClick={() => {
-                      updateComment();
-                    }}
-                  >
-                    수정
-                  </span>
-                  <span
-                    onClick={() => {
-                      setWouldYouUpdate(false);
-                    }}
-                    style={{ marginLeft: "2vw" }}
-                  >
-                    취소
-                  </span>
+        <div className={style.content}>
+          <img
+            className={style.profile}
+            src={
+              comment.userDetailRes.photoUrl
+                ? comment.userDetailRes.photoUrl
+                : "/images/defaultProfile.jpg"
+            }
+            alt={"profile"}
+          />
+          <div className={style.contentContainer}>
+            <div className={style.infoContainer}>
+              <div className={style.nicknameContainer}>
+                <div className={style.username}>
+                  {comment.userDetailRes.nickname}
                 </div>
-              ) : moreButtonOpen && whichButton === comment.commentId ? (
+                <div className={style.date}>{nowDate}</div>
+              </div>
+              {comment.userDetailRes.userId === USER.userId &&
+                (wouldYouUpdate ? (
+                  <div
+                    style={{
+                      marginLeft: "auto",
+                      marginRight: "3%",
+                      fontSize: "20",
+                    }}
+                  >
+                    <span onClick={() => updateComment()}>수정</span>
+                    <span
+                      onClick={() => setWouldYouUpdate(false)}
+                      style={{ marginLeft: "2vw" }}
+                    >
+                      취소
+                    </span>
+                  </div>
+                ) : moreButtonOpen && whichButton === comment.commentId ? (
+                  <div
+                    style={{
+                      marginLeft: "auto",
+                      marginRight: "3%",
+                      fontSize: "20",
+                    }}
+                  >
+                    <span onClick={() => setWouldYouUpdate(true)}> 수정 </span>
+                    <span onClick={() => setWouldYouDelete(true)}>
+                      {" "}
+                      삭제{" "}
+                    </span>{" "}
+                  </div>
+                ) : (
+                  <RiMoreFill
+                    style={{
+                      marginLeft: "auto",
+                      marginRight: "3%",
+                      fontSize: "20",
+                    }}
+                    onClick={() => {
+                      setMoreButtonOpen(true);
+                      setWhichButton(comment.commentId);
+                    }}
+                  />
+                ))}
+            </div>
+
+            <div className={style.text}>
+              {wouldYouUpdate ? (
+                <input
+                  className={style.modify}
+                  onChange={onChange}
+                  defaultValue={comment.commentContent}
+                />
+              ) : (
+                <div>{comment.commentContent}</div>
+              )}
+            </div>
+
+            <div className={style.actionContainer}>
+              {comment.userIdxList.find((idx) => idx === USER.userId) ? (
                 <div
-                  style={{
-                    marginLeft: "auto",
-                    marginRight: "3%",
-                    fontSize: "20",
-                  }}
+                  className={style.iconContainer}
+                  onClick={() => unlikeComment()}
                 >
-                  <span
-                    onClick={() => {
-                      setWouldYouDelete(true);
-                    }}
-                  >
-                    {" "}
-                    삭제{" "}
-                  </span>{" "}
-                  <span
-                    onClick={() => {
-                      setWouldYouUpdate(true);
-                    }}
-                  >
-                    {" "}
-                    수정{" "}
-                  </span>
+                  <AiFillHeart className={style.icon} size={19} />
+                  {comment.userIdxList.length}
                 </div>
               ) : (
-                <RiMoreFill
-                  style={{
-                    marginLeft: "auto",
-                    marginRight: "3%",
-                    fontSize: "20",
-                  }}
-                  onClick={() => {
-                    setMoreButtonOpen(true);
-                    setWhichButton(comment.commentId);
-                  }}
-                />
-              ))}
-          </div>
-          <div className={style.text}>
-            {wouldYouUpdate ? (
-              <input
-                onChange={onChange}
-                defaultValue={comment.commentContent}
-              />
-            ) : (
-              <div>{comment.commentContent}</div>
-            )}
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-start",
-              marginTop: "5%",
-            }}
-          >
-            {comment.userIdxList.find((idx) => idx === USER.userId) ? (
-              <FontAwesomeIcon
-                icon={faHeart}
-                style={{ marginLeft: "3.8rem", marginRight: "2%" }}
+                <div
+                  className={style.iconContainer}
+                  onClick={() => likeComment()}
+                >
+                  <AiOutlineHeart className={style.icon} size={19} />{" "}
+                  {comment.userIdxList.length}
+                </div>
+              )}
+              <FaRegComment
+                style={{ marginRight: "0.2rem" }}
+                size={16}
                 onClick={() => {
-                  unlikeComment();
+                  toggle();
+                  getReply();
                 }}
               />
-            ) : (
-              <FontAwesomeIcon
-                icon={faHeartCirclePlus}
-                style={{ marginLeft: "3.8rem", marginRight: "2%" }}
-                onClick={() => {
-                  likeComment();
-                }}
-              />
-            )}
-            {comment.userIdxList.length}
-            <FontAwesomeIcon
-              icon={faComment}
-              style={{ marginLeft: "5%", marginRight: "2%" }}
-              onClick={() => {
-                toggle();
-                getReply();
-              }}
-            />
-            <span>{`댓글 달기(${comment.subCommentDtoList.length})`}</span>
+              {comment.subCommentDtoList.length}
+            </div>
           </div>
         </div>
       )}

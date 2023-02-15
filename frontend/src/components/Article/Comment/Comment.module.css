@@ -1,5 +1,11 @@
-
-
+.comment_content {
+  background-color: white;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.1);
+}
 
 .header {
   display: flex;
@@ -38,7 +44,6 @@
 .content {
   word-break: break-all;
   /* white-space:normal; */
- 
 }
 
 .footer {
@@ -67,7 +72,7 @@
   flex-direction: row;
   justify-content: space-evenly;
   width: 100%;
-  margin-top: 1vh;
+  margin-top: 1rem;
 }
 
 .yesDelete {
@@ -92,61 +97,85 @@
   padding-bottom: 1vh;
 }
 
-
 .comment {
-  /* display: flex; */
-  /* align-items: flex-start; */
-  margin-bottom: 20px;
-  position: relative;
-  flex-direction:column; 
-  align-items:center;
+  margin-bottom: 1rem;
 }
 
-.comment_content {
-
+.content {
   background-color: white;
+  width: 100%;
+  box-sizing: border-box;
   padding: 15px;
   border-radius: 10px;
-  position: relative;
-  box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.1);
-
+  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.1);
+  display: flex;
 }
-
 
 .profile {
-  display: flex;
-  align-items: right;
-  margin-left: 0.7rem;
-  width: 100%;
-}
-
-.profile_picture {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  margin-right: 10px;
+}
+
+.contentContainer {
+  margin-left: 0.7rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.infoContainer {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 0.3rem;
+}
+
+.nicknameContainer {
+  display: flex;
+  align-items: center;
 }
 
 .username {
-  margin: 0;
   font-weight: bold;
-  font-size: 16px;
-  color: #333;
+}
+
+.date {
+  font-size: 0.7rem;
+  color: gray;
+  margin-left: 0.3rem;
 }
 
 .text {
   font-size: 14px;
-  color: #333;
   line-height: 1.5;
-  text-align: justify;
-  margin-left: 3.8rem;
+  text-align: left;
+  white-space: pre-wrap;
+  margin-bottom: 0.5rem;
+}
+
+.modify {
+  border: none;
+  color: gray;
+  font-size: 14px;
+}
+
+.actionContainer {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  margin-right: 0.5rem;
 }
 
 .icon {
-  display: inline-block;
-  margin-left: 10px;
-  vertical-align: middle;
+  margin-right: 0.1rem;
 }
 
 .heart-icon {
@@ -160,4 +189,3 @@
   height: 20px;
   fill: #333;
 }
-

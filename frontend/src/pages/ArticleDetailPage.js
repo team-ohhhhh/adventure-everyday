@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams, useNavigate, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import ArticleDetail from "./../components/Article/ArticleDetail";
-import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
+import CommentPage from "./CommentPage";
 
 import style from "./ArticleDetailPage.module.css";
+import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
 function ArticleDetailPage() {
   let URL = useSelector((state) => state.url);
   let TOKEN = useSelector((state) => state.token);
-  
 
   let { articleId } = useParams();
 
@@ -30,6 +30,7 @@ function ArticleDetailPage() {
       },
     })
       .then((res) => {
+        // console.log(res.data.result);
         setArticle([res.data.result]);
       })
       .catch((err) => {
@@ -38,18 +39,25 @@ function ArticleDetailPage() {
   }, []);
 
   return (
-    <div className="pageContainer" style={{ marginBottom: "3rem" }}>
+    <div className="pageContainer">
       <div className={style.topBar}>
-        <AiOutlineLeft className={style.left} onClick={() => navigate(-1, {
-                  state: { lat: article[0].lat, lng: article[0].lng },
-                } )} />
+        <AiOutlineLeft
+          className={style.left}
+          onClick={() =>
+            navigate(-1, {
+              state: { lat: article[0].lat, lng: article[0].lng },
+            })
+          }
+        />
         <div>게시글</div>
         <AiOutlineRight className={style.right} />
       </div>
 
       {article.map((articleItem) => (
-        <ArticleDetail article={articleItem} />
+        <ArticleDetail key={articleItem.postId} article={articleItem} />
       ))}
+
+      <CommentPage isDetailPage={true} />
     </div>
   );
 }
