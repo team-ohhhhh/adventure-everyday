@@ -221,15 +221,20 @@ function ArticleDetail({ article, isFeed }) {
           goToDetail();
         }}
       >
-        {article.photoUrl && <img
-          className={style.photo}
-          src={article.photoUrl}
-          alt={article.title}
-        />}
+        {article.photoUrl && (
+          <img
+            className={style.photo}
+            src={article.photoUrl}
+            alt={article.title}
+          />
+        )}
         <div className={style.contentContainer}>
           <div className={style.title}>{article.title}</div>
           <div className={style.content}>{article.content}</div>
-          <div className={style.date}>{date(new Date(article.createTime))}</div>
+          <div className={style.date}>
+            {date(new Date(article.createTime))}
+            {!article.isPublic && <span> · 비공개</span>}{" "}
+          </div>
         </div>
       </div>
 
