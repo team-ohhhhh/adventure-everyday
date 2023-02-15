@@ -6,7 +6,7 @@ services:
       - 4444:3306
     environment:
       MYSQL_ROOT_PASSWORD: gorillantenna305
-#      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_HOST: '%'
 #      MYSQL_USER: gorilla305
 #      MYSQL_PASSWORD: gorilla305
       MYSQL_DATABASE: antennadb
