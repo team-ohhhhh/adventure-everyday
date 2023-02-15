@@ -26,7 +26,7 @@ public class PostController {
 	private final PostService postService;
 
 	@PostMapping
-	public ResultResponse<PostDetailRes> createPost(
+	public ResultResponse<com.ssafy.antenna.domain.post.dto.temp.PostDetailRes> createPost(
 			@RequestPart String title,
 			@RequestPart String content,
 			@RequestPart String lat,
