@@ -33,7 +33,7 @@ public class PostController {
 			@RequestPart String lng,
 			@RequestPart String isPublic,
 			@RequestPart(required = false) MultipartFile photo,
-			@RequestPart(required = false) String isCheckpoint,
+			@RequestPart(required = false) String isCheckPoint,
 			@RequestPart(required = false) String adventureId,
 			@RequestPart(required = false) String adventurePlaceId,
 			Authentication authentication
@@ -47,7 +47,7 @@ public class PostController {
 						lng,
 						isPublic,
 						photo,
-						isCheckpoint,
+						isCheckPoint,
 						adventureId,
 						adventurePlaceId
 				)
