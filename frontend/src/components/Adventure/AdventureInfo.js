@@ -89,7 +89,7 @@ function AdventureInfo(props) {
                 src={
                   props.info.userIdPhotoUrl
                     ? props.info.userIdPhotoUrl.photoUrl
-                    : "/defaultProfile.jpg"
+                    : "/images/defaultProfile.jpg"
                 }
               ></ProfileCircle>
             </div>
