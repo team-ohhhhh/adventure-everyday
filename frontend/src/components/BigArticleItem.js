@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import style from "./BigArticleItem.module.css";
 import { useNavigate } from "react-router-dom";
 
-function BigArticleItem({postId, title, w3w, date, photo}) {
+function BigArticleItem({postId, title, w3w, date, photo, isAdventure}) {
 
   const navigate = useNavigate();
 
   return (
     <div
       key={postId}
-      className={style.articleListItem}
+      className={isAdventure? style.articleListAdventureItem : style.articleListItem}
       onClick={() => {
         navigate(`/article/${postId}`);
       }}

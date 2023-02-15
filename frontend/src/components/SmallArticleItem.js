@@ -9,7 +9,7 @@ function SmallArticleItem(props) {
   const constent = props.data.content;
   const w3w = props.data.w3w;
   const createdTime = props.data.createTime;
-
+  const isAdventure=props.isAdventure
   // 포토 변수명 체크
   const photo = props.data.phototUrl;
   const userDetailRes = props.data.userDetailRes;
@@ -18,7 +18,7 @@ function SmallArticleItem(props) {
   return (
     <div
       key={postId}
-      className={style.articleListItem}
+      className={isAdventure? style.articleListAdventureItem : style.articleListItem}
       onClick={() => {
         navigate(`/article/${postId}`);
       }}
@@ -32,7 +32,7 @@ function SmallArticleItem(props) {
       />
       <div className={style.divForInfo}>
         <div>
-          <div className={style.title}> {title} </div>
+          <div className={style.title}> {title}  </div>
           <div className={style.nickNameAndTier}>
             <span className={style.nickName}> {userDetailRes.nickname} </span>
             <img

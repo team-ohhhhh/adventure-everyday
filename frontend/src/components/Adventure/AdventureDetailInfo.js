@@ -81,6 +81,7 @@ function AdventureDetailInfo(props) {
                   ? checkPointInfo.photoUrl
                   : "/images/emptyBanner3.png"
               }
+              isAdventure="true"
             />
           </div>
         )}
@@ -95,7 +96,7 @@ function AdventureDetailInfo(props) {
             {/* 체크포인트 글 목록이 있으면 보여줄 컴포넌트 */}
             {checkPointInfo.subPostList.length > 0 &&
               checkPointInfo.subPostList.map((article) => {
-                return <SmallArticleItem key={article} data={article} />;
+                return <SmallArticleItem key={article} data={article} isAdventure="true" />;
               })}
 
             {/* 체크포인트 글 목록이 없으면 보여줄 컴포넌트 */}
