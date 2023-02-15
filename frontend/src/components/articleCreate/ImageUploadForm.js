@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import EXIF from "exif-js";
 
 import styles from "./ImageUploadForm.module.css";
@@ -42,40 +42,34 @@ const ImageUploadForm = ({ article, setArticle }) => {
         return;
       }
 
-      // 프리뷰 이미지 생성
-      const preview = URL.createObjectURL(file);
-
       // 이미지 크기 리사이즈
-      const img2 = new Image();
-      img2.src = preview;
-      img2.onload = () => {
-        console.log(img2.width, img2.height);
-      };
-      console.log(preview.width, preview.width);
-
       const image = document.createElement("img");
       image.src = URL.createObjectURL(file);
-      console.log(image.width, image.height);
-      // // 이미지가 로드되면 canvas를 원하는 크기로 만들고 이미지를 그에 맞춰 그립니다.
-      // image.onload = () => {
-      //   URL.revokeObjectURL(image.src);
-      //   const canvas = document.createElement("canvas");
-      //   canvas.width = 500;
-      //   canvas.height = 500;
-      //   const context = canvas.getContext("2d");
-      //   context.drawImage(image, 0, 0, 500, 500);
-      //   // canvas에 그려진 이미지를 Blob으로 만들고 다시 File로 만들어 배열에 저장합니다.
-      //   context.canvas.toBlob(
-      //     (newImageBlob) => {
-      //       newImageFiles.push(new File([newImageBlob], oldImageFile.name));
-      //       if (oldImageFiles.length === newImageFiles.length) {
-      //         ok(newImageFiles);
-      //       }
-      //     },
-      //     "image/png",
-      //     0.5
-      //   );
-      // };
+      image.onload = () => {
+        // 이미지 로드되면
+        const ratio = image.height / image.width; // 이미지 가로, 세로 비율 계산
+        URL.revokeObjectURL(image.src);
+        const canvas = document.createElement("canvas"); // 캔버스 생성
+        const widthSize = 720;
+        canvas.width = widthSize;
+        canvas.height = canvas.width * ratio; // 비율에 맞게 리사이즈
+        const context = canvas.getContext("2d");
+        context.drawImage(image, 0, 0, widthSize, canvas.height); // 캔버스에 그리기
+        context.canvas.toBlob(
+          (blob) => {
+            const newFile = new File([blob], "articleImage.jpg");
+            const newPreview = URL.createObjectURL(newFile);
+            setArticle((article) => ({
+              ...article,
+              isText: false,
+              photo: newFile,
+              preview: newPreview,
+            }));
+          },
+          "image/jpg", // 파일 확장자
+          0.5 // 사진 퀄리티
+        ); // 이미지를 blob 객체로 저장
+      };
 
       // 메타데이터 추출 (위경도)
       EXIF.getData(file, function () {
@@ -88,9 +82,6 @@ const ImageUploadForm = ({ article, setArticle }) => {
             ...article,
             lat,
             lng,
-            isText: false,
-            photo: file,
-            preview: preview,
           }));
         } else {
           alert("위치정보가 없는 사진입니다. 다른 사진을 선택해주세요.");
