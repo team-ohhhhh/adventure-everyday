@@ -8,7 +8,7 @@
 
 .AppContainer {
   width: 100vw;
-  min-width: 360px;
+  min-width: 375px;
   max-width: 700px;
   position: relative;
   background-color: white;
