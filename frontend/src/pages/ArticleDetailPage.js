@@ -39,7 +39,7 @@ function ArticleDetailPage() {
   }, []);
 
   return (
-    <div className="pageContainer" style={{ marginBottom: "5rem" }}>
+    <div className="pageContainer">
       <div className={style.topBar}>
         <AiOutlineLeft
           className={style.left}

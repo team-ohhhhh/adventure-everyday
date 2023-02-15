@@ -52,7 +52,7 @@ function CommentPage({ isDetailPage }) {
         getComments();
         setCommentInput("");
       })
-      .then(() => console.log("빈칸 되어라"))
+      // .then(() => console.log("빈칸 되어라"))
       .catch((err) => console.log(err));
   };
 
@@ -82,21 +82,26 @@ function CommentPage({ isDetailPage }) {
 
   return (
     <div
-      className="pageContainer"
+      className={!isDetailPage ? "pageContainer" : ""}
       style={{ backgroundColor: "#f2f2f2", paddingBottom: "5rem" }}
       onClick={() => {
         closeMoreButton();
         closeReplyMoreButton();
       }}
     >
-      <div className={styles2.topBar} style={{ marginBottom: 0 }}>
-        <AiOutlineLeft className={styles2.left} onClick={() => navigate(-1)} />
-        <div className={styles.comments_count}>
-          <div>댓글</div>
-          <div className={styles.count}>{commentList.length}</div>
+      {!isDetailPage && (
+        <div className={styles2.topBar} style={{ marginBottom: 0 }}>
+          <AiOutlineLeft
+            className={styles2.left}
+            onClick={() => navigate(-1)}
+          />
+          <div className={styles.comments_count}>
+            <div>댓글</div>
+            <div className={styles.count}>{commentList.length}</div>
+          </div>
+          <AiOutlineRight className={styles2.right} />
         </div>
-        <AiOutlineRight className={styles2.right} />
-      </div>
+      )}
 
       <div className={styles.comments_container}>
         <div>
