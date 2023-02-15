@@ -16,7 +16,7 @@ function MainMap() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log(location.state)
+  console.log(location.state);
 
   const mapRef = useRef();
 
@@ -365,7 +365,9 @@ function MainMap() {
             flexDirection: "column",
             alignItems: "center",
           }}
-          onClick={() => {setResultWindow(false)}}
+          onClick={() => {
+            setResultWindow(false);
+          }}
         >
           <input
             onChange={(e) => onChange(e)}
@@ -456,7 +458,7 @@ function MainMap() {
           level={state.level} // 지도의 확대 레벨
           onClick={(_t, mouseEvent) => {
             // 카카오 검색 결과 목록 끄기
-            setResultWindow(false)
+            setResultWindow(false);
             // 인포윈도우 off
             setIsOpen(0);
             if (clusterInfowindow) clusterInfowindow.close();
@@ -513,7 +515,7 @@ function MainMap() {
                     }));
                   }}
                   image={{
-                    src: "/images/Antenna.png",
+                    src: "/images/antennaIcon.png",
 
                     size: {
                       width: 50,
@@ -521,7 +523,7 @@ function MainMap() {
                     },
                     options: {
                       offset: {
-                        x: 12,
+                        x: 20,
                         y: 20,
                       },
                     },
@@ -545,10 +547,10 @@ function MainMap() {
                     }}
                     radius={1000}
                     strokeWeight={5} // 선의 두께입니다
-                    strokeColor={"#4D3EA3"} // 선의 색깔입니다
+                    strokeColor={"#00529E"} // 선의 색깔입니다
                     strokeOpacity={0} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
                     strokeStyle={"dash"} // 선의 스타일 입니다
-                    fillColor={"#4D3EA3"} // 채우기 색깔입니다
+                    fillColor={"#00529E"} // 채우기 색깔입니다
                     fillOpacity={0.7} // 채우기 불투명도 입니다
                     onClick={() => {
                       kakao.maps.event.preventMap();
@@ -669,7 +671,7 @@ function MainMap() {
                   }));
                 }}
                 image={{
-                  src: "/images/advMarker2true.png",
+                  src: "/images/spaceshipIcon.png",
                   size: {
                     // width: 30,
                     height: 30,
@@ -681,7 +683,7 @@ function MainMap() {
                   options: {
                     offset: {
                       x: 12,
-                      y: 20,
+                      y: 17,
                     },
                   },
                 }}
@@ -788,9 +790,7 @@ function MainMap() {
                             lineHeight: "1rem",
                             color: "gray",
                           }}
-                        >
-                          
-                        </div>
+                        ></div>
                       </div>
                     </div>
                   )}

@@ -41,7 +41,7 @@ function SmallArticleItem(props) {
             />
           </div>
         </div>
-        <div className={style.date}> {props.data.createTime} </div>
+        <div className={style.date}> {props.data.createTime && props.data.createTime.substr(0,10)} </div>
       </div>
     </div>
   );
