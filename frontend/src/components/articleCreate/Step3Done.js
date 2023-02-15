@@ -46,9 +46,9 @@ const Step3Done = ({ postType }) => {
         preserveAspectRatio: "xMidYMid slice",
       },
     });
-    // setTimeout(() => {
-    //   navigate("/map");
-    // }, 3000);
+    setTimeout(() => {
+      navigate("/map");
+    }, 3000);
   }, []);
 
   return (

@@ -1,17 +1,21 @@
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { Hashicon } from "@emeraldpay/hashicon-react";
+
 import style from "./TreasurePage.module.css";
+import { AiOutlineClose } from "react-icons/ai";
 
 function TreasurePage() {
   let { userId, nickname } = useParams();
+
   const URL = useSelector((state) => state.url);
   const TOKEN = useSelector((state) => state.token);
 
   const navigate = useNavigate();
   const [treasureList, setTreasureList] = useState([]);
+
   useEffect(() => {
     axios({
       url: URL + `/adventures/treasures/users/${userId}`,
@@ -36,18 +40,17 @@ function TreasurePage() {
         margin: "5vw",
       }}
     >
-      <h1>{nickname}의 보물함!</h1>
-      <div>보물을 클릭하면 해당 모험 상세페이지로 이동합니다~</div>
+      <div className={style.close}>
+        <AiOutlineClose onClick={() => navigate(-1)} size={35} />
+      </div>
+      <h1 className={style.header}>{nickname}의 보물함</h1>
       {treasureList.length !== 0 ? (
         <div
           style={{
-            width: "90vw",
+            width: "100%",
             display: "grid",
             gridTemplateRows: "1fr ",
-            gridTemplateColumns: "1fr 1fr 1fr",
-            backgroundColor: "",
-            marginLeft: "auto",
-            marginRight: "auto",
+            gridTemplateColumns: "1fr 1fr",
           }}
         >
           {treasureList.map((treasure) => (
@@ -56,11 +59,11 @@ function TreasurePage() {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "space-evenly",
                 alignItems: "center",
                 background: "#F6F9F8",
-                margin: "2vw",
-                borderRadius: "10px",
+                margin: "0.5rem",
+                borderRadius: "999px",
+                padding: "2rem 0.5rem",
               }}
               onClick={() => {
                 navigate(`/adventure/detail/${treasure.adventureId}}`);
@@ -70,14 +73,14 @@ function TreasurePage() {
                 value={
                   treasure.adventureId + treasure.feat + treasure.adventureTitle
                 }
-                size={70}
+                size={60}
               />
-              <div style={{ marginTop: "1vh" }}>{treasure.feat}</div>
+              <div style={{ marginTop: "1rem" }}>{treasure.feat}</div>
               <div
                 style={{
-                  marginTop: "0.5vh",
-                  marginBottom: "1vh",
+                  marginTop: "0.3rem",
                   color: "grey",
+                  fontSize: "0.8rem",
                 }}
               >
                 {treasure.adventureTitle}
@@ -87,8 +90,7 @@ function TreasurePage() {
         </div>
       ) : (
         <div style={{ fontSize: "large", marginTop: "5vh" }}>
-          {" "}
-          보물이 없어요 ㅜㅠ
+          앗! 아직 보물이 없어요
         </div>
       )}
     </div>
