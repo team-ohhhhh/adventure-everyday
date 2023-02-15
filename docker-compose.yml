@@ -13,7 +13,7 @@ services:
       - 4444:3306
     restart: unless-stopped
     volumes:
-      - antenna-data:/var/lib/mysql
+      - /antenna-data:/var/lib/mysql
 
   backend:
     build:
