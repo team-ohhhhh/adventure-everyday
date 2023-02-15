@@ -19,7 +19,7 @@ function ArticleUpdatePage() {
 
   const [title, setTitle] = useState(article.title);
   const [content, setContent] = useState(article.content);
-  const [isPublic, setIsPublic] = useState(!article.isPublic);
+  const [isPrivate, setIsPrivate] = useState(!article.isPublic);
 
   const titleRef = useRef();
   const contentRef = useRef();
@@ -44,7 +44,7 @@ function ArticleUpdatePage() {
   };
 
   const handleCheck = (e) => {
-    setIsPublic((prev) => !prev);
+    setIsPrivate((prev) => !prev);
   };
 
   // 수정 요청
@@ -68,7 +68,7 @@ function ArticleUpdatePage() {
       data: {
         title,
         content,
-        isPublic,
+        isPublic: !isPrivate,
       },
     })
       .then(() => {
@@ -125,7 +125,7 @@ function ArticleUpdatePage() {
           <input
             type="checkbox"
             name="isPrivate"
-            checked={isPublic}
+            checked={isPrivate}
             onChange={handleCheck}
             className={style.checkBox}
           />

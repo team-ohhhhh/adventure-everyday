@@ -153,6 +153,12 @@ const BottomSheetContainer = (props) => {
       .catch((err) => console.log(err))
   }, [props.center]);
 
+  const headerRef = useRef()
+  const myHeight = function() {
+    console.log(headerRef.current.clientHeight)
+    return 70.8 + 43 + headerRef.current.clientHeight
+  }
+
   return (
     <p ref={focusRef}>
       {/* <button onClick={() => setOpen(open => !open)} ref={focusRef}>
@@ -160,12 +166,13 @@ const BottomSheetContainer = (props) => {
       </button> */}
       <button>요기</button>
       <BottomSheet
+        
         open={open}
         // 사라지게 하는 부분
         // onDismiss={() => setOpen(false)}
         blocking={false}
         header={
-          <div style={{display:"flex", flexDirection:"column", alignItems:"start",width:"100%" ,marginTop:"4%"}}>
+          <div ref={headerRef} style={{display:"flex", flexDirection:"column", alignItems:"start",width:"100%" ,marginTop:"4%", }}>
             <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"95%", margin:"auto"}}>
               <div style={{display:"flex", flexDirection:"column", alignItems:"start" }}>
                 <div style={{fontWeight:"600" }}>{W3W}</div>
@@ -174,7 +181,7 @@ const BottomSheetContainer = (props) => {
               <div  style={{alignItems:"flex-start"}}>
                 {props.isAntenna ? (
                   <button
-                  style={{background: "white", borderRadius: "8px", color:"#1C0B69", borderColor: "#1C0B69", height:"3.5rem"}}
+                  style={{background: "white", borderRadius: "8px", color:"#1C0B69", borderColor: "#1C0B69", height:"2rem", width:"7rem"}}
                     onClick={() => {
                       deleteAntenna();
                     }}
@@ -182,11 +189,11 @@ const BottomSheetContainer = (props) => {
                     안테나 뽑기
                   </button>
                 ) : (
-                  <button
+                  <button 
                     onClick={() => {
                       makeAntenna();
                     }}
-                    style={{background: "#1C0B69", borderRadius: "8px", color:"white", height:"3.5rem"}}
+                    style={{background: "#1C0B69", borderRadius: "8px", color:"white", height:"2rem", width:"7rem"}}
                   >
                     안테나 설치  
                   </button>
@@ -195,17 +202,17 @@ const BottomSheetContainer = (props) => {
             </div>
             <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"95%", marginLeft:"auto",marginRight:"auto"}}>
             <div style={{display:"flex", flexDirection:"column", alignItems:"start" }}>
-              <div style={{marginTop:"15%"}}> {props.articleList.length}개의 글 </div>
+              <div style={{marginTop:"15%", marginBottom:"15%"}}> {props.articleList.length}개의 글 </div>
               </div>
             </div>
           </div>
         }
         // 첫번쨰가 1차 높이, 두번째가 최대 높이  
-        snapPoints={({ maxHeight }) => [maxHeight / 5.8, maxHeight]}
+        snapPoints={({ maxHeight }) => [myHeight(), maxHeight]}
       >
-        <div className="forScrollBar" style={{marginTop:"1.2rem"}}>
+        <div className="forScrollBar" style={{marginTop:"1.2rem", marginBottom: "5rem"}}>
           {/* dummy => list로 교체 */}
-          {props.articleList.length != 0 ? props.articleList.map((data) => {
+          {props.articleList.length != 0 ? props.articleList.reverse().map((data) => {
             if (contentType === "article") {
               return <SmallArticleItem data={data} />;
             } else if (contentType === "adventure") {
