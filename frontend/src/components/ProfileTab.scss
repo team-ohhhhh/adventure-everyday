@@ -1,64 +1,64 @@
-$noneActiveTextColor:grey;
-$activeTextColor:rgb(255, 255, 255);
+$noneActiveTextColor: grey;
+$activeTextColor: rgb(255, 255, 255);
 
 $noneActiveTabBottomColor: #ebebeb;
 $activeTabBottomColor: rgb(255, 255, 255);
 
-
 .rb-tabs {
+  position: relative;
+
+  .rb-tabs-header {
     position: relative;
 
-    .rb-tabs-header {
-        position: relative;
+    .rb-tabs-items {
+      display: flex;
+      align-items: center;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      border-bottom: 1px solid $noneActiveTabBottomColor; // active하지 않은 탭 하단 색상
 
-        .rb-tabs-items {
-            display: flex;
-            align-items: center;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            border-bottom: 1px solid $noneActiveTabBottomColor; // active하지 않은 탭 하단 색상
+      @media (max-width: 768px) {
+        justify-content: space-around;
+      }
 
-            @media (max-width: 768px) {
-                justify-content: space-around;
-            }
+      .rb-tabs-item {
+        padding: 8px 16px;
+        cursor: pointer;
+        color: $noneActiveTextColor; // active하지 않은 글씨 색상
 
-            .rb-tabs-item {
-                padding: 8px 16px;
-                cursor: pointer;
-                color: $noneActiveTextColor; // active하지 않은 글씨 색상
-
-                &.active {
-                    font-weight: 500;
-                    color: $activeTextColor; // active한 탭 글씨 색상
-                }
-
-                @media (max-width: 768px) {
-                    font-size: 14px;
-                }
-            }
+        &.active {
+          font-weight: 500;
+          color: $activeTextColor; // active한 탭 글씨 색상
         }
 
-        .rb-tabs-active-item {
-            height: 2px;
-            background-color: $activeTabBottomColor; // active한 탭 하단 색상
-            position: absolute;
-            bottom: 0;
-            transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-            will-change: left, width;
-    
+        @media (max-width: 768px) {
+          font-size: 14px;
         }
+
+        @media (max-width: 385px) {
+          font-size: 12px;
+        }
+      }
     }
 
-    .rb-tabs-content {
-        .rb-tabs-content-item {
-            display: none;
-           
-
-            &.show {
-                display: block;
-                
-            }
-        }
+    .rb-tabs-active-item {
+      height: 2px;
+      background-color: $activeTabBottomColor; // active한 탭 하단 색상
+      position: absolute;
+      bottom: 0;
+      transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+      will-change: left, width;
     }
+  }
+
+  .rb-tabs-content {
+    .rb-tabs-content-item {
+      display: none;
+
+      &.show {
+        display: block;
+      }
+    }
+  }
 }
