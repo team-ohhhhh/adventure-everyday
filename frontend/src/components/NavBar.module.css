@@ -4,6 +4,7 @@
   position: fixed;
   bottom: 0;
   width: 100%;
+  max-width: 700px;
   height: 100px;
   display: flex;
 

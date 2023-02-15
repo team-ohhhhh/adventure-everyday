@@ -1,26 +1,27 @@
 .App {
   text-align: center;
-  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  background-color: #1c0b690a;
+}
+
+.AppContainer {
+  width: 100vw;
+  min-width: 360px;
+  max-width: 700px;
+  position: relative;
+  background-color: white;
 }
 
 /* 모든 페이지에 최소 높이 적용 */
 .pageContainer {
   min-height: 100vh; /* 지원 안 하는 브라우저를 위한 복귀점 */
-  height: -webkit-fill-available;
+  min-height: -webkit-fill-available;
 }
 
 .commentPageContainer {
   min-height: 100vh; /* 지원 안 하는 브라우저를 위한 복귀점 */
   height: -webkit-fill-available;
   background-color: #f2f2f2;
-}
-
-/* 가로 스크롤 방지 -> 안됨 */
-.react-horizontal-scrolling-menu--scroll-container::-webkit-scrollbar {
-  display: none;
-}
-
-.react-horizontal-scrolling-menu--scroll-container {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
 }
