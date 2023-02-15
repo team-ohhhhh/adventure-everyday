@@ -229,9 +229,10 @@ function IntroduceComponent(props) {
 }
 
 function PhotoComponent(props) {
+  const imgRef = useRef();
   
   const savePhoto = () => {
-    const file = props.imgRef.current.files[0]
+    const file = imgRef.current.files[0]
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onloadend = () => {
@@ -261,7 +262,7 @@ function PhotoComponent(props) {
         type="file"
         accept={ "image/*" } 
         onChange={savePhoto}
-        ref={props.imgRef}
+        ref={imgRef}
         style={{display:"none"}}
         ></input>
       <div className={style.inputAndButton}>

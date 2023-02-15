@@ -32,7 +32,7 @@ function SignUpPage() {
   const [photo, setPhoto] = useState("");
   const [file, setFile] = useState("");
 
-  const imgRef = useRef();
+
 
   // 회원가입 axios
   const signUp = function () {
@@ -41,7 +41,7 @@ function SignUpPage() {
     formData.append("nickname", nickname);
     formData.append("password", password);
     formData.append("introduce", introduce);
-    formData.append("file", file);
+    formData.append("photo", file);
     axios
       .post(URL + "/auth/register", formData, {
         headers: {
@@ -146,7 +146,6 @@ function SignUpPage() {
         <PhotoComponent
           setFile={setFile}
           signUp={signUp}
-          imgRef={imgRef}
           setStage={setStage}
           stage={stage}
           setPhoto={setPhoto}
