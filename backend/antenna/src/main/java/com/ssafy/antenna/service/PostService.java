@@ -235,10 +235,13 @@ public class PostService {
 		}
 	}
 
-	public PostDetailRes createPost(Long userId, String title, String content, String lat, String lng, String isPublic, MultipartFile photo, String isCheckPoint, String adventureId, String adventurePlaceId) throws IOException {
+	public com.ssafy.antenna.domain.post.dto.temp.PostDetailRes createPost(Long userId, String title, String content, String lat, String lng, String isPublic, MultipartFile photo, String isCheckPoint, String adventureId, String adventurePlaceId) throws IOException {
 		System.out.println("===================================================");
 		System.out.println("isPublic:"+isPublic);
 		System.out.println("isCheckPoint:"+isCheckPoint);
+
+		// 탐험 체크포인트 모두 달성시 true.
+		Boolean isAdventureClear = false;
 
 		User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 		Post post = new Post();
@@ -294,6 +297,7 @@ public class PostService {
 			adventureInProgress.setCurrentPoint(currentPoint + 1);
 			//같으면 -> adventureInProgress에서 삭제, adventureSuccess 에 추가, 유저 경험치 업데이트(메소드 이용)
 			if ((currentPoint + 1) == adventureInProgress.getTotalPoint()) {
+				isAdventureClear=true;
 				adventureInProgressRepository.deleteById(adventureInProgress.getProgressId());
 				AdventureSucceed adventureSucceed = AdventureSucceed.builder()
 						.user(user)
@@ -332,7 +336,20 @@ public class PostService {
 		}
 
 
-		return post.toResponse();
+		return new com.ssafy.antenna.domain.post.dto.temp.PostDetailRes(
+				post.getPostId(),
+				post.getTitle(),
+				post.getContent(),
+				post.getCoordinate().getX(),
+				post.getCoordinate().getY(),
+				post.getNearestPlace(),
+				post.getW3w(),
+				post.isPublic(),
+				post.getCreateTime(),
+				post.getPhotoUrl(),
+				post.getUser().toResponse(),
+				isAdventureClear
+		);
 	}
 
 	public ResultResponse<PostDetailRes> updatePost(
