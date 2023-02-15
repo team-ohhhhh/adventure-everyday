@@ -171,18 +171,21 @@ public class PostService {
 		if (followList.isPresent()) {
 			for (Follow follow : followList.get()) {
 				Optional<List<Post>> findPostList = postRepository.findAllByUser(follow.getFollowingUser());
-				Optional<List<Post>> findMyPostList = postRepository.findAllByUser(user);
+
 				if (findPostList.isPresent()) {
 					for (Post post : findPostList.get()) {
 						if (post.isPublic())
 							searchResult.add(post.getPostId());
 					}
 				}
-				if (findMyPostList.isPresent()) {
-					for (Post post : findMyPostList.get()) {
-						searchResult.add(post.getPostId());
-					}
-				}
+
+			}
+		}
+		//내 글 가져오기
+		Optional<List<Post>> findMyPostList = postRepository.findAllByUser(user);
+		if (findMyPostList.get().size()!=0) {
+			for (Post post : findMyPostList.get()) {
+				searchResult.add(post.getPostId());
 			}
 		}
 		//마지막으로 내가 참여하고 알림설정 on 해놓은 모험의 게시글도 가져와야 한다.
