@@ -4,13 +4,13 @@ services:
     image: mysql:8.0.30
     environment:
       MYSQL_DATABASE: antennadb
-      MYSQL_USER: gorilla305
-      MYSQL_PASSWORD: gorilla305
+#      MYSQL_USER: gorilla305
+#      MYSQL_PASSWORD: gorilla305
 #      MYSQL_ROOT_HOST: '%'
-      MYSQL_ROOT_PASSWORD: antenna305
+      MYSQL_ROOT_PASSWORD: gorillantenna305
       TZ: "Asia/Seoul"
     ports:
-      - 4444:3306
+      - 3306:3306
     restart: unless-stopped
     volumes:
       - /antenna-data:/var/lib/mysql
@@ -29,8 +29,8 @@ services:
     container_name: springboot
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/antennadb?useSSL=false&allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME: gorilla305
-      SPRING_DATASOURCE_PASSWORD: gorilla305
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: gorillantenna305
       TZ: "Asia/Seoul"
   
   frontend:
