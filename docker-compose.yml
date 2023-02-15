@@ -29,7 +29,7 @@ services:
     container_name: springboot
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/antennadb?useSSL=false&allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: gorillantenna305
       TZ: "Asia/Seoul"
   
