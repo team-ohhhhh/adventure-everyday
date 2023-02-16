@@ -90,7 +90,6 @@ function AdventureDetailInfo(props) {
         <div className={styles.checkPointArticles}>
           <div className={styles.articleInfo}>
             <div className={styles.cpSubTitle}>이 포인트에서 작성된 글들</div>
-            <button className={styles.arrangeBtn}>정렬버튼</button>
           </div>
           <div className={styles.articles}>
             {/* 체크포인트 글 목록이 있으면 보여줄 컴포넌트 */}

@@ -167,7 +167,7 @@ function MainMap() {
     const content = document.createElement("div");
     content.setAttribute(
       "style",
-      "width: 150px; height: 65px; padding: 0.2rem 0.5rem; overflow: auto;"
+      "width: 180px; height: 65px; padding: 0.2rem 0.5rem; overflow: auto;"
     );
 
     clusterArticles.forEach((clusterArticle, idx) => {
@@ -374,11 +374,12 @@ function MainMap() {
               boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
               paddingLeft: "2vw",
             }}
+            value={keyWord}
           ></input>
           {result.length > 0 &&
             resultWindow &&
-            result.slice(0, 11).map((place) => {
-              //TODO: 일단 10개까지만 보여주는걸로 하자...
+            result.slice(0, 5).map((place) => {
+              // 5개만 보여주기
               return (
                 <div
                   key={place.id}
@@ -451,6 +452,7 @@ function MainMap() {
           onClick={(_t, mouseEvent) => {
             // 카카오 검색 결과 목록 끄기
             setResultWindow(false);
+            setKeyWord("");
             // 인포윈도우 off
             setIsOpen(0);
             if (clusterInfowindow) clusterInfowindow.close();
@@ -756,7 +758,7 @@ function MainMap() {
                   {isOpen === article.postId && (
                     <div
                       style={{
-                        width: "150px",
+                        width: "170px",
                         padding: "0.5rem",
                       }}
                     >
@@ -782,7 +784,9 @@ function MainMap() {
                             lineHeight: "1rem",
                             color: "gray",
                           }}
-                        ></div>
+                        >
+                          >{/* 오타 아님! */}
+                        </div>
                       </div>
                     </div>
                   )}

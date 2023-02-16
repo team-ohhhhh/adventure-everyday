@@ -117,9 +117,9 @@ public class AdventureController {
 
     // 탐험 포기(특정 유저가 참가중인 탐험 삭제)
     @DeleteMapping("/{adventureId}/adventure-in-progress")
-    public ResultResponse<String> deleteAdventureInProgress(@PathVariable Long adventureId) {
+    public ResultResponse<String> deleteAdventureInProgress(@PathVariable Long adventureId,Authentication authentication) {
         if(adventureId < 1) throw new BadConstantException();
-        adventureService.deleteAdventureInProgress(adventureId);
+        adventureService.deleteAdventureInProgress(adventureId,Long.valueOf(authentication.getName()));
         return ResultResponse.success("탐험 포기 성공~~");
     }
 

@@ -159,7 +159,7 @@ public class PostService {
 		//1. 내 전체 안테나에 속한 게시글 구하기
 		Optional<List<Antenna>> antennaList = antennaRepository.findAllByUser(user);
 		//있다면, 안테나의 범위 안에 있는 글들을 조회해야한다.
-		if (antennaList.isPresent()) {
+		if (antennaList.get().size()>0) {
 			for (Antenna antenna : antennaList.get()) {
 				//안테나 별로 주변 게시글을 조회해서 그 게시글 중 내가 가진 postId가 있는지를 체크한다.
 				searchResult.addAll(getPostIdWithArea(antenna.getCoordinate().getX(), antenna.getCoordinate().getY(), antenna.getArea()));
@@ -168,11 +168,11 @@ public class PostService {
 		//내가 팔로우한 유저의 게시글도 가져오자.
 		Optional<List<Follow>> followList = followRepository.findAllByFollowerUser(user);
 
-		if (followList.isPresent()) {
+		if (followList.get().size()>0) {
 			for (Follow follow : followList.get()) {
 				Optional<List<Post>> findPostList = postRepository.findAllByUser(follow.getFollowingUser());
 
-				if (findPostList.isPresent()) {
+				if (findPostList.get().size()>0) {
 					for (Post post : findPostList.get()) {
 						if (post.isPublic())
 							searchResult.add(post.getPostId());
@@ -183,14 +183,14 @@ public class PostService {
 		}
 		//내 글 가져오기
 		Optional<List<Post>> findMyPostList = postRepository.findAllByUser(user);
-		if (findMyPostList.get().size()!=0) {
+		if (findMyPostList.get().size()>0) {
 			for (Post post : findMyPostList.get()) {
 				searchResult.add(post.getPostId());
 			}
 		}
 		//마지막으로 내가 참여하고 알림설정 on 해놓은 모험의 게시글도 가져와야 한다.
 		Optional<List<AdventureInProgress>> adventureInProgressList = adventureInProgressRepository.findAllByUser(user);
-		if (adventureInProgressList.isPresent()) {
+		if (adventureInProgressList.get().size()>0) {
 			//내가 참가중인 탐험이 있으면, 알람설정 한 모험이 있나 확인
 			for (AdventureInProgress adventureInProgress : adventureInProgressList.get()) {
 				Optional<AdventureLike> adventureLike = adventureLikeRepository.findByAdventureAndUser(adventureInProgress.getAdventure(), user);
@@ -198,7 +198,7 @@ public class PostService {
 					//내가 알람설정한 탐험이 있다면, 그 탐험 id로 체크포인트 게시글에 작성된 글들을 가져온다.
 					Optional<List<CheckpointPost>> checkpointPostList = checkpointPostRepository.findAllByAdventure(adventureLike.get().getAdventure());
 					//postId를 넣어준다.
-					if (checkpointPostList.isPresent()) {
+					if (checkpointPostList.get().size()>0) {
 						for (CheckpointPost checkpointPost : checkpointPostList.get()) {
 							if (checkpointPost.getPost().isPublic())
 								searchResult.add(checkpointPost.getPost().getPostId());
@@ -223,9 +223,24 @@ public class PostService {
 	public PostDetailRes deletePost(Long userId, Long postId) throws IllegalAccessException {
 		Post post = postRepository.findById(postId)
 				.orElseThrow(NoSuchElementException::new);
+		User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 		if (adventurePlaceRepository.findByPost(post).isPresent()) {
 			throw new AdventurePostException();
 		}
+		//체크포인트 게시글이라면, 체크포인트 게시글 정보와 체크포인트 정보도 지우고 달성도 같이 내리기
+		Optional<CheckpointPost> checkpointPost = checkpointPostRepository.findByPost(post);
+		if(checkpointPost.isPresent()){
+			//체크포인트 정보 지우기
+			checkpointRepository.deleteByUserAndAdventurePlace(user,checkpointPost.get().getAdventurePlace());
+			//달성도 내리기
+			Optional<AdventureInProgress> adventureInProgress = adventureInProgressRepository.findByUserAndAdventure(user,checkpointPost.get().getAdventure());
+			int currentCnt = adventureInProgress.get().getCurrentPoint();
+			adventureInProgress.get().setCurrentPoint(currentCnt-1);
+			adventureInProgressRepository.save(adventureInProgress.get());
+			//체크포인트 게시글 삭제
+			checkpointPostRepository.deleteById(checkpointPost.get().getCheckpointId());
+		}
+
 		if (post.getPhotoName() != null) {
 			awsS3Service.deleteImage(post.getPhotoName());
 		}
@@ -407,6 +422,7 @@ public class PostService {
 				.filter(post -> post.getUser().equals(auth) || post.isPublic())
 				.map(postDtoMapper)
 				.collect(Collectors.toList());
+		Collections.reverse(postDtoList);
 		return ResultResponse.success(postDtoList);
 	}
 
@@ -640,6 +656,7 @@ public class PostService {
 				postList) {
 			postDetailResList.add(post.toResponse());
 		}
+		Collections.reverse(postDetailResList);
 		return postDetailResList;
 	}
 
