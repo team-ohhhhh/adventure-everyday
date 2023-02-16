@@ -1,14 +1,17 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import HorizontalScroll from "../components/HorizontalScroll";
-import style from "./AdventurePage.module.css";
-import { BiSearchAlt2 } from "react-icons/bi";
-import { useMemo, useState } from "react";
-import axios from "axios";
 import { useSelector } from "react-redux";
+import HorizontalScroll from "../components/HorizontalScroll";
+import axios from "axios";
+
 import AdventureBannerMore from "../components/Adventure/AdventureBannerMore";
-import AdventureBanner from "../components/Adventure/AdventureBanner";
+
+import style from "./AdventurePage.module.css";
+import "./AdventurePage.css";
+import { BiSearchAlt2 } from "react-icons/bi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faMessage, faXmark, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+
 function AdventurePage() {
   const navigate = useNavigate();
 
@@ -20,7 +23,6 @@ function AdventurePage() {
   const [nearList, setnearList] = useState([]); // 내 주변 탐험
   const [updateList, setUpdateList] = useState([]); // 업데이트 탐험
   const [popularList, setPopularList] = useState([]); //
-
 
   // 내 주변 탐험 조회
   function getCurrentLocation() {
@@ -82,169 +84,217 @@ function AdventurePage() {
   }
 
   // 더보기용 컴포넌트 전환
-  const [isMore, setIsMore] = useState(false)
-  const [whichMore, setWhichMore] = useState(1)
+  const [isMore, setIsMore] = useState(false);
+  const [whichMore, setWhichMore] = useState(1);
 
-  useMemo(() => {
+  useEffect(() => {
     getCurrentLocation();
     getNewAdventure();
     getPopularAdventure();
+
+    window.scrollTo(0, 0);
   }, []);
-  
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [whichMore]);
 
   return (
-    <div className="pageContainer">
-      {!isMore 
-      ? <div className={style.adPageContainer}>
-        <div className={style.recommendPageHeader}>
-          <div className={style.pageTitle}>탐험</div>
-          <div className={style.searchAndCreate}>
-            {/* 검색 컴포넌트 자리 onClick달아서 모달열기 */}
-            <BiSearchAlt2
-              className={style.searchIcon}
-              onClick={() => {
-                navigate("/search/adventure");
-              }}
-            />
-            {/* 생성 컴포넌트 자리 */}
-            <h3 onClick={() => navigate("/adventure/create")}>생성</h3>
+    <div className="pageContainer" style={{ marginBottom: "6rem" }}>
+      {!isMore ? (
+        <div className={style.adPageContainer}>
+          <div className={style.recommendPageHeader}>
+            <div className={style.pageTitle}>탐험</div>
+            <div className={style.searchAndCreate}>
+              {/* 검색 컴포넌트 자리 onClick달아서 모달열기 */}
+              <BiSearchAlt2
+                className={style.searchIcon}
+                onClick={() => {
+                  navigate("/search/adventure");
+                }}
+              />
+              {/* 생성 컴포넌트 자리 */}
+              <h3 onClick={() => navigate("/adventure/create")}>생성</h3>
+            </div>
           </div>
+          {/* 첫번째 추천 기준 */}
+          <section className={style.section}>
+            <div className={style.recommendListInfo}>
+              <div className={style.adventureTitle}>
+                <div className={style.recommendTitle}>내 주변의 탐험</div>
+                <div className={style.recommendInfo}>
+                  지금 바로 시작할 수 있어요
+                </div>
+              </div>
+              <div className={style.more}>
+                <span
+                  onClick={() => {
+                    setIsMore(true);
+                    setWhichMore(1);
+                  }}
+                >
+                  더보기
+                </span>
+              </div>
+            </div>
+            <div className={`${style.scrollContainer} scrollMargin`}>
+              <HorizontalScroll
+                contentType={"adventure"}
+                adventureList={nearList.slice(0, 5)}
+                isAdTab={true}
+              />
+            </div>
+          </section>
+          <div className={style.line}>&nbsp;</div>
+          {/* 두번째 추천 기준 */}
+          <section className={style.section}>
+            <div className={style.recommendListInfo}>
+              <div className={style.adventureTitle}>
+                <div className={style.recommendTitle}>최근에 만들어진 탐험</div>
+                <div className={style.recommendInfo}>
+                  따끈따끈한 신규 탐험들이에요
+                </div>
+              </div>
+              <div className={style.more}>
+                <span
+                  onClick={() => {
+                    setIsMore(true);
+                    setWhichMore(2);
+                  }}
+                >
+                  더보기
+                </span>
+              </div>
+            </div>
+            <div className={`${style.scrollContainer} scrollMargin`}>
+              <HorizontalScroll
+                contentType={"adventure"}
+                adventureList={updateList.slice(0, 5)}
+                isAdTab={true}
+              />
+            </div>
+          </section>
+          <div className={style.line}>&nbsp;</div>
+          {/* 세번째 추천 기준 */}
+          <section className={style.section}>
+            <div className={style.recommendListInfo}>
+              <div className={style.adventureTitle}>
+                <div className={style.recommendTitle}>인기 많은 탐험</div>
+                <div className={style.recommendInfo}>
+                  별점이 높은 탐험들만 모았어요
+                </div>
+              </div>
+              <div className={style.more}>
+                <span
+                  onClick={() => {
+                    setIsMore(true);
+                    setWhichMore(3);
+                  }}
+                >
+                  더보기
+                </span>
+              </div>
+            </div>
+            <div className={`${style.scrollContainer} scrollMargin`}>
+              <HorizontalScroll
+                contentType={"adventure"}
+                adventureList={popularList.slice(0, 5)}
+                isAdTab={true}
+              />
+            </div>
+          </section>
         </div>
-        {/* 첫번째 추천 기준 */}
-        <section className={style.section}>
-          <div className={style.recommendListInfo}>
-            <div className={style.adventureTitle}>
-              <div className={style.recommendTitle}>내 주변의 탐험</div>
-              <div className={style.recommendInfo}>
-                지금 바로 시작할 수 있어요
-              </div>
+      ) : whichMore === 1 ? (
+        <div>
+          <div className={style.title}>
+            <div>
+              <span className={style.titleFont}>내 주변의 탐험 </span>
+              <span>
+                <FontAwesomeIcon
+                  icon={faXmark}
+                  style={{ fontSize: "1.5rem", float: "right" }}
+                  onClick={() => {
+                    setIsMore(false);
+                  }}
+                />
+              </span>
             </div>
-            <div className={style.more}>
-              <span onClick={() => {setIsMore(true); setWhichMore(1)}}>더보기</span>
-            </div>
-          </div>
-          <div className={style.scrollContainer}>
-            <HorizontalScroll
-              contentType={"adventure"}
-              adventureList={nearList.slice(0,5)}
-              isAdTab={true}
-            />
-          </div>
-        </section>
-        <div className={style.line}>&nbsp;</div>
-        {/* 두번째 추천 기준 */}
-        <section className={style.section}>
-          <div className={style.recommendListInfo}>
-            <div className={style.adventureTitle}>
-              <div className={style.recommendTitle}>최근에 만들어진 탐험</div>
-              <div className={style.recommendInfo}>
-                따끈따끈한 신규 탐험들이에요
-              </div>
-            </div>
-            <div className={style.more}>
-              <span onClick={() => {setIsMore(true); setWhichMore(2)}}>더보기</span>
-            </div>
-          </div>
-          <div className={style.scrollContainer}>
-            <HorizontalScroll
-              contentType={"adventure"}
-              adventureList={updateList.slice(0,5)}
-              isAdTab={true}
-            />
-          </div>
-        </section>
-        <div className={style.line}>&nbsp;</div>
-        {/* 세번째 추천 기준 */}
-        <section className={style.section}>
-          <div className={style.recommendListInfo}>
-            <div className={style.adventureTitle}>
-              <div className={style.recommendTitle}>인기 많은 탐험</div>
-              <div className={style.recommendInfo}>
-                별점이 높은 탐험들만 모았어요
-              </div>
-            </div>
-            <div className={style.more}>
-              <span onClick={() => {setIsMore(true); setWhichMore(3)}}>더보기</span>
-            </div>
-          </div>
-          <div className={style.scrollContainer}>
-            <HorizontalScroll
-              contentType={"adventure"}
-              adventureList={popularList.slice(0,5)}
-              isAdTab={true}
-            />
-          </div>
-        </section>
-      </div>
-      : whichMore === 1 
-      ? <div>
-        <div className={style.title}>
-          <div>
-          <span className={style.titleFont}>내 주변의 탐험  </span>
-          <span><FontAwesomeIcon icon={faXmark} style={{fontSize:"1.5rem",float:"right" }} onClick={()=>{setIsMore(false)}}/></span>
-          </div>
-          <div className={style.titleInfo}>
-          지금 바로 시작할 수 있어요
-          </div>
+            <div className={style.titleInfo}>지금 바로 시작할 수 있어요</div>
           </div>
           <div>
             {nearList.map((articleListItem) => {
               return (
                 <AdventureBannerMore
-                    key={articleListItem.postId}
-                    adventureItem={articleListItem}
-                    isAdTab={true}
-                    setIsMore={setIsMore}/>
-                )
-                })
-            }
+                  key={articleListItem.postId}
+                  adventureItem={articleListItem}
+                  isAdTab={true}
+                  setIsMore={setIsMore}
+                />
+              );
+            })}
           </div>
         </div>
-      : whichMore === 2
-      ? <div>
-        <div className={style.title}>
+      ) : whichMore === 2 ? (
         <div>
-          <span className={style.titleFont}>최근에 만들어진 탐험  </span>
-          <span><FontAwesomeIcon icon={faXmark} style={{fontSize:"1.5rem",float:"right" }} onClick={()=>{setIsMore(false)}}/></span>
-          </div>
-          <div className={style.titleInfo}>
-            별점이 높은 탐험들만 모았어요
-          </div>
+          <div className={style.title}>
+            <div>
+              <span className={style.titleFont}>최근에 만들어진 탐험 </span>
+              <span>
+                <FontAwesomeIcon
+                  icon={faXmark}
+                  style={{ fontSize: "1.5rem", float: "right" }}
+                  onClick={() => {
+                    setIsMore(false);
+                  }}
+                />
+              </span>
+            </div>
+            <div className={style.titleInfo}>별점이 높은 탐험들만 모았어요</div>
           </div>
           <div>
             {updateList.map((articleListItem) => {
               return (
                 <AdventureBannerMore
-                    key={articleListItem.postId}
-                    adventureItem={articleListItem}
-                    isAdTab={true}
-                    setIsMore={setIsMore}/>
-              )
-            })
-            }
+                  key={articleListItem.postId}
+                  adventureItem={articleListItem}
+                  isAdTab={true}
+                  setIsMore={setIsMore}
+                />
+              );
+            })}
           </div>
-      </div>
-      : <div>
-        <div className={style.title}>
+        </div>
+      ) : (
         <div>
-          <span className={style.titleFont}>인기 많은 탐험 </span>
-          <span><FontAwesomeIcon icon={faXmark} style={{fontSize:"1.5rem",float:"right" }} onClick={()=>{setIsMore(false)}}/></span>
+          <div className={style.title}>
+            <div>
+              <span className={style.titleFont}>인기 많은 탐험 </span>
+              <span>
+                <FontAwesomeIcon
+                  icon={faXmark}
+                  style={{ fontSize: "1.5rem", float: "right" }}
+                  onClick={() => {
+                    setIsMore(false);
+                  }}
+                />
+              </span>
+            </div>
+            <div className={style.titleInfo}>따끈따끈한 신규 탐험들이에요</div>
           </div>
-          <div className={style.titleInfo}>
-            따끈따끈한 신규 탐험들이에요
-          </div></div>
-      <div>{popularList.map((articleListItem) => {
-        return (
-          <AdventureBannerMore
-              key={articleListItem.postId}
-              adventureItem={articleListItem}
-              isAdTab={true}
-              setIsMore={setIsMore}/>
-        )
-      })
-      }</div></div>
-       
-    }
+          <div>
+            {popularList.map((articleListItem) => {
+              return (
+                <AdventureBannerMore
+                  key={articleListItem.postId}
+                  adventureItem={articleListItem}
+                  isAdTab={true}
+                  setIsMore={setIsMore}
+                />
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
