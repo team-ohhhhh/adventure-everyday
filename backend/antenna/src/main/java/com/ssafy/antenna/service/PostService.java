@@ -422,6 +422,7 @@ public class PostService {
 				.filter(post -> post.getUser().equals(auth) || post.isPublic())
 				.map(postDtoMapper)
 				.collect(Collectors.toList());
+		Collections.reverse(postDtoList);
 		return ResultResponse.success(postDtoList);
 	}
 
@@ -655,6 +656,7 @@ public class PostService {
 				postList) {
 			postDetailResList.add(post.toResponse());
 		}
+		Collections.reverse(postDetailResList);
 		return postDetailResList;
 	}
 

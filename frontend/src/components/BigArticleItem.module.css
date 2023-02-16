@@ -26,19 +26,21 @@
   color: black;
 }
 
+
 .titleAndW3w {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin: 10px;
+  margin: 1rem;
 }
 
-.title {
-  /* 타이틀 너비 체크 */
+.w3w {
+  font-size: 1rem;
+}
+
+/* .title {
   width: 80%;
   text-align: left;
-
-  /* 여기가 글자 넘칠때 잘라주는 코드 */
   overflow: hidden;  		
   text-overflow: ellipsis;  	 
   white-space: nowrap;
@@ -46,6 +48,14 @@
   font-size: 24px;
   font-weight: 600;
   
+} */
+.title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.4rem;
 }
 
 .photo {
@@ -63,6 +73,9 @@
 }
 
 .date {
+  font-size: 0.8rem;
+  color: gray;
   text-align: right;
-  margin: 5px;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
 }
