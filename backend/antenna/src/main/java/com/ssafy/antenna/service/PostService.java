@@ -231,7 +231,7 @@ public class PostService {
 		Optional<CheckpointPost> checkpointPost = checkpointPostRepository.findByPost(post);
 		if(checkpointPost.isPresent()){
 			//체크포인트 정보 지우기
-			checkpointRepository.deleteByAdventurePlaceAndUser(checkpointPost.get().getAdventurePlace(), user);
+			checkpointRepository.deleteByUserAndAdventurePlace(user,checkpointPost.get().getAdventurePlace());
 			//달성도 내리기
 			Optional<AdventureInProgress> adventureInProgress = adventureInProgressRepository.findByUserAndAdventure(user,checkpointPost.get().getAdventure());
 			int currentCnt = adventureInProgress.get().getCurrentPoint();
