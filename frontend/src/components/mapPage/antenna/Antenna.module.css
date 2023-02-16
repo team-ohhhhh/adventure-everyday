@@ -1,9 +1,9 @@
 .container{
     
-    position: relative;
-    top: -60%;
-    left: 40%;
-    z-index: 2;
+    position: absolute;
+    top: 40%;
+    right: 0%;
+    z-index: 20;
 
    
     width: auto;
