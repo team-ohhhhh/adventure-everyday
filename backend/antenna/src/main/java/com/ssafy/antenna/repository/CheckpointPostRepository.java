@@ -20,6 +20,8 @@ public interface CheckpointPostRepository extends JpaRepository<CheckpointPost, 
 
     Optional<CheckpointPost> findByPost(Post post);
 
+    Optional<CheckpointPost> findByAdventureAndPost(Adventure adventure, Post post);
+
     @Query(value = "select cp.checkpoint_id,cp.create_time,cp.update_time,cp.adventure_id,cp.adventure_place_id,cp.post_id\n" +
             "from (select post_id, count(post_id) cnt from post_like group by post_id) temp\n" +
             "right outer join checkpoint_post cp\n" +
@@ -28,4 +30,6 @@ public interface CheckpointPostRepository extends JpaRepository<CheckpointPost, 
     Optional<List<CheckpointPost>> findCheckpointPostByPostLikeDesc(@Param("adventurePlaceId") Long adventurePlaceId);
 
     Optional<List<CheckpointPost>> findAllByAdventurePlaceOrderByCreateTimeDesc(AdventurePlace adventurePlace);
+
+    void deleteByPostAndAdventure(Post post, Adventure adventure);
 }
