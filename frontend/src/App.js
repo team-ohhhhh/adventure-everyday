@@ -67,7 +67,7 @@ function App() {
               <Route path="/feed" element={<FeedPage />} />
               {/* <Route path={["/map", "/"]} element={<MapPage />} /> */}
 
-              {["/map", "/"].map((path, idx) => (
+              {["/map"].map((path, idx) => (
                 <Route key={idx} path={path} element={<MapPage />} />
               ))}
 
@@ -125,7 +125,7 @@ function App() {
           </Route>
           {/* 로그인 상태에서 가면 안되는 페이지는 이곳에 추가해주세요 */}
           <Route element={<AntiAuthLayout />}>
-            <Route path="/login" element={<LogInPage />} />
+            <Route path="/" element={<LogInPage />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/kakao/callback" element={<KakaoLogIn />} />
             <Route path="/kakao/callback/signup" element={<KakaoSignUp />} />

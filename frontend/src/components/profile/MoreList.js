@@ -13,7 +13,7 @@ function MoreList({ isMe }) {
     dispatch(deleteToken()) 
     dispatch(deleteUserInfo())
     //TODO: 먼가 여기 다음에 만나요 페이지 있으면 좋겠다
-    navigate('/login')
+    navigate('/')
   }
 
   if (isMe) {

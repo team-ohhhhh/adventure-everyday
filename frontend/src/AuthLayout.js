@@ -9,7 +9,7 @@ const AuthLayout = () => {
 
   useEffect(() => {
     if (!TOKEN) {
-      navigate("/login", { state: pathname });
+      navigate("/", { state: pathname });
     }
   }, []);
 
