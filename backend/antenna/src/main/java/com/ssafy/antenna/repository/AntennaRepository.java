@@ -11,4 +11,6 @@ public interface AntennaRepository extends JpaRepository<Antenna, Long> {
     Optional<Antenna> findByAntennaIdAndUser(Long antennaId, User user);
 
     Optional<List<Antenna>> findAllByUser(User user);
+
+    Optional<Integer> countByUser(User user);
 }
