@@ -531,7 +531,7 @@ public class AdventureService {
             // 별점 합
             Double totalSum = adventureReviewRepository.sumOfAdventureReviews(adventure.getAdventureId()).orElseThrow(AdventureReviewNotFoundException::new);
             // 평균별점 업데이트
-            Double avgReviewGrade = (double) Math.round((totalSum / totalCnt) * 100.0 / 100.0);
+            Double avgReviewGrade = (double) Math.round((totalSum * 100.0 / totalCnt))/100.0;
             adventure.updateAvgReviewGrade(avgReviewGrade);
         } else {
             adventure.updateAvgReviewGrade(Double.valueOf(0));
@@ -591,7 +591,7 @@ public class AdventureService {
             // 별점 합
             Double totalSum = adventureReviewRepository.sumOfAdventureReviews(adventure.getAdventureId()).orElseThrow(AdventureReviewNotFoundException::new);
             // 평균별점 업데이트
-            Double avgReviewGrade = (double) Math.round((totalSum / totalCnt) * 100.0 / 100.0);
+            Double avgReviewGrade = (double) Math.round((totalSum * 100.0 / totalCnt))/100.0;
             adventure.updateAvgReviewGrade(avgReviewGrade);
         } else {
             adventure.updateAvgReviewGrade(Double.valueOf(0));
@@ -622,7 +622,7 @@ public class AdventureService {
             Double totalSum = adventureReviewRepository.sumOfAdventureReviews(adventure.getAdventureId()).orElseThrow(AdventureReviewNotFoundException::new);
             System.out.println("33333333333333333333333333333333333333333333333333");
             // 평균별점 업데이트
-            Double avgReviewGrade = (double) Math.round((totalSum / totalCnt) * 100.0 / 100.0);
+            Double avgReviewGrade = (double) Math.round((totalSum * 100.0 / totalCnt))/100.0;
             adventure.updateAvgReviewGrade(avgReviewGrade);
         } else {
             adventure.updateAvgReviewGrade(Double.valueOf(0));
