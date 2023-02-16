@@ -35,6 +35,10 @@ const Step1CheckPoint = ({
   }, [checkpoints]);
 
   const openModal = () => {
+    if (myPosts.length < 1) {
+      alert("게시글을 먼저 작성해주세요.");
+      return;
+    }
     if (checkpoints.length === 5) {
       alert("체크포인트는 최대 5개까지 선택할 수 있습니다.");
     } else {
