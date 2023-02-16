@@ -64,8 +64,7 @@ function AdventureDetailPage() {
       .then((response) => {
         setReviews(response.data.result.subAdventureReviews);
         setChingho(response.data.result.adventureFeat);
-        console.log(response)
-
+        console.log(response);
       })
       .catch((err) => console.log(err));
   }
@@ -92,16 +91,11 @@ function AdventureDetailPage() {
   // 탐험 상세 정보 받아오기
   useEffect(() => {
     getAdventureDetail();
-    getReview()
+    getReview();
   }, []);
 
   return (
-    <div
-      className="pageContainer"
-      onClick={() => {
-        close();
-      }}
-    >
+    <div className="pageContainer" onClick={() => close()}>
       <div className={styles.wrapper}>
         <div className={styles.white}>
           <AdventureInfo
@@ -109,7 +103,11 @@ function AdventureDetailPage() {
             key={adventureDetail.adventureId}
             info={adventureDetail}
             getAdventureDetail={getAdventureDetail}
-            isReview={reviews.filter((review) => {return review.userId === USER.userId }).length > 0}
+            isReview={
+              reviews.filter((review) => {
+                return review.userId === USER.userId;
+              }).length > 0
+            }
           ></AdventureInfo>
         </div>
 
