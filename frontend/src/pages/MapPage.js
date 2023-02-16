@@ -764,7 +764,7 @@ function MainMap() {
                   {isOpen === article.postId && (
                     <div
                       style={{
-                        width: "150px",
+                        width: "170px",
                         padding: "0.5rem",
                       }}
                     >
