@@ -30,6 +30,32 @@ import PageNotFound from "./pages/PageNotFound";
 import "./App.css";
 
 function App() {
+  // 두 손가락으로 화면을 클릭 시 이 이벤트를 무시
+  document.documentElement.addEventListener(
+    "touchstart",
+    function (event) {
+      if (event.touches.length > 1) {
+        event.preventDefault();
+      }
+    },
+    false
+  );
+
+  var lastTouchEnd = 0;
+
+  // 두번 연속 탭이 0.3초보다 짧다면 이를 무시
+  document.documentElement.addEventListener(
+    "touchend",
+    function (event) {
+      var now = new Date().getTime();
+      if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+      }
+      lastTouchEnd = now;
+    },
+    false
+  );
+
   return (
     <div className="App">
       <div className="AppContainer">

@@ -412,6 +412,9 @@ public class AdventureService {
                 checkpointPostRepository.deleteByPostAndAdventure(post,adventure);
             }
         }
+
+        // 탐험 포기하면, 알림관한 정보도 삭제한다.
+        adventureLikeRepository.deleteByUserAndAdventure(user,adventure);
     }
 
 
