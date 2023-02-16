@@ -21,6 +21,12 @@ function CommentPage({ isDetailPage }) {
 
   const [commentList, setCommentList] = useState([]);
 
+  useEffect(() => {
+    if (!isDetailPage) {
+      window.scrollTo(0, 0);
+    }
+  }, []);
+
   const getComments = function () {
     axios({
       url: URL + `/posts/${articleId}/comments`,
@@ -86,6 +92,7 @@ function CommentPage({ isDetailPage }) {
       style={{
         backgroundColor: "#f2f2f2",
         paddingBottom: "5rem",
+        height: isDetailPage ? "inherit" : "100vh",
       }}
       onClick={() => {
         closeMoreButton();
