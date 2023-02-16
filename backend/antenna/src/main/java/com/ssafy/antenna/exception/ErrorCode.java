@@ -59,6 +59,8 @@ public enum ErrorCode {
     DUPLICATED_ADVENTURE_IN_PROGRESS(CONFLICT, "이미 참가중인 모험입니다."),
     DUPLICATED_ADVENTURE_PLACE(CONFLICT, "이미 참가한 모험 장소입니다."),
     DUPLICATED_ADVENTURE_LIKE(CONFLICT, "이미 알림을 켠 모험입니다."),
+
+    OVER_ANTENNA_CNT(CONFLICT, "설치할 수 있는 안태나의 갯수를 초과하였습니다."),
     DIFFICULTY_MAX(BAD_REQUEST, "모험의 난이도는 1이상 5이하입니다."),
     FOLLOW_NOT_ME(BAD_REQUEST, "나를 팔로우 할 수 없습니다."),
     DATABASE_ERROR(INTERNAL_SERVER_ERROR, "데이터베이스 에러"),

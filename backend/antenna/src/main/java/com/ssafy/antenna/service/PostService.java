@@ -223,9 +223,24 @@ public class PostService {
 	public PostDetailRes deletePost(Long userId, Long postId) throws IllegalAccessException {
 		Post post = postRepository.findById(postId)
 				.orElseThrow(NoSuchElementException::new);
+		User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 		if (adventurePlaceRepository.findByPost(post).isPresent()) {
 			throw new AdventurePostException();
 		}
+		//체크포인트 게시글이라면, 체크포인트 게시글 정보와 체크포인트 정보도 지우고 달성도 같이 내리기
+		Optional<CheckpointPost> checkpointPost = checkpointPostRepository.findByPost(post);
+		if(checkpointPost.isPresent()){
+			//체크포인트 정보 지우기
+			checkpointRepository.deleteByUserAndAdventurePlace(user,checkpointPost.get().getAdventurePlace());
+			//달성도 내리기
+			Optional<AdventureInProgress> adventureInProgress = adventureInProgressRepository.findByUserAndAdventure(user,checkpointPost.get().getAdventure());
+			int currentCnt = adventureInProgress.get().getCurrentPoint();
+			adventureInProgress.get().setCurrentPoint(currentCnt-1);
+			adventureInProgressRepository.save(adventureInProgress.get());
+			//체크포인트 게시글 삭제
+			checkpointPostRepository.deleteById(checkpointPost.get().getCheckpointId());
+		}
+
 		if (post.getPhotoName() != null) {
 			awsS3Service.deleteImage(post.getPhotoName());
 		}
