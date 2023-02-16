@@ -35,7 +35,7 @@ function ReviewItem({
         Authorization: `Bearer ${TOKEN}`,
       },
     }).then((res) => {
-      console.log(res)
+      // console.log(res)
       getReview()
       setWouldYouDelete(false)
     })

@@ -38,7 +38,7 @@ function EmailComponent(props) {
     .then((res) => {
       if (!res.data.result.result) {
         setIsChecked(true)
-        console.log(res)
+        // console.log(res)
         axios({
           url : URL + '/email/send',
           method: 'get',
@@ -77,7 +77,7 @@ function EmailComponent(props) {
     })
     .then((response) => {
       if (response.data.result.result) {
-        console.log(response)
+        // console.log(response)
         props.setStage(props.stage + 1)
       }
       else {

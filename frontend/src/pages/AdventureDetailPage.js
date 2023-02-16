@@ -47,7 +47,7 @@ function AdventureDetailPage() {
     })
       .then((response) => {
         setAdventureDetail(response.data.result);
-        console.log(response.data.result);
+        // console.log(response.data.result);
       })
       .then((response) => {});
   }
@@ -64,7 +64,7 @@ function AdventureDetailPage() {
       .then((response) => {
         setReviews(response.data.result.subAdventureReviews);
         setChingho(response.data.result.adventureFeat);
-        console.log(response);
+        // console.log(response);
       })
       .catch((err) => console.log(err));
   }
@@ -122,7 +122,7 @@ function AdventureDetailPage() {
               activityClassName="activeTab"
               onClick={(event, tab) => {
                 // tab이 2면 (탐험 후기 탭을 누르면 후기 조회하기)
-                console.log(tab);
+                // console.log(tab);
               }}
             >
               <Tab title="탐험 지도">

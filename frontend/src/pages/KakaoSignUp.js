@@ -12,7 +12,7 @@ import { EmailComponent, PasswordComponent, NicknameComponent, IntroduceComponen
 // 로그인 페이지
 function KakaoSignUp() {
 
-    console.log(window.location.search)
+    // console.log(window.location.search)
   let qs = queryString.parse(window.location.search)
 
   
@@ -27,7 +27,7 @@ function KakaoSignUp() {
           method: "get"
         }).then((response) => {
           //TODO: 여기서 이메일 저장
-          console.log(response.data.result)
+          // console.log(response.data.result)
           setEmail(response.data.result.email)
         }).catch((error) => console.log(error))
       }
@@ -66,7 +66,7 @@ function KakaoSignUp() {
     },
     })
     .then(function (response) {
-      console.log(response)
+      // console.log(response)
     })
     .then(setStage(stage + 1))
     .catch((error) => console.log(error))

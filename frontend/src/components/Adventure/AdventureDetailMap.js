@@ -32,7 +32,7 @@ function AdventureDetailMap(props) {
   }, [props.subAdventurePlaces]);
 
   const handleBounds = (map) => {
-    console.log(bounds);
+    // console.log(bounds);
     if (map && !bounds.isEmpty()) {
       map.setBounds(bounds);
     }
@@ -60,8 +60,8 @@ function AdventureDetailMap(props) {
       },
       method: "get",
     }).then((response) => {
-      console.log("체크포인트 정보 받아오기");
-      console.log(response.data.result);
+      // console.log("체크포인트 정보 받아오기");
+      // console.log(response.data.result);
       props.setCheckPointInfo((prev) => ({
         ...prev,
         // TODO: adventurePlaceId 오류의 경우 여기 바꾼 변수명 체크해보기
@@ -111,7 +111,7 @@ function AdventureDetailMap(props) {
                 }} // 마커를 표시할 위치
                 onClick={() => {
                   getCheckPointInfo(place);
-                  console.log(place.adventurePlaceId);
+                  // console.log(place.adventurePlaceId);
                 }}
                 // advMarkerfalse => 아직 달성 안됨 / true가 이미 달성됨
                 image={{

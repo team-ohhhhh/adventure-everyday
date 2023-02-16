@@ -32,7 +32,7 @@ function SearchComponent(props) {
       })
         .then((res) => {
           setResult(res.data.result);
-          console.log(result);
+          // console.log(result);
         })
         .catch((err) => {
           console.log(err);
@@ -51,7 +51,7 @@ function SearchComponent(props) {
       })
         .then((res) => {
           setResult(res.data.result);
-          console.log(res);
+          // console.log(res);
         })
         .catch((err) => {
           console.log(err);

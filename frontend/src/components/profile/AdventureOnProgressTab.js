@@ -38,7 +38,7 @@ function AdventureOnProgressTab({ userId, tab, isMe }) {
       },
     })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setAdventureList(res.data.result);
       })
       .catch((err) => console.log(err));

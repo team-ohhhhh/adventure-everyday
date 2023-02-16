@@ -33,7 +33,7 @@ function ArticleMoreList({ isMe, article, setModalIsOpen }) {
         <div
           className={style.MoreListItem}
           style={{ color: "red" }}
-          onClick={() => console.log("신고")}
+          // onClick={() => console.log("신고")}
         >
           신고
         </div>

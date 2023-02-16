@@ -224,7 +224,7 @@ function MainMap() {
     })
       .then((res) => {
         setAdventureList(res.data.result);
-        console.log(res.data.result);
+        // console.log(res.data.result);
       })
       .catch((err) => console.log(err));
   };
@@ -277,7 +277,7 @@ function MainMap() {
           // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
           // LatLngBounds 객체에 좌표를 추가합니다
           // const bounds = new kakao.maps.LatLngBounds()
-          console.log(data);
+          // console.log(data);
           setResult(data);
         }
       },
@@ -318,7 +318,7 @@ function MainMap() {
               }}
               onClick={() => {
                 setIsAdventureMode(false);
-                console.log(isAdventureMode);
+                // console.log(isAdventureMode);
               }}
             >
               지도 모드
