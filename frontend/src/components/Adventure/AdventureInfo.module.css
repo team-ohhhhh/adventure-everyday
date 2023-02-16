@@ -115,6 +115,7 @@
   display: flex;
   flex-direction: row;
 }
+
 .makerName {
 }
 
@@ -129,6 +130,7 @@
   height: fit-content;
   font-weight: 600;
 }
+
 .partImg {
   width: 2rem;
   height: 2rem;
@@ -162,17 +164,19 @@
   justify-content: space-between;
 
   align-items: center;
-  margin-right: 0.4rem;
 }
 
 .normal {
   width: fit-content;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
 }
 
 .highlight {
+  margin-left: 0.2rem;
+  margin-right: 0.4rem;
+
   font-weight: 800;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   color: #1c0b69;
 
   width: fit-content;
@@ -180,9 +184,9 @@
 
 .button {
   display: flex;
-  /* background-color: aqua; */
   width: 9.5rem;
-  justify-content: space-between;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .notice {
@@ -201,10 +205,10 @@
   justify-content: center;
   align-items: center;
   border: 0.1rem solid #1c0b69;
-  border-radius: 0.2rem;
-  height: 2rem;
+  border-radius: 2rem;
   width: 2rem;
   background-color: white;
+  margin-right: 0.4rem;
 }
 
 .participate {
@@ -213,7 +217,7 @@
   align-items: center;
 
   width: fit-content;
-  height: fit-content;
+  height: 100%;
   padding: 0.4rem;
   padding-left: 0.8rem;
   padding-right: 0.8rem;
