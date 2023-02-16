@@ -42,9 +42,6 @@ const UserPostMap = ({ myPosts, selectPost, userHeight, checkpoints }) => {
   // 2. 지도에 계산된 영역 반영
   useEffect(() => {
     const map = mapRef.current;
-    if (myPosts.length < 2) {
-      alert("먼저 게시글을 두 개 이상 작성해 주세요.");
-    }
     if (map && myPosts.length) map.setBounds(bounds);
   }, [bounds]);
 
