@@ -43,7 +43,7 @@ public class AdventureController {
             @PathVariable Long adventureId,
             Authentication authentication
     ) {
-        if(adventureId < 1) {return ResultResponse.error(ErrorResponse.of(ErrorCode.BAD_CONSTANT));};
+        if(adventureId < 1) {return ResultResponse.error(ErrorResponse.of(ErrorCode.BAD_CONSTANT));}
         ReadAdventureRes result = adventureService.readAdventure(adventureId, Long.valueOf(authentication.getName()));
         return ResultResponse.success(result);
     }
@@ -51,7 +51,7 @@ public class AdventureController {
     // 특정 탐험 삭제
     @DeleteMapping("/{adventureId}")
     public ResultResponse<?> deleteAdventure(@PathVariable Long adventureId) {
-        if(adventureId < 1) {return ResultResponse.error(ErrorResponse.of(ErrorCode.BAD_CONSTANT));};
+        if(adventureId < 1) {return ResultResponse.error(ErrorResponse.of(ErrorCode.BAD_CONSTANT));}
         adventureService.deleteAdventure(adventureId);
         return ResultResponse.success("탐험 삭제 성공");
     }

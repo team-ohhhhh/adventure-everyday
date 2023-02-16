@@ -56,7 +56,7 @@ const ImageUploadForm = ({ article, setArticle }) => {
           }));
 
           // 이미지 크기 리사이즈
-          console.log("why");
+          // console.log("why");
           const image = document.createElement("img");
           image.src = URL.createObjectURL(file);
           image.onload = () => {

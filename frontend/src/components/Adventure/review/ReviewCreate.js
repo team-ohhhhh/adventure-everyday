@@ -48,16 +48,16 @@ function ReviewCreate() {
       },
     })
       .then((response) => {
-        console.log("axios 성공");
-        console.log(response.data.result);
-        console.log(content);
-        console.log(grade);
+        // console.log("axios 성공");
+        // console.log(response.data.result);
+        // console.log(content);
+        // console.log(grade);
         navigate(`/adventure/detail/${params.id}/createReview/complete`); // 후기 작성 완료 페이지로 이동
       })
       .catch((err) => {
         console.log(err);
-        console.log(content);
-        console.log(grade);
+        // console.log(content);
+        // console.log(grade);
       });
     }}
 

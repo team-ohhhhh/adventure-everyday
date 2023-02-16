@@ -29,7 +29,7 @@ function Comment({
   let TOKEN = useSelector((state) => state.token);
 
   useEffect(() => {
-    console.log(comment)
+    // console.log(comment)
     window.scrollTo(0, 0);
   }, []);
 

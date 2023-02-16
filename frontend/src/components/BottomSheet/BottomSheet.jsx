@@ -36,7 +36,7 @@ const BottomSheetContainer = (props) => {
       },
     })
       .then((res) => {
-        console.log(res.data.result);
+        // console.log(res.data.result);
         props.setArticleList(res.data.result);
       })
       .catch((err) => {
@@ -146,7 +146,7 @@ const BottomSheetContainer = (props) => {
         },
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setAddress(res.data.documents[0].address.address_name);
       })
       .catch((err) => console.log(err));
