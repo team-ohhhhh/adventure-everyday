@@ -44,9 +44,10 @@ function ArticleDetailPage() {
         <AiOutlineLeft
           className={style.left}
           onClick={() =>
-            navigate(-1, {
-              state: { lat: article[0].lat, lng: article[0].lng },
-            })
+            navigate("/feed")
+            // navigate(-1, {
+            //   state: { lat: article[0].lat, lng: article[0].lng },
+            // })
           }
         />
         <div>게시글</div>
