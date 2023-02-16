@@ -109,10 +109,8 @@ const BottomSheetContainer = (props) => {
   };
 
   // w3w 변수 와 도로명 주소
-  const [W3W, setW3W] = useState('')
-  const [address, setAddress] = useState('')
-
-  
+  const [W3W, setW3W] = useState("");
+  const [address, setAddress] = useState("");
 
   useEffect(() => {
     // Setting focus is to aid keyboard and screen reader nav when activating this iframe
@@ -120,21 +118,21 @@ const BottomSheetContainer = (props) => {
 
     // w3w
     axios({
-      url : "https://api.what3words.com/v3/convert-to-3wa",
-      method : "get",
-      params : {
-        key : process.env.REACT_APP_W3W_KEY,
-        coordinates : `${props.center.lat},${props.center.lng}`,
-        language : "ko",
-        format : "json"
-      }
+      url: "https://api.what3words.com/v3/convert-to-3wa",
+      method: "get",
+      params: {
+        key: process.env.REACT_APP_W3W_KEY,
+        coordinates: `${props.center.lat},${props.center.lng}`,
+        language: "ko",
+        format: "json",
+      },
     })
-    .then((res) => {
-      setW3W(res.data.words)
-    })
-    .catch((err) => console.log(err));
+      .then((res) => {
+        setW3W(res.data.words);
+      })
+      .catch((err) => console.log(err));
 
-    // 카카오맵 
+    // 카카오맵
     axios
       .get("https://dapi.kakao.com/v2/local/geo/coord2address.json", {
         params: {
@@ -147,17 +145,17 @@ const BottomSheetContainer = (props) => {
         },
       })
       .then((res) => {
-        console.log(res)
-        setAddress(res.data.documents[0].address.address_name)
+        console.log(res);
+        setAddress(res.data.documents[0].address.address_name);
       })
-      .catch((err) => console.log(err))
+      .catch((err) => console.log(err));
   }, [props.center]);
 
-  const headerRef = useRef()
-  const myHeight = function() {
-    console.log(headerRef.current.clientHeight)
-    return 70.8 + 43 + headerRef.current.clientHeight
-  }
+  const headerRef = useRef();
+  const myHeight = function () {
+    // console.log(headerRef.current.clientHeight)
+    return 70.8 + 43 + headerRef.current.clientHeight;
+  };
 
   return (
     <p ref={focusRef}>
@@ -166,22 +164,54 @@ const BottomSheetContainer = (props) => {
       </button> */}
       <button>요기</button>
       <BottomSheet
-        
         open={open}
         // 사라지게 하는 부분
         // onDismiss={() => setOpen(false)}
         blocking={false}
         header={
-          <div ref={headerRef} style={{display:"flex", flexDirection:"column", alignItems:"start",width:"100%" ,marginTop:"4%", }}>
-            <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"95%", margin:"auto"}}>
-              <div style={{display:"flex", flexDirection:"column", alignItems:"start" }}>
-                <div style={{fontWeight:"600" }}>{W3W}</div>
-                <div style={{fontSize:"small", marginTop:"7%"}}>{address}</div>
+          <div
+            ref={headerRef}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "start",
+              width: "100%",
+              marginTop: "4%",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "95%",
+                margin: "auto",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "start",
+                }}
+              >
+                <div style={{ fontWeight: "600" }}>{W3W}</div>
+                <div style={{ fontSize: "small", marginTop: "7%" }}>
+                  {address}
+                </div>
               </div>
-              <div  style={{alignItems:"flex-start"}}>
+              <div style={{ alignItems: "flex-start" }}>
                 {props.isAntenna ? (
                   <button
-                  style={{background: "white", borderRadius: "8px", color:"#1C0B69", borderColor: "#1C0B69", height:"2rem", width:"7rem"}}
+                    style={{
+                      background: "white",
+                      borderRadius: "8px",
+                      color: "#1C0B69",
+                      borderColor: "#1C0B69",
+                      height: "2rem",
+                      width: "7rem",
+                    }}
                     onClick={() => {
                       deleteAntenna();
                     }}
@@ -189,38 +219,72 @@ const BottomSheetContainer = (props) => {
                     안테나 뽑기
                   </button>
                 ) : (
-                  <button 
+                  <button
                     onClick={() => {
                       makeAntenna();
                     }}
-                    style={{background: "#1C0B69", borderRadius: "8px", color:"white", height:"2rem", width:"7rem"}}
+                    style={{
+                      background: "#1C0B69",
+                      borderRadius: "8px",
+                      color: "white",
+                      height: "2rem",
+                      width: "7rem",
+                    }}
                   >
-                    안테나 설치  
+                    안테나 설치
                   </button>
                 )}
               </div>
             </div>
-            <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"95%", marginLeft:"auto",marginRight:"auto"}}>
-            <div style={{display:"flex", flexDirection:"column", alignItems:"start" }}>
-              <div style={{marginTop:"15%", marginBottom:"15%"}}> {props.articleList.length}개의 글 </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "95%",
+                marginLeft: "auto",
+                marginRight: "auto",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "start",
+                }}
+              >
+                <div style={{ marginTop: "15%", marginBottom: "15%" }}>
+                  {" "}
+                  {props.articleList.length}개의 글{" "}
+                </div>
               </div>
             </div>
           </div>
         }
-        // 첫번쨰가 1차 높이, 두번째가 최대 높이  
+        // 첫번쨰가 1차 높이, 두번째가 최대 높이
         snapPoints={({ maxHeight }) => [myHeight(), maxHeight]}
       >
-        <div className="forScrollBar" style={{marginTop:"1.2rem", marginBottom: "5rem"}}>
+        <div
+          className="forScrollBar"
+          style={{ marginTop: "1.2rem", marginBottom: "5rem" }}
+        >
           {/* dummy => list로 교체 */}
-          {props.articleList.length != 0 ? props.articleList.reverse().map((data) => {
-            if (contentType === "article") {
-              return <SmallArticleItem data={data} />;
-            } else if (contentType === "adventure") {
-              return <AdventureBanner AdventureListItem={data} />;
-            }
-          })
-          : <div style={{width:"auto", textAlign:"center", marginTop:"2vh"}}>글이 없어요...</div>
-        }
+          {props.articleList.length != 0 ? (
+            props.articleList.map((data) => {
+              if (contentType === "article") {
+                return <SmallArticleItem data={data} />;
+              } else if (contentType === "adventure") {
+                return <AdventureBanner AdventureListItem={data} />;
+              }
+            })
+          ) : (
+            <div
+              style={{ width: "auto", textAlign: "center", marginTop: "2vh" }}
+            >
+              글이 없어요...
+            </div>
+          )}
         </div>
       </BottomSheet>
     </p>
