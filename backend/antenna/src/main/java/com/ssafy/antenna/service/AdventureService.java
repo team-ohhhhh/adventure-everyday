@@ -391,10 +391,27 @@ public class AdventureService {
     }
 
     // 탐험 포기(특정 유저가 참가중인 탐험 삭제)
-    public void deleteAdventureInProgress(Long adventureId) {
-        Adventure curAdventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
+    public void deleteAdventureInProgress(Long adventureId, Long userId) {
+        Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
-        adventureInProgressRepository.deleteByAdventure(curAdventure);
+        adventureInProgressRepository.deleteByAdventureAndUser(adventure,user);
+
+        // 탐험 포기시 체크포인트(달성내역)과 체크포인트게시글(모험글) 테이블에서 삭제
+        // checkpoint
+        // 모험의 모험장소를 돌면서, checkpoint 테이블에 해당유저 있으면 삭제.
+        for(AdventurePlace ap:adventure.getAdventurePlaces()){
+            if(checkpointRepository.findByUserAndAdventurePlace(user,ap).isPresent()){
+                checkpointRepository.deleteByUserAndAdventurePlace(user,ap);
+            }
+        }
+        // checkpoint_post 삭제
+        // 유저가 쓴 글을 돌면서, 해당 모험에 쓴 글이 있으면 삭제.
+        for(Post post:user.getPosts()){
+            if(checkpointPostRepository.findByAdventureAndPost(adventure,post).isPresent()){
+                checkpointPostRepository.deleteByPostAndAdventure(post,adventure);
+            }
+        }
     }
 
 
