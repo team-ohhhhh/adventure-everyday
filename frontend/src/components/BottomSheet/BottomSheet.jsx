@@ -162,7 +162,8 @@ const BottomSheetContainer = (props) => {
       {/* <button onClick={() => setOpen(open => !open)} ref={focusRef}>
         {open ? "Close" : "Open"}
       </button> */}
-      <button>요기</button>
+      {/* <button>요기</button> */}
+      
       <BottomSheet
         open={open}
         // 사라지게 하는 부분
