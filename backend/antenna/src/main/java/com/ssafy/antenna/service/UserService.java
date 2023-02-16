@@ -11,6 +11,7 @@ import com.ssafy.antenna.domain.user.Role;
 import com.ssafy.antenna.domain.user.User;
 import com.ssafy.antenna.domain.user.dto.*;
 import com.ssafy.antenna.domain.user.mapper.UserFeatsDtoMapper;
+import com.ssafy.antenna.exception.conflict.OverAntennaCntException;
 import com.ssafy.antenna.exception.not_found.*;
 import com.ssafy.antenna.exception.unauthorized.InvalidPasswordException;
 import com.ssafy.antenna.repository.AdventureSucceedRepository;
@@ -252,6 +253,10 @@ public class UserService {
     public DetailAntennaRes createAntenna(PostAntennaReq postAntennaReq, Long userId) {
         //유저가 존재하는지 먼저 확인
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Integer antennaCnt = antennaRepository.countByUser(user).orElseThrow();
+        if(antennaCnt>=3)
+            throw new OverAntennaCntException();
+
         ConvertTo3WA w3wWords = w3WUtil.getW3W(postAntennaReq.lng(), postAntennaReq.lat());
         Antenna antenna = Antenna.builder()
                 .user(user)
