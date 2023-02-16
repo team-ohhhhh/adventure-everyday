@@ -33,8 +33,10 @@ function ProfilePage() {
 
   const userHeight = useMemo(() => {
     const viewHeight = document.documentElement.clientHeight;
-    // console.log(viewHeight);
-    return viewHeight - 301.69 - 34 - 71;
+    const tab = document.getElementById("tab");
+    const top = tab ? tab.getBoundingClientRect().top : 311;
+
+    return viewHeight - top - 71;
   }, []);
 
   return (
@@ -48,7 +50,7 @@ function ProfilePage() {
         />
       </div>
 
-      <div>
+      <div id="tab">
         <Tabs
           activeTab="1"
           className=""
