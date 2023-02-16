@@ -785,7 +785,7 @@ function MainMap() {
                             color: "gray",
                           }}
                         >
-                          >{/* 오타 아님! */}
+                          {'>'}
                         </div>
                       </div>
                     </div>
