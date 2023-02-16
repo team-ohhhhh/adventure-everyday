@@ -164,7 +164,8 @@ const BottomSheetContainer = (props) => {
       {/* <button onClick={() => setOpen(open => !open)} ref={focusRef}>
         {open ? "Close" : "Open"}
       </button> */}
-      <button>요기</button>
+      {/* <button>요기</button> */}
+      
       <BottomSheet
         
         open={open}
@@ -172,7 +173,7 @@ const BottomSheetContainer = (props) => {
         // onDismiss={() => setOpen(false)}
         blocking={false}
         header={
-          <div ref={headerRef} style={{display:"flex", flexDirection:"column", alignItems:"start",width:"100%" ,marginTop:"4%", }}>
+          <div ref={headerRef} style={{display:"flex", flexDirection:"column", alignItems:"start", width:"100%" ,marginTop:"4%", }}>
             <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"95%", margin:"auto"}}>
               <div style={{display:"flex", flexDirection:"column", alignItems:"start" }}>
                 <div style={{fontWeight:"600" }}>{W3W}</div>
