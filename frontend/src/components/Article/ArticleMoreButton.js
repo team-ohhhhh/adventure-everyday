@@ -52,12 +52,12 @@ function ArticleMoreButton(props) {
       },
     })
       .then(() => {
-        navigate("/"); //TODO: 삭제 후 어디로 보낼지 고민
+        navigate("/feed"); //TODO: 삭제 후 어디로 보낼지 고민
       })
       .catch((err) => {
         console.log(err);
-        alert(err.response.data.result.message)
-        setModalIsOpen(false)
+        alert(err.response.data.result.message);
+        setModalIsOpen(false);
       });
   };
 

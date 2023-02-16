@@ -7,6 +7,7 @@ const CheckPointList = ({
   styles,
   isAdvSelected,
   setIsAdvSelected,
+  setPostType,
 }) => {
   const onSelect = (point) => {
     setIsAdvSelected(true);
@@ -18,6 +19,7 @@ const CheckPointList = ({
       adventurePlaceId: point.adventurePlaceId,
       adventurePlaceTitle: point.adventurePlaceTitle,
     }));
+    setPostType(2);
   };
 
   const onNotSelect = () => {
@@ -30,6 +32,7 @@ const CheckPointList = ({
       adventurePlaceId: null,
       adventurePlaceTitle: null,
     }));
+    setPostType(1);
   };
 
   const checkSelect = (adventureId, adventurePlaceId) => {

@@ -8,8 +8,13 @@ import CheckPointList from "./CheckPointList";
 
 import { AiOutlineClose } from "react-icons/ai";
 
-const Step1Location = ({ article, setArticle, checkPointList, styles }) => {
-  // console.log(checkPointList);
+const Step1Location = ({
+  article,
+  setArticle,
+  checkPointList,
+  setPostType,
+  styles,
+}) => {
   const navigate = useNavigate();
   const geolocation = useGeolocation();
 
@@ -81,6 +86,7 @@ const Step1Location = ({ article, setArticle, checkPointList, styles }) => {
             styles={styles}
             isAdvSelected={isAdvSelected}
             setIsAdvSelected={setIsAdvSelected}
+            setPostType={setPostType}
           />
         </div>
       )}

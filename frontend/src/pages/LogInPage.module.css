@@ -39,6 +39,7 @@
   font-size: 1rem;
   text-align: center;
   margin-bottom: 0.8rem;
+  box-sizing: border-box;
 }
 
 .logInInput::placeholder {
