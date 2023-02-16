@@ -291,7 +291,7 @@ function PhotoComponent(props) {
             
           });
           setTimeout(() => {
-          navigate('/login')
+          navigate('/')
           }, 2000)
         }, [])
         // 여기 자꾸 워닝 뜸.. React Hook useEffect has a missing dependency: 'navigate'. Either include it or remove the dependency array
