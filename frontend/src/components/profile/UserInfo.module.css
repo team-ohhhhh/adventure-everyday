@@ -8,7 +8,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.7rem;
 }
 
 .nicknameAndTier {
@@ -39,8 +39,7 @@
 
 .introduceAndModify {
   display: flex;
-  align-items: center;
-  height: 2rem;
+  align-items: flex-start;
   margin-bottom: 1.3rem;
   text-align: left;
 }
