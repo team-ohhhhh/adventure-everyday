@@ -364,6 +364,9 @@ public class AdventureService {
                 .build();
 
         adventureInProgressRepository.save(newAdventureInProgress);
+
+        // 모험 참가하면 자동으로 알림 켜기
+        createAdventureLike(adventureId,userId);
     }
 
     // 특정 유저가 참가중인 탐험 조회
