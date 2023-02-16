@@ -16,7 +16,7 @@ function MainMap() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log(location.state);
+  // console.log(location.state);
 
   const mapRef = useRef();
 
@@ -49,6 +49,7 @@ function MainMap() {
   useEffect(() => {
     // 최상단으로 이동
     window.scrollTo(0, 0);
+
     // 스크롤 방지
     // document.body.style.overflow = "hidden";
 

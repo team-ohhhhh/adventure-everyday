@@ -25,7 +25,6 @@ import Navigate from "./Navigate";
 import AdventureReviewPage from "./pages/AdventureReviewPage";
 import KakaoLogIn from "./components/SignUp/KakaoLogin";
 import KakaoSignUp from "./pages/KakaoSignUp";
-import CommentPageTest from "./pages/CommentPageTest";
 import PageNotFound from "./pages/PageNotFound";
 
 import "./App.css";
@@ -97,8 +96,6 @@ function App() {
               path="/article/:articleId/update"
               element={<ArticleUpdatePage />}
             />
-
-            <Route path="/article/comment-test" element={<CommentPageTest />} />
           </Route>
           {/* 로그인 상태에서 가면 안되는 페이지는 이곳에 추가해주세요 */}
           <Route element={<AntiAuthLayout />}>
