@@ -99,7 +99,7 @@ function SignUpPage() {
               <div className={style.move}>
                 계정이 있으신가요?{" "}
                 <span
-                  onClick={() => navigate("/login")}
+                  onClick={() => navigate("/")}
                   className={style.signup}
                 >
                   로그인

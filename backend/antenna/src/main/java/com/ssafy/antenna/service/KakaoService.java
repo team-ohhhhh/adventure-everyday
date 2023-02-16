@@ -57,14 +57,13 @@ public class KakaoService {
             urlConnection.setDoOutput(true); // 데이터 기록 알려주기
 
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream()));
-            StringBuilder sb = new StringBuilder();
-            sb.append("grant_type=authorization_code");
-            sb.append("&client_id=" + kakaoToken);
+            String sb = "grant_type=authorization_code" +
+                    "&client_id=" + kakaoToken +
 //            sb.append("&redirect_uri=http://localhost:3000/kakao/callback");
-            sb.append("&redirect_uri=https://i8a305.p.ssafy.io/kakao/callback");
-            sb.append("&code=" + code);
+                    "&redirect_uri=https://i8a305.p.ssafy.io/kakao/callback" +
+                    "&code=" + code;
 
-            bw.write(sb.toString());
+            bw.write(sb);
             bw.flush();
 
             int responseCode = urlConnection.getResponseCode();
@@ -112,14 +111,13 @@ public class KakaoService {
             urlConnection.setDoOutput(true); // 데이터 기록 알려주기
 
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream()));
-            StringBuilder sb = new StringBuilder();
-            sb.append("grant_type=authorization_code");
-            sb.append("&client_id=" + kakaoToken);
+            String sb = "grant_type=authorization_code" +
+                    "&client_id=" + kakaoToken +
 //            sb.append("&redirect_uri=http://localhost:3000/kakao/callback/signup");
-            sb.append("&redirect_uri=https://i8a305.p.ssafy.io/kakao/callback/signup");
-            sb.append("&code=" + code);
+                    "&redirect_uri=https://i8a305.p.ssafy.io/kakao/callback/signup" +
+                    "&code=" + code;
 
-            bw.write(sb.toString());
+            bw.write(sb);
             bw.flush();
 
             int responseCode = urlConnection.getResponseCode();

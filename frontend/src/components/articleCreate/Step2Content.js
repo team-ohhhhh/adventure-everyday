@@ -106,7 +106,7 @@ const Step2Content = ({
         },
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         const isAdventureClear = res.data.result.isAdventureClear;
         if (isAdventureClear) {
           setPostType(3);

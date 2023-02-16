@@ -24,7 +24,7 @@ function AdventureInProgressListPage(){
 
     })
     .then((res) => {
-      console.log(res.data.result)
+      // console.log(res.data.result)
       setAdventureInProgressList(res.data.result)
       setSubReadAdventureInProgressUsersClickResList(res.data.result.subReadAdventureInProgressUsersClickResList)
 

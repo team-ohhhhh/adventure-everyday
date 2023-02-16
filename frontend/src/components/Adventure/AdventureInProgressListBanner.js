@@ -9,7 +9,7 @@ import ProgressBar from "@ramonak/react-progress-bar";
 
 function AdventureInProgressListBanner({adventureInProgressItem}) {
   const navigate = useNavigate();
-  console.log(adventureInProgressItem);
+  // console.log(adventureInProgressItem);
   return (
     <div className={style.main}>
       {adventureInProgressItem && (
