@@ -1,4 +1,4 @@
-.main{
+.main {
   border-radius: 20px;
   display: flex;
   flex-direction: column;
@@ -7,9 +7,9 @@
 }
 
 .banner {
-    margin-left: 10%;
-    margin-right: 10%;
-    width: 90%;
+  margin-left: 10%;
+  margin-right: 10%;
+  width: 90%;
   color: black;
   font-weight: bold;
   border-radius: 20px;
@@ -34,7 +34,6 @@
   line-height: 24px;
 }
 
-
 .difficulty {
   margin-left: 10px;
 }
@@ -51,7 +50,7 @@
   flex-direction: row;
   margin: 20px;
 }
-.makerName{
+.makerName {
   margin-right: 2%;
 }
 
@@ -59,11 +58,11 @@
   display: flex;
   flex-direction: column;
   align-items: baseline;
-  margin-left : 10px;
+  margin-left: 10px;
   width: 100%;
 }
 
-.makerNameAndTier{
+.makerNameAndTier {
   display: flex;
   width: 100%;
   justify-content: flex-start;
@@ -71,7 +70,7 @@
   margin-bottom: 3%;
 }
 
-.userLevel{
+.userLevel {
   width: 1.3rem;
 }
 
@@ -95,5 +94,3 @@
   margin-right: 15px;
   margin-bottom: 20px;
 }
-
-
