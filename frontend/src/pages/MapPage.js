@@ -790,7 +790,9 @@ function MainMap() {
                             lineHeight: "1rem",
                             color: "gray",
                           }}
-                        ></div>
+                        >
+                          >{/* 오류 아님! */}
+                        </div>
                       </div>
                     </div>
                   )}
