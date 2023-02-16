@@ -82,6 +82,7 @@ const BottomSheetContainer = (props) => {
         }));
       })
       .catch((err) => {
+        alert("안테나는 3개를 초과할 수 없습니다.");
         console.log(err);
       });
   };
