@@ -12,3 +12,17 @@
   color: #1c0b69;
   font-weight: bold;
 }
+
+#adventure .rb-tabs-item {
+  width: 50%;
+  border-bottom: 0.5px solid white;
+}
+
+#adventure .activeTab {
+  border-bottom: 1px solid white;
+}
+
+#adventure .active {
+  color: white;
+  font-weight: bold;
+}
