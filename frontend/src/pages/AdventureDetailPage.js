@@ -1,15 +1,15 @@
-/* global kakao*/
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router";
+import Tabs, { Tab } from "react-best-tabs";
+import axios from "axios";
+
 import AdventureInfo from "../components/Adventure/AdventureInfo";
 import AdventureDetailInfo from "../components/Adventure/AdventureDetailInfo";
 import AdventureDetailReview from "../components/Adventure/AdventureDetailReview";
+
 import styles from "./AdventureDetailPage.module.css";
-import Tabs, { Tab } from "react-best-tabs";
-import tabs from "./AdventureDetailTab.module.scss";
-import { useEffect, useMemo, useState } from "react";
-import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
-import { saveBound } from "../store/boundSlice";
+import "./ProfilePage.css";
 
 function AdventureDetailPage() {
   const params = useParams(); // 특정 탐험 id가져오기
@@ -95,7 +95,7 @@ function AdventureDetailPage() {
   }, []);
 
   return (
-    <div className="pageContainer" onClick={() => close()}>
+    <div id="adventure" className="pageContainer" onClick={() => close()}>
       <div className={styles.wrapper}>
         <div className={styles.white}>
           <AdventureInfo
@@ -117,19 +117,19 @@ function AdventureDetailPage() {
               activeTab="1"
               className={[styles.tab]} // tabs.rb-tabs
               ulClassName=""
-              activityClassName="bg-success"
+              activityClassName="activeTab"
               onClick={(event, tab) => {
                 // tab이 2면 (탐험 후기 탭을 누르면 후기 조회하기)
                 console.log(tab);
               }}
             >
-              <Tab title="탐험 지도" className="mr-2">
+              <Tab title="탐험 지도">
                 <AdventureDetailInfo
                   key={adventureDetail.adventureId}
                   info={adventureDetail}
                 ></AdventureDetailInfo>
               </Tab>
-              <Tab title="탐험 후기" className="mr-2">
+              <Tab title="탐험 후기">
                 <AdventureDetailReview
                   info={reviews}
                   setReviewMoreButton={setReviewMoreButton}
