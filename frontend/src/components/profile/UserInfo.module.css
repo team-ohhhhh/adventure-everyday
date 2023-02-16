@@ -20,6 +20,8 @@
   font-size: 1.8rem;
   font-weight: 700;
   font-style: bold;
+  text-align: left;
+  width: fit-content;
 }
 
 .tier {
