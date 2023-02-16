@@ -90,6 +90,7 @@ function MainMap() {
   // 지도 높이 반응형으로 계산
   const userHeight = useMemo(() => {
     const viewHeight = document.documentElement.clientHeight;
+    console.log(viewHeight);
     const navHeight = 71; // navbar 박스 높이
     return viewHeight - navHeight;
   }, []);
@@ -277,23 +278,7 @@ function MainMap() {
           // const bounds = new kakao.maps.LatLngBounds()
           console.log(data);
           setResult(data);
-          // for (var i = 0; i < data.length; i++) {
-          //   // @ts-ignore
-          //   markers.push({
-          //     position: {
-          //       lat: data[i].y,
-          //       lng: data[i].x,
-          //     },
-          //     content: data[i].place_name,
-          //   })
-          // @ts-ignore
-          // bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x))
         }
-        // setMarkers(markers)
-
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
-        // map.setBounds(bounds)
-        // }
       },
       { location, sort: kakao.maps.services.SortBy.DISTANCE }
     ); // 옵션은 이런형태로 넣어줄것!
@@ -312,10 +297,9 @@ function MainMap() {
       >
         {/* 모험모드용 버튼 */}
         <div
-          // TODO: 위치 하드코딩함...
           style={{
             position: "absolute",
-            left: "81%",
+            right: "3%",
             top: "35%",
             zIndex: "2",
           }}
@@ -324,9 +308,12 @@ function MainMap() {
             <button
               style={{
                 background: "white",
-                borderRadius: "8px",
+
                 color: "#1C0B69",
                 borderColor: "#1C0B69",
+                borderRadius: "1rem",
+                width: "5rem",
+                height: "2rem",
               }}
               onClick={() => {
                 setIsAdventureMode(false);
@@ -339,12 +326,14 @@ function MainMap() {
             <button
               style={{
                 background: "#1C0B69",
-                borderRadius: "8px",
+                borderRadius: "1rem",
                 color: "white",
+                width: "5rem",
+                height: "2rem",
               }}
               onClick={() => {
                 setIsAdventureMode(true);
-                console.log(isAdventureMode);
+                if (clusterInfowindow) clusterInfowindow.close();
               }}
             >
               탐험 모드
@@ -357,13 +346,15 @@ function MainMap() {
           className="kakao"
           style={{
             width: "100%",
-            marginLeft: "auto",
-            marginRight: "auto",
+            height: "fit-content",
+
             position: "absolute",
             zIndex: "3",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+
+            marginTop: "20px",
           }}
           onClick={() => {
             setResultWindow(false);
@@ -373,11 +364,12 @@ function MainMap() {
             onChange={(e) => onChange(e)}
             placeholder="카카오맵 키워드 검색"
             style={{
+              // display: "flex",
               color: "#1C0B69",
-              width: "80vw",
-              height: "10vw",
+              width: "85%",
+              height: "3rem",
               borderRadius: "8px",
-              marginTop: "20px",
+
               border: "none",
               boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
               paddingLeft: "2vw",
@@ -637,9 +629,9 @@ function MainMap() {
               style={{
                 /*버튼 위치*/
                 position: "absolute",
-                top: "60%",
+                top: "85%",
                 left: "50%",
-                transform: "translate(-50%, 500%)",
+                transform: "translate(-50%, 50%)",
                 zIndex: "1",
 
                 /*버튼 디자인 */
