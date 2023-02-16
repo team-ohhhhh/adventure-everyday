@@ -32,8 +32,6 @@ function SignUpPage() {
   const [photo, setPhoto] = useState("");
   const [file, setFile] = useState("");
 
-
-
   // 회원가입 axios
   const signUp = function () {
     const formData = new FormData();
@@ -97,8 +95,15 @@ function SignUpPage() {
               >
                 카카오로 회원가입
               </button>
-              <div className={style.move} onClick={() => navigate("/login")}>
-                로그인 화면으로 이동
+
+              <div className={style.move}>
+                계정이 있으신가요?{" "}
+                <span
+                  onClick={() => navigate("/login")}
+                  className={style.signup}
+                >
+                  로그인
+                </span>
               </div>
             </div>
           </div>
