@@ -43,8 +43,8 @@ function ArticleDetailPage() {
       <div className={style.topBar}>
         <AiOutlineLeft
           className={style.left}
-          onClick={() =>
-            navigate("/feed")
+          onClick={
+            () => navigate("/feed")
             // navigate(-1, {
             //   state: { lat: article[0].lat, lng: article[0].lng },
             // })
