@@ -848,7 +848,18 @@ public class AdventureService {
         if (order.equals("createTimeDesc")) { // 최신순
             adventureInProgressList = adventureInProgressRepository.findAllByUserOrderByCreateTimeDesc(user).orElseThrow(AdventureInProgressNotFoundException::new);
         } else if (order.equals("userCountDesc")) { // 참여자 많은순
-            adventureInProgressList = adventureInProgressRepository.findAIPOrderByUserCount(user.getUserId()).orElseThrow(AdventureInProgressNotFoundException::new);
+            List<AdventureInProgress> temp = adventureInProgressRepository.findAIPOrderByUserCount(user.getUserId()).orElseThrow(AdventureInProgressNotFoundException::new);
+
+            Set<Long> adventureIds = new HashSet<>();
+
+            adventureInProgressList=new ArrayList<>();
+            for(AdventureInProgress adventureInProgress:temp){
+                if(adventureIds.contains(adventureInProgress.getAdventure().getAdventureId())){
+                    continue;
+                }
+                adventureIds.add(adventureInProgress.getAdventure().getAdventureId());
+                adventureInProgressList.add(adventureInProgress);
+            }
         } else if (order.equals("difficultyAsc")) { // 쉬운순
             adventureInProgressList = adventureInProgressList.stream()
                     .sorted((a1, a2) -> Long.compare(a1.getAdventure().getDifficulty(), a2.getAdventure().getDifficulty()))
@@ -914,7 +925,18 @@ public class AdventureService {
         if (order.equals("createTimeDesc")) { // 최신순
             adventureSucceeds = adventureSucceedRepository.findAllByUserOrderByCreateTimeDesc(user).orElseThrow(AdventureInProgressNotFoundException::new);
         } else if (order.equals("userCountDesc")) { // 참여자 많은순
-            adventureSucceeds = adventureSucceedRepository.findAIPOrderByUserCount(user.getUserId()).orElseThrow(AdventureInProgressNotFoundException::new);
+            List<AdventureSucceed> temp = adventureSucceedRepository.findAIPOrderByUserCount(user.getUserId()).orElseThrow(AdventureInProgressNotFoundException::new);
+
+            Set<Long> adventureIds = new HashSet<>();
+
+            adventureSucceeds=new ArrayList<>();
+            for(AdventureSucceed adventureSucceed:temp){
+                if(adventureIds.contains(adventureSucceed.getAdventure().getAdventureId())){
+                    continue;
+                }
+                adventureIds.add(adventureSucceed.getAdventure().getAdventureId());
+                adventureSucceeds.add(adventureSucceed);
+            }
         } else if (order.equals("difficultyAsc")) { // 쉬운순
             adventureSucceeds = adventureSucceeds.stream()
                     .sorted((a1, a2) -> Long.compare(a1.getAdventure().getDifficulty(), a2.getAdventure().getDifficulty()))
@@ -1020,7 +1042,18 @@ public class AdventureService {
         if (order.equals("createTimeDesc")) { // 최신순
             adventureList = adventureRepository.findAllByUserOrderByCreateTimeDesc(user).orElseThrow(AdventureInProgressNotFoundException::new);
         } else if (order.equals("userCountDesc")) { // 참여자 많은순
-            adventureList = adventureRepository.findAdventuresOrderByUserCount(user.getUserId()).orElseThrow(AdventureInProgressNotFoundException::new);
+            List<Adventure> temp = adventureRepository.findAdventuresOrderByUserCount(user.getUserId()).orElseThrow(AdventureNotFoundException::new);
+
+            Set<Long> adventureIds = new HashSet<>();
+
+            adventureList=new ArrayList<>();
+            for(Adventure adventure:temp){
+                if(adventureIds.contains(adventure.getAdventureId())){
+                    continue;
+                }
+                adventureIds.add(adventure.getAdventureId());
+                adventureList.add(adventure);
+            }
         } else if (order.equals("difficultyAsc")) { // 쉬운순
             adventureList = adventureList.stream()
                     .sorted((a1, a2) -> Long.compare(a1.getDifficulty(), a2.getDifficulty()))
