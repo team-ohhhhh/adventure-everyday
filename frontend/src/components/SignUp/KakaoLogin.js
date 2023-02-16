@@ -27,7 +27,7 @@ function KakaoLogIn() {
         dispatch(saveToken(response.data.result.token));
         dispatch(saveUserInfo(response.data.result.userDetailRes));
         // console.log(response.data);
-        navigate("/");
+        navigate("/map");
       })
       .catch((error) => {
         // console.log(error);

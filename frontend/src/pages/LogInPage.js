@@ -46,7 +46,7 @@ function LoginPage() {
       .then((response) => {
         dispatch(saveToken(response.data.result.token));
         dispatch(saveUserInfo(response.data.result.userDetailRes));
-        navigate("/");
+        navigate("/map");
       })
       .catch((error) => {
         // console.log(error.response.data.result.message);

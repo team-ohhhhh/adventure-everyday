@@ -161,7 +161,7 @@ function ArticleDetail({ article, isFeed }) {
             <div
               className={style.w3w}
               onClick={() =>
-                navigate("/", {
+                navigate("/map", {
                   state: { lat: article.lat, lng: article.lng },
                 })
               }
@@ -187,7 +187,7 @@ function ArticleDetail({ article, isFeed }) {
               size={23}
               className={style.icon}
               onClick={() =>
-                navigate("/", {
+                navigate("/map", {
                   state: { lat: article.lat, lng: article.lng },
                 })
               }
