@@ -19,9 +19,8 @@
 .nickname {
   font-size: 1.8rem;
   font-weight: 700;
-  font-style: bold;
   text-align: left;
-  width: fit-content;
+  display: inline;
 }
 
 .tier {
@@ -43,6 +42,7 @@
   align-items: center;
   height: 2rem;
   margin-bottom: 1.3rem;
+  text-align: left;
 }
 
 .modifyBtn {

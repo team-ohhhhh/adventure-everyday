@@ -17,6 +17,8 @@ function TreasurePage() {
   const [treasureList, setTreasureList] = useState([]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     axios({
       url: URL + `/adventures/treasures/users/${userId}`,
       method: "get",
