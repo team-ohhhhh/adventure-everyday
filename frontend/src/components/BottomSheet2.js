@@ -24,7 +24,7 @@ function BottomSheet() {
           setBottomSheetState("semiActive");
         }, 200)
       }}>여기를 눌러!</button>
-      <button onClick={() => {console.log('ㅇㅋ')}}>여기를 누르면 콘솔</button>
+      <button onClick={() => {/*console.log('ㅇㅋ')*/}}>여기를 누르면 콘솔</button>
       <div id="bottomSheetContainer" className={bottomSheetContainerState}>
         <div id="bottomSheet" className={bottomSheetState}>
         {bottomSheetState === "semiActive" &&

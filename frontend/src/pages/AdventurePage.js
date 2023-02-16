@@ -41,7 +41,7 @@ function AdventurePage() {
             },
             method: "get",
           }).then((response) => {
-            console.log(response.data.result);
+            // console.log(response.data.result);
             setnearList(response.data.result);
           });
         },
@@ -51,7 +51,7 @@ function AdventurePage() {
       );
     } else {
       // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
-      console.log("geolocation 사용불가");
+      // console.log("geolocation 사용불가");
     }
   }
 
@@ -65,7 +65,7 @@ function AdventurePage() {
       method: "get",
     }).then((response) => {
       setUpdateList(response.data.result);
-      console.log(response);
+      // console.log(response);
     });
   }
 
@@ -79,7 +79,7 @@ function AdventurePage() {
       method: "get",
     }).then((response) => {
       setPopularList(response.data.result);
-      console.log(response);
+      // console.log(response);
     });
   }
 

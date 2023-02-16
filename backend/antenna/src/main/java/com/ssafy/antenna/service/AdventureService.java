@@ -115,7 +115,7 @@ public class AdventureService {
 
         //
         Boolean adventureNotification = false;
-        Long adventureNotificationId = -1l;
+        Long adventureNotificationId = -1L;
         // isParticipating
         Boolean participation = Boolean.FALSE;
         if (isParticipating(adventureId, userId)) {
@@ -177,10 +177,7 @@ public class AdventureService {
     private boolean isParticipating(Long adventureId, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Adventure adventure = adventureRepository.findById(adventureId).orElseThrow(AdventureNotFoundException::new);
-        if (adventureInProgressRepository.findByUserAndAdventure(user, adventure).isPresent()) {
-            return true;
-        }
-        return false;
+        return adventureInProgressRepository.findByUserAndAdventure(user, adventure).isPresent();
     }
 
     // 특정 탐험 삭제
@@ -200,7 +197,7 @@ public class AdventureService {
         if (lat != null && lng != null) {
             Query query = entityManager.createNativeQuery(
                             "SELECT *, " +
-                                    "ST_Distance_Sphere(POINT(" + lng.toString() + ", " + lat.toString() + "), ap.coordinate) AS distance " +
+                                    "ST_Distance_Sphere(POINT(" + lng + ", " + lat + "), ap.coordinate) AS distance " +
                                     "FROM adventure_place ap " +
                                     "order by distance asc "
                             , AdventurePlace.class)
