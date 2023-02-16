@@ -12,7 +12,7 @@ const ArticleMap = ({ lat, lng }) => {
         <MapMarker
           position={{ lat, lng }}
           image={{
-            src: "/images/advMarker5False.png",
+            src: "/images/advMarker5false.png",
             size: {
               width: 30,
             },
