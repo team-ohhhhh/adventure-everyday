@@ -12,5 +12,5 @@ public interface CheckpointRepository extends JpaRepository<Checkpoint, Long> {
     Optional<Integer> countByUserAndAdventurePlace(User user, AdventurePlace adventurePlace);
     Optional<Checkpoint> findByUserAndAdventurePlace(User user, AdventurePlace adventurePlace);
     @Transactional
-    void deleteByUserAndAdventure(User user, AdventurePlace adventurePlace);
+    void deleteByUserAndAdventurePlace(User user, AdventurePlace adventurePlace);
 }

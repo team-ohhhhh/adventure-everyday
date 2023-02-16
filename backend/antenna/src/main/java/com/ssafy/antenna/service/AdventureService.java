@@ -402,7 +402,7 @@ public class AdventureService {
         // 모험의 모험장소를 돌면서, checkpoint 테이블에 해당유저 있으면 삭제.
         for(AdventurePlace ap:adventure.getAdventurePlaces()){
             if(checkpointRepository.findByUserAndAdventurePlace(user,ap).isPresent()){
-                checkpointRepository.deleteByUserAndAdventure(user,ap);
+                checkpointRepository.deleteByUserAndAdventurePlace(user,ap);
             }
         }
         // checkpoint_post 삭제

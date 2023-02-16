@@ -4,6 +4,7 @@ import com.ssafy.antenna.domain.adventure.Adventure;
 import com.ssafy.antenna.domain.adventure.AdventurePlace;
 import com.ssafy.antenna.domain.post.CheckpointPost;
 import com.ssafy.antenna.domain.post.Post;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -30,6 +31,6 @@ public interface CheckpointPostRepository extends JpaRepository<CheckpointPost, 
     Optional<List<CheckpointPost>> findCheckpointPostByPostLikeDesc(@Param("adventurePlaceId") Long adventurePlaceId);
 
     Optional<List<CheckpointPost>> findAllByAdventurePlaceOrderByCreateTimeDesc(AdventurePlace adventurePlace);
-
+    @Transactional
     void deleteByPostAndAdventure(Post post, Adventure adventure);
 }
