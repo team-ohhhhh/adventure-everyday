@@ -128,7 +128,7 @@ function LoginPage() {
               ></input>
               <input
                 className={style.logInInput}
-                placeholder="비밀번호을 입력하세요"
+                placeholder="비밀번호를 입력하세요"
                 type={"password"}
                 id="password"
                 onChange={(event) => setPassword(event.target.value)}
