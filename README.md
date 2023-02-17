@@ -183,23 +183,16 @@
 
 ### 1. Figma
 
-[목업](https://www.figma.com/file/rFvg0Xwsh98GXAHrV74Ir4/%EB%AA%A9%EC%97%85?node-id=0%3A1&t=jxT1c83YH0gNKUeE-0)
-
-![목업.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f66626b5-e2a7-4255-b002-820ca6e0dd42/%EB%AA%A9%EC%97%85.png)
+![목업](./image/mockup.png)
 
 ### 2. ERD
 
-[SNS_ERD](https://www.erdcloud.com/d/RP4XrcfQTsdoXujKG)
-
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/de1cecec-7ca8-4158-889d-5d2987710d2a/Untitled.png)
-
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a3d54e23-b437-43d0-ba65-0d725ff09171/Untitled.png)
+![ERD](./image/erd.png)
 
 ### 3. API 문서
 
-[antenna](https://documenter.getpostman.com/view/17785045/2s8ZDd115D)
-
-[API (1)](https://www.notion.so/ab1b2ccb75fe4df09cea8d972729897f)
+[NOTION](https://documenter.getpostman.com/view/17785045/2s8ZDd115D)
+![API](./image/API.pdf)
 
 # 🦍프로젝트 폴더 구조
 
