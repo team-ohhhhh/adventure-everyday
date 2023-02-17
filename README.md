@@ -44,45 +44,45 @@
 # 🦍시연 영상
 
 ## 로그인/회원가입
-![login](./image/video-capture/login.jpg){: width="50%" height="50%"}
+![login](./image/video-capture/login.jpg){width=50px height=100px}
 ## 메인 화면
-![main](./image/video-capture/main.jpg){: width="50%" height="50%"}
+![main](./image/video-capture/main.jpg){width=50px height=100px}
 ## 메인 화면(탐험모드)
-![main-adv](./image/video-capture/adventure-mode-main.jpg){: width="50%" height="50%"}
+![main-adv](./image/video-capture/adventure-mode-main.jpg){width=50px height=100px}
 ## 내 주변 글
-![my-area](./image/video-capture/my-area.jpg){: width="50%" height="50%"}
+![my-area](./image/video-capture/my-area.jpg){width=50px height=100px}
 ## 특정위치 주변 글
-![around](./image/video-capture/around-area.jpg){: width="50%" height="50%"}
+![around](./image/video-capture/around-area.jpg){width=50px height=100px}
 ## 특정위치 주변 글 상세보기
-![around-posts](./image/video-capture/around-area-posts.jpg){: width="50%" height="50%"}
+![around-posts](./image/video-capture/around-area-posts.jpg){width=50px height=100px}
 ## 팔로우 피드
-![follow-feed](./image/video-capture/follow-feed.jpg){: width="50%" height="50%"}
+![follow-feed](./image/video-capture/follow-feed.jpg){width=50px height=100px}
 ## 탐험 피드
-![adv-feed](./image/video-capture/adventure-feed.jpg){: width="50%" height="50%"}
+![adv-feed](./image/video-capture/adventure-feed.jpg){width=50px height=100px}
 ## 안테나 피드
-![antenna-feed](./image/video-capture/antenna-feed.jpg){: width="50%" height="50%"}
+![antenna-feed](./image/video-capture/antenna-feed.jpg){width=50px height=100px}
 ## 포스팅
-![posting](./image/video-capture/posting.jpg){: width="50%" height="50%"}
+![posting](./image/video-capture/posting.jpg){width=50px height=100px}
 ## 포스팅 결과화면
-![post-posting](./image/video-capture/after-posting.jpg){: width="50%" height="50%"}
+![post-posting](./image/video-capture/after-posting.jpg){width=50px height=100px}
 ## 체크포인트 포스팅
-![checkpoint-posting](./image/video-capture/posting-adventure.jpg){: width="50%" height="50%"}
+![checkpoint-posting](./image/video-capture/posting-adventure.jpg){width=50px height=100px}
 ## 체크포인트 포스팅 결과화면
-![post-checkpoint-posting](./image/video-capture/checkpoind-succeed.jpg){: width="50%" height="50%"}
+![post-checkpoint-posting](./image/video-capture/checkpoind-succeed.jpg){width=50px height=100px}
 ## 탐험완료 결과화면
-![post-adv](./image/video-capture/finish-adventure.jpg){: width="50%" height="50%"}
+![post-adv](./image/video-capture/finish-adventure.jpg){width=50px height=100px}
 ## 마이페이지
-![mypage](./image/video-capture/mypage.jpg){: width="50%" height="50%"}
+![mypage](./image/video-capture/mypage.jpg){width=50px height=100px}
 ## 팔로우
-![follow](./image/video-capture/follow.jpg){: width="50%" height="50%"}
+![follow](./image/video-capture/follow.jpg){width=50px height=100px}
 ## 마이페이지 탐험중
-![mypage-aip](./image/video-capture/mypage-aip.jpg){: width="50%" height="50%"}
+![mypage-aip](./image/video-capture/mypage-aip.jpg){width=50px height=100px}
 ## 마이페이지 탐험중 소팅
-![mypage-aip-sort](./image/video-capture/mypage-aip-sorting.jpg){: width="50%" height="50%"}
+![mypage-aip-sort](./image/video-capture/mypage-aip-sorting.jpg){width=50px height=100px}
 ## 마이페이지 탐험완료
-![mypage-as](./image/video-capture/mypage-as.jpg){: width="50%" height="50%"}
+![mypage-as](./image/video-capture/mypage-as.jpg){width=50px height=100px}
 ## 마이페이지 마이탐험
-![mypage-myadv](./image/video-capture/mypage-myadventure.jpg){: width="50%" height="50%"}
+![mypage-myadv](./image/video-capture/mypage-myadventure.jpg){width=50px height=100px}
 
 # 🦍기술 스택
 
@@ -299,3 +299,11 @@
 ```
 
 # 🦍개발 멤버
+## [FE]
+- 김나연 : 기획 및 디자인, Jira관리 총괄
+- 김준형 : UX/UI, 회의진행 및 발표
+- 조은비 : 디자인 총괄, UCC
+## [BE]
+- 권택윤 : API, Docker, JWT
+- 김명호 : DB 설계, API, S3 관리
+- 김현호 : API, JPA, DB 설계
