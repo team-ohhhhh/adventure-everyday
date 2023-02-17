@@ -152,20 +152,28 @@
 ### 프로필
 
 1. 유저 검색
+
 ![유저검색](./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_1_%EC%9C%A0%EC%A0%80%EA%B2%80%EC%83%89.gif)
 2. 탐험 중, 탐험 완료, 만든 탐험 조회
+
 ![탐험](./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_2_%ED%83%90%ED%97%98%EC%A4%91_%ED%83%90%ED%97%98%EC%99%84%EB%A3%8C_%EB%A7%8C%EB%93%A0%ED%83%90%ED%97%98_%EC%A1%B0%ED%9A%8C.gif)
 3. 보물함 조회
+
 ![보물함](./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_3_%EB%B3%B4%EB%AC%BC%ED%95%A8_%EC%A1%B0%ED%9A%8C.gif)
 4. 팔로잉, 팔로워 조회
+
 ![팔로우](./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_4_%ED%8C%94%EB%A1%9C%EC%9E%89_%ED%8C%94%EB%A1%9C%EC%9B%8C_%EC%A1%B0%ED%9A%8C.gif)
 5. 프로필 사진 수정
+
 ![프사수정](./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_5_%ED%94%84%EB%A1%9C%ED%95%84_%EC%82%AC%EC%A7%84_%EC%88%98%EC%A0%95.gif)
 6. 자기소개 수정
+
 ![소개수정](./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_6_%EC%9E%90%EA%B8%B0%EC%86%8C%EA%B0%9C_%EC%88%98%EC%A0%95.gif)
 7. 프로필 화면에서 지도에 떠있는 내가 쓴 게시글 눌러보기
+
 ![내글보기](./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_7_%ED%94%84%EB%A1%9C%ED%95%84_%EC%A7%80%EB%8F%84_%EB%82%B4%EA%B8%80.gif)
 8. 로그아웃
+
 ![로그아웃](./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_8_%EB%A1%9C%EA%B7%B8%EC%95%84%EC%9B%83.gif)
 
 ## 로그인/회원가입
