@@ -44,7 +44,7 @@
 # 🦍시연 영상
 
 ## 로그인/회원가입
-![login](./image/video-capture/login.jpg){: width=50px height=100px}
+![login](./image/video-capture/login.jpg){: width="50px" height="100px"}
 ## 메인 화면
 ![main](./image/video-capture/main.jpg){: width=50px height=100px}
 ## 메인 화면(탐험모드)
