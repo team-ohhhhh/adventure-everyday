@@ -43,25 +43,46 @@
 
 # 🦍시연 영상
 
-## 회원가입
-
-## 메인화면
-
+## 로그인/회원가입
+![login](./image/video-capture/login.jpg)
+## 메인 화면
+![main](./image/video-capture/main.jpg)
+## 메인 화면(탐험모드)
+![main-adv](./image/video-capture/adventure-mode-main.jpg)
+## 내 주변 글
+![my-area](./image/video-capture/my-area.jpg)
+## 특정위치 주변 글
+![around](./image/video-capture/around-area.jpg)
+## 특정위치 주변 글 상세보기
+![around-posts](./image/video-capture/around-area-posts.jpg)
+## 팔로우 피드
+![follow-feed](./image/video-capture/follow-feed.jpg)
+## 탐험 피드
+![adv-feed](./image/video-capture/adventure-feed.jpg)
+## 안테나 피드
+![antenna-feed](./image/video-capture/antenna-feed.jpg)
+## 포스팅
+![posting](./image/video-capture/posting.jpg)
+## 포스팅 결과화면
+![post-posting](./image/video-capture/after-posting.jpg)
+## 체크포인트 포스팅
+![checkpoint-posting](./image/video-capture/posting-adventure.jpg)
+## 체크포인트 포스팅 결과화면
+![post-checkpoint-posting](./image/video-capture/checkpoind-succeed.jpg)
+## 탐험완료 결과화면
+![post-adv](./image/video-capture/finish-adventure.jpg)
 ## 마이페이지
-
-## 탐험페이지
-
-## 
-
-## 방 입장
-
-## 아바타 선택 화면 및 미팅방 입장
-
-## 미니게임- 밸런스 게임
-
-## 미니게임 - 물건 고르기
-
-## 최종 선택
+![mypage](./image/video-capture/mypage.jpg)
+## 팔로우
+![follow](./image/video-capture/follow.jpg)
+## 마이페이지 탐험중
+![mypage-aip](./image/video-capture/mypage-aip.jpg)
+## 마이페이지 탐험중 소팅
+![mypage-aip-sort](./image/video-capture/mypage-aip-sorting.jpg)
+## 마이페이지 탐험완료
+![mypage-as](./image/video-capture/mypage-as.jpg)
+## 마이페이지 마이탐험
+![mypage-myadv](./image/video-capture/mypage-myadventure.jpg)
 
 # 🦍기술 스택
 
@@ -193,7 +214,7 @@
 
 [POSTMAN](https://documenter.getpostman.com/view/17785045/2s8ZDd115D)
 
-[API](./image/API.pdf)
+[API](./docs/API.pdf)
 
 # 🦍프로젝트 폴더 구조
 
