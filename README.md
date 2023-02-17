@@ -191,8 +191,9 @@
 
 ### 3. API 문서
 
-[NOTION](https://documenter.getpostman.com/view/17785045/2s8ZDd115D)
-![API](./image/API.pdf)
+[POSTMAN](https://documenter.getpostman.com/view/17785045/2s8ZDd115D)
+
+[API](./image/API.pdf)
 
 # 🦍프로젝트 폴더 구조
 
