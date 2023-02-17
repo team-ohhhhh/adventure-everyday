@@ -1,15 +1,15 @@
 .container {
   width: 90%;
   height: fit-content;
-  background-color: rgb(255, 255, 255);
-  border-radius: 1rem;
+  /* background-color: rgb(255, 255, 255); */
+  /* border-radius: 1rem; */
 
-  position: absolute;
-  z-index: 200;
+  /* position: absolute; */
+  /* z-index: 200; */
 
-  left: 50%;
-  top: 5%;
-  transform: translateX(-50%);
+  /* left: 50%; */
+  /* top: 5%; */
+  /* transform: translateX(-50%); */
 
   /* box-shadow: 1px 1px 25px 1px rgb(156, 156, 156); */
   display: flex;
@@ -185,7 +185,7 @@
 
 .button {
   display: flex;
-  width: 9.5rem;
+  /* width: 9.5rem; */
   justify-content: flex-end;
   align-items: center;
 }
