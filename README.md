@@ -52,84 +52,64 @@
 # 🦍시연 영상
 
 ## 로그인/회원가입
-<!-- ![login](./image/video-capture/login.jpg){: width="50px" height="100px"} -->
-<img src="./image/video-capture/login.jpg" width="50%" height="50%"/>
+<img src="./image/video-capture/login.jpg" width="30%" height="30%"/>
 
 ## 메인 화면
-<!-- ![main](./image/video-capture/main.jpg){: width=50px height=100px} -->
-<img src="./image/video-capture/main.jpg" width="50%" height="50%"/>
+<img src="./image/video-capture/main.jpg" width="30%" height="30%"/>
 
 ## 메인 화면(탐험모드)
-<!-- ![main-adv](./image/video-capture/adventure-mode-main.jpg){: width=50px height=100px} -->
-<img src="./image/video-capture/adventure-mode-main.jpg" width="50%" height="50%"/>
+<img src="./image/video-capture/adventure-mode-main.jpg" width="30%" height="30%"/>
 
 ## 내 주변 글
-<!-- ![my-area](./image/video-capture/my-area.jpg){: width=50px height=100px} -->
-<img src="./image/video-capture/my-area.jpg" width="50%" height="50%"/>
+<img src="./image/video-capture/my-area.jpg" width="30%" height="30%"/>
 
 ## 특정위치 주변 글
-<!-- ![around](./image/video-capture/around-area.jpg){: width=50px height=100px} -->
-<img src="./image/video-capture/around-area.jpg" width="50%" height="50%"/>
+<img src="./image/video-capture/around-area.jpg" width="30%" height="30%"/>
 
 ## 특정위치 주변 글 상세보기
-<!-- ![around-posts](./image/video-capture/around-area-posts.jpg){: width=50px height=100px} -->
-<img src="./image/video-capture/around-area-posts.jpg" width="50%" height="50%"/>
+<img src="./image/video-capture/around-area-posts.jpg" width="30%" height="30%"/>
 
 ## 팔로우 피드
-<!-- ![follow-feed](./image/video-capture/follow-feed.jpg){: width=50px height=100px} -->
-<img src="./image/video-capture/follow-feed.jpg" width="50%" height="50%"/>
+<img src="./image/video-capture/follow-feed.jpg" width="30%" height="30%"/>
 
 ## 탐험 피드
-<!-- ![adv-feed](./image/video-capture/adventure-feed.jpg){: width=50px height=100px} -->
-<img src="./image/video-capture/adventure-feed.jpg" width="50%" height="50%"/>
+<img src="./image/video-capture/adventure-feed.jpg" width="30%" height="30%"/>
 
 ## 안테나 피드
-<!-- ![antenna-feed](./image/video-capture/antenna-feed.jpg){: width=50px height=100px} -->
-<img src="./image/video-capture/antenna-feed.jpg" width="50%" height="50%"/>
+<img src="./image/video-capture/antenna-feed.jpg" width="30%" height="30%"/>
 
 ## 포스팅
-<!-- ![posting](./image/video-capture/posting.jpg){: width=50px height=100px} -->
-<img src="./image/video-capture/posting.jpg" width="50%" height="50%"/>
+<img src="./image/video-capture/posting.jpg" width="30%" height="30%"/>
 
 ## 포스팅 결과화면
-<!-- ![post-posting](./image/video-capture/after-posting.jpg){: width=50px height=100px} -->
-<img src="./image/video-capture/after-posting.jpg" width="50%" height="50%"/>
+<img src="./image/video-capture/after-posting.jpg" width="30%" height="30%"/>
 
 ## 체크포인트 포스팅
-<!-- ![checkpoint-posting](./image/video-capture/posting-adventure.jpg){: width=50px height=100px} -->
-<img src="./image/video-capture/posting-adventure.jpg" width="50%" height="50%"/>
+<img src="./image/video-capture/posting-adventure.jpg" width="30%" height="30%"/>
 
 ## 체크포인트 포스팅 결과화면
-<!-- ![post-checkpoint-posting](./image/video-capture/checkpoind-succeed.jpg){: width=50px height=100px} -->
-<img src="./image/video-capture/checkpoind-succeed.jpg" width="50%" height="50%"/>
+<img src="./image/video-capture/checkpoind-succeed.jpg" width="30%" height="30%"/>
 
 ## 탐험완료 결과화면
-<!-- ![post-adv](./image/video-capture/finish-adventure.jpg){: width=50px height=100px} -->
-<img src="./image/video-capture/finish-adventure.jpg" width="50%" height="50%"/>
+<img src="./image/video-capture/finish-adventure.jpg" width="30%" height="30%"/>
 
 ## 마이페이지
-<!-- ![mypage](./image/video-capture/mypage.jpg){: width=50px height=100px} -->
-<img src="./image/video-capture/mypage.jpg" width="50%" height="50%"/>
+<img src="./image/video-capture/mypage.jpg" width="30%" height="30%"/>
 
 ## 팔로우
-<!-- ![follow](./image/video-capture/follow.jpg){: width=50px height=100px} -->
-<img src="./image/video-capture/follow.jpg" width="50%" height="50%"/>
+<img src="./image/video-capture/follow.jpg" width="30%" height="30%"/>
 
 ## 마이페이지 탐험중
-<!-- ![mypage-aip](./image/video-capture/mypage-aip.jpg){: width=50px height=100px} -->
-<img src="./image/video-capture/mypage-aip.jpg" width="50%" height="50%"/>
+<img src="./image/video-capture/mypage-aip.jpg" width="30%" height="30%"/>
 
 ## 마이페이지 탐험중 소팅
-<!-- ![mypage-aip-sort](./image/video-capture/mypage-aip-sorting.jpg){: width=50px height=100px} -->
-<img src="./image/video-capture/mypage-aip-sorting.jpg" width="50%" height="50%"/>
+<img src="./image/video-capture/mypage-aip-sorting.jpg" width="30%" height="30%"/>
 
 ## 마이페이지 탐험완료
-<!-- ![mypage-as](./image/video-capture/mypage-as.jpg){: width=50px height=100px} -->
-<img src="./image/video-capture/mypage-as.jpg" width="50%" height="50%"/>
+<img src="./image/video-capture/mypage-as.jpg" width="30%" height="30%"/>
 
 ## 마이페이지 마이탐험
-<!-- ![mypage-myadv](./image/video-capture/mypage-myadventure.jpg){: width=50px height=100px} -->
-<img src="./image/video-capture/mypage-myadventure.jpg" width="50%" height="50%"/>
+<img src="./image/video-capture/mypage-myadventure.jpg" width="30%" height="30%"/>
 
 
 # 🦍기술 스택
