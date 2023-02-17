@@ -18,7 +18,11 @@ function AdventureInProgressListBanner({ adventureInProgressItem }) {
             <div className={style.makerProfileContainer}>
               <img
                 className={style.makerProfile}
-                src={adventureInProgressItem.userDetailRes.photoUrl}
+                src={
+                  adventureInProgressItem.userDetailRes.photoUrl
+                    ? adventureInProgressItem.userDetailRes.photoUrl
+                    : "/images/defaultProfile.jpg"
+                }
                 alt={"profile"}
               />
             </div>
