@@ -50,8 +50,8 @@ function LoginPage() {
       })
       .catch((error) => {
         // console.log(error.response.data.result.message);
-        const msg = error.response.data.result.message;
-        alert(msg);
+        // const msg = error.response.data.result.message;
+        alert("아이디 또는 비밀번호를 확인해주세요.");
       });
   };
 
