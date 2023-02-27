@@ -51,187 +51,107 @@
 
 # 🦍시연 영상
 
-## 로그인
 
-1. **이메일 로그인**
+### :small_blue_diamond: 로그인
 
-![이메일](./image/gifs/%EB%A1%9C%EA%B7%B8%EC%9D%B8_1_%EC%9D%B4%EB%A9%94%EC%9D%BC%EB%A1%9C%20%EB%A1%9C%EA%B7%B8%EC%9D%B8.gif)
+|이메일 로그인|카카오 로그인|
+|:------:|:------:|
+|<img src="./image/gifs/%EB%A1%9C%EA%B7%B8%EC%9D%B8_1_%EC%9D%B4%EB%A9%94%EC%9D%BC%EB%A1%9C%20%EB%A1%9C%EA%B7%B8%EC%9D%B8.gif" width="250" height="530" />|<img src="./image/gifs/%EB%A1%9C%EA%B7%B8%EC%9D%B8_2_%EC%B9%B4%EC%B9%B4%EC%98%A4%EB%A1%9C%20%EB%A1%9C%EA%B7%B8%EC%9D%B8.gif" width="250" height="530" />|
 
-2. **카카오 로그인**
 
-![카카오](./image/gifs/%EB%A1%9C%EA%B7%B8%EC%9D%B8_2_%EC%B9%B4%EC%B9%B4%EC%98%A4%EB%A1%9C%20%EB%A1%9C%EA%B7%B8%EC%9D%B8.gif)
+### :small_blue_diamond: 회원가입과 탈퇴
 
-## 회원가입
+|이메일로 회원가입|카카오로 회원가입|탈퇴하기|
+|:------:|:------:|:------:|
+|<img src="./image/gifs/%ED%99%94%EC%9B%90%EA%B0%80%EC%9E%85_1_%EC%9D%B4%EB%A9%94%EC%9D%BC%EB%A1%9C%20%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85.gif" width="250" height="530" />|<img src="./image/gifs/%ED%99%94%EC%9B%90%EA%B0%80%EC%9E%85_2_%EC%B9%B4%EC%B9%B4%EC%98%A4%EB%A1%9C%20%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85.gif" width="250" height="530" />|<img src="./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_10_%ED%9A%8C%EC%9B%90%ED%83%88%ED%87%B4.gif" width="250" height="530" />|
 
-1. **이메일로 회원가입**
 
-![이메일가입](./image/gifs/%ED%99%94%EC%9B%90%EA%B0%80%EC%9E%85_1_%EC%9D%B4%EB%A9%94%EC%9D%BC%EB%A1%9C%20%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85.gif)
+### :small_blue_diamond: 지도
 
-2. **카카오로 회원가입**
+|내 주변 글 확인하기|UFO로 글 확인하기|글 목록 확인|
+|:------:|:------:|:------:|
+|<img src="./image/gifs/%EC%A7%80%EB%8F%84_1-1_%EB%82%B4%20%EC%A3%BC%EB%B3%80%20%EA%B8%80%20%ED%99%95%EC%9D%B8%ED%95%98%EA%B8%B0.gif" width="250" height="530" />|<img src="./image/gifs/%EC%A7%80%EB%8F%84_1-2_UFO%EB%A1%9C%20%EA%B8%80%20%ED%99%95%EC%9D%B8%ED%95%98%EA%B8%B0.gif" width="250" height="530" />|<img src="./image/gifs/%EC%A7%80%EB%8F%84_2_%EC%9D%B8%ED%8F%AC%20%EC%9C%88%EB%8F%84%EC%9A%B0%EB%A1%9C%20%EA%B8%80%20%ED%99%95%EC%9D%B8.gif" width="250" height="530" />|
 
-![카카오가입](./image/gifs/%ED%99%94%EC%9B%90%EA%B0%80%EC%9E%85_2_%EC%B9%B4%EC%B9%B4%EC%98%A4%EB%A1%9C%20%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85.gif)
+|안테나 설치|안테나 뽑기|
+|:------:|:------:|
+|<img src="./image/gifs/%EC%A7%80%EB%8F%84_3_%EC%95%88%ED%85%8C%EB%82%98%20%EC%84%A4%EC%B9%98.gif" width="250" height="530" />|<img src="./image/gifs/%EC%A7%80%EB%8F%84_4_%EC%95%88%ED%85%8C%EB%82%98%20%EB%BD%91%EA%B8%B0.gif" width="250" height="530" />|
 
-3. **탈퇴하기**
+|지도모드/탐험모드|장소검색|
+|:------:|:------:|
+|<img src="./image/gifs/%EC%A7%80%EB%8F%84_5_%EB%AA%A8%EB%93%9C%EB%B2%84%ED%8A%BC%20%EA%B8%B0%EB%8A%A5.gif" width="250" height="530" />|<img src="./image/gifs/%EC%A7%80%EB%8F%84_6_%EC%9E%A5%EC%86%8C%20%EA%B2%80%EC%83%89.gif" width="250" height="530" />|
 
-![탈퇴하기](./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_10_%ED%9A%8C%EC%9B%90%ED%83%88%ED%87%B4.gif)
 
-## 지도
+### :small_blue_diamond: 피드
 
-1. **글 확인하기**
+|피드 조회|댓글 페이지|
+|:------:|:------:|
+|<img src="./image/gifs/%ED%94%BC%EB%93%9C_1_%ED%94%BC%EB%93%9C%20%EC%A1%B0%ED%9A%8C.gif" width="280" height="530" />|<img src="./image/gifs/%ED%94%BC%EB%93%9C_2_%EB%8C%93%EA%B8%80%20%ED%8E%98%EC%9D%B4%EC%A7%80.gif" width="280" height="530" />|
 
-    **1-1. 내 주변**
 
-    ![내주변](./image/gifs/%EC%A7%80%EB%8F%84_1-1_%EB%82%B4%20%EC%A3%BC%EB%B3%80%20%EA%B8%80%20%ED%99%95%EC%9D%B8%ED%95%98%EA%B8%B0.gif)
+[게시글 상세 조회]
+
+
+|작성자 프로필 및 작성 장소 조회|게시글 카테고리 조회|게시글 수정|게시글 삭제|
+|:-------:|:-------:|:-------:|:-------:|
+|<img src="./image/gifs/%ED%94%BC%EB%93%9C_3-1_%EC%9E%91%EC%84%B1%EC%9E%90%20%ED%94%84%EB%A1%9C%ED%95%84%20%EB%B0%8F%20%EC%9E%91%EC%84%B1%20%EC%9C%84%EC%B9%98%20%EC%A1%B0%ED%9A%8C.gif" width="300" height="530" />|<img src="./image/gifs/%ED%94%BC%EB%93%9C_3-2_%EA%B2%8C%EC%8B%9C%EA%B8%80%20%EC%B9%B4%ED%85%8C%EA%B3%A0%EB%A6%AC%20%EC%A1%B0%ED%9A%8C.gif" width="300" height="530" />|<img src="./image/gifs/%ED%94%BC%EB%93%9C_3-3_%EA%B2%8C%EC%8B%9C%EA%B8%80%20%EC%88%98%EC%A0%95.gif" width="300" height="530" />|<img src="./image/gifs/%ED%94%BC%EB%93%9C_3-4_%EA%B2%8C%EC%8B%9C%EA%B8%80%20%EC%82%AD%EC%A0%9C.gif" width="300" height="530" />|
+
+
+
+### :small_blue_diamond: 글작성
+
+|사진으로 글 작성|사진 없이 글 작성|비공개 글 작성|
+|:------:|:------:|:------:|
+|<img src="./image/gifs/%EA%B8%80%EC%9E%91%EC%84%B1_1_%EC%82%AC%EC%A7%84%EC%9E%88%EA%B2%8C%EA%B8%80%EC%9E%91%EC%84%B1.gif" width="250" height="530" />|<img src="./image/gifs/%EA%B8%80%EC%9E%91%EC%84%B1_2_%EC%82%AC%EC%A7%84%EC%97%86%EC%9D%B4%EA%B8%80%EC%9E%91%EC%84%B1.gif" width="250" height="530" />|<img src="./image/gifs/%EA%B8%80%EC%9E%91%EC%84%B1_3_%EB%B9%84%EA%B3%B5%EA%B0%9C%EA%B2%8C%EC%8B%9C%EA%B8%80%EC%9E%91%EC%84%B1.gif" width="250" height="530" />|
+
+
+
+### :small_blue_diamond: 탐험
+
     
-    **1-2. UFO**
-
-    ![UFO](./image/gifs/%EC%A7%80%EB%8F%84_1-2_UFO%EB%A1%9C%20%EA%B8%80%20%ED%99%95%EC%9D%B8%ED%95%98%EA%B8%B0.gif)
-
-2. **글 목록 확인**
-
-    ![글목록](./image/gifs/%EC%A7%80%EB%8F%84_2_%EC%9D%B8%ED%8F%AC%20%EC%9C%88%EB%8F%84%EC%9A%B0%EB%A1%9C%20%EA%B8%80%20%ED%99%95%EC%9D%B8.gif)
-
-3. **안테나 설치**
-
-    ![안테나설치](./image/gifs/%EC%A7%80%EB%8F%84_3_%EC%95%88%ED%85%8C%EB%82%98%20%EC%84%A4%EC%B9%98.gif)
-
-4. **안테나 뽑기**
-
-    ![안테나뽑기](./image/gifs/%EC%A7%80%EB%8F%84_4_%EC%95%88%ED%85%8C%EB%82%98%20%EB%BD%91%EA%B8%B0.gif)
-
-5. **지도모드/탐험모드 기능**
-
-    ![지도모드](./image/gifs/%EC%A7%80%EB%8F%84_5_%EB%AA%A8%EB%93%9C%EB%B2%84%ED%8A%BC%20%EA%B8%B0%EB%8A%A5.gif)
-
-6. **장소 검색**
-
-    ![장소검색](./image/gifs/%EC%A7%80%EB%8F%84_6_%EC%9E%A5%EC%86%8C%20%EA%B2%80%EC%83%89.gif)
-
-## 피드
-
-1. **피드 조회**
+|탐험 큐레이션|
+|:------:|
+|<img src="./image/gifs/%ED%83%90%ED%97%98_1-1_%EC%8A%A4%ED%81%AC%EB%A1%A4%2C%20%EB%8D%94%EB%B3%B4%EA%B8%B0.gif" width="280" height="530" />|
     
-    ![피드조회](./image/gifs/%ED%94%BC%EB%93%9C_1_%ED%94%BC%EB%93%9C%20%EC%A1%B0%ED%9A%8C.gif)
-
-2. **댓글 페이지**
+[탐험 상세 조회]
+|체크포인트 정보 조회|탐험 참여/포기|
+|:------:|:------:|
+|<img src="./image/gifs/%ED%83%90%ED%97%98_2-1_%ED%83%90%ED%97%98%20%EC%A7%80%EB%8F%84%20%EC%B2%B4%ED%81%AC%ED%8F%AC%EC%9D%B8%ED%8A%B8%20%EC%A0%95%EB%B3%B4%20%EC%A1%B0%ED%9A%8C.gif" width="250" height="530" />|<img src="./image/gifs/%ED%83%90%ED%97%98_2-2_%ED%83%90%ED%97%98_%EC%B0%B8%EC%97%AC_%ED%8F%AC%EA%B8%B0.gif" width="250" height="530" />
+ 
+|탐험 후기 조회/작성/수정/삭제|탐험 공유|참여자 목록 조회|
+|:------:|:------:|:------:|
+|<img src="./image/gifs/%ED%83%90%ED%97%98_2-3_%ED%83%90%ED%97%98%20%ED%9B%84%EA%B8%B0%20%EC%A1%B0%ED%9A%8C%20%EC%9E%91%EC%84%B1%20%EC%88%98%EC%A0%95%20%EC%82%AD%EC%A0%9C.gif" width="250" height="530" />|<img src="./image/gifs/%ED%83%90%ED%97%98_2_4_url%EB%B3%B5%EC%82%AC.gif" width="250" height="530" />|<img src="./image/gifs/%ED%83%90%ED%97%98_2_5_%EC%B0%B8%EC%97%AC%EC%9E%90%EB%AA%A9%EB%A1%9D%EC%A1%B0%ED%9A%8C.gif" width="250" height="530"/>
     
-    ![댓글페이지](./image/gifs/%ED%94%BC%EB%93%9C_2_%EB%8C%93%EA%B8%80%20%ED%8E%98%EC%9D%B4%EC%A7%80.gif)
-
-3. **게시글 상세 조회**
-
-    **3-1. 작성자 프로필 및 작성 장소 조회**
-
-    ![3-1](./image/gifs/%ED%94%BC%EB%93%9C_3-1_%EC%9E%91%EC%84%B1%EC%9E%90%20%ED%94%84%EB%A1%9C%ED%95%84%20%EB%B0%8F%20%EC%9E%91%EC%84%B1%20%EC%9C%84%EC%B9%98%20%EC%A1%B0%ED%9A%8C.gif)
-
-    **3-2. 게시글 카테고리 조회**
-
-    ![3-2](./image/gifs/%ED%94%BC%EB%93%9C_3-2_%EA%B2%8C%EC%8B%9C%EA%B8%80%20%EC%B9%B4%ED%85%8C%EA%B3%A0%EB%A6%AC%20%EC%A1%B0%ED%9A%8C.gif)
-
-    **3-3. 게시글 수정**
-
-    ![3-3](./image/gifs/%ED%94%BC%EB%93%9C_3-3_%EA%B2%8C%EC%8B%9C%EA%B8%80%20%EC%88%98%EC%A0%95.gif)
-
-    **3-4. 게시글 삭제**
-
-    ![3-4](./image/gifs/%ED%94%BC%EB%93%9C_3-4_%EA%B2%8C%EC%8B%9C%EA%B8%80%20%EC%82%AD%EC%A0%9C.gif)
-
-## 글작성
-
-1. **사진 있이 글 작성**
-
-![사진글](./image/gifs/%EA%B8%80%EC%9E%91%EC%84%B1_1_%EC%82%AC%EC%A7%84%EC%9E%88%EA%B2%8C%EA%B8%80%EC%9E%91%EC%84%B1.gif)
-
-2. **사진 없이 글 작성**
-
-![사진없글](./image/gifs/%EA%B8%80%EC%9E%91%EC%84%B1_2_%EC%82%AC%EC%A7%84%EC%97%86%EC%9D%B4%EA%B8%80%EC%9E%91%EC%84%B1.gif)
-
-3. **비공개 글 작성**
-    - **피드에서 비공개 확인**
-
-![비공글](./image/gifs/%EA%B8%80%EC%9E%91%EC%84%B1_3_%EB%B9%84%EA%B3%B5%EA%B0%9C%EA%B2%8C%EC%8B%9C%EA%B8%80%EC%9E%91%EC%84%B1.gif)
-
-
-## 탐험
-
-1. **탐험 큐레이션 보여주기**
     
-    **1-1. 스크롤, 더보기**
+[탐험 글 작성]
+|체크포인트 달성|탐험 달성|
+|:------:|:------:|
+|<img src="./image/gifs/%ED%83%90%ED%97%98_3-1_%EC%B2%B4%ED%81%AC%ED%8F%AC%EC%9D%B8%ED%8A%B8%20%EB%8B%AC%EC%84%B1.gif" width="250" height="530" />|<img src="./image/gifs/%ED%83%90%ED%97%98_3-2_%ED%83%90%ED%97%98%20%EB%8B%AC%EC%84%B1.gif" width="250" height="530" />
+   
 
-    ![탐험큐레이션](./image/gifs/%ED%83%90%ED%97%98_1-1_%EC%8A%A4%ED%81%AC%EB%A1%A4%2C%20%EB%8D%94%EB%B3%B4%EA%B8%B0.gif)
-    
-2. **탐험 상세 조회**
-    
-    **2-1. 탐험 지도 체크포인트 정보 조회**
+|탐험 검색|
+|:------:|
+|<img src="./image/gifs/%ED%83%90%ED%97%98_4_%ED%83%90%ED%97%98%EA%B2%80%EC%83%89.gif" width="280" height="530" />|
 
-    ![탐험지도체크포인트](./image/gifs/%ED%83%90%ED%97%98_2-1_%ED%83%90%ED%97%98%20%EC%A7%80%EB%8F%84%20%EC%B2%B4%ED%81%AC%ED%8F%AC%EC%9D%B8%ED%8A%B8%20%EC%A0%95%EB%B3%B4%20%EC%A1%B0%ED%9A%8C.gif)
-    
-    **2-2. 탐험 참여/포기**
+|탐험 생성|
+|:------:|
+|<img src="./image/gifs/%ED%83%90%ED%97%98_5_%ED%83%90%ED%97%98%EC%83%9D%EC%84%B1.gif" width="280" height="530" />|
+  
 
-    ![탐험참여포기](./image/gifs/%ED%83%90%ED%97%98_2-2_%ED%83%90%ED%97%98_%EC%B0%B8%EC%97%AC_%ED%8F%AC%EA%B8%B0.gif)
-    
-    **2-3. 탐험 후기 조회/작성/수정/삭제**
+### :small_blue_diamond: 프로필
 
-    ![탐험후기조작수삭](./image/gifs/%ED%83%90%ED%97%98_2-3_%ED%83%90%ED%97%98%20%ED%9B%84%EA%B8%B0%20%EC%A1%B0%ED%9A%8C%20%EC%9E%91%EC%84%B1%20%EC%88%98%EC%A0%95%20%EC%82%AD%EC%A0%9C.gif)
-        
-    **2-4. 탐험 공유 (url복사)**
+|유저 검색|유저의 탐험정보 조회|보물함 조회|팔로잉, 팔로워 조회|
+|:------:|:------:|:------:|:------:|
+|<img src="./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_1_%EC%9C%A0%EC%A0%80%EA%B2%80%EC%83%89.gif" width="280" height="530" />|<img src="./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_2_%ED%83%90%ED%97%98%EC%A4%91_%ED%83%90%ED%97%98%EC%99%84%EB%A3%8C_%EB%A7%8C%EB%93%A0%ED%83%90%ED%97%98_%EC%A1%B0%ED%9A%8C.gif" width="280" height="530" />|<img src="./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_3_%EB%B3%B4%EB%AC%BC%ED%95%A8_%EC%A1%B0%ED%9A%8C.gif" width="280" height="530" />|<img src="./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_4_%ED%8C%94%EB%A1%9C%EC%9E%89_%ED%8C%94%EB%A1%9C%EC%9B%8C_%EC%A1%B0%ED%9A%8C.gif" width="280" height="530" />|
 
-    ![탐험공유](./image/gifs/%ED%83%90%ED%97%98_2_4_url%EB%B3%B5%EC%82%AC.gif)
-    
-    **2-5. 참여자 목록 조회**
 
-    ![탐험참여자](./image/gifs/%ED%83%90%ED%97%98_2_5_%EC%B0%B8%EC%97%AC%EC%9E%90%EB%AA%A9%EB%A1%9D%EC%A1%B0%ED%9A%8C.gif)
-    
-3. **탐험 글 작성**
-    
-    **3-1. 체크포인트 달성**
+|프로필 사진 수정|자기소개 수정|
+|:------:|:------:|
+|<img src="./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_5_%ED%94%84%EB%A1%9C%ED%95%84_%EC%82%AC%EC%A7%84_%EC%88%98%EC%A0%95.gif" width="250" height="530" />|<img src="./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_6_%EC%9E%90%EA%B8%B0%EC%86%8C%EA%B0%9C_%EC%88%98%EC%A0%95.gif" width="250" height="530" />|
 
-    ![체크포인트](./image/gifs/%ED%83%90%ED%97%98_3-1_%EC%B2%B4%ED%81%AC%ED%8F%AC%EC%9D%B8%ED%8A%B8%20%EB%8B%AC%EC%84%B1.gif)
-    
-    **3-2. 탐험 달성**
-    
-   ![탐험달성](./image/gifs/%ED%83%90%ED%97%98_3-2_%ED%83%90%ED%97%98%20%EB%8B%AC%EC%84%B1.gif)
+|내가 쓴 게시글 확인|로그아웃|
+|:------:|:------:|
+|<img src="./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_7_%ED%94%84%EB%A1%9C%ED%95%84_%EC%A7%80%EB%8F%84_%EB%82%B4%EA%B8%80.gif" width="250" height="530" />|<img src="./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_8_%EB%A1%9C%EA%B7%B8%EC%95%84%EC%9B%83.gif" width="250" height="530" />
 
-4. **탐험 검색**
-
-    ![탐험검색](./image/gifs/%ED%83%90%ED%97%98_4_%ED%83%90%ED%97%98%EA%B2%80%EC%83%89.gif)
-
-5. **탐험 생성**
-
-    ![탐험생성](./image/gifs/%ED%83%90%ED%97%98_5_%ED%83%90%ED%97%98%EC%83%9D%EC%84%B1.gif)
-
-## 프로필
-
-1. **유저 검색**
-
-![유저검색](./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_1_%EC%9C%A0%EC%A0%80%EA%B2%80%EC%83%89.gif)
-
-2. **탐험 중, 탐험 완료, 만든 탐험 조회**
-
-![탐험](./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_2_%ED%83%90%ED%97%98%EC%A4%91_%ED%83%90%ED%97%98%EC%99%84%EB%A3%8C_%EB%A7%8C%EB%93%A0%ED%83%90%ED%97%98_%EC%A1%B0%ED%9A%8C.gif)
-
-3. **보물함 조회**
-
-![보물함](./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_3_%EB%B3%B4%EB%AC%BC%ED%95%A8_%EC%A1%B0%ED%9A%8C.gif)
-
-4. **팔로잉, 팔로워 조회**
-
-![팔로우](./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_4_%ED%8C%94%EB%A1%9C%EC%9E%89_%ED%8C%94%EB%A1%9C%EC%9B%8C_%EC%A1%B0%ED%9A%8C.gif)
-
-5. **프로필 사진 수정**
-
-![프사수정](./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_5_%ED%94%84%EB%A1%9C%ED%95%84_%EC%82%AC%EC%A7%84_%EC%88%98%EC%A0%95.gif)
-
-6. **자기소개 수정**
-
-![소개수정](./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_6_%EC%9E%90%EA%B8%B0%EC%86%8C%EA%B0%9C_%EC%88%98%EC%A0%95.gif)
-
-7. **프로필 화면에서 지도에 떠있는 내가 쓴 게시글 눌러보기**
-
-![내글보기](./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_7_%ED%94%84%EB%A1%9C%ED%95%84_%EC%A7%80%EB%8F%84_%EB%82%B4%EA%B8%80.gif)
-
-8. **로그아웃**
-
-![로그아웃](./image/gifs/%ED%94%84%EB%A1%9C%ED%95%84_8_%EB%A1%9C%EA%B7%B8%EC%95%84%EC%9B%83.gif)
 
 <!-- ## 로그인/회원가입
 <img src="./image/video-capture/login.jpg" width="30%" height="30%"/>
